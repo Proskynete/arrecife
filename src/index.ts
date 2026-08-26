@@ -8,4 +8,5 @@
 export * from './tokens/index.ts';
 export * from './primitives/index.ts';
 export * from './components/index.ts';
+export * from './brand/index.ts';
 export { cn } from './lib/cn.ts';

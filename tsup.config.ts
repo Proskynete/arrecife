@@ -8,6 +8,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     'tokens/index': 'src/tokens/index.ts',
+    'brand/index': 'src/brand/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

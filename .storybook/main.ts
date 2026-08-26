@@ -12,6 +12,9 @@ const config: StorybookConfig = {
     'storybook-addon-pseudo-states',
     '@storybook/addon-vitest',
   ],
+  // Los PNG se sirven en /brand, que es la misma ruta que usan los cinco
+  // proyectos desde su public/, así que el default de `basePath` funciona.
+  staticDirs: ['../assets'],
   framework: { name: '@storybook/react-vite', options: {} },
   /**
    * La tabla de props sale de los tipos, no de una heurística: `react-docgen`

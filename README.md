@@ -97,7 +97,7 @@ aparte: los tipos resuelven desde `dist/`, `./tokens` carga sin arrastrar React 
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint, incluido el veto a hex literales fuera de `tokens.ts` |
 | `pnpm check:tokens` | falla si `src/tokens/` importa algo de fuera |
-| `pnpm test` | corre axe sobre las 125 stories, en los dos modos |
+| `pnpm test` | corre axe sobre las 128 stories, en los dos modos |
 | `pnpm storybook` | genera los tokens y levanta Storybook en el 6006 |
 
 ## El contraste como test, no como panel
@@ -140,7 +140,7 @@ de la razón de contraste, que cerca del blanco se pasa de frenada.
 ## Estado
 
 - **Fase 1** · andamiaje, tokens y Storybook con el switch de tema. Completa.
-- **Fase 2** · `brand/`. Esperando los SVG del ilustrador.
+- **Fase 2** · `brand/`. Completa con los PNG que ya existían.
 - **Fase 3** · los 18 primitivos sobre shadcn/Radix, más `Text` y ocho añadidos
   después de medir el uso real en los cinco proyectos. Completa.
 - **Fase 4** · `AudioPlayer`, migrado. Completa.
@@ -226,6 +226,43 @@ ese fallo.
 dentro del componente. Declaradas dentro, cambian de identidad en cada render y
 React las remonta: con `timeupdate` disparando cuatro veces por segundo, el
 arrastre de la barra perdía el pointer capture.
+
+### La marca
+
+Las trece piezas de Tiburoncín estaban repartidas por los cinco proyectos, byte
+a byte idénticas. Se consolidaron en `assets/brand/` y se publican en el
+paquete; se sirven en `/brand`, que es la misma ruta que todos usan ya desde su
+`public/`, así que el valor por defecto de `basePath` funciona sin configurar
+nada.
+
+```tsx
+import { Logo, Mascota, CaraDeMascota, listaCaras } from '@eduardoalvarez/arrecife/brand';
+```
+
+| | |
+| --- | --- |
+| aletas | `fin.png` (dos azules) y `fin-foam.png` (silueta espuma) |
+| caras | annoyed · confused · hearts · laughing · shades · waiting · wink |
+| poses | desk · laptop-coffee · peek · surf |
+
+Los nombres son un tipo: una cara que no existe no compila, y el autocompletado
+ofrece las que hay. Añadir una es soltar el PNG y añadir una línea al catálogo.
+
+**Regla 1 como API.** `sobre="oscuro"` usa la silueta a una tinta y
+`sobre="claro"` la de dos azules. No es una nota en una guía: es una prop. El
+análisis de píxeles lo confirma — el 94 % de `fin-foam.png` es `#EDF4F3`, o sea
+el token espuma.
+
+**Regla 5 como API.** El wordmark sale de `naming.wordmark` y siempre dice
+«Eduardo Álvarez». No hay ninguna prop que permita cambiar ese texto, y
+Tiburoncín no aparece escrito dentro del logo.
+
+**Regla 4 como API.** Las caras van solo en estados vacíos, confirmaciones,
+errores, progreso de curso y celebración. La regla vive en qué componentes
+aceptan una cara, no en la documentación.
+
+El formato es un detalle de implementación: cuando lleguen los SVG, se
+reemplazan los archivos y no cambia una línea de código.
 
 ### Los ocho que se añadieron después
 

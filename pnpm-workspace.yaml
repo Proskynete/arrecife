@@ -1,0 +1,4 @@
+# esbuild trae su binario por dependencia opcional; su script de instalación
+# solo lo verifica. tsup, vite y Storybook lo necesitan.
+allowBuilds:
+  esbuild: true

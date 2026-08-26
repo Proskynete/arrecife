@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+/* La salida generada desde src/tokens/tokens.ts. Storybook consume exactamente
+   lo mismo que consumen los cinco proyectos: si un componente tiene un color
+   literal en vez de un token, el switch de tema lo delata. */
+@import '../dist/tokens/theme.css';
+
+html,
+body,
+#storybook-root {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+@source '../src';
+@source '../stories';

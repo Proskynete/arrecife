@@ -6,3 +6,5 @@
  * nada de la raíz.
  */
 export * from './tokens/index.ts';
+export * from './primitives/index.ts';
+export { cn } from './lib/cn.ts';

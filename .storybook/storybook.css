@@ -15,3 +15,106 @@ body,
 
 @source '../src';
 @source '../stories';
+
+/* ---------------------------------------------------------------------------
+   Las páginas de documentación que genera Storybook traen su propio tema:
+   fondo blanco y grises propios, que sobre abismo se ven como un parche. Aquí
+   se atan a los tokens, así que siguen el switch de la toolbar como todo lo
+   demás en vez de quedarse en un tema fijo.
+
+   Todo cuelga de `.sbdocs-wrapper` como ancestro, y no de dobles clases sobre
+   el propio elemento: el titular, por ejemplo, lleva `sbdocs-title sb-unstyled`
+   pero NO `sbdocs`, así que un selector `.sbdocs.sbdocs-title` no casa con
+   nada. Como descendiente sí casa, y de paso gana en especificidad a los
+   estilos que Storybook inyecta en tiempo de ejecución.
+--------------------------------------------------------------------------- */
+
+.sbdocs-wrapper {
+  background-color: var(--color-background);
+  font-family: var(--font-sans);
+}
+
+/* Titulares en la escala del sistema, no en la de Storybook.
+   `!important` a propósito y solo aquí: Storybook inyecta el color del titular
+   en tiempo de ejecución con una clase generada, y sin esto gana él y el título
+   queda en gris oscuro sobre abismo, ilegible. Es sobrescribir el tema de un
+   tercero al que no se llega de otra forma, no pereza de especificidad. */
+.sbdocs-title,
+.sbdocs-h1,
+.sbdocs-h2,
+.sbdocs-h3,
+.sbdocs-wrapper h1,
+.sbdocs-wrapper h2,
+.sbdocs-wrapper h3 {
+  color: var(--color-text-primary) !important;
+  /* Storybook atenúa el titular aparte del color; sin esto se queda a media
+     tinta sobre abismo aunque el color ya sea el correcto. */
+  opacity: 1 !important;
+  font-family: var(--font-display);
+  border-bottom-color: var(--color-hairline);
+}
+
+.sbdocs-subtitle,
+.sbdocs-wrapper .sbdocs-p,
+.sbdocs-wrapper .sbdocs-li,
+.sbdocs-wrapper p,
+.sbdocs-wrapper li {
+  color: var(--color-text-secondary) !important;
+}
+
+.sbdocs-wrapper .sbdocs-a,
+.sbdocs-wrapper a {
+  color: var(--color-accent);
+}
+
+/* Cada bloque de previsualización es una tarjeta del sistema, con su barra de
+   herramientas —zoom y recarga— en la superficie elevada. */
+.sbdocs-wrapper .sbdocs-preview,
+.sbdocs-wrapper .docs-story {
+  background-color: var(--color-surface);
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-card);
+  box-shadow: none;
+}
+
+.sbdocs-wrapper .sbdocs-preview > :first-child {
+  background-color: var(--color-surface-raised);
+  border-bottom-color: var(--color-hairline);
+}
+
+.sbdocs-wrapper .sbdocs-preview-actions {
+  color: var(--color-text-secondary);
+  border-top-color: var(--color-hairline);
+}
+
+.sbdocs-wrapper .docblock-code-toggle {
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-raised);
+  border-color: var(--color-hairline);
+}
+
+/* La tabla de props. */
+.sbdocs-wrapper .docblock-argstable,
+.sbdocs-wrapper .docblock-argstable th,
+.sbdocs-wrapper .docblock-argstable td,
+.sbdocs-wrapper .docblock-argstable span,
+.sbdocs-wrapper .docblock-argstable div {
+  color: var(--color-text-secondary);
+}
+
+.sbdocs-wrapper .docblock-argstable-head th {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.sbdocs-wrapper .docblock-argstable tr {
+  border-bottom-color: var(--color-hairline);
+}
+
+.sbdocs-wrapper code,
+.sbdocs-wrapper .docblock-argstable code {
+  font-family: var(--font-mono);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-raised);
+  border-color: var(--color-hairline);
+}

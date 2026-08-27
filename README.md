@@ -149,6 +149,7 @@ aparte: los tipos resuelven desde `dist/`, `./tokens` carga sin arrastrar React 
 | `pnpm check:tokens` | falla si `src/tokens/` importa algo de fuera |
 | `pnpm test` | corre axe sobre las 161 stories, en los dos modos |
 | `pnpm check:exports` | verifica que `dist/` tiene lo que `exports` promete |
+| `pnpm check:release` | valida `release-please-config.json` contra el esquema oficial |
 | `pnpm storybook` | genera los tokens y levanta Storybook en el 6006 |
 
 ## El contraste como test, no como panel
@@ -239,6 +240,31 @@ de la primera versión.
 
 Cuando la API se estabilice, se sube a `1.0.0` a mano una vez y a partir de ahí
 un `BREAKING CHANGE:` sube la major como en cualquier paquete.
+
+### Cómo release-please decide qué cortar
+
+Dos datos, y salen de sitios distintos. Saberlo evita el único fallo que deja el
+release atascado:
+
+| Dato | De dónde sale |
+| --- | --- |
+| La **versión** | Del **título** del PR — `chore(main): release 0.2.0` |
+| El **componente** | Del **nombre de la rama** — `release-please--branches--main--components--arrecife` |
+
+El componente lo deriva de `package.json` y **no se puede fijar por
+configuración**: no existe una clave `component` en el
+[esquema oficial](https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json).
+`include-component-in-tag: false` es lo que hace que el tag sea `v0.2.0` y no
+`arrecife-v0.2.0`.
+
+Si el título o la rama se editan a mano y dejan de casar, release-please no crea
+el release y cada run termina en `There are untagged, merged release PRs
+outstanding - aborting`. De ahí no se sale con configuración: hay que cortar el
+tag y el release a mano y reetiquetar el PR a `autorelease: tagged`.
+
+`pnpm check:release` valida la configuración contra ese esquema en cada CI.
+Existe porque release-please **ignora en silencio** las claves que no conoce: una
+opción inventada no da error, no sale en el log y no hace nada.
 
 ### La publicación de confianza
 

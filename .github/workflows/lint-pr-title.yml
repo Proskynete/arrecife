@@ -38,11 +38,20 @@ jobs:
             deps-dev
             ci
           requireScope: false
-          # Los nombres REALES de las etiquetas del repo. Antes decía
-          # «dependencies», que no existe aquí, así que no ignoraba nada.
+          # Los PRs automáticos no se validan: sus títulos los generan sus
+          # herramientas y no los escribe nadie, así que una lista de ámbitos
+          # curada a mano solo puede bloquearlos.
+          #
+          # Ya pasó dos veces: dependabot usa el ámbito `deps-dev` y
+          # release-please titula `chore(main): release X.Y.Z`, con la RAMA como
+          # ámbito. Ninguno de los dos iba a estar en la lista.
+          #
+          # Se ignoran por ETIQUETA, que es lo único que el bot controla y el
+          # humano no puede falsear por accidente en el título.
           ignoreLabels: |
             bot
             📦 Dependencies
+            autorelease: pending
 
       - name: 💬 Explicar el fallo
         if: failure()

@@ -10,7 +10,7 @@ export function Checkbox({ className, ...props }: CheckboxProps) {
   return (
     <CheckboxPrimitive.Root
       className={cn(
-        'rounded-chip border-border bg-surface size-5 shrink-0 border',
+        'rounded-chip border-border bg-surface size-5 shrink-0 cursor-pointer border',
         'text-accent-on transition-standard',
         'hover:border-hairline-hover',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',

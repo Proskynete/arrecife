@@ -29,7 +29,7 @@ export function PaginationLink({ className, isActive = false, ...props }: Pagina
     <a
       aria-current={isActive ? 'page' : undefined}
       className={cn(
-        'rounded-chip px-sm inline-flex h-9 min-w-9 items-center justify-center',
+        'rounded-chip px-sm inline-flex h-9 min-w-9 cursor-pointer items-center justify-center',
         'font-sans text-ui text-text-secondary',
         'transition-standard',
         'hover:bg-surface hover:text-text-primary',

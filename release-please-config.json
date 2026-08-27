@@ -3,12 +3,10 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "package-name": "@eduardoalvarez/arrecife",
-      "changelog-path": "CHANGELOG.md",
+      "component": "",
       "include-component-in-tag": false,
       "initial-version": "0.1.0",
       "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": false,
       "changelog-sections": [
         {
           "type": "feat",
@@ -55,6 +53,5 @@
       ]
     }
   },
-  "pull-request-header": "Esta rama corta la versión. Al mergear, se crea el tag, el release y se publica en npm. NO cambies el título: release-please lee la versión de vuelta desde él.",
-  "separate-pull-requests": false
+  "pull-request-header": "Esta rama corta la versión. Al mergear, se crea el tag, el release y se publica en npm. NO cambies el título: release-please lee la versión de vuelta desde él."
 }

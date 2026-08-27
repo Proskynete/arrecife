@@ -457,7 +457,24 @@ if (!plantilla.includes(MARCA)) {
   process.exit(1);
 }
 
-const salida = plantilla.replace(MARCA, lineas.join('\n').trimEnd());
+/**
+ * Fuera las rutas absolutas del disco.
+ *
+ * TypeScript imprime los re-exports de namespace —`export * as social from
+ * './lib/social.tsx'`— como `typeof import("<ruta absoluta>")`, así que el
+ * archivo salía con la ruta de la máquina donde se generó. Dos problemas, y el
+ * segundo es el grave:
+ *
+ *   1. El `--check` no podía pasar nunca fuera de esa máquina. Fallaba en CI y
+ *      pasaba en local, que es el peor modo de fallar.
+ *   2. `llms.txt` VIAJA EN EL PAQUETE. Publicar la estructura de carpetas de
+ *      quien compiló no aporta nada a un agente y no debería salir de aquí.
+ *
+ * Queda la ruta relativa al repo, que es determinista y además es la útil.
+ */
+const sinRutasDelDisco = (texto) => texto.split(`${root}/`).join('').split(root).join('.');
+
+const salida = sinRutasDelDisco(plantilla.replace(MARCA, lineas.join('\n').trimEnd()));
 
 /**
  * Las primeras diferencias entre lo commiteado y lo generado.

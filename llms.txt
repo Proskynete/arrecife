@@ -1204,7 +1204,7 @@ Tipos (6): `DatosArticulo`, `DatosBase`, `DatosCharla`, `DatosCurso`, `DatosDefe
 | `categoryBadgeVariants` | `(props?: (ConfigVariants<{ active: { false: string; true: string; }; }> & ClassProp) \| undefined): string` |  |
 | `cn` | `(...inputs: ClassValue[]): string` |  |
 | `HOVER_TARJETA` | `"transition-standard hover:border-hairline-hover"` | El hover de la regla 6: solo el borde. Se aplica donde la tarjeta es pulsable. |
-| `social` | `typeof import("/Users/ealvarez/Documents/personal/blog/arrecife/src/lib/social")` |  |
+| `social` | `typeof import("src/lib/social")` |  |
 | `SUPERFICIE_TARJETA` | `"rounded-card border-hairline bg-surface border"` | El contenedor de superficie del sistema, y la única definición de lo que es una tarjeta: `surface`, borde `hairline`, radio de tarjeta. |
 | `textVariants` | `(props?: (ConfigVariants<{ variant: { display: string; stat: string; h1: string; h2: string; h3: string; body: string; lead: string; ui: string; label: string; tag: string; chip: string; meta: string; eyebrow: string; }; tone: { ...; }; }> & ClassProp) \| undefined): string` |  |
 

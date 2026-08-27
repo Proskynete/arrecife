@@ -1,9 +1,9 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* La salida generada desde src/tokens/tokens.ts. Storybook consume exactamente
    lo mismo que consumen los cinco proyectos: si un componente tiene un color
    literal en vez de un token, el switch de tema lo delata. */
-@import '../dist/tokens/theme.css';
+@import "../dist/tokens/theme.css";
 
 html,
 body,
@@ -134,7 +134,6 @@ body,
 .sbdocs-wrapper .docs-story {
   background-color: var(--color-surface);
   border-color: var(--color-hairline);
-  border-radius: var(--radius-card);
   box-shadow: none;
 }
 

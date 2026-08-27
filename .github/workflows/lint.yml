@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📚 Clonar el repositorio
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 🟢 Preparar el entorno
         uses: ./.github/actions/setup

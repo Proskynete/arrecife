@@ -22,6 +22,17 @@ body,
   background-color: var(--color-background) !important;
 }
 
+/* El div de dentro, `sbdocs sbdocs-wrapper css-XXXX`, es el que de verdad pinta
+   el blanco. `.sbdocs-wrapper` y la clase generada por Storybook tienen la MISMA
+   especificidad, así que gana la que se inyecte después — y las suyas se
+   inyectan en tiempo de ejecución. Eso convierte el resultado en una carrera que
+   sale distinta según la máquina.
+   Colgarlo del id sube la especificidad por encima de cualquier clase suya, y el
+   `!important` cubre el caso de que además la escriban en línea. */
+#storybook-docs .sbdocs-wrapper {
+  background-color: var(--color-background) !important;
+}
+
 @source '../src';
 @source '../stories';
 

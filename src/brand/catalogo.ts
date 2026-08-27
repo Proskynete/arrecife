@@ -44,6 +44,28 @@ export const aletas = {
   espuma: 'fin-foam.png',
 } as const;
 
+/**
+ * El uso asignado de cada cara, del inventario del manual.
+ *
+ * No es documentación suelta: es la parte del contrato de humor que se puede
+ * escribir como dato. El manual asigna una situación a cada cara, y sin esto la
+ * elección se hacía a ojo en cada sitio de uso — que es como `annoyed` termina
+ * en una confirmación y `hearts` en un error.
+ *
+ * Falta una: el manual lista ocho caras y `head-5` (sorpresa · confirmación
+ * destructiva) no tiene PNG en `assets/brand/`. Cuando llegue, entra aquí y en
+ * `caras` a la vez.
+ */
+export const usoDeCara = {
+  wink: 'Formularios, nota al pie amable',
+  waiting: 'Sin resultados, estado de espera',
+  laughing: 'Éxito, suscripción confirmada',
+  shades: 'Módulo o curso completado',
+  hearts: 'Agradecimiento, OG de artículo',
+  confused: '404, página no encontrada',
+  annoyed: 'Error del servidor, fallo de build',
+} as const satisfies Record<keyof typeof caras, string>;
+
 export type Cara = keyof typeof caras;
 export type Pose = keyof typeof poses;
 export type Aleta = keyof typeof aletas;

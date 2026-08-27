@@ -14,7 +14,7 @@ export function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {
   return (
     <RadioGroupPrimitive.Item
       className={cn(
-        'rounded-pill border-border bg-surface size-5 shrink-0 border',
+        'rounded-pill border-border bg-surface size-5 shrink-0 cursor-pointer border',
         'transition-standard',
         'hover:border-hairline-hover',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',

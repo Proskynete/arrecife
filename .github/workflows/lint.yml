@@ -1,17 +1,18 @@
 name: "🔦 Lint"
 
 on:
+  # Solo `main` en push. Una rama con PR abierto ya dispara por `pull_request`,
+  # y escuchar los dos eventos hacía correr todo DOS veces por cada empujón:
+  # el doble de minutos para el mismo commit.
   push:
     branches:
       - main
-      - "feat/**"
-      - "fix/**"
   pull_request:
     branches:
       - main
 
 concurrency:
-  group: lint-${{ github.ref }}
+  group: lint-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 permissions:

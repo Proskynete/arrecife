@@ -148,6 +148,7 @@ aparte: los tipos resuelven desde `dist/`, `./tokens` carga sin arrastrar React 
 | `pnpm lint` | ESLint, incluido el veto a hex literales fuera de `tokens.ts` |
 | `pnpm check:tokens` | falla si `src/tokens/` importa algo de fuera |
 | `pnpm test` | corre axe sobre las 161 stories, en los dos modos |
+| `pnpm check:exports` | verifica que `dist/` tiene lo que `exports` promete |
 | `pnpm storybook` | genera los tokens y levanta Storybook en el 6006 |
 
 ## El contraste como test, no como panel
@@ -211,6 +212,30 @@ texto: el borde y el glifo.
 El 8 %, por cierto, aguanta igual o mejor sobre papel que sobre abismo (1.106 vs.
 1.149 en acento). La sospecha de que el modo claro necesitaba una segunda tabla
 iba al revés: el punto flojo del sistema es `error` sobre abismo, 1.067.
+
+## Publicar una versión
+
+El pipeline vive en `.github/workflows/publish.yml` y se dispara con un
+**release publicado** en GitHub. El proceso:
+
+1. Sube la versión en `package.json` y haz el commit.
+2. Crea el tag y el release: `v0.1.0` para `"version": "0.1.0"`. Las notas las
+   arma GitHub solo, agrupadas según `.github/release.yml`.
+3. El workflow verifica que **el tag y `package.json` coinciden** —si no, para—,
+   corre lint, tipos, build, la comprobación de `exports` y la suite completa en
+   los dos modos, y recién ahí publica con `--provenance`.
+
+La procedencia firma el paquete con un enlace verificable a ese commit y a ese
+workflow, así que quien lo instale puede comprobar de dónde salió.
+
+**Antes del primer release** hacen falta dos cosas: un entorno llamado `npm` en
+la configuración del repo con el secreto `NPM_TOKEN` (un token de publicación,
+automation), y una versión distinta de `0.0.0` — el workflow rechaza esa a
+propósito.
+
+Para probar sin riesgo: *Actions → Publicar en npm → Run workflow* con el ensayo
+activado. Hace todo menos publicar, y no necesita el token. El resumen del run
+lista exactamente qué archivos viajarían en el tarball y cuánto pesa.
 
 ## Estado
 

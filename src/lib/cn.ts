@@ -1,21 +1,39 @@
 import { clsx, type ClassValue } from 'clsx';
 import { extendTailwindMerge } from 'tailwind-merge';
 
+import { control, radius, spacing, typeScale } from '../tokens/tokens.ts';
+
 /**
- * tailwind-merge no conoce la escala de Arrecife: sin esto, `cn('text-ui',
- * 'text-h2')` deja las dos clases puestas y gana la que el CSS ordene, no la
- * que el consumidor pidió. Cada grupo de aquí es una escala declarada en
- * `tokens.ts`, así que se mantienen sincronizados a mano y a propósito.
+ * tailwind-merge no conoce la escala de Arrecife, y eso no es cosmético: sin
+ * declararla, `text-tag` no parece un tamaño sino un COLOR —`text-` es ambiguo—,
+ * así que en `cn('text-tag', 'text-text-primary')` gana el último y el tamaño
+ * desaparece. La clase queda escrita en el componente y no llega al DOM.
+ *
+ * Esta lista se mantenía a mano «y a propósito». Se desincronizó: `stat`,
+ * `meta`, `tag`, `chip` y `lead` entraron en `typeScale` y no aquí, y las cinco
+ * se estaban cayendo en cualquier pieza que además pidiera un tono — que son
+ * casi todas. Los badges renderizaban a 16px heredados en vez de a 12.5.
+ *
+ * Ahora se DERIVA de `tokens.ts`. Añadir un escalón ya no puede olvidarse aquí,
+ * porque aquí no hay nada que añadir. La dirección de la dependencia es la de
+ * siempre: `lib/` puede importar tokens, los tokens no importan nada.
  */
+const escalas = Object.keys(typeScale);
+const radios = Object.keys(radius);
+const espacios = Object.keys(spacing);
+/** `control.md` se emite como `--spacing-control-md` → `px-control-md`. */
+const controles = Object.keys(control).map((nombre) => `control-${nombre}`);
+
 const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      'font-size': [{ text: ['display', 'h1', 'h2', 'h3', 'body', 'ui', 'label', 'eyebrow'] }],
-      rounded: [{ rounded: ['chip', 'control', 'card', 'panel', 'pill'] }],
-      p: [{ p: ['xs', 'sm', 'md', 'lg', 'xl', 'section'] }],
-      px: [{ px: ['xs', 'sm', 'md', 'lg', 'xl', 'section'] }],
-      py: [{ py: ['xs', 'sm', 'md', 'lg', 'xl', 'section'] }],
-      gap: [{ gap: ['xs', 'sm', 'md', 'lg', 'xl', 'section'] }],
+      'font-size': [{ text: escalas }],
+      rounded: [{ rounded: radios }],
+      p: [{ p: espacios }],
+      px: [{ px: [...espacios, ...controles] }],
+      py: [{ py: espacios }],
+      gap: [{ gap: espacios }],
+      size: [{ size: controles }],
     },
   },
 });

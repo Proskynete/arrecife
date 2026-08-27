@@ -47,7 +47,7 @@ export const Portada: Story = {
         action={
           <>
             <Button variant="conversion">Agenda una llamada</Button>
-            <Button variant="ghost">Ver el trabajo</Button>
+            <Button variant="secondary">Ver el trabajo</Button>
           </>
         }
       />

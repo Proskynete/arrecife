@@ -6,6 +6,8 @@ import { cn } from '../lib/cn.ts';
 import { Spinner } from '../lib/glyphs.tsx';
 
 /**
+ * Las CUATRO variantes del sistema, y solo esas cuatro.
+ *
  * Regla de marca 2, como código y no como documentación: en modo claro el botón
  * primario no puede ser bioluz ni arena, así que pasa a casco sólido. No hay un
  * hex literal en ningún lado — `brand.hull` es un token, y el hover reusa
@@ -14,10 +16,22 @@ import { Spinner } from '../lib/glyphs.tsx';
  * Regla de marca 3: `conversion` va UNA sola vez por pantalla. Está documentado
  * en la story y no se fuerza en runtime: dos botones de conversión en una misma
  * página son un problema de diseño, no un error que deba tirar el render.
+ *
+ * `secondary` NUNCA se rellena el fondo. Es borde y texto: en reposo, hairline
+ * de hover y espuma; en hover, los dos pasan a bioluz. Un secundario relleno es
+ * un primario mal teñido, y era lo que hacía este archivo.
+ *
+ * `tertiary` es la estética CLI del sistema: mono, formato `./acción →`, sin
+ * caja. Aparece en cada tarjeta, así que no es un `ghost` genérico con otro
+ * nombre — el formato del texto es parte de la variante.
+ *
+ * No hay variante de peligro. El error del sistema vive en los avisos y en la
+ * validación de campo, no en un botón rojo. Si alguna vez hace falta uno de
+ * verdad, entra primero en el documento y luego aquí.
  */
 const button = cva(
   [
-    'inline-flex items-center justify-center gap-xs whitespace-nowrap select-none',
+    'inline-flex cursor-pointer items-center justify-center gap-xs whitespace-nowrap select-none',
     'rounded-control font-sans font-medium',
     'transition-standard',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
@@ -33,21 +47,30 @@ const button = cva(
         ],
         conversion: 'bg-warm text-warm-on hover:bg-warm-hover',
         secondary: [
-          'bg-surface text-text-primary border border-border',
-          'hover:bg-surface-raised hover:border-hairline-hover',
+          'border-hairline-hover border bg-transparent text-text-primary',
+          'hover:border-accent hover:text-accent',
         ],
-        ghost: 'bg-transparent text-text-secondary hover:bg-surface-raised hover:text-text-primary',
-        danger: [
-          'bg-transparent text-error border border-error',
-          'hover:bg-error hover:text-accent-on',
+        tertiary: [
+          'bg-transparent font-mono font-normal text-text-secondary',
+          'hover:text-accent hover:underline hover:underline-offset-4',
         ],
       },
       size: {
-        sm: 'h-8 px-sm text-label',
-        md: 'h-10 px-md text-ui',
-        lg: 'h-12 px-lg text-ui',
+        sm: 'h-8 px-control-sm text-label',
+        md: 'h-10 px-control-md text-ui',
+        lg: 'h-12 px-control-lg text-lead',
+        /** Cuadrado 42×42, sin texto. Lleva `aria-label` obligatorio. */
+        icon: 'size-control-icon p-0',
       },
     },
+    compoundVariants: [
+      /**
+       * El terciario no tiene caja: ni padding horizontal ni alto de control.
+       * Va aquí y no como `px-0` en la variante para que gane al `px-*` del
+       * tamaño sin depender del orden en que cva concatena las clases.
+       */
+      { variant: 'tertiary', size: ['sm', 'md', 'lg'], class: 'h-auto px-0' },
+    ],
     defaultVariants: { variant: 'primary', size: 'md' },
   },
 );

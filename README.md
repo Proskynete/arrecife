@@ -3,6 +3,19 @@
 Librería de componentes de la identidad visual de Eduardo Álvarez.
 `@eduardoalvarez/arrecife` · React 19 · TypeScript · shadcn/ui · Storybook · tsup.
 
+## Los documentos de identidad
+
+`docs/design-system.md` y `docs/manual-de-marca.md` son la extracción de los dos
+canvas de Claude Design, en el repo para poder hacer `grep` y para versionarlos.
+El canvas sigue siendo la fuente; esto es la copia consultable.
+
+Está aquí por un motivo concreto: la paleta de resaltado vivía escrita a mano en
+un proyecto con un `#E05252` que este README declara incorrecto desde hace
+meses, y nadie lo vio porque el documento no era `grep`-able desde el código.
+
+`docs/decisiones.md` es la otra mitad: los quince puntos donde el código y el
+documento no dicen lo mismo, con la resolución y el motivo de cada uno.
+
 ## La restricción que manda sobre todo lo demás
 
 `src/tokens/` no importa nada: ni React, ni componentes, ni CSS de terceros. Es el
@@ -47,6 +60,9 @@ Grotesque, Geist y JetBrains Mono como prefiera: la librería no impone cómo.
 | `fonts.display` | `--font-display` | `font-display` |
 | `radius.card` | `--radius-card` | `rounded-card` |
 | `spacing.lg` | `--spacing-lg` | `p-lg`, `gap-lg`, `mb-lg` |
+| `control.md` | `--spacing-control-md` | `px-control-md` (padding de botón) |
+| `control.icon` | `--spacing-control-icon` | `size-control-icon` (botón de icono 42×42) |
+| `gradient[modo].hero` | `--gradient-hero` | `degradado-hero` (utilidad, sigue el modo) |
 | `size.nav` | `--spacing-nav` | `h-nav` |
 | `size.content` / `size.wide` | `--container-content` / `--container-wide` | `max-w-content` / `max-w-wide` |
 | `limits.measure` | `--container-measure` | `max-w-measure` |
@@ -61,6 +77,40 @@ las plantillas de OG:
 ```ts
 import { tokens } from '@eduardoalvarez/arrecife/tokens';
 ```
+
+El tema de resaltado va en otra subruta por la misma razón — se consume desde
+`astro.config.mjs`, no desde un componente:
+
+```ts
+import { arrecife } from '@eduardoalvarez/arrecife/shiki';
+
+export default defineConfig({
+  markdown: { syntaxHighlight: 'shiki', shikiConfig: { theme: arrecife } },
+});
+```
+
+**La librería no trae Shiki.** Los proyectos ya resaltan en build con su propia
+herramienta; lo que les faltaba no era un resaltador, era el tema. `CodeBlock`
+sigue recibiendo el código ya resaltado, que es para lo que está escrito.
+
+Las plantillas de OG se publican en su propia subruta por la misma razón: un
+generador corre en un worker o en un script de build y no debe arrastrar React ni
+un solo componente.
+
+```ts
+import satori from 'satori';
+import { plantillaArticulo, OG } from '@eduardoalvarez/arrecife/og';
+
+const svg = await satori(plantillaArticulo({ title, date, readingMinutes }), {
+  width: OG.width,   // 1200
+  height: OG.height, // 630
+  fonts: [...],
+});
+```
+
+Son funciones puras que devuelven el árbol que Satori pinta, construido solo con
+tokens. `dist/og/index.js` no menciona React en ninguna línea, y eso es
+comprobable con un `grep`.
 
 ## Cómo se usa desde un proyecto
 
@@ -79,7 +129,7 @@ props generada desde los tipos. Las de `Text`:
 
 | prop | tipo | por defecto |
 | --- | --- | --- |
-| `variant` | `display · h1 · h2 · h3 · body · ui · label · eyebrow` | `body` |
+| `variant` | `display · stat · h1 · h2 · h3 · body · lead · ui · label · tag · meta · chip · eyebrow` | `body` |
 | `tone` | `primary · secondary · muted · accent · warm · success · warning · error` | `primary` |
 | `as` | `h1 · h2 · h3 · h4 · p · span · strong · em · figcaption · caption · legend · dt · dd · li` | según `variant` |
 | `measure` | `boolean` — corta a 68ch | `true` en `body` |
@@ -97,7 +147,7 @@ aparte: los tipos resuelven desde `dist/`, `./tokens` carga sin arrastrar React 
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint, incluido el veto a hex literales fuera de `tokens.ts` |
 | `pnpm check:tokens` | falla si `src/tokens/` importa algo de fuera |
-| `pnpm test` | corre axe sobre las 128 stories, en los dos modos |
+| `pnpm test` | corre axe sobre las 161 stories, en los dos modos |
 | `pnpm storybook` | genera los tokens y levanta Storybook en el 6006 |
 
 ## El contraste como test, no como panel
@@ -137,6 +187,31 @@ de la razón de contraste, que cerca del blanco se pasa de frenada.
 `textMuted` no va nunca sobre `surfaceRaised`: en oscuro da 4.07. Los menús usan
 `textSecondary`, que da 6.96.
 
+### La tercera corrección: el color semántico no es color de texto sobre su tinte
+
+Salió al implementar la receta de avisos del documento — fondo al 8 % del color
+semántico — y la tiró la suite en modo claro, en cinco stories.
+
+Los semánticos claros están calibrados para pasar **justo** sobre papel. Teñir el
+fondo con ellos los hunde por debajo de AA:
+
+| tono | sobre papel | sobre su propio tinte 8 % | `textPrimary` sobre el tinte |
+| --- | --- | --- | --- |
+| `accent` | 4.55 | **4.12** | 14.82 |
+| `warm` | 4.54 | **4.11** | 14.85 |
+| `success` | 5.80 | 5.17 | 14.63 |
+| `warning` | 4.88 | **4.40** | 14.78 |
+| `error` | 4.87 | **4.35** | 14.64 |
+
+No hay alfa que lo arregle: el problema es poner el color encima de sí mismo. La
+resolución no toca la paleta — el tinte es una **superficie**, así que el texto
+que lleva encima es un token de texto. El color semántico se queda donde no es
+texto: el borde y el glifo.
+
+El 8 %, por cierto, aguanta igual o mejor sobre papel que sobre abismo (1.106 vs.
+1.149 en acento). La sospecha de que el modo claro necesitaba una segunda tabla
+iba al revés: el punto flojo del sistema es `error` sobre abismo, 1.067.
+
 ## Estado
 
 - **Fase 1** · andamiaje, tokens y Storybook con el switch de tema. Completa.
@@ -144,19 +219,42 @@ de la razón de contraste, que cerca del blanco se pasa de frenada.
 - **Fase 3** · los 18 primitivos sobre shadcn/Radix, más `Text` y ocho añadidos
   después de medir el uso real en los cinco proyectos. Completa.
 - **Fase 4** · `AudioPlayer`, migrado. Completa.
-- **Fase 5** · en curso. Hechos `ArticleCard`, `TalkCard`, `CourseCard`, `LinkRow`,
-  `CodeBlock`, `Blockquote` y `PageHeader`. Faltan `EmptyState`, `NavBar`,
-  `Footer` y `og/`, que dependen de `brand/` y esperan los SVG.
+- **Fase 5** · completa. `ArticleCard`, `AuthorCard`, `TalkCard`, `CourseCard`,
+  `LinkRow`, `CodeBlock`, `Blockquote`, `PageHeader`, `EmptyState`, `Breadcrumb`,
+  `Nav`, `SidebarNav`, `TableOfContents`, `Stat`, `Footer`, `Hero`,
+  `NewsletterForm`, `og/` y `shiki/`.
 
-  `Hero` y `NewsletterSection` salieron de la lista. El hero del portafolio y el
-  de cursos son el mismo esqueleto que una cabecera de sección — eyebrow en
-  acento, titular, párrafo acotado — así que `PageHeader` los cubre con una prop
-  de escala en vez de duplicar la regla. Y la captura de correo existe en un solo
-  proyecto y la mitad de su código es un `POST` a un endpoint que solo vive ahí:
-  eso es infraestructura, no identidad.
+  El criterio para decidir qué entra sigue siendo el mismo: **codifica una regla
+  de identidad, tiene dos o más consumidores, y no arrastra infraestructura del
+  proyecto.**
 
-  El criterio para decidir qué entra: **codifica una regla de identidad, tiene dos
-  o más consumidores, y no arrastra infraestructura del proyecto.**
+### `Hero` y `NewsletterForm` volvieron a entrar
+
+Estaban fuera de la lista con un argumento escrito, y el argumento se revisó.
+
+**`Hero`.** Se había descartado porque «el hero del portafolio y el de cursos son
+el mismo esqueleto que una cabecera de sección, y `PageHeader` los cubre con una
+prop de escala». Eso vale para el texto y solo para el texto. El hero del
+documento tiene además degradado, radio de panel, texto acotado al 62 % del ancho
+y la pose sangrando por la esquina inferior derecha — nada de lo cual cabe en una
+prop de escala de `PageHeader`, y todo lo cual son reglas de identidad que si no
+viven aquí se reimplementan cinco veces. Son dos piezas distintas: `PageHeader`
+sigue siendo la cabecera de sección y va dentro de `<main>`; `Hero` es la portada
+y va uno por sitio.
+
+**`NewsletterForm`.** Se había descartado porque «la mitad de su código es un
+`POST` a un endpoint que solo vive ahí: eso es infraestructura». Correcto, y por
+eso el `POST` no está aquí. El componente es presentacional: recibe `state` y
+emite `onSubmitEmail`, y el proyecto hace la llamada con su proveedor. Lo que sí
+es identidad son los cuatro estados y, sobre todo, que el aviso vaya **debajo**
+del formulario en vez de reemplazarlo — reemplazarlo es lo que rompe el caso real
+de quien se suscribe con el correo equivocado.
+
+`Nav`, `Footer`, `Breadcrumb` y `Hero` son composición de página y se pueden
+discutir como piezas de librería. Entran igual: la estética CLI —el `./sección`
+de la barra, el `~ / artículos / slug` de la ruta, la firma `$ cd ~/…` del pie—
+es lo primero que se desincroniza cuando cinco proyectos la escriben cada uno por
+su cuenta.
 
 ### Decisiones de la Fase 3
 
@@ -174,6 +272,45 @@ de la razón de contraste, que cerca del blanco se pasa de frenada.
   el progreso, y ninguna otra parte del componente puede deducirlo.
 - **Cero hex literales**, incluido `Button`. La regla 2 sale con
   `light:bg-brand-hull`, porque el casco ya era un token.
+- **`cursor-pointer` explícito** en todo lo que se pulsa. Tailwind v4 quitó del
+  preflight el `cursor: pointer` de `button`, así que un botón sin la clase se
+  queda con la flecha del sistema. Lo llevan `Button`, `Checkbox`,
+  `RadioGroupItem`, `Switch`, `TabsTrigger`, el disparador de `Select`, los
+  cerrar de `Dialog`/`Sheet`/`Toast`, `PaginationLink`, el casco de las tarjetas
+  pulsables y los enlaces de `Nav`, `Footer` y `Breadcrumb` — que renderizan
+  `<a>` sin `href` cuando se les enchufa el `Link` de un enrutador.
+
+  Dos excepciones deliberadas. `Label` apunta a un control pero no es el control.
+  Y los **ítems de menú** de `Select` y `DropdownMenu` se quedan en
+  `cursor-default`: un menú nativo no muestra la manito, y el highlight de la
+  fila ya dice que la fila responde.
+
+### La paleta de sintaxis
+
+Del documento, literal: «keywords arena, strings bioluz, comments plancton,
+identifiers espuma», sobre casco. Cuatro colores a propósito — funciones,
+variables y tipos caen los tres en espuma, porque el sistema se comunica con
+color y borde y no con ruido cromático. Los números y booleanos van con las
+cadenas: el documento no los asigna, y agruparlos por «son literales» es más
+coherente que estrenar un quinto color.
+
+Medido sobre `brand.hull` #0B1524, todo AA:
+
+| rol | token | contraste |
+| --- | --- | --- |
+| identificador | `textPrimary` | 16.42:1 |
+| literal | `accent` | 10.05:1 |
+| palabra clave | `warm` | 9.05:1 |
+| comentario | `textMuted` | 5.43:1 |
+| invalidez | `error` | 4.97:1 |
+
+`brand.body` (#3E7CB1) no entra: el sistema lo restringe a relleno y aquí mide
+4.2:1.
+
+Vivía escrita a mano en `eduardoalvarez.dev/src/settings/shiki-reef.ts`, y ahí
+dentro se había quedado un `#E05252` — justo el hex que este README dice que está
+mal. Es el caso de libro de por qué la paleta no puede vivir dentro de un
+proyecto: el tema se genera desde `tokens.sintaxis` y el rojo sale corregido solo.
 
 ### Temas anidables
 

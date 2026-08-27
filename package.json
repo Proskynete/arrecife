@@ -14,7 +14,8 @@
   ],
   "files": [
     "dist",
-    "assets"
+    "assets",
+    "CHANGELOG.md"
   ],
   "exports": {
     ".": {

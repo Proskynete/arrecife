@@ -272,23 +272,33 @@ const FAMILIA: Record<string, string> = {
 
 const TAMANO: Record<keyof typeof typeScale, string> = {
   display: 'text-display',
+  stat: 'text-stat',
   h1: 'text-h1',
   h2: 'text-h2',
   h3: 'text-h3',
   body: 'text-body',
+  lead: 'text-lead',
   ui: 'text-ui',
   label: 'text-label',
+  tag: 'text-tag',
+  meta: 'text-meta',
+  chip: 'text-chip',
   eyebrow: 'text-eyebrow uppercase',
 };
 
 const EJEMPLO: Record<keyof typeof typeScale, string> = {
   display: 'Escalar con criterio',
+  stat: '46',
   h1: 'Ayudo a equipos de ingeniería a escalar con criterio',
   h2: 'Arquitectura que sobrevive al equipo que la escribió',
   h3: 'Decisiones documentadas, no heredadas',
   body: 'El sistema no anima posición ni escala. Los estados se comunican con borde y color, no con movimiento, porque el movimiento es caro de leer y barato de abusar.',
+  lead: 'Bajada de página interna, diecisiete píxeles',
   ui: 'Etiqueta de interfaz, quince píxeles',
   label: 'Etiqueta mínima, trece píxeles',
+  tag: 'Publicado',
+  meta: '18 ago 2026 · 8 min · v5.0.1',
+  chip: 'engineering-culture',
   eyebrow: 'sección',
 };
 

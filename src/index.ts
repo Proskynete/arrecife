@@ -10,3 +10,4 @@ export * from './primitives/index.ts';
 export * from './components/index.ts';
 export * from './brand/index.ts';
 export { cn } from './lib/cn.ts';
+export * as social from './lib/social.tsx';

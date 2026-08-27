@@ -55,7 +55,6 @@
       ]
     }
   },
-  "pull-request-title-pattern": "chore: versión ${version}",
-  "pull-request-header": "Esta rama corta la versión. Al mergear, se crea el tag, el release y se publica en npm.",
+  "pull-request-header": "Esta rama corta la versión. Al mergear, se crea el tag, el release y se publica en npm. NO cambies el título: release-please lee la versión de vuelta desde él.",
   "separate-pull-requests": false
 }

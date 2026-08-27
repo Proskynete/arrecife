@@ -459,14 +459,45 @@ if (!plantilla.includes(MARCA)) {
 
 const salida = plantilla.replace(MARCA, lineas.join('\n').trimEnd());
 
+/**
+ * Las primeras diferencias entre lo commiteado y lo generado.
+ *
+ * Un check que solo dice «está desactualizado» obliga a regenerar a ciegas para
+ * enterarse de qué cambió — y si el que falla es CI y no tu portátil, ni eso
+ * sirve. Esto imprime las líneas concretas, que es lo único accionable desde el
+ * log de un runner.
+ */
+function primerasDiferencias(esperado, encontrado, cuantas = 12) {
+  const a = esperado.split('\n');
+  const b = encontrado.split('\n');
+  const salida = [];
+
+  for (let i = 0; i < Math.max(a.length, b.length) && salida.length < cuantas; i += 1) {
+    if (a[i] === b[i]) continue;
+    salida.push(`  línea ${i + 1}`);
+    salida.push(`    commiteado: ${a[i] === undefined ? '(no existe)' : JSON.stringify(a[i])}`);
+    salida.push(`    generado:   ${b[i] === undefined ? '(no existe)' : JSON.stringify(b[i])}`);
+  }
+
+  if (a.length !== b.length) {
+    salida.push(`  total de líneas · commiteado ${a.length} · generado ${b.length}`);
+  }
+
+  return salida.join('\n');
+}
+
 if (COMPROBAR) {
   const actual = await readFile(DESTINO, 'utf8').catch(() => null);
   if (actual !== salida) {
     console.error(
       'llms.txt está desactualizado. Se genera desde los tipos y la plantilla:\n\n' +
         '  pnpm build:llms\n\n' +
-        'Pasa cuando cambia un prop y no se regenera. Es el fallo que el archivo existe para evitar.',
+        'Pasa cuando cambia un prop y no se regenera. Es el fallo que el archivo existe para evitar.\n',
     );
+    if (actual !== null) {
+      console.error('Primeras diferencias:\n');
+      console.error(primerasDiferencias(actual, salida));
+    }
     process.exit(1);
   }
   console.log('arrecife · llms.txt al día con los tipos');

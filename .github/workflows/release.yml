@@ -35,8 +35,13 @@ jobs:
     name: Preparar la versión
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    # Los tres que pide el README de la acción. `issues: write` faltaba: es el
+    # que necesita para mantener sus etiquetas (`autorelease: pending`,
+    # `autorelease: tagged`), que son con las que sabe qué PR de versión está
+    # sin cortar.
     permissions:
       contents: write
+      issues: write
       pull-requests: write
     outputs:
       publicar: ${{ steps.release.outputs.releases_created }}

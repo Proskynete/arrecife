@@ -3,7 +3,6 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "component": "",
       "include-component-in-tag": false,
       "initial-version": "0.1.0",
       "bump-minor-pre-major": true,
@@ -53,5 +52,5 @@
       ]
     }
   },
-  "pull-request-header": "Esta rama corta la versión. Al mergear, se crea el tag, el release y se publica en npm. NO cambies el título: release-please lee la versión de vuelta desde él."
+  "pull-request-header": "Esta rama corta la versión. Al mergear se crea el tag, el release y se publica en npm.\n\nNo le cambies el título ni la rama a mano: release-please saca la VERSIÓN del título y el COMPONENTE del nombre de la rama. Si dejan de casar, el release no se crea y queda un «untagged, merged release PRs outstanding» que solo se desatasca cortando el tag a mano."
 }

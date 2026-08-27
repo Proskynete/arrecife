@@ -43,6 +43,11 @@ jobs:
       - name: 🔒 Verificar la pureza de los tokens
         run: pnpm check:tokens
 
+      # release-please ignora en silencio las claves que no conoce, así que una
+      # configuración rota parece correcta hasta que el release no se corta.
+      - name: 🏷️ Validar la configuración de release-please
+        run: pnpm check:release
+
       - name: 🧮 Comprobar los tipos
         run: pnpm typecheck
 

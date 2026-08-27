@@ -15,6 +15,7 @@
   "files": [
     "dist",
     "assets",
+    "llms.txt",
     "CHANGELOG.md"
   ],
   "exports": {
@@ -44,6 +45,7 @@
       "import": "./dist/shiki/index.js",
       "require": "./dist/shiki/index.cjs"
     },
+    "./llms.txt": "./llms.txt",
     "./assets/*": "./assets/*",
     "./package.json": "./package.json"
   },
@@ -51,9 +53,11 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "pnpm check:tokens && tsup && pnpm build:tokens",
+    "build": "pnpm check:tokens && tsup && pnpm build:tokens && pnpm build:llms",
     "build:tokens": "node scripts/build-tokens.mjs",
+    "build:llms": "node scripts/build-llms.mjs",
     "check:tokens": "node scripts/check-tokens-purity.mjs",
+    "check:llms": "node scripts/build-llms.mjs --check",
     "check:exports": "node scripts/check-package-exports.mjs",
     "check:release": "node scripts/check-release-config.mjs",
     "typecheck": "tsc --noEmit",

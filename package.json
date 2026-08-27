@@ -53,6 +53,7 @@
     "build": "pnpm check:tokens && tsup && pnpm build:tokens",
     "build:tokens": "node scripts/build-tokens.mjs",
     "check:tokens": "node scripts/check-tokens-purity.mjs",
+    "check:exports": "node scripts/check-package-exports.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "pnpm test:oscuro && pnpm test:claro",

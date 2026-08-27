@@ -7,7 +7,8 @@
 
 html,
 body,
-#storybook-root {
+#storybook-root,
+#storybook-docs {
   background-color: var(--color-background);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
@@ -29,6 +30,11 @@ body,
    estilos que Storybook inyecta en tiempo de ejecución.
 --------------------------------------------------------------------------- */
 
+/* `.sbdocs` a secas incluida: el contenedor de la página lleva esa clase y
+   pinta blanco por su cuenta, dejando una banda clara arriba justo debajo del
+   titular. La regla del bloque de previsualización va más abajo y le gana por
+   especificidad, así que las tarjetas siguen en `surface`. */
+.sbdocs,
 .sbdocs-wrapper {
   background-color: var(--color-background);
   font-family: var(--font-sans);

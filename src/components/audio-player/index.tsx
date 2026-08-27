@@ -503,7 +503,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
             {title ? (
               <p className="text-label font-sans text-text-secondary truncate">{title}</p>
             ) : null}
-            <p className="text-label font-mono text-text-muted tabular-nums">
+            <p className="text-chip font-mono text-text-muted tabular-nums">
               {formatTime(currentTime)} / {formatTime(duration)}
             </p>
           </div>
@@ -541,7 +541,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
             <span className="text-eyebrow font-mono text-accent uppercase">
               Narración de audio
             </span>
-            <span className="text-label font-mono text-text-muted ml-auto tabular-nums">
+            <span className="text-chip font-mono text-text-muted ml-auto tabular-nums">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
@@ -596,7 +596,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
             <BarraProgreso alto="h-1.5" perilla={12} progreso={progress} {...puntero} />
           </div>
 
-          <div className="text-label font-mono text-text-muted mb-sm flex justify-between">
+          <div className="text-chip font-mono text-text-muted mb-sm flex justify-between">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
@@ -605,7 +605,8 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
             <div className="flex items-center gap-1">
               <BotonSalto segundos={-15} className="p-1.5" tamano="w-5 h-5" onSaltar={skip} />
               <BotonPlay
-                className="rounded-pill p-2"
+                // 34px, del documento. Es tamaño de control, no de escala.
+                className="rounded-pill flex size-[34px] items-center justify-center"
                 tamano="w-4 h-4"
                 etiqueta={etiquetaPlay}
                 onAlternar={togglePlay}
@@ -628,7 +629,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
   /* ─── full · podcasts y páginas dedicadas ──────────────────────────────── */
   return (
-    <div className="bg-surface rounded-card border-border p-md w-full border">
+    <div className="bg-surface rounded-control border-border p-md w-full border">
       <audio ref={audioRef} src={src} preload="metadata" />
 
       {title ? (
@@ -639,7 +640,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
         <BarraProgreso alto="h-2" perilla={16} progreso={progress} {...puntero} />
       </div>
 
-      <div className="text-label font-mono text-text-muted mb-sm flex justify-between">
+      <div className="text-chip font-mono text-text-muted mb-sm flex justify-between">
         <span>{formatTime(currentTime)}</span>
         <span>{formatTime(duration)}</span>
       </div>
@@ -648,7 +649,8 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
         <div className="gap-xs flex items-center">
           <BotonSalto segundos={-15} className="p-2" tamano="w-5 h-5" onSaltar={skip} />
           <BotonPlay
-            className="rounded-pill p-3"
+            // 48px, del documento.
+            className="rounded-pill flex size-12 items-center justify-center"
             tamano="w-6 h-6"
             etiqueta={etiquetaPlay}
             onAlternar={togglePlay}

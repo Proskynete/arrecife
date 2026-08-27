@@ -13,7 +13,7 @@ import { HOVER_TARJETA, SUPERFICIE_TARJETA } from '../primitives/card.tsx';
  * escala, ni elevación, ni desplazamiento del título.
  */
 export const TARJETA = [
-  'group block',
+  'group block cursor-pointer',
   SUPERFICIE_TARJETA,
   HOVER_TARJETA,
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',

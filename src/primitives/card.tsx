@@ -10,6 +10,13 @@ import { Text } from './typography.tsx';
  * Las tarjetas con dominio — `ArticleCard`, `TalkCard`, `CourseCard`,
  * `LinkRow` — reutilizan estas mismas clases, así que si el radio o el borde
  * cambian, cambian en todas a la vez.
+ *
+ * El documento daba a la tarjeta un fondo propio, `#0B1620`, un cuarto nivel de
+ * superficie entre abismo y fosa. No entra: no tiene par en modo claro, y una
+ * superficie sin par es un token que miente en la mitad de los proyectos. La
+ * tarjeta es `surface`, y el documento se corrige — ver `docs/decisiones.md`.
+ *
+ * El padding sí estaba mal: el documento pide 26 (`lg`) y aquí había 16 (`md`).
  */
 export const SUPERFICIE_TARJETA = 'rounded-card border-hairline bg-surface border';
 
@@ -21,7 +28,7 @@ export function Card({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
 }
 
 export function CardHeader({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn('gap-xs p-md flex flex-col', className)} {...props} />;
+  return <div className={cn('gap-xs p-lg flex flex-col', className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: ComponentPropsWithoutRef<'h3'>) {
@@ -33,13 +40,13 @@ export function CardDescription({ className, ...props }: ComponentPropsWithoutRe
 }
 
 export function CardContent({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn('px-md pb-md', className)} {...props} />;
+  return <div className={cn('px-lg pb-lg', className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   return (
     <div
-      className={cn('border-hairline px-md py-sm gap-sm flex items-center border-t', className)}
+      className={cn('border-hairline px-lg py-md gap-sm flex items-center border-t', className)}
       {...props}
     />
   );

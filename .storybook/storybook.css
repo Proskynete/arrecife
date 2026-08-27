@@ -33,6 +33,42 @@ body,
   background-color: var(--color-background) !important;
 }
 
+/* La tabla de props tiene el mismo empate de especificidad que el wrapper: su
+   clase generada gana a `.docblock-argstable` por orden de inyección. Se cuelga
+   del id por la misma razón.
+
+   Va en `surface`, la misma superficie que los bloques de previsualización: es
+   un panel de información sobre la página, no la página. La cabecera se deja
+   transparente para que descanse sobre el fondo y separe visualmente. */
+#storybook-docs .docblock-argstable,
+#storybook-docs .docblock-argstable tbody,
+#storybook-docs .docblock-argstable tbody tr,
+#storybook-docs .docblock-argstable tbody td {
+  background-color: var(--color-surface) !important;
+}
+
+#storybook-docs .docblock-argstable-head,
+#storybook-docs .docblock-argstable-head th {
+  background-color: transparent !important;
+}
+
+#storybook-docs .docblock-argstable tbody tr {
+  border-bottom-color: var(--color-hairline) !important;
+}
+
+/* Los controles de la tabla —campos, desplegables y botones— se pintan con
+   clases generadas cuyo hash cambia entre versiones, así que se apuntan por
+   tipo de elemento. Van en `surfaceRaised`, un escalón por encima de la
+   superficie de la tabla, que es la jerarquía del sistema. */
+#storybook-docs .docblock-argstable textarea,
+#storybook-docs .docblock-argstable input,
+#storybook-docs .docblock-argstable select,
+#storybook-docs .docblock-argstable button {
+  background-color: var(--color-surface-raised) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+
 @source '../src';
 @source '../stories';
 

@@ -231,9 +231,14 @@ El ciclo, entero, está en `.github/workflows/release.yml`:
    coinciden, y corre lint, tipos, build, la verificación de `exports` y la
    suite completa en los dos modos.
 
-`feat:` sube la minor, `fix:` la patch, y un `!` o un `BREAKING CHANGE:` sube la
-major. Mientras la versión sea `0.x`, `feat:` sube la minor y todo lo demás la
-patch — está en `release-please-config.json`.
+`feat:` sube la minor y `fix:` la patch. Mientras la versión sea `0.x`, un
+cambio que rompe sube la **minor** y no la major: eso es lo que significa el
+`0.` — que la API todavía se puede mover sin gastar la 1.0. Está en
+`release-please-config.json`, y ahí también está `initial-version` con el `0.1.0`
+de la primera versión.
+
+Cuando la API se estabilice, se sube a `1.0.0` a mano una vez y a partir de ahí
+un `BREAKING CHANGE:` sube la major como en cualquier paquete.
 
 ### La publicación de confianza
 

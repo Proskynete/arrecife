@@ -1,18 +1,19 @@
-import type { Preview } from '@storybook/react-vite';
-import { withThemeByDataAttribute } from '@storybook/addon-themes';
+import type { Preview } from "@storybook/react-vite";
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import {
   decorators as pseudoStates,
   initialGlobals as pseudoStatesGlobals,
-} from 'storybook-addon-pseudo-states/preview';
+} from "storybook-addon-pseudo-states/preview";
 
-import './storybook.css';
+import "./storybook.css";
 
 /**
  * El tema por defecto se puede fijar desde el entorno para correr la suite de
  * accesibilidad en los dos modos: un color solo falla en uno de ellos, así que
  * pasar en oscuro no prueba nada sobre el claro.
  */
-const temaInicial = import.meta.env['STORYBOOK_THEME'] === 'claro' ? 'claro' : 'oscuro';
+const temaInicial =
+  import.meta.env["STORYBOOK_THEME"] === "claro" ? "claro" : "oscuro";
 
 const preview: Preview = {
   decorators: [
@@ -38,9 +39,9 @@ const preview: Preview = {
      * token.
      */
     withThemeByDataAttribute({
-      themes: { oscuro: 'dark', claro: 'light' },
+      themes: { oscuro: "dark", claro: "light" },
       defaultTheme: temaInicial,
-      attributeName: 'data-theme',
+      attributeName: "data-theme",
     }),
   ],
   initialGlobals: {
@@ -49,12 +50,12 @@ const preview: Preview = {
   // Cada componente publica su página de documentación con la tabla de props.
   // Es lo que va a leer quien lo consuma desde otro proyecto, que no tiene el
   // código delante.
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
     // El fondo lo manda el token, no el addon de backgrounds.
     backgrounds: { disable: true },
-    a11y: { test: 'error' },
+    a11y: { test: "error" },
     controls: { matchers: { color: /(background|color)$/i } },
   },
 };

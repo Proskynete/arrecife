@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.1](https://github.com/Proskynete/arrecife/compare/v0.1.0...v0.1.1) (2026-08-27)
+
+
+### 🐛 Correcciones
+
+* **ci:** componente vacío en release-please y configuración al mínimo ([1888bb3](https://github.com/Proskynete/arrecife/commit/1888bb3388ab58a5df7f801948f5e70135a59639))
+* **ci:** configuración de release-please contra el esquema oficial ([206c235](https://github.com/Proskynete/arrecife/commit/206c2358964ee55c6c2be4c5cca63284c8d10171))
+* **ci:** quitar el patrón de título de release-please ([c3c8796](https://github.com/Proskynete/arrecife/commit/c3c879692b7f8078cb61176cbe031c36fd27dc08))
+
 ## 0.1.0 (2026-08-27)
 
 

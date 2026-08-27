@@ -1,0 +1,47 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
+    versioning-strategy: increase
+    labels:
+      - "📦 Dependencies"
+    open-pull-requests-limit: 10
+    groups:
+      # Radix son dieciséis paquetes que suben juntos. En PRs separados es
+      # ruido; agrupados es una sola revisión.
+      radix:
+        patterns:
+          - "@radix-ui/*"
+      storybook:
+        patterns:
+          - "storybook"
+          - "@storybook/*"
+          - "storybook-addon-*"
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "playwright"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "eslint-plugin-*"
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - "📦 Dependencies"
+      - "🚀 CI/CD"
+    open-pull-requests-limit: 5

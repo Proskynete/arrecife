@@ -1,0 +1,53 @@
+name: "Preparar el entorno"
+description: "pnpm, Node y las dependencias, con caché. Opcionalmente Chromium."
+author: "Proskynete"
+
+inputs:
+  node-version:
+    description: "Versión de Node. Por defecto, la que exige `engines` en package.json."
+    required: false
+    default: ""
+  playwright:
+    description: "Instala Chromium. Solo lo necesitan los jobs que corren la suite."
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    # `packageManager` en package.json fija la versión de pnpm, así que no se
+    # repite aquí: si sube en el repo, sube en CI sin tocar este archivo.
+    - name: 📦 Preparar pnpm
+      uses: pnpm/action-setup@v4
+
+    # Sin `node-version` explícito lee `engines.node` de package.json, que es
+    # el suelo real de la librería. La matriz lo sobreescribe para probar por
+    # encima de ese suelo.
+    - name: 🟢 Preparar Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: ${{ inputs.node-version == '' && 'package.json' || '' }}
+        cache: pnpm
+
+    - name: 🛠 Instalar dependencias
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    # El binario de Chromium pesa y cambia poco: cachearlo ahorra ~40 s por job
+    # y evita depender del CDN de Playwright en cada push.
+    - name: 🗂 Restaurar la caché de Chromium
+      if: inputs.playwright == 'true'
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+    - name: 🎭 Instalar Chromium
+      if: inputs.playwright == 'true'
+      shell: bash
+      run: pnpm exec playwright install --with-deps chromium
+
+    - name: 📋 Versiones
+      shell: bash
+      run: echo "node $(node --version) · pnpm $(pnpm --version)"

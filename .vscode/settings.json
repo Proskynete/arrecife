@@ -1,0 +1,8 @@
+{
+  // El editor usa el TypeScript del proyecto (5.9.3), no el que trae empaquetado.
+  // Sin esto, el editor y `pnpm typecheck` pueden discrepar —resuelven las
+  // subrutas de `exports` de forma distinta— y aparecen errores que la
+  // compilación no ve. Al abrir un .ts hay que aceptar "Use Workspace Version".
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}

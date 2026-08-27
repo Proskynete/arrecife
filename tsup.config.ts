@@ -16,7 +16,10 @@ export default defineConfig({
   dts: true,
   clean: true,
   treeshake: true,
-  sourcemap: true,
+  // Sin sourcemaps. Eran 688 KB de un tarball de 1.1 MB — `index.cjs.map` solo
+  // pesaba más que cualquier PNG de la marca, que es el producto. Quien necesite
+  // depurar la librería la tiene entera en el repo, con su historia.
+  sourcemap: false,
   target: 'es2022',
   external: ['react', 'react-dom'],
 });

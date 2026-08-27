@@ -14,6 +14,14 @@ body,
   font-family: var(--font-sans);
 }
 
+/* Storybook le pone el fondo al contenedor de docs con un estilo EN LÍNEA, que
+   gana incluso a un selector de id. `!important` es lo único que lo sobrescribe,
+   y es el caso para el que existe: imponerse a un tercero que escribe estilos
+   inline y al que no se llega de otra forma. */
+#storybook-docs {
+  background-color: var(--color-background) !important;
+}
+
 @source '../src';
 @source '../stories';
 

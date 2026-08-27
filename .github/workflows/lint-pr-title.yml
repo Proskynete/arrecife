@@ -20,6 +20,11 @@ jobs:
         with:
           # Los ámbitos reales de la librería. La lista es corta a propósito:
           # si hace falta uno nuevo, se piensa antes de escribirlo.
+          #
+          # `deps` y `deps-dev` son los DOS que genera dependabot: el primero
+          # para dependencias de producción y el segundo para las de desarrollo,
+          # según el `prefix-development` de dependabot.yml. Faltaba el segundo y
+          # tumbaba todos sus PRs de devDependencies.
           scopes: |
             tokens
             primitives
@@ -30,11 +35,14 @@ jobs:
             storybook
             a11y
             deps
+            deps-dev
             ci
           requireScope: false
+          # Los nombres REALES de las etiquetas del repo. Antes decía
+          # «dependencies», que no existe aquí, así que no ignoraba nada.
           ignoreLabels: |
             bot
-            dependencies
+            📦 Dependencies
 
       - name: 💬 Explicar el fallo
         if: failure()

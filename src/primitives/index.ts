@@ -5,6 +5,7 @@ export * from './button.tsx';
 export * from './calendar.tsx';
 export * from './card.tsx';
 export * from './checkbox.tsx';
+export * from './code.tsx';
 export * from './date-field.tsx';
 export * from './dialog.tsx';
 export * from './dropdown-menu.tsx';

@@ -1,0 +1,65 @@
+name: "📝 Título del PR"
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  lint-pr-title:
+    name: Formato de commit convencional
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔍 Validar el título
+        id: lint_pr_title
+        uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Los ámbitos reales de la librería. La lista es corta a propósito:
+          # si hace falta uno nuevo, se piensa antes de escribirlo.
+          scopes: |
+            tokens
+            primitives
+            components
+            brand
+            og
+            shiki
+            storybook
+            a11y
+            deps
+            ci
+          requireScope: false
+          ignoreLabels: |
+            bot
+            dependencies
+
+      - name: 💬 Explicar el fallo
+        if: failure()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-title-lint-error
+          message: |
+            ## ❌ El título del PR no cumple el formato
+
+            Sigue [Conventional Commits](https://www.conventionalcommits.org/):
+            `tipo(ámbito): descripción`, en minúscula y sin punto final.
+
+            **Ejemplos de este repo**:
+            - `fix(badge): separar categoría, estado y métrica`
+            - `feat(og): las cuatro plantillas con la retícula del documento`
+            - `docs(readme): la tercera corrección de contraste`
+
+            **Tipos**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`,
+            `chore`, `perf`, `ci`
+
+            **Detalle**: ${{ steps.lint_pr_title.outputs.error_message }}
+
+      - name: ✅ Borrar el comentario
+        if: success()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-title-lint-error
+          delete: true

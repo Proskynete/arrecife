@@ -1,0 +1,34 @@
+name: "🔦 Lint"
+
+on:
+  push:
+    branches:
+      - main
+      - "feat/**"
+      - "fix/**"
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📚 Clonar el repositorio
+        uses: actions/checkout@v6
+
+      - name: 🟢 Preparar el entorno
+        uses: ./.github/actions/setup
+
+      # Incluye el veto a hex literales fuera de tokens.ts, que es la regla
+      # que sostiene toda la librería.
+      - name: 🔦 Ejecutar ESLint
+        run: pnpm lint

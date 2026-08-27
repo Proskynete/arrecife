@@ -1,0 +1,76 @@
+name: "👾 Integración continua"
+
+on:
+  push:
+    branches:
+      - main
+      - "feat/**"
+      - "fix/**"
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build · Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # El suelo de `engines` y el actual. Una librería se rompe por versión
+        # de Node, no por sistema operativo: por eso hay matriz de Node y no de
+        # SO, al revés que en una API con binarios nativos.
+        node: ["22.x", "24.x"]
+    steps:
+      - name: 📚 Clonar el repositorio
+        uses: actions/checkout@v6
+
+      - name: 🟢 Preparar el entorno
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: 🔒 Verificar la pureza de los tokens
+        run: pnpm check:tokens
+
+      - name: 🧮 Comprobar los tipos
+        run: pnpm typecheck
+
+      - name: 🏗️ Compilar
+        run: pnpm build
+
+      # Que compile no basta: lo que se publica es `dist/`, y una subruta mal
+      # declarada en `exports` no falla hasta que alguien la importa.
+      - name: 📦 Verificar la superficie publicada
+        run: node scripts/check-package-exports.mjs
+
+  test:
+    name: Accesibilidad y contraste
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📚 Clonar el repositorio
+        uses: actions/checkout@v6
+
+      - name: 🟢 Preparar el entorno
+        uses: ./.github/actions/setup
+        with:
+          playwright: "true"
+
+      - name: 🎨 Generar los tokens
+        run: pnpm build:tokens
+
+      # Monta cada story en un Chromium real y le pasa axe. Corre DOS veces,
+      # una por modo: un color solo falla en uno de los dos, así que pasar en
+      # oscuro no prueba nada sobre el claro.
+      - name: 🌑 Suite en modo oscuro
+        run: pnpm test:oscuro
+
+      - name: ☀️ Suite en modo claro
+        run: pnpm test:claro

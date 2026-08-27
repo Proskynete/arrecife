@@ -17,6 +17,10 @@ import { cn } from '../lib/cn.ts';
  *    exponen: cambiarlos por componente es como se deshace una escala.
  * 3. El cuerpo se corta a 68ch solo. `measure` existe para desactivarlo cuando
  *    el texto va dentro de una celda o una tarjeta estrecha, no como preferencia.
+ * 4. Hay DOS escalas mono y no una: `eyebrow` lleva versalitas de fábrica y
+ *    `meta` no. Casi todo el mono del sistema —fechas, rutas, versiones, la
+ *    firma del footer— es `meta`. Un eyebrow con `normal-case` encima es la
+ *    señal de que se eligió la escala equivocada.
  *
  * Semántica y estilo son independientes a propósito: `as` elige la etiqueta y
  * `variant` elige la escala. Un `h2` que tiene que verse pequeño es
@@ -26,12 +30,17 @@ import { cn } from '../lib/cn.ts';
 /** Etiqueta por defecto de cada escala, cuando no se pasa `as`. */
 const ETIQUETA = {
   display: 'h1',
+  stat: 'p',
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',
   body: 'p',
+  lead: 'p',
   ui: 'p',
   label: 'span',
+  tag: 'span',
+  meta: 'p',
+  chip: 'span',
   eyebrow: 'p',
 } as const;
 
@@ -39,12 +48,25 @@ const texto = cva('', {
   variants: {
     variant: {
       display: 'text-display font-display',
+      // Métricas grandes: 46px de display. Es la única escala pensada para un
+      // número, y por eso el interlineado es 1.
+      stat: 'text-stat font-display',
       h1: 'text-h1 font-display',
       h2: 'text-h2 font-display',
       h3: 'text-h3 font-display',
       body: 'text-body font-sans',
+      // 17px: la bajada de las páginas internas y el botón grande.
+      lead: 'text-lead font-sans',
       ui: 'text-ui font-sans',
       label: 'text-label font-sans',
+      // Las dos escalas de etiqueta. `tag` es el estado (sans 12.5/500) y `chip`
+      // la categoría y la métrica (mono 11.5). Ninguna transforma el texto.
+      tag: 'text-tag font-sans',
+      chip: 'text-chip font-mono',
+      // Mono SIN transformar: fechas, rutas, versiones, nombres de archivo y la
+      // firma del footer. Es el escalón que faltaba, y por el que cada sitio de
+      // uso terminaba escribiendo `variant="eyebrow" className="normal-case"`.
+      meta: 'text-meta font-mono',
       // `uppercase` no cabe en un token de tamaño: text-transform no es un
       // modificador de --text-*. Por eso lo pone la variante y no theme.css.
       eyebrow: 'text-eyebrow font-mono uppercase',

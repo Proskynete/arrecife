@@ -2,24 +2,30 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 
+/**
+ * Todo por el barril público. Una story es el mejor sitio para comprobar que la
+ * superficie que se publica exporta lo que dice exportar: si algo desaparece de
+ * `src/index.ts`, el catálogo deja de compilar antes que el consumidor.
+ */
 import {
   aletas,
   caras,
   CaraDeMascota,
+  Button,
+  Card,
+  Code,
   Isotipo,
   listaCaras,
   listaPoses,
   Logo,
   Mascota,
+  MetricBadge,
+  naming,
   poses,
   RUTA_ASSETS,
+  Text,
   type Cara,
-} from '../src/brand/index.ts';
-import { Badge } from '../src/primitives/badge.tsx';
-import { Button } from '../src/primitives/button.tsx';
-import { Card } from '../src/primitives/card.tsx';
-import { Text } from '../src/primitives/typography.tsx';
-import { naming } from '../src/tokens/tokens.ts';
+} from '../src/index.ts';
 
 const meta = {
   title: 'Marca/Assets',
@@ -79,13 +85,13 @@ function Ficha({
         <Text variant="label" as="p">
           {nombre}
         </Text>
-        <Text variant="eyebrow" tone="secondary" as="p" className="normal-case">
+        <Text variant="meta" tone="secondary" as="p">
           {archivo}
         </Text>
         <Button
           size="sm"
-          variant="ghost"
-          className="mt-xs justify-start px-0"
+          variant="tertiary"
+          className="mt-xs justify-start"
           onClick={() => {
             void navigator.clipboard.writeText(codigo).then(
               () => setCopiado(true),
@@ -93,7 +99,7 @@ function Ficha({
             );
           }}
         >
-          {copiado ? 'copiado' : 'copiar uso'}
+          {copiado ? './copiado ✓' : './copiar_uso →'}
         </Button>
       </div>
     </Card>
@@ -124,9 +130,9 @@ export const Todo: StoryObj = {
       </Text>
       <Text variant="body" tone="secondary" className="mb-section">
         Trece piezas, consolidadas desde los cinco proyectos. Se publican en el
-        paquete bajo <code className="font-mono">./assets/brand/</code> y se sirven
-        en <code className="font-mono">{RUTA_ASSETS}</code>, que es la misma ruta
-        que ya usan todos desde su <code className="font-mono">public/</code>. Los
+        paquete bajo <Code>./assets/brand/</Code> y se sirven
+        en <Code>{RUTA_ASSETS}</Code>, que es la misma ruta
+        que ya usan todos desde su <Code>public/</Code>. Los
         nombres están tipados: escribe una pose que no existe y no compila.
       </Text>
 
@@ -135,7 +141,7 @@ export const Todo: StoryObj = {
         nota={
           <>
             El cuerpo de la aleta es casi negro, así que sobre fondo oscuro la
-            variante de dos azules desaparece. Por eso <code className="font-mono">sobre</code> es
+            variante de dos azules desaparece. Por eso <Code>sobre</Code> es
             una prop y no una nota en una guía: la silueta a una tinta se elige sola.
           </>
         }
@@ -188,8 +194,7 @@ export const Todo: StoryObj = {
           <>
             Solo en estados vacíos, confirmaciones, errores, progreso de curso y
             celebración. Nunca en hero, precios, servicios, contacto ni CV. Por eso
-            <code className="font-mono"> EmptyState</code> recibe una cara y
-            <code className="font-mono"> PageHeader</code> no.
+            <Code>EmptyState</Code> recibe una cara y <Code>PageHeader</Code> no.
           </>
         }
       >
@@ -222,18 +227,20 @@ export const Todo: StoryObj = {
         nota="Los nombres son un tipo, así que el autocompletado los ofrece y un nombre inventado no compila."
       >
         <Card className="p-md gap-sm flex flex-col">
-          <Text variant="label" tone="secondary" as="p" className="font-mono">
+          <Text variant="meta" tone="secondary" as="p">
             import {'{'} Logo, Mascota, CaraDeMascota, listaCaras {'}'} from
             &apos;@eduardoalvarez/arrecife/brand&apos;;
           </Text>
           <div className="gap-xs flex flex-wrap">
             {listaCaras.map((c: Cara) => (
-              <Badge key={c}>{c}</Badge>
+              <MetricBadge key={c} boxed>
+                {c}
+              </MetricBadge>
             ))}
             {listaPoses.map((p) => (
-              <Badge key={p} variant="warm">
+              <MetricBadge key={p} boxed>
                 {p}
-              </Badge>
+              </MetricBadge>
             ))}
           </div>
         </Card>

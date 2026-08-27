@@ -9,6 +9,8 @@ export default defineConfig({
     index: 'src/index.ts',
     'tokens/index': 'src/tokens/index.ts',
     'brand/index': 'src/brand/index.ts',
+    'og/index': 'src/og/index.ts',
+    'shiki/index': 'src/shiki/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

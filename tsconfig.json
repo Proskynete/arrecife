@@ -30,15 +30,13 @@
     "src",
     "stories",
     "scripts",
-    "*.config.ts"
+    "*.config.ts",
+    ".storybook/*.ts",
+    ".storybook/*.tsx"
   ],
   "exclude": [
     "dist",
     "node_modules",
     "storybook-static"
-  ],
-  "files": [
-    ".storybook/main.ts",
-    ".storybook/preview.tsx"
   ]
 }

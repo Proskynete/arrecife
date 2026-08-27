@@ -70,7 +70,7 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
         ) : null}
       </div>
 
-      <pre className="p-md font-mono text-label text-text-primary overflow-x-auto leading-relaxed">
+      <pre className="p-md font-mono text-meta text-text-primary overflow-x-auto leading-relaxed">
         {children}
       </pre>
     </div>

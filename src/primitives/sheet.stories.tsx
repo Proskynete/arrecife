@@ -46,7 +46,7 @@ const panel = (args: Parameters<NonNullable<Story['render']>>[0], side: Lado = '
       </SheetBody>
       <SheetFooter>
         <SheetClose asChild>
-          <Button variant="ghost">Cancelar</Button>
+          <Button variant="secondary">Cancelar</Button>
         </SheetClose>
         <Button>Guardar</Button>
       </SheetFooter>

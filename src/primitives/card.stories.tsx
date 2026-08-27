@@ -24,7 +24,7 @@ export const Default: Story = {
         </CardContent>
         <CardFooter>
           <Button size="sm">Guardar</Button>
-          <Button size="sm" variant="ghost">Descartar</Button>
+          <Button size="sm" variant="tertiary">./descartar →</Button>
         </CardFooter>
       </Card>
       <Nota>

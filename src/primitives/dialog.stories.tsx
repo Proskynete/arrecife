@@ -32,9 +32,9 @@ const modal = (args: Parameters<NonNullable<Story['render']>>[0]) => (
       </DialogHeader>
       <DialogFooter>
         <DialogClose asChild>
-          <Button variant="ghost">Mejor no</Button>
+          <Button variant="secondary">Mejor no</Button>
         </DialogClose>
-        <Button variant="danger">Cancelar suscripción</Button>
+        <Button>Cancelar suscripción</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

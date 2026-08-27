@@ -12,7 +12,7 @@ const pista = (args: Parameters<NonNullable<Story['render']>>[0]) => (
     <div className="py-xl flex justify-center">
       <Tooltip {...args}>
         <TooltipTrigger asChild>
-          <Button variant="ghost">Retroceder 15s</Button>
+          <Button variant="secondary">Retroceder 15s</Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">Flecha izquierda</TooltipContent>
       </Tooltip>

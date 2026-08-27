@@ -16,6 +16,23 @@ meses, y nadie lo vio porque el documento no era `grep`-able desde el código.
 `docs/decisiones.md` es la otra mitad: los quince puntos donde el código y el
 documento no dicen lo mismo, con la resolución y el motivo de cada uno.
 
+## Los dos documentos para agentes
+
+`AGENTS.md` es para un agente que trabaja **en este repo**: cómo se crea un
+componente, qué reglas no puede romper y dónde se verifica cada una. `CLAUDE.md`
+es un symlink a ese archivo, así que Claude, Codex y Cursor leen el mismo texto.
+
+`llms.txt` es para un agente que trabaja en uno de los **cinco proyectos que
+consumen** la librería. Ese agente nunca ve este repo: ve
+`node_modules/@eduardoalvarez/arrecife/`, y por eso `llms.txt` viaja en el
+tarball y se declara en `exports`.
+
+El inventario de componentes y props de `llms.txt` no está escrito a mano: lo
+extrae `scripts/build-llms.mjs` del compilador de TypeScript, y `pnpm check:llms`
+falla en CI si alguien cambia un prop y no lo regenera. La prosa vive en
+`docs/llms.plantilla.md`. Es la misma decisión que los tokens: una fuente, una
+salida generada, y un check que impide que discrepen.
+
 ## La restricción que manda sobre todo lo demás
 
 `src/tokens/` no importa nada: ni React, ni componentes, ni CSS de terceros. Es el

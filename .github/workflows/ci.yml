@@ -51,6 +51,13 @@ jobs:
       - name: 🧮 Comprobar los tipos
         run: pnpm typecheck
 
+      # `llms.txt` es lo que lee un agente desde un proyecto que instaló la
+      # librería. Se genera de los tipos: si alguien cambia un prop y no lo
+      # regenera, el documento miente y nadie lo nota hasta que el agente
+      # escribe código con una prop que ya no existe.
+      - name: 🤖 Verificar el documento para agentes
+        run: pnpm check:llms
+
       - name: 🏗️ Compilar
         run: pnpm build
 

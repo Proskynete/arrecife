@@ -19,7 +19,7 @@ jobs:
       # Una librería publicada arrastra sus dependencias a los cinco proyectos,
       # así que una vulnerabilidad aquí se multiplica por cinco.
       - name: 🔍 Revisar las dependencias
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@v5
         with:
           comment-summary-in-pr: always
           fail-on-severity: high

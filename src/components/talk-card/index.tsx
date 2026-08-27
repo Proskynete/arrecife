@@ -32,7 +32,7 @@ export function TalkCard({
   ].filter(Boolean);
 
   return (
-    <Tarjeta className={cn('p-md', className)} {...props}>
+    <Tarjeta className={cn('p-lg', className)} {...props}>
       <article className="gap-sm flex h-full flex-col">
         <div className="gap-sm flex items-start justify-between">
           <Text variant="eyebrow" tone="accent" as="p">

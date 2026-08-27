@@ -70,6 +70,12 @@ function bloqueTipografia() {
   return lineas.join('\n');
 }
 
+function bloqueGradientes(modo, indent = '  ') {
+  return Object.entries(tokens.gradient[modo])
+    .map(([nombre, valor]) => `${indent}--gradient-${kebab(nombre)}: ${valor};`)
+    .join('\n');
+}
+
 function bloqueForma() {
   const lineas = [];
   for (const [nombre, valor] of Object.entries(tokens.radius)) {
@@ -78,6 +84,12 @@ function bloqueForma() {
   lineas.push('');
   for (const [nombre, valor] of Object.entries(tokens.spacing)) {
     lineas.push(`  --spacing-${nombre}: ${px(valor)};`);
+  }
+  lineas.push('');
+  // Los controles entran en la escala de espaciado con prefijo propio: dan
+  // px-control-md y size-control-icon, y no se ofrecen como margen suelto.
+  for (const [nombre, valor] of Object.entries(tokens.control)) {
+    lineas.push(`  --spacing-control-${kebab(nombre)}: ${px(valor)};`);
   }
   lineas.push('');
   // `nav` es una altura (h-nav); `content` y `wide` son anchos (max-w-content).
@@ -112,6 +124,9 @@ ${bloqueTipografia()}
 
   /* --- forma y ritmo ------------------------------------------------------ */
 ${bloqueForma()}
+
+  /* --- degradados · modo oscuro (default) --------------------------------- */
+${bloqueGradientes('dark')}
 }
 
 /* --- color por modo, anidable ---------------------------------------------
@@ -121,10 +136,47 @@ ${bloqueForma()}
    dos temas y por tanto siempre lleva tinta clara encima. */
 [data-theme='dark'] {
 ${bloqueColores(tokens.colors.dark)}
+
+${bloqueGradientes('dark')}
 }
 
 [data-theme='light'] {
 ${bloqueColores(tokens.colors.light)}
+
+${bloqueGradientes('light')}
+}
+
+/* --- los dos degradados del sistema, como utilidad --------------------------
+   Son los dos únicos bloques con degradado: el hero y el panel de sección. Que
+   sean utilidades y no clases arbitrarias es lo que impide que cada proyecto
+   escriba su propio ángulo. Siguen el modo porque leen la custom property. */
+@utility degradado-hero {
+  background-image: var(--gradient-hero);
+}
+@utility degradado-seccion {
+  background-image: var(--gradient-seccion);
+}
+
+/* --- la tercera excepción de movimiento: el shimmer del skeleton ------------
+   El sistema no anima, y esta es la tercera y última salvedad, junto al spinner
+   del botón y el panel lateral. Todas son realimentación de PROGRESO, no de
+   estado: un bloque quieto y un bloque que nunca va a cargar se ven igual.
+
+   1.4s lineal, del documento. Va detrás de motion-safe en el componente. */
+@keyframes arrecife-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@utility shimmer {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-hairline-hover) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: arrecife-shimmer 1.4s linear infinite;
 }
 
 /* --- la excepción del panel lateral -----------------------------------------

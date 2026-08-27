@@ -101,12 +101,58 @@ export const fonts = {
 
 export const typeScale = {
   display: { family: 'display', size: 76, lineHeight: 0.96, weight: 800, tracking: '-0.035em' },
+  /** Métricas grandes. Números, no prosa: interlineado 1 y sin descendentes. */
+  stat: { family: 'display', size: 46, lineHeight: 1, weight: 800, tracking: '-0.035em' },
   h1: { family: 'display', size: 44, lineHeight: 1.05, weight: 700, tracking: '-0.03em' },
   h2: { family: 'display', size: 30, lineHeight: 1.1, weight: 600, tracking: '-0.02em' },
   h3: { family: 'display', size: 25, lineHeight: 1.15, weight: 600, tracking: '-0.02em' },
   body: { family: 'sans', size: 18, lineHeight: 1.75, weight: 400 },
+  /**
+   * 17px. El botón grande y la bajada de las páginas internas.
+   *
+   * Entra como escalón propio porque el documento lo usa DOS veces y en piezas
+   * distintas: «lg 15px 30px r12» con texto de 17, y «h1 44/700 · bajada 17px ·
+   * párrafo de contexto 15px». Un solo uso no habría justificado partir la
+   * distancia entre `ui` (15) y `body` (18); dos sí.
+   */
+  lead: { family: 'sans', size: 17, lineHeight: 1.5, weight: 400 },
   ui: { family: 'sans', size: 15, lineHeight: 1.6, weight: 400 },
   label: { family: 'sans', size: 13, lineHeight: 1.5, weight: 500 },
+  /**
+   * La escala de las etiquetas de estado: sans 12.5/500, cuadrada.
+   *
+   * Es medio píxel por debajo de `label`, y esta vez el medio píxel sí importa:
+   * una etiqueta de estado va dentro de una tabla o al lado de un título, y a 13
+   * competía con el texto que acompaña. El documento la da en 12.5 y se ve.
+   */
+  tag: { family: 'sans', size: 12.5, lineHeight: 1.4, weight: 500 },
+  /**
+   * La escala de categoría y métrica: mono 11.5.
+   *
+   * Rompe el suelo de `limits.minScreenPx`, y es a propósito. Ese suelo protege
+   * al TEXTO —lo que se lee en una frase—, y una píldora de una palabra no es
+   * texto corrido: es una marca. El contraste sigue medido y pasa AA (plancton
+   * 5.57:1 sobre abismo), que es la parte que no se negocia.
+   *
+   * A 13 las tres familias de etiqueta salían del tamaño de un botón pequeño y
+   * pesaban más que el título que acompañan. Ver `docs/decisiones.md`.
+   */
+  chip: { family: 'mono', size: 11.5, lineHeight: 1.4, weight: 400 },
+  /**
+   * Mono SIN transformar: fechas, rutas, versiones, nombres de archivo, la firma
+   * del footer y las métricas de etiqueta. Es la mayoría del mono del sistema.
+   *
+   * Existe porque `eyebrow` lleva `uppercase` de fábrica y no es una preferencia
+   * que se pueda apagar: es la escala del eyebrow. Un `18 ago 2026` en versalitas
+   * o un `pose-laptop-coffee.png` en mayúsculas están mal, y sin este escalón la
+   * única salida era un `normal-case` en cada sitio de uso.
+   *
+   * El documento dice 12.5. Son 13 por la misma razón por la que `textMuted` se
+   * corrigió: `limits.minScreenPx` es 13 y plancton «nunca bajo 13px». Esta
+   * escala es justo donde se escriben las metas en muted, así que ponerla en
+   * 12.5 habría dejado ilegible su uso más común por medio píxel.
+   */
+  meta: { family: 'mono', size: 13, lineHeight: 1.6, weight: 400 },
   eyebrow: { family: 'mono', size: 12, tracking: '0.12em', transform: 'uppercase' },
 } as const;
 
@@ -130,6 +176,24 @@ export const radius = {
   pill: 999,
 } as const;
 
+/**
+ * Controles, del documento: `sm 8/14 · md 12/22 · lg 15/30 · icono 42×42`.
+ *
+ * Solo el padding horizontal y el cuadrado del botón de icono. El alto sale de
+ * la escala tipográfica, y el radio es uno solo para los tres tamaños: ver
+ * `docs/decisiones.md`.
+ *
+ * No están en `spacing` porque no son ritmo de página: 14, 22 y 30 no componen
+ * con 8/12/16/26/40 y no deben ofrecerse como márgenes.
+ */
+export const control = {
+  sm: 14,
+  md: 22,
+  lg: 30,
+  /** Botón de icono: cuadrado, sin texto. */
+  icon: 42,
+} as const;
+
 export const spacing = {
   xs: 8,
   sm: 12,
@@ -146,6 +210,76 @@ export const size = {
   content: 760,
   /** Ancho máximo de página. */
   wide: 1180,
+} as const;
+
+/**
+ * La paleta del resaltado de sintaxis.
+ *
+ * Del documento, literal: «keywords arena, strings bioluz, comments plancton,
+ * identifiers espuma», sobre casco. CUATRO colores a propósito — el sistema se
+ * comunica con color y borde, no con ruido cromático, así que funciones,
+ * variables y tipos caen todos en espuma.
+ *
+ * El bloque de código es una isla de tema oscuro en los dos modos (ver
+ * `CodeBlock`), así que esta paleta NO tiene par claro: siempre va sobre casco.
+ *
+ * Contrastes MEDIDOS sobre `brand.hull` #0B1524, todos AA:
+ *
+ *   identificador  espuma    16.42:1
+ *   literal        bioluz    10.05:1
+ *   palabraClave   arena      9.05:1
+ *   comentario     plancton   5.43:1
+ *   invalido       error      4.97:1
+ *
+ * `brand.body` (#3E7CB1) NO entra: el sistema lo restringe a relleno, nunca a
+ * texto, y aquí mide 4.2:1.
+ *
+ * Los literales numéricos y booleanos van con las cadenas en bioluz. El
+ * documento no los asigna, y agruparlos con las cadenas —los tres son
+ * literales— es más coherente que estrenar un quinto color fuera de la paleta.
+ */
+export const sintaxis = {
+  /** El casco. Es el fondo del bloque en los dos modos. */
+  fondo: brand.hull,
+  /** Identificadores, funciones, tipos, variables. */
+  identificador: dark.textPrimary,
+  /** Cadenas, números, booleanos, null. */
+  literal: dark.accent,
+  /** Palabras clave, control de flujo, `import`, `this`. */
+  palabraClave: dark.warm,
+  /** Comentarios y puntuación. */
+  comentario: dark.textMuted,
+  /** `markup.deleted`, `invalid`. */
+  invalido: dark.error,
+} as const;
+
+/**
+ * Los dos únicos bloques con degradado del sistema: el hero y el panel de
+ * sección (newsletter). Sin token, los cinco proyectos los escriben a mano
+ * distinto, que es exactamente cómo se desincroniza una identidad.
+ *
+ * `profundo` es el tercer punto del degradado oscuro. Vive solo aquí dentro: no
+ * es superficie ni color de texto, así que no entra en la paleta, y una clave
+ * en `dark` sin par en `light` sería un token que miente en modo claro.
+ *
+ * El documento solo da los dos degradados oscuros. Los claros se componen de la
+ * paleta clara con los mismos ángulos y paradas, para que el hero no se quede
+ * plano en modo claro. Está pendiente de ratificar en el documento.
+ */
+const profundo = '#0D2129';
+
+export const gradient = {
+  dark: {
+    hero: `linear-gradient(160deg, ${dark.background} 60%, ${profundo} 100%)`,
+    seccion: `linear-gradient(150deg, ${dark.surface} 0%, ${profundo} 100%)`,
+    /** El de la plantilla OG de artículo. 145°, del documento. */
+    og: `linear-gradient(145deg, ${dark.background} 55%, ${profundo} 100%)`,
+  },
+  light: {
+    hero: `linear-gradient(160deg, ${light.background} 60%, ${light.surfaceRaised} 100%)`,
+    seccion: `linear-gradient(150deg, ${light.surface} 0%, ${light.surfaceRaised} 100%)`,
+    og: `linear-gradient(145deg, ${light.background} 55%, ${light.surfaceRaised} 100%)`,
+  },
 } as const;
 
 /** Un solo nivel. No hay escala de elevación. */
@@ -182,6 +316,8 @@ export const tagline = {
 export const naming = {
   wordmark: 'Eduardo Álvarez',
   mascot: 'Tiburoncín',
+  /** El dominio, para la firma CLI del footer: `$ cd ~/eduardoalvarez.dev/2026`. */
+  domain: 'eduardoalvarez.dev',
 } as const;
 
 export type ColorMode = keyof typeof colors;
@@ -190,5 +326,8 @@ export type BrandToken = keyof typeof brand;
 export type FontToken = keyof typeof fonts;
 export type TypeScaleToken = keyof typeof typeScale;
 export type RadiusToken = keyof typeof radius;
+export type ControlToken = keyof typeof control;
+export type GradientToken = keyof typeof gradient.dark;
+export type SintaxisToken = keyof typeof sintaxis;
 export type SpacingToken = keyof typeof spacing;
 export type SizeToken = keyof typeof size;

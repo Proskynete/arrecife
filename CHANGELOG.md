@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.2.0](https://github.com/Proskynete/arrecife/compare/v0.1.1...v0.2.0) (2026-08-27)
+
+
+### 🚀 Novedades
+
+* llms.txt generado desde los tipos, para agentes de IA ([ec7f38e](https://github.com/Proskynete/arrecife/commit/ec7f38e6f9e344c0bc6cda8e60666fcbd2db778f))
+
+
+### 🐛 Correcciones
+
+* **ci:** admitir el ámbito deps-dev en el lint del título ([cdf9cd2](https://github.com/Proskynete/arrecife/commit/cdf9cd272a1bdb975f9277ed18324f5b905dedeb))
+* **ci:** admitir el ámbito deps-dev y quitar configuración muerta ([42f09d3](https://github.com/Proskynete/arrecife/commit/42f09d3486149395b1cc0355077f7f0c41345047))
+* **ci:** no lintear el título de los PRs automáticos ([8c2de14](https://github.com/Proskynete/arrecife/commit/8c2de148add50164ff0738474a436ee8ee84aa08))
+* **llms:** quitar las rutas absolutas del disco del documento generado ([abde074](https://github.com/Proskynete/arrecife/commit/abde074fe0b345f2d7b638ec04a0b1e5c6550d5a))
+
+
+### 📚 Documentación
+
+* AGENTS.md para el agente que trabaja en el repo ([bf21c12](https://github.com/Proskynete/arrecife/commit/bf21c12b691900183549260a5cc539d741524fd6))
+* apuntar a los dos documentos para agentes ([3d18592](https://github.com/Proskynete/arrecife/commit/3d18592bfbf4235a0f0f098556ebed22e6a318a9))
+
+
+### 🚀 CI/CD
+
+* **llms:** que el check diga QUÉ cambió, no solo que cambió ([e775548](https://github.com/Proskynete/arrecife/commit/e7755486da13a4b192c6559d25b3c379e3f99b43))
+* verificar que llms.txt no se queda desactualizado ([78f0e6d](https://github.com/Proskynete/arrecife/commit/78f0e6dd520e56ad437ebf5c9dd85d2a716eef94))
+
 ## [0.1.1](https://github.com/Proskynete/arrecife/compare/v0.1.0...v0.1.1) (2026-08-27)
 
 ### 🐛 Correcciones

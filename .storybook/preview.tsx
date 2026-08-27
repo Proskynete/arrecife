@@ -15,6 +15,7 @@ import "./storybook.css";
 const temaInicial =
   import.meta.env["STORYBOOK_THEME"] === "claro" ? "claro" : "oscuro";
 
+
 const preview: Preview = {
   decorators: [
     /**

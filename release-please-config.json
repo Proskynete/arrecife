@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "package-name": "@eduardoalvarez/arrecife",
+      "changelog-path": "CHANGELOG.md",
+      "include-component-in-tag": false,
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true,
+      "changelog-sections": [
+        { "type": "feat", "section": "🚀 Novedades" },
+        { "type": "fix", "section": "🐛 Correcciones" },
+        { "type": "perf", "section": "⚡ Rendimiento" },
+        { "type": "refactor", "section": "🔧 Mantenimiento" },
+        { "type": "docs", "section": "📚 Documentación" },
+        { "type": "test", "section": "🧪 Pruebas" },
+        { "type": "build", "section": "📦 Dependencias" },
+        { "type": "ci", "section": "🚀 CI/CD" },
+        { "type": "style", "section": "💅 Estilo", "hidden": true },
+        { "type": "chore", "section": "🔧 Mantenimiento", "hidden": true }
+      ]
+    }
+  },
+  "pull-request-title-pattern": "chore: versión ${version}",
+  "pull-request-header": "Esta rama corta la versión. Al mergear, se crea el tag, el release y se publica en npm.",
+  "separate-pull-requests": false
+}

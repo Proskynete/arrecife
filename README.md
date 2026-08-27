@@ -215,27 +215,63 @@ iba al revés: el punto flojo del sistema es `error` sobre abismo, 1.067.
 
 ## Publicar una versión
 
-El pipeline vive en `.github/workflows/publish.yml` y se dispara con un
-**release publicado** en GitHub. El proceso:
+**No hay pasos manuales.** El tag, el CHANGELOG y el bump de versión los hace
+release-please a partir de los commits convencionales que ya se escriben —y que
+`lint-pr-title` ya obliga a escribir bien.
 
-1. Sube la versión en `package.json` y haz el commit.
-2. Crea el tag y el release: `v0.1.0` para `"version": "0.1.0"`. Las notas las
-   arma GitHub solo, agrupadas según `.github/release.yml`.
-3. El workflow verifica que **el tag y `package.json` coinciden** —si no, para—,
-   corre lint, tipos, build, la comprobación de `exports` y la suite completa en
-   los dos modos, y recién ahí publica con `--provenance`.
+El ciclo, entero, está en `.github/workflows/release.yml`:
 
-La procedencia firma el paquete con un enlace verificable a ese commit y a ese
-workflow, así que quien lo instale puede comprobar de dónde salió.
+1. Mergeas un PR a `main` con un título tipo `feat(badge): …`.
+2. release-please abre —o actualiza— un PR llamado `chore: versión X.Y.Z` con el
+   bump en `package.json` y la entrada nueva del `CHANGELOG.md`. Ese PR se queda
+   abierto y se va acumulando con cada merge, así que puedes juntar varios
+   cambios en una versión.
+3. Cuando lo mergeas, corta el tag, crea el release y dispara la publicación.
+4. Antes de subir nada, el workflow comprueba que el tag y `package.json`
+   coinciden, y corre lint, tipos, build, la verificación de `exports` y la
+   suite completa en los dos modos.
 
-**Antes del primer release** hacen falta dos cosas: un entorno llamado `npm` en
-la configuración del repo con el secreto `NPM_TOKEN` (un token de publicación,
-automation), y una versión distinta de `0.0.0` — el workflow rechaza esa a
-propósito.
+`feat:` sube la minor, `fix:` la patch, y un `!` o un `BREAKING CHANGE:` sube la
+major. Mientras la versión sea `0.x`, `feat:` sube la minor y todo lo demás la
+patch — está en `release-please-config.json`.
 
-Para probar sin riesgo: *Actions → Publicar en npm → Run workflow* con el ensayo
-activado. Hace todo menos publicar, y no necesita el token. El resumen del run
-lista exactamente qué archivos viajarían en el tarball y cuánto pesa.
+### La publicación de confianza
+
+El workflow publica con **OIDC**: GitHub emite un token que prueba «este build
+salió de este repo y de este workflow», y npm lo cambia por permiso de
+publicación. No hay ningún secreto de larga vida que robar, ni que rotar. De
+paso genera la **procedencia**, que firma el paquete con un enlace verificable a
+ese commit exacto.
+
+Se configura una vez, en npmjs.com → el paquete → *Settings* → *Trusted
+publisher*:
+
+| Campo | Valor |
+| --- | --- |
+| Publisher | GitHub Actions |
+| Organization or user | `Proskynete` |
+| Repository | `arrecife` |
+| Workflow filename | `release.yml` |
+| Environment | `npm` |
+
+Ese *Workflow filename* es la razón de que el release y la publicación vivan en
+un solo archivo en vez de en un workflow reutilizable: npm casa el token contra
+un nombre, y con `workflow_call` hay dos candidatos.
+
+**El huevo y la gallina.** No se puede configurar un publicador de confianza en
+un paquete que todavía no existe, así que la primera versión necesita token:
+
+1. Crea el entorno `npm` en la configuración del repo con el secreto
+   `NPM_TOKEN` (un token de tipo *automation*).
+2. Sube la versión y publica la primera vez. El workflow avisa en el log de que
+   está usando token.
+3. Configura la publicación de confianza con la tabla de arriba.
+4. **Borra el secreto `NPM_TOKEN`.** El paso que lo usa se salta solo cuando no
+   está, y OIDC toma el relevo sin tocar ni una línea del workflow.
+
+Para probar sin gastar una versión: *Actions → Release y publicación → Run
+workflow* con el ensayo activado. Hace todo menos publicar, no necesita token, y
+el resumen del run lista qué archivos viajarían y cuánto pesa el tarball.
 
 ## Estado
 

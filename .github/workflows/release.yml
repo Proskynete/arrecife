@@ -1,0 +1,177 @@
+name: "🏷️ Release y publicación"
+
+# Un solo archivo a propósito. La publicación de confianza de npm casa el token
+# OIDC contra UN nombre de workflow, y con un workflow reutilizable hay dos
+# candidatos —el que llama y el llamado— sin forma obvia de saber cuál pide
+# npm. Con un archivo, la configuración en npmjs es inequívoca: release.yml.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Ensayo: verifica y empaqueta, pero no publica"
+        type: boolean
+        default: true
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  # release-please lee los commits convencionales desde el último tag y mantiene
+  # abierto un PR con el bump de versión y el CHANGELOG. Mientras ese PR siga
+  # abierto se actualiza solo con cada merge a main; al mergearlo, corta el tag
+  # y crea el release.
+  #
+  # La versión no la decide nadie a mano: la deciden los `feat:` y los `fix:`
+  # que ya se escriben, y que `lint-pr-title` ya obliga a escribir bien.
+  preparar:
+    name: Preparar la versión
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      publicar: ${{ steps.release.outputs.releases_created }}
+      tag: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - name: 🏷️ release-please
+        id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publicar:
+    name: Verificar y publicar
+    needs: preparar
+    # Corre cuando release-please acaba de cortar una versión, o a mano para el
+    # ensayo. En el ensayo `preparar` no corre, así que hay que dejar pasar el
+    # estado «skipped» sin dejar pasar el «failure».
+    if: >-
+      ${{ !cancelled()
+        && needs.preparar.result != 'failure'
+        && (github.event_name == 'workflow_dispatch'
+            || needs.preparar.outputs.publicar == 'true') }}
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      # Lo que hace posible la publicación de confianza: GitHub emite un token
+      # OIDC que prueba «este build salió de este repo y de este workflow», y
+      # npm lo cambia por permiso de publicación. Sin esto no hay ni OIDC ni
+      # procedencia.
+      id-token: write
+    env:
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
+      TAG: ${{ needs.preparar.outputs.tag }}
+      # A nivel de job porque el contexto `secrets` no existe dentro de un
+      # `if:`. Es el rodeo estándar para preguntar «¿está puesto?».
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    steps:
+      - name: 📚 Clonar el repositorio
+        uses: actions/checkout@v6
+
+      - name: 🟢 Preparar el entorno
+        uses: ./.github/actions/setup
+        with:
+          playwright: "true"
+
+      # La publicación de confianza necesita npm 11.5.1 o superior, que es donde
+      # entró el intercambio OIDC. Node 22 trae npm 10, así que no basta con la
+      # versión que venga en el runner.
+      - name: ⬆️ Actualizar npm
+        run: |
+          npm install -g npm@latest
+          echo "npm $(npm --version)"
+
+      # La versión sale de package.json, no del tag. Si no coinciden, el release
+      # apunta a un código que no es el que se publica — y eso no se deshace:
+      # npm no permite reutilizar una versión.
+      - name: 🔖 Comprobar que el tag y la versión coinciden
+        if: env.TAG != ''
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          tag="${TAG#v}"
+          echo "package.json $version · tag $tag"
+          if [ "$version" != "$tag" ]; then
+            echo "::error::El tag ($tag) no coincide con package.json ($version)."
+            exit 1
+          fi
+
+      - name: 🚫 Rechazar la versión de plantilla
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "$version" = "0.0.0" ]; then
+            echo "::error::package.json sigue en 0.0.0. Súbelo antes de publicar."
+            exit 1
+          fi
+
+      - name: 🔦 ESLint
+        run: pnpm lint
+
+      - name: 🧮 Tipos
+        run: pnpm typecheck
+
+      - name: 🏗️ Compilar
+        run: pnpm build
+
+      - name: 📦 Verificar la superficie publicada
+        run: pnpm check:exports
+
+      # La suite completa antes de publicar, no solo en el PR. Entre que el PR
+      # pasó y la versión se corta pueden haber entrado otros merges.
+      - name: 🌑 Suite en modo oscuro
+        run: pnpm test:oscuro
+
+      - name: ☀️ Suite en modo claro
+        run: pnpm test:claro
+
+      # `npm pack` respeta `files`, así que esto muestra exactamente lo que va a
+      # viajar. Es el último punto donde se puede ver un archivo de más.
+      - name: 👀 Listar el contenido del tarball
+        run: |
+          npm pack --pack-destination /tmp --ignore-scripts >/dev/null
+          tarball="$(ls /tmp/*.tgz)"
+          {
+            echo "### Contenido de $(basename "$tarball")"
+            echo '```'
+            tar -tzf "$tarball" | sed 's|^package/||' | sort
+            echo '```'
+            echo "peso: $(du -h "$tarball" | cut -f1)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Escalón intermedio, y temporal. La publicación de confianza no se puede
+      # configurar en un paquete que todavía no existe, así que la PRIMERA
+      # versión necesita token. Cuando esté configurada en npmjs, se borra el
+      # secreto y este paso se salta solo: OIDC toma el relevo sin tocar nada.
+      - name: 🔑 Token de npm, si todavía hace falta
+        if: env.DRY_RUN != 'true' && env.NPM_TOKEN != ''
+        run: |
+          echo "::warning::Publicando con token. Configura la publicación de confianza y borra el secreto NPM_TOKEN."
+          printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" >> "$HOME/.npmrc"
+
+      # Se publica con el CLI de npm y no con `pnpm publish` a propósito: el
+      # intercambio OIDC lo implementa npm. El paquete no usa el protocolo
+      # `workspace:`, así que npm empaqueta exactamente lo mismo.
+      #
+      # `--provenance` firma el paquete con un enlace verificable a este commit
+      # y a este workflow. Con publicación de confianza sale sola, pero dejarlo
+      # explícito hace que también salga durante el escalón del token.
+      - name: 🚀 Publicar
+        if: env.DRY_RUN != 'true'
+        run: npm publish --access public --provenance
+
+      - name: 🧪 Ensayo, sin publicar
+        if: env.DRY_RUN == 'true'
+        run: |
+          npm publish --access public --dry-run
+          echo "Ensayo: se verificó todo y NO se publicó." >> "$GITHUB_STEP_SUMMARY"

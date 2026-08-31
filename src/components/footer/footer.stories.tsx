@@ -91,6 +91,11 @@ export const ConMarca: Story = {
           `w-full` para que se llevara su propia línea: funcionaba y era un apaño,
           porque la marca no es un enlace de texto más.
         </Nota>
+        <Nota>
+          Y la firma comparte línea CON LA MARCA, que es la primera fila. Colgada
+          de la fila de redes —como estaba en la 0.5.0— caía a la tercera línea en
+          cuanto el pie tenía marca y enlaces encima.
+        </Nota>
       </div>
     </div>
   ),
@@ -109,6 +114,11 @@ export const FirmaALaDerecha: Story = {
           `justify-between` la dejaría pegada al borde izquierdo.
         </Nota>
         <Nota>
+          Aquí la primera fila son los iconos, así que la firma se alinea con
+          ellos. No está pegada a las redes: está pegada a la primera fila que
+          exista, sea la que sea.
+        </Nota>
+        <Nota>
           En pantalla estrecha las dos partes se parten con `flex-wrap` en vez de
           apretarse. La firma es mono y no se puede truncar sin que deje de
           leerse como una ruta.
@@ -123,6 +133,50 @@ export const SoloFirma: Story = {
   render: () => (
     <div className="-m-step-lg">
       <Footer />
+    </div>
+  ),
+};
+
+/*
+ * Van en DOS stories y no en una con los dos pies: `<footer>` es el landmark
+ * `contentinfo`, y dos en el mismo documento es una violación —axe la señaló al
+ * primer intento—. Un pie de página no se compara poniendo dos.
+ */
+export const PrimeraFilaEsLaMarca: Story = {
+  name: 'Primera fila · la marca',
+  render: () => (
+    <div className="-m-step-lg">
+      <Footer brand={<Logo />} social={REDES}>
+        <FooterLink href="/rss.xml">./rss</FooterLink>
+        <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
+      </Footer>
+
+      <div className="p-step-lg">
+        <Nota>
+          Con marca, la firma comparte línea con la marca. Es la diferencia entre
+          «la firma va a la derecha» y «la firma va a la derecha DEL TODO».
+        </Nota>
+      </div>
+    </div>
+  ),
+};
+
+export const PrimeraFilaSonLosEnlaces: Story = {
+  name: 'Primera fila · los enlaces',
+  render: () => (
+    <div className="-m-step-lg">
+      <Footer social={REDES}>
+        <FooterLink href="/rss.xml">./rss</FooterLink>
+        <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
+      </Footer>
+
+      <div className="p-step-lg">
+        <Nota>
+          Sin marca, la primera fila son los enlaces y la firma se alinea con
+          ellos. No está pegada a ninguna fila concreta: está pegada a la primera
+          que exista.
+        </Nota>
+      </div>
     </div>
   ),
 };

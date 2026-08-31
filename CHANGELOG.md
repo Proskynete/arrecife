@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.5.0](https://github.com/Proskynete/arrecife/compare/v0.4.0...v0.5.0) (2026-08-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **primitives:** `Toast`, `ToastProvider`, `ToastViewport`, `ToastTitle` y `ToastDescription` dejan de exportarse; se usa `<Toaster />` una vez y `toast()` desde donde haga falta. `ToastAction` no cambia. Migración en docs/migracion-0.5.md.
+
+### 🚀 Novedades
+
+* **components:** EventCalendar, la agenda con crear, editar y borrar ([6190700](https://github.com/Proskynete/arrecife/commit/61907003eeef777ba86c594791b2e95d225eda1f))
+* **components:** la barra, el pie y las métricas como en el documento ([203b669](https://github.com/Proskynete/arrecife/commit/203b669379f63048ce4b34fce9a9411aebec3279))
+* **primitives:** AvatarUpload, el avatar que se puede cambiar ([f888b4c](https://github.com/Proskynete/arrecife/commit/f888b4c0fadeddfb885f0b4651bf56000da7d430))
+* **primitives:** el plegable anima la altura, como cuarta excepción ([b9dd44c](https://github.com/Proskynete/arrecife/commit/b9dd44ccb99ccb2c0f00ec99fefa17bc838cca52))
+* **primitives:** Toaster es la única forma de mostrar un aviso ([2ec1d23](https://github.com/Proskynete/arrecife/commit/2ec1d2383ecd87c58a88c9e32543dc2112df2321))
+
+
+### 📚 Documentación
+
+* los iconos de redes van agrupados, y por qué ([1939455](https://github.com/Proskynete/arrecife/commit/19394554185a54e4e752a86e27e60f1a60acec26))
+
 ## [0.4.0](https://github.com/Proskynete/arrecife/compare/v0.3.0...v0.4.0) (2026-08-31)
 
 

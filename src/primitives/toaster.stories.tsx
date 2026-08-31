@@ -91,3 +91,28 @@ export const ConAccion: Story = {
     </div>
   ),
 };
+
+export const Variantes: Story = {
+  name: 'Las tres formas, abiertas',
+  render: (args) => (
+    <div>
+      <Nota>
+        Las tres que existen: neutral, éxito y error. No hay más, y no hay
+        `toast.promise` ni posiciones configurables — cada añadido es superficie
+        pública que hay que mantener.
+      </Nota>
+      <Nota>
+        Desde la 0.5.0 esta es la ÚNICA forma de mostrar un aviso. `Toast`,
+        `ToastProvider` y `ToastViewport` dejaron de ser públicos: no tenían un
+        caso de uso propio, y dos formas de mostrar lo mismo obligan a elegir en
+        cada sitio sin criterio que lo resuelva.
+      </Nota>
+      <Toaster {...args} />
+    </div>
+  ),
+  play: async () => {
+    toast('Borrador guardado');
+    toast.success('Artículo publicado', { description: 'Ya está en el feed.' });
+    toast.error('No se pudo guardar', { title: 'Error del servidor' });
+  },
+};

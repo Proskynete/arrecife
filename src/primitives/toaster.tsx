@@ -10,6 +10,22 @@ import {
 } from './toast.tsx';
 
 /**
+ * Lo ÚNICO que se reexporta de `toast.tsx`. El resto de la primitiva de Radix
+ * —`Toast`, `ToastProvider`, `ToastViewport`, `ToastTitle`,
+ * `ToastDescription`— dejó de ser API pública en la 0.5.0.
+ *
+ * El motivo es que no tenía un caso de uso propio. `Toaster` está construido
+ * encima y cubre todo lo que los proyectos hacen; la capa de abajo solo servía
+ * para atar un aviso al ciclo de vida de un componente, que no lo hace nadie.
+ * Dos formas de mostrar lo mismo obligan a elegir en cada sitio de uso, y esa
+ * elección no tenía criterio que la resolviera.
+ *
+ * `ToastAction` sí se queda: es lo que se pasa en `action` cuando el aviso
+ * ofrece deshacer, y sin él esa prop no se puede construir desde fuera.
+ */
+export { ToastAction } from './toast.tsx';
+
+/**
  * La cara imperativa del `Toast` de Radix: `toast('Guardado')` desde cualquier
  * sitio, sin pasar el aviso por props hasta el componente que lo dispara.
  *

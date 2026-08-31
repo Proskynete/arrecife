@@ -204,9 +204,21 @@ Todo sale de un token, por su utilidad de Tailwind: `bg-surface-raised`,
 van a quedarse. La perilla del `Switch` cambia de posición sin deslizarse.
 
 La única transición del sistema es `transition-standard`, y por cómo está escrita
-la utilidad **solo puede animar color y borde**. La única excepción documentada es
-el spinner de `Button loading`, que va envuelto en `motion-safe`: un botón
-cargando sin movimiento es indistinguible de uno deshabilitado.
+la utilidad **solo puede animar color y borde**.
+
+Hay **cuatro excepciones declaradas**, todas envueltas en `motion-safe` y todas
+con el mismo criterio: son realimentación de progreso o de continuidad espacial,
+nunca decoración.
+
+| Excepción | Por qué |
+| --- | --- |
+| Spinner de `Button loading` | Un botón cargando sin movimiento es indistinguible de uno deshabilitado |
+| Panel lateral de `Sheet` | Un panel que entra desde un borde se desliza por definición; quieto es un modal descentrado |
+| Shimmer de `Skeleton` | Un bloque quieto y uno que nunca va a cargar se ven igual |
+| Altura de `Accordion` | No aparece nada: se abre un hueco y lo de abajo se desplaza. Sin transición es un salto y se pierde el sitio en la página |
+
+Una quinta entra por el mismo camino que la cuarta: con el argumento escrito en
+`docs/decisiones.md`, no porque quede mejor. Ver § 20.
 
 ### 5 · Accesibilidad
 

@@ -205,6 +205,33 @@ ${bloqueGradientes('light')}
   animation: arrecife-shimmer 1.4s linear infinite;
 }
 
+/* --- la excepción del plegable ----------------------------------------------
+   La cuarta y, como las otras tres, no es «queda mejor»: un plegable que revela
+   contenido sin transición hace SALTAR todo lo que tiene debajo, y quien acaba
+   de pulsar pierde el sitio en la página. Es la misma categoría que el panel
+   lateral —un panel que entra desde un borde se desliza por definición— y no la
+   de una animación de entrada, que es lo que el sistema no admite: aquí no
+   aparece nada nuevo en pantalla, se abre un hueco.
+
+   La altura la publica Radix en --radix-accordion-content-height. Dura lo que
+   dura todo lo demás y usa la misma curva, así que no estrena un tiempo. En el
+   componente va detrás de motion-safe. */
+@keyframes arrecife-despliega {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+@keyframes arrecife-repliega {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+@utility desplegar {
+  animation: arrecife-despliega var(--duration-standard) var(--ease-standard);
+}
+@utility replegar {
+  animation: arrecife-repliega var(--duration-standard) var(--ease-standard);
+}
+
 /* --- la excepción del panel lateral -----------------------------------------
    Un panel que entra desde un borde se desliza por definición: quieto sería un
    modal descentrado. Es la segunda y última excepción a "nada de

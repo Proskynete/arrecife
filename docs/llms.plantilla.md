@@ -99,31 +99,63 @@ escribe con el nombre de la tabla.
 
 ## Qué importar de dónde
 
-`exports` tiene cinco subrutas y la elección importa: tres de ellas **no
-arrastran React**, y por eso pueden consumirse desde un worker, un
-`astro.config.mjs`, un script de build o un generador con Satori.
+La elección importa, y por dos motivos distintos. Cuatro subrutas **no arrastran
+React**, así que pueden consumirse desde un worker, un `astro.config.mjs`, un
+script de build o un generador con Satori. Otras dos piden una **dependencia de
+pares opcional** que solo instala quien las use.
 
-| Subruta | Arrastra React | Para qué |
-| --- | --- | --- |
-| `@eduardoalvarez/arrecife` | sí | Componentes, primitivos, marca, `cn`. Reexporta tokens |
-| `@eduardoalvarez/arrecife/tokens` | **no** | El objeto `tokens` en JS. Satori, Astro, scripts |
-| `@eduardoalvarez/arrecife/tokens/theme.css` | — | El `@theme` de Tailwind v4 |
-| `@eduardoalvarez/arrecife/og` | **no** | Las plantillas de Open Graph para Satori |
-| `@eduardoalvarez/arrecife/shiki` | **no** | El tema de resaltado de sintaxis |
-| `@eduardoalvarez/arrecife/brand` | sí | Logo, isotipo y mascota como componentes |
-| `@eduardoalvarez/arrecife/assets/*` | — | Los PNG de la marca |
+| Subruta | Arrastra React | Pide además | Para qué |
+| --- | --- | --- | --- |
+| `@eduardoalvarez/arrecife` | sí | — | Componentes, primitivos, marca, `cn`. Reexporta tokens y tema |
+| `@eduardoalvarez/arrecife/tokens` | **no** | — | El objeto `tokens` en JS. Satori, Astro, scripts |
+| `@eduardoalvarez/arrecife/tokens/theme.css` | — | — | El `@theme` de Tailwind v4 |
+| `@eduardoalvarez/arrecife/tema` | **no** | — | `scriptTema` para el `<head>`, y leer o cambiar el modo |
+| `@eduardoalvarez/arrecife/og` | **no** | — | Las plantillas de Open Graph para Satori |
+| `@eduardoalvarez/arrecife/shiki` | **no** | — | El tema de resaltado de sintaxis |
+| `@eduardoalvarez/arrecife/brand` | sí | — | Logo, isotipo y mascota como componentes |
+| `@eduardoalvarez/arrecife/form` | sí | `react-hook-form` | La capa de formulario: etiquetas, errores y `aria-*` |
+| `@eduardoalvarez/arrecife/chart` | sí | `recharts` | El chasis de las gráficas y la paleta de series |
+| `@eduardoalvarez/arrecife/assets/*` | — | — | Los PNG de la marca |
 
 Importar la raíz desde un script de build para sacar un token es el error que las
 subrutas existen para evitar: arrastra React entero a un worker que no lo monta.
+
+`./form` y `./chart` están fuera de la raíz por el motivo simétrico: si colgaran
+del índice principal, los proyectos que no dibujan gráficas ni usan React Hook
+Form tendrían que instalar esas dependencias igualmente para que su bundler
+resolviera un import que nunca ejecutan.
 
 ```ts
 // Bien, en un generador de OG o en astro.config.mjs
 import { tokens } from '@eduardoalvarez/arrecife/tokens';
 import { arrecife } from '@eduardoalvarez/arrecife/shiki';
 
+// Bien, en el <head> de un Astro que no monta React
+import { scriptTema } from '@eduardoalvarez/arrecife/tema';
+
 // Mal: monta React donde no hace falta
 import { tokens } from '@eduardoalvarez/arrecife';
 ```
+
+### El tema, y el parpadeo de la primera pintura
+
+`ThemeToggle` es el botón; lo difícil está en `./tema`. Sin `scriptTema` inline en
+el `<head>`, la primera pintura sale con el modo por defecto y el elegido entra
+un frame después: en un sitio oscuro que el usuario dejó en claro, eso es un
+fogonazo blanco en cada carga.
+
+```astro
+---
+import { scriptTema } from '@eduardoalvarez/arrecife/tema';
+---
+<head>
+  <script is:inline set:html={scriptTema} />
+</head>
+```
+
+Tiene que ir INLINE. Un `<script src>`, aunque sea síncrono, se descarga, y el
+parpadeo vuelve. El script reengancha en `astro:after-swap` porque las
+transiciones de vista reemplazan el `<html>` entero.
 
 ## Tokens
 

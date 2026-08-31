@@ -445,6 +445,40 @@ del contenedor de gráficas tiró tres stories con `aria-hidden-focus`.
 
 ---
 
+## 20 · El plegable SÍ anima la altura
+
+**Regla del sistema:** «sin animaciones de entrada». El error nº 3 de la lista de
+`AGENTS.md` es literalmente «añadir una animación de entrada porque queda mejor».
+
+**Qué había:** `Accordion` entró en la 0.4.0 sin animar, citando esa regla, y
+dejando escrito que Radix publica `--radix-accordion-content-height` justo para
+animarla y que aquí no se usaba.
+
+**Qué quedó:** la altura se anima, detrás de `motion-safe`, con
+`--duration-standard` y `--ease-standard`.
+
+El argumento que cambió la decisión no es estético. En un plegable **no aparece
+nada**: se abre un hueco, y todo lo que está debajo del acordeón se desplaza. Sin
+transición ese desplazamiento es un salto de cien o doscientos píxeles, y quien
+acaba de pulsar pierde el sitio en la página — que es exactamente el daño que la
+regla «nada de movimiento» existe para evitar. Aplicarla aquí la volvía en contra
+de su propio motivo.
+
+Es la misma categoría que la segunda excepción, el panel lateral: «un panel que
+entra desde un borde se desliza por definición». Un plegable que revela contenido
+empuja lo de abajo por definición.
+
+No estrena tiempo ni curva, y `motion-safe` lo apaga para quien pidió menos
+movimiento: ahí el panel sigue apareciendo donde va a quedarse.
+
+Con esta son **cuatro** las excepciones declaradas: el spinner del botón, el
+panel lateral, el shimmer del skeleton y el plegable. Las cuatro son
+realimentación de PROGRESO o de continuidad espacial, ninguna es decoración.
+
+**Acción en el documento:** anotar la cuarta excepción junto a las otras tres.
+
+---
+
 ## Lo que NO se tocó
 
 Sigue vigente la lista de la auditoría: las tres correcciones de contraste

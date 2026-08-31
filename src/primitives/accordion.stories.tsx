@@ -33,15 +33,16 @@ const PREGUNTAS = [
   },
 ] as const;
 
+const items = (deshabilitado = false) =>
+  PREGUNTAS.map((p, i) => (
+    <AccordionItem key={p.valor} value={p.valor} disabled={deshabilitado && i === 2}>
+      <AccordionTrigger headingLevel={3}>{p.pregunta}</AccordionTrigger>
+      <AccordionContent>{p.respuesta}</AccordionContent>
+    </AccordionItem>
+  ));
+
 const bloque = (args: Parameters<NonNullable<Story['render']>>[0], deshabilitado = false) => (
-  <Accordion {...args}>
-    {PREGUNTAS.map((p, i) => (
-      <AccordionItem key={p.valor} value={p.valor} disabled={deshabilitado && i === 2}>
-        <AccordionTrigger headingLevel={3}>{p.pregunta}</AccordionTrigger>
-        <AccordionContent>{p.respuesta}</AccordionContent>
-      </AccordionItem>
-    ))}
-  </Accordion>
+  <Accordion {...args}>{items(deshabilitado)}</Accordion>
 );
 
 export const Default: Story = {
@@ -64,10 +65,18 @@ export const Default: Story = {
 
 export const Multiple: Story = {
   name: 'Varios abiertos',
-  args: { type: 'multiple', defaultValue: ['consultoria', 'remoto'] },
-  render: (args) => (
+  /*
+   * Se monta a mano en vez de esparcir los `args` del meta, y no es manía:
+   * `collapsible` solo existe en `type="single"`. Con `type="multiple"`, Radix
+   * lo reenvía al `<div>` y React avisa por consola de un atributo inválido —un
+   * aviso que la suite no convierte en fallo, así que vive ahí hasta que alguien
+   * lee los logs. Pasó justo eso entre la 0.4.0 y la 0.5.0.
+   */
+  render: () => (
     <div>
-      {bloque(args)}
+      <Accordion type="multiple" defaultValue={['consultoria', 'remoto']}>
+        {items()}
+      </Accordion>
       <Nota>
         `type="multiple"` para un temario, donde comparar dos secciones es el
         caso normal. Para un FAQ, `single` con `collapsible`.
@@ -97,6 +106,27 @@ export const Deshabilitado: Story = {
     <div>
       {bloque(args, true)}
       <Nota>El tercero está deshabilitado: se atenúa y no responde al puntero.</Nota>
+    </div>
+  ),
+};
+
+export const Movimiento: Story = {
+  name: 'La cuarta excepción de movimiento',
+  render: (args) => (
+    <div>
+      {bloque(args)}
+      <Nota>
+        La altura SÍ se anima, y el componente nació sin animarla citando la regla
+        contraria. La diferencia: aquí no APARECE nada, se abre un hueco, y todo
+        lo que hay debajo se desplaza. Sin transición ese desplazamiento es un
+        salto y quien acaba de pulsar pierde el sitio en la página.
+      </Nota>
+      <Nota>
+        Es la misma categoría que el panel lateral —la segunda excepción— y no la
+        de una animación de entrada. Va detrás de `motion-safe`, con
+        `--duration-standard` y `--ease-standard`: no estrena tiempo ni curva.
+      </Nota>
+      <Nota>Ver `docs/decisiones.md` § 20.</Nota>
     </div>
   ),
 };

@@ -8,16 +8,25 @@ import { ChevronDown } from '../lib/glyphs.tsx';
  * El plegable. Lo pedían dos proyectos: el FAQ del portafolio y el temario de
  * cursos, que es literalmente una lista de secciones que se abren.
  *
- * NO se anima la altura, que es lo primero que hace todo el mundo con este
- * componente. Radix publica `--radix-accordion-content-height` justo para eso y
- * aquí no se usa: el sistema no anima posición ni tamaño, y un panel que crece
- * a 200ms es exactamente el desplazamiento que las tarjetas, los menús y los
- * modales ya evitan. El panel aparece donde va a quedarse.
+ * La altura SÍ se anima, y es la cuarta excepción declarada del sistema.
  *
- * Lo único que se mueve es el galón, y se mueve porque `rotate` bajo
- * `transition-standard` NO transiciona: la utilidad solo cubre color y borde,
- * así que el giro es instantáneo aunque la clase esté puesta. Es el mismo trato
- * que recibe el ancho de `Progress`.
+ * Merece explicarse, porque la regla general es la contraria y este componente
+ * nació sin animar citándola. La diferencia es que aquí no APARECE nada: se
+ * abre un hueco, y todo lo que hay debajo del acordeón se desplaza. Sin
+ * transición ese desplazamiento es un salto, y quien acaba de pulsar pierde el
+ * sitio en la página — que es justo el daño que la regla «nada de movimiento»
+ * existe para evitar. Es la misma categoría que el panel lateral, la segunda
+ * excepción, y no la de una animación de entrada.
+ *
+ * Va detrás de `motion-safe`, dura `--duration-standard` y usa
+ * `--ease-standard`, así que no estrena un tiempo ni una curva. Quien pidió
+ * menos movimiento sigue viendo el panel aparecer donde va a quedarse.
+ *
+ * Ver `docs/decisiones.md` § 20.
+ *
+ * El galón, en cambio, gira sin transición: `transition-standard` solo cubre
+ * color y borde, así que `rotate` salta aunque la clase esté puesta. Es el mismo
+ * trato que recibe el ancho de `Progress`.
  *
  * La división entre items es `hairline`, no `border`: es una separación de
  * lectura, no el borde de un control.
@@ -95,7 +104,13 @@ export function AccordionContent({
   ...props
 }: ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>) {
   return (
-    <AccordionPrimitive.Content className="overflow-hidden" {...props}>
+    <AccordionPrimitive.Content
+      className={cn(
+        'overflow-hidden',
+        'motion-safe:data-[state=open]:desplegar motion-safe:data-[state=closed]:replegar',
+      )}
+      {...props}
+    >
       <div className={cn('pb-step-md font-sans text-ui text-text-secondary max-w-measure', className)}>
         {children}
       </div>

@@ -6,6 +6,7 @@ export * from './breadcrumb/index.tsx';
 export * from './code-block/index.tsx';
 export * from './course-card/index.tsx';
 export * from './empty-state/index.tsx';
+export * from './event-calendar/index.tsx';
 export * from './footer/index.tsx';
 export * from './hero/index.tsx';
 export * from './link-row/index.tsx';

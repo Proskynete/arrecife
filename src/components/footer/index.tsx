@@ -58,33 +58,45 @@ export function Footer({
 
         {children ? <div className="gap-step-md flex flex-wrap items-center">{children}</div> : null}
 
-        {social && social.length > 0 ? (
-          // 18px de separación, del documento. No es un escalón de `spacing`:
-          // es el ritmo de una fila de iconos, no el de una página.
-          <ul className="flex items-center gap-[18px]">
-            {social.map((red) => (
-              <li key={red.href}>
-                <a
-                  href={red.href}
-                  aria-label={red.label}
-                  className={cn(
-                    'text-text-muted hover:text-accent transition-standard block cursor-pointer text-[19px]',
-                    'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-                  )}
-                >
-                  {red.icon}
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        {/*
+          Los iconos a la izquierda y la firma a la derecha, en la MISMA línea.
+          La firma lleva `ml-auto` y no basta con `justify-between`: sin redes,
+          un `justify-between` la dejaría pegada al borde izquierdo, que es
+          justo donde no va.
 
-        <Text variant="meta" tone="muted" as="p">
-          <span aria-hidden="true" className="text-accent">
-            ${' '}
-          </span>
-          cd ~/{naming.domain}/{year}
-        </Text>
+          En pantalla estrecha las dos filas se parten con `flex-wrap` en vez de
+          apretarse: la firma es mono y no se puede truncar sin que deje de
+          leerse como una ruta.
+        */}
+        <div className="gap-step-md flex flex-wrap items-center">
+          {social && social.length > 0 ? (
+            // 18px de separación, del documento. No es un escalón de `spacing`:
+            // es el ritmo de una fila de iconos, no el de una página.
+            <ul className="flex items-center gap-[18px]">
+              {social.map((red) => (
+                <li key={red.href}>
+                  <a
+                    href={red.href}
+                    aria-label={red.label}
+                    className={cn(
+                      'text-text-muted hover:text-accent transition-standard block cursor-pointer text-[19px]',
+                      'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+                    )}
+                  >
+                    {red.icon}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          <Text variant="meta" tone="muted" as="p" className="ml-auto">
+            <span aria-hidden="true" className="text-accent">
+              ${' '}
+            </span>
+            cd ~/{naming.domain}/{year}
+          </Text>
+        </div>
       </div>
     </footer>
   );

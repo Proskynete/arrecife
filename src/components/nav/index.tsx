@@ -14,11 +14,17 @@ import { cn } from '../../lib/cn.ts';
  * Renderiza `<header>` colgando directamente del `body`, así que ES el landmark
  * `banner` del sitio. Por eso `PageHeader` va dentro de `<main>` y no es
  * landmark: dos banners en una página son un fallo de accesibilidad.
+ *
+ * Los items van a la DERECHA, pegados a las acciones, no a continuación de la
+ * marca. Con la marca a la izquierda y los items justo detrás, el bloque de
+ * navegación queda flotando en medio de la barra y el ojo tiene que cruzar el
+ * hueco dos veces: una para leer la marca y otra para volver a buscar la
+ * sección. Agrupados a la derecha, marca y navegación son dos anclas y no tres.
  */
 export type NavProps = ComponentPropsWithoutRef<'header'> & {
   /** El logo, a la izquierda. */
   brand?: ReactNode;
-  /** Los items de sección, en el centro. */
+  /** Los items de sección. Van a la derecha, pegados a `actions`. */
   children?: ReactNode;
   /** Acciones a la derecha: conversión, cambio de tema, buscar. */
   actions?: ReactNode;
@@ -41,8 +47,22 @@ export function Nav({ brand, children, actions, className, ...props }: NavProps)
         {brand ? <div className="shrink-0">{brand}</div> : null}
 
         {children ? (
-          <nav aria-label="Principal" className="min-w-0 flex-1">
-            <ul className="gap-step-md flex items-center">{children}</ul>
+          <nav aria-label="Principal" className="ml-auto min-w-0">
+            <ul className="gap-step-md flex items-center">
+              {/*
+                El prompt. Es la misma estética CLI del `./` de cada item y del
+                `$` del pie, y va `aria-hidden` por lo mismo: un lector de
+                pantalla anuncia «artículos», no «virgulilla barra artículos».
+
+                Va fuera de los `<li>` a propósito. Meterlo dentro convertiría el
+                prompt en un elemento de la lista de navegación, y esa lista
+                tiene que tener tantos elementos como secciones.
+              */}
+              <span aria-hidden="true" className="text-text-muted font-mono text-meta select-none">
+                ~/
+              </span>
+              {children}
+            </ul>
           </nav>
         ) : (
           <div className="flex-1" />
@@ -68,6 +88,13 @@ export type NavItemProps = ComponentPropsWithoutRef<'a'> & {
  * no una convención que haya que recordar en cinco proyectos. Va `aria-hidden`,
  * así que un lector de pantalla anuncia «artículos» y no «punto barra
  * artículos».
+ *
+ * La sección actual va entre CORCHETES además de en bioluz y subrayada. No es
+ * decoración: el subrayado y el color son la misma señal —«esto destaca»— y en
+ * una barra de seis items en mono, a 13px, esa señal se lee peor de lo que
+ * parece en una maqueta. Los corchetes son la forma en que una terminal marca la
+ * ruta activa, así que dicen «estás aquí» sin depender de que se distinga el
+ * color. Van `aria-hidden`, porque quien escucha ya tiene `aria-current`.
  */
 export function NavItem({ active = false, asChild = false, className, children, ...props }: NavItemProps) {
   const Raiz = asChild ? Slot : 'a';
@@ -86,10 +113,20 @@ export function NavItem({ active = false, asChild = false, className, children, 
         )}
         {...props}
       >
-        <span aria-hidden="true" className="text-text-muted">
+        {active ? (
+          <span aria-hidden="true" className="text-accent">
+            [
+          </span>
+        ) : null}
+        <span aria-hidden="true" className={active ? 'text-accent' : 'text-text-muted'}>
           ./
         </span>
         {children}
+        {active ? (
+          <span aria-hidden="true" className="text-accent">
+            ]
+          </span>
+        ) : null}
       </Raiz>
     </li>
   );

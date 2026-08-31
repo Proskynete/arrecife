@@ -4,6 +4,7 @@ import { Nota } from '../../../stories/utils.tsx';
 import { Logo } from '../../brand/logo.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { Text } from '../../primitives/typography.tsx';
+import { ThemeToggle } from '../theme-toggle/index.tsx';
 import { Nav, NavItem } from './index.tsx';
 
 const meta = {
@@ -66,6 +67,55 @@ export const Formato: Story = {
           El activo es bioluz con subrayado de 1px y `aria-current="page"`. El
           color no puede ser el único indicador, y el subrayado es lo que lo
           acompaña.
+        </Nota>
+      </div>
+    </div>
+  ),
+};
+
+export const ComoEnElSitio: Story = {
+  name: 'La barra real del sitio',
+  render: () => (
+    <div className="-m-step-lg">
+      <Nav
+        brand={<Logo sobre="oscuro" conLema />}
+        actions={
+          <>
+            <Button variant="tertiary" size="icon" aria-label="Buscar">
+              <span aria-hidden="true">⌕</span>
+            </Button>
+            <ThemeToggle />
+          </>
+        }
+      >
+        <NavItem href="#" active>
+          artículos
+        </NavItem>
+        <NavItem href="#">charlas</NavItem>
+        <NavItem href="#">cursos</NavItem>
+        <NavItem href="#">sobre_mí</NavItem>
+        <NavItem href="#">hablemos</NavItem>
+      </Nav>
+
+      <div className="p-step-lg">
+        <Nota>
+          Los items van a la DERECHA, pegados a las acciones. Con la marca a la
+          izquierda y los items justo detrás, el bloque de navegación queda
+          flotando en medio y el ojo cruza el hueco dos veces.
+        </Nota>
+        <Nota>
+          El `~/` es el prompt y va fuera de los `li`: meterlo dentro lo
+          convertiría en un elemento más de la lista de navegación, y esa lista
+          tiene que tener tantos elementos como secciones.
+        </Nota>
+        <Nota>
+          La sección actual va entre corchetes además de en bioluz y subrayada.
+          El color y el subrayado son la misma señal; los corchetes son cómo una
+          terminal marca la ruta activa y no dependen de distinguir el color.
+        </Nota>
+        <Nota>
+          La marca lleva `conLema`: el lema sale de `tagline.corto` y no se puede
+          pasar por prop, por lo mismo que el wordmark.
         </Nota>
       </div>
     </div>

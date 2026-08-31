@@ -115,6 +115,17 @@ export const Spinner = (props: GlyphProps) => (
   </svg>
 );
 
+/**
+ * La cámara del control de subida de avatar. Entra porque un primitivo nuevo la
+ * pide, que es la única razón por la que este archivo crece.
+ */
+export const Camara = (props: GlyphProps) => (
+  <Glyph {...props}>
+    <path d="M2 5.5h2.6l1-1.5h4.8l1 1.5H14v7.5H2z" />
+    <circle cx="8" cy="9" r="2.4" />
+  </Glyph>
+);
+
 /* -------------------------------------------------------------------- tema */
 
 /**

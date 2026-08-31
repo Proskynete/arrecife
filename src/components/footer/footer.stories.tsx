@@ -95,3 +95,34 @@ export const ConMarca: Story = {
     </div>
   ),
 };
+
+export const FirmaALaDerecha: Story = {
+  name: 'La firma va a la derecha',
+  render: () => (
+    <div className="-m-step-lg">
+      <Footer social={REDES} />
+
+      <div className="p-step-lg">
+        <Nota>
+          Iconos a la izquierda, firma a la derecha, en la MISMA línea. La firma
+          lleva `ml-auto` y no basta con `justify-between`: sin redes, un
+          `justify-between` la dejaría pegada al borde izquierdo.
+        </Nota>
+        <Nota>
+          En pantalla estrecha las dos partes se parten con `flex-wrap` en vez de
+          apretarse. La firma es mono y no se puede truncar sin que deje de
+          leerse como una ruta.
+        </Nota>
+      </div>
+    </div>
+  ),
+};
+
+export const SoloFirma: Story = {
+  name: 'Sin redes, la firma sigue a la derecha',
+  render: () => (
+    <div className="-m-step-lg">
+      <Footer />
+    </div>
+  ),
+};

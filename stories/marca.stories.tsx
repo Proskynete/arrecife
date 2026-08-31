@@ -182,6 +182,9 @@ export const Todo: StoryObj = {
           <Ficha nombre="completo, sobre claro" archivo="fin.png + wordmark" tema="light" codigo={'<Logo sobre="claro" />'}>
             <Logo sobre="claro" />
           </Ficha>
+          <Ficha nombre="con lema, para la barra" archivo="fin-foam.png + wordmark + tagline.corto" tema="dark" codigo={'<Logo sobre="oscuro" conLema />'}>
+            <Logo sobre="oscuro" conLema />
+          </Ficha>
           <Ficha nombre="solo isotipo" archivo="fin-foam.png" tema="dark" codigo={'<Logo sobre="oscuro" soloIsotipo />'}>
             <Logo sobre="oscuro" soloIsotipo />
           </Ficha>

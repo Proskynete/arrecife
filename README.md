@@ -83,6 +83,11 @@ con la hoja en `src/styles/` sube dos niveles y no uno. Lo detectaron los tests
 E2E del blog, no el build, y hasta la 0.3.0 esto solo estaba escrito en
 `llms.txt` — el archivo que lee un agente y no una persona.
 
+> **Vienes de la 0.4.0 o anterior.** `Toast`, `ToastProvider`, `ToastViewport`,
+> `ToastTitle` y `ToastDescription` dejaron de ser API pública en la 0.5.0: se
+> usa `Toaster` y `toast()`. `ToastAction` se queda. La migración, con el porqué
+> y los ejemplos, está en [`docs/migracion-0.5.md`](docs/migracion-0.5.md).
+
 > **Vienes de la 0.2.0 o anterior.** Los cinco escalones de espaciado se
 > renombraron: `p-md` es ahora `p-step-md`, `gap-sm` es `gap-step-sm`. Es un
 > cambio incompatible, y si tu proyecto usa `max-w-sm`, `max-w-md` o `max-w-lg`,
@@ -253,6 +258,34 @@ Comprobado empaquetando la librería con `pnpm pack` e instalándola en un proye
 aparte: los tipos resuelven desde `dist/`, `./tokens` carga sin arrastrar React y
 `./tokens/theme.css` se resuelve por subruta.
 
+### Los iconos de redes van agrupados
+
+Es lo primero con lo que tropieza quien consume la librería, porque la forma
+natural no funciona:
+
+```tsx
+// ❌ no existe
+import { GitHub, LinkedIn } from '@eduardoalvarez/arrecife';
+
+// ✅
+import { social } from '@eduardoalvarez/arrecife';
+
+<social.GitHub />
+<social.LinkedIn />
+```
+
+Los ocho son `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`
+y `Correo`. Van bajo un namespace por un motivo concreto: **uno se llama `X`**.
+Un `export const X` en la raíz de una librería de componentes colisiona con
+cualquier cosa —una variable de un genérico, un `import { X }` de otro sitio— y
+el fallo aparece lejos de aquí.
+
+**Los glifos internos NO se exportan.** `Close`, `ChevronDown`, `Copy`, `Sol` y
+compañía son el juego mínimo que necesitan los primitivos y se quedan dentro.
+Publicarlos convertiría `lib/glyphs.tsx` en la librería de iconos que el sistema
+decidió no tener, y a partir de ahí crece sola. Un proyecto que necesite un icono
+pasa el suyo: `Stat` recibe `icon`, `Footer` recibe el `icon` de cada red.
+
 ### Las dos subrutas que piden una dependencia
 
 `./form` y `./chart` no cuelgan de la raíz, y es a propósito. Cada una pide una
@@ -286,7 +319,7 @@ grep sobre esas dos líneas no encuentra React ni aunque el chunk lo importe.
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint, incluido el veto a hex literales fuera de `tokens.ts` |
 | `pnpm check:tokens` | falla si `src/tokens/` importa algo de fuera |
-| `pnpm test` | compila Tailwind y corre axe sobre las 193 stories, en los dos modos |
+| `pnpm test` | compila Tailwind y corre axe sobre las 206 stories, en los dos modos |
 | `pnpm check:exports` | verifica que `dist/` tiene lo que `exports` promete |
 | `pnpm check:release` | valida `release-please-config.json` contra el esquema oficial |
 | `pnpm storybook` | genera los tokens y levanta Storybook en el 6006 |

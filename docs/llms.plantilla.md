@@ -157,6 +157,25 @@ Tiene que ir INLINE. Un `<script src>`, aunque sea síncrono, se descarga, y el
 parpadeo vuelve. El script reengancha en `astro:after-swap` porque las
 transiciones de vista reemplazan el `<html>` entero.
 
+### Los iconos de redes van agrupados
+
+```tsx
+// ❌ no existe
+import { GitHub } from '@eduardoalvarez/arrecife';
+
+// ✅
+import { social } from '@eduardoalvarez/arrecife';
+<social.GitHub />
+```
+
+Los ocho: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
+`Correo`. Van bajo namespace porque uno se llama `X` y sueltos colisiona.
+
+Los glifos internos —`Close`, `ChevronDown`, `Sol`— **no se exportan** y no van a
+exportarse: son el juego mínimo de los primitivos. Un componente que necesita un
+icono lo recibe por prop (`Stat` tiene `icon`, cada `Red` de `Footer` tiene el
+suyo). No pidas que se publiquen: pasa el tuyo.
+
 ## Tokens
 
 La fuente es un objeto de TypeScript y la salida CSS se genera de él, así que el

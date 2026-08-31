@@ -25,13 +25,20 @@ jobs:
           # para dependencias de producción y el segundo para las de desarrollo,
           # según el `prefix-development` de dependabot.yml. Faltaba el segundo y
           # tumbaba todos sus PRs de devDependencies.
+          #
+          # `tema`, `form` y `chart` entraron en la 0.4.0 por el mismo criterio
+          # que `og` y `shiki`: una subruta publicada de `exports` es un ámbito.
+          # No es que la lista se abra, es que hay tres áreas más.
           scopes: |
             tokens
             primitives
             components
             brand
+            tema
             og
             shiki
+            form
+            chart
             storybook
             a11y
             deps

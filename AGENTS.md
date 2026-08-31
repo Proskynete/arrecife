@@ -29,6 +29,10 @@ Es el único subpaquete que pueden consumir los cinco proyectos, Satori y un Ast
 sin React. Si un token termina dependiendo de un componente, la librería deja de
 ser portable y `./og` y `./shiki` dejan de existir.
 
+`src/tema/` vive bajo la misma regla por el mismo motivo: lo consume el `<head>`
+de un Astro que no monta React. No es un token, así que `check:tokens` no lo
+cubre; lo cubre `check:exports`, que sigue los imports del `dist/` publicado.
+
 No es una recomendación: `pnpm check:tokens` lo verifica en cada build, ESLint lo
 dice en el editor y `check:exports` comprueba que las subrutas portables no
 traen React en el `dist/` publicado.
@@ -54,7 +58,7 @@ pnpm storybook        # genera los tokens y levanta Storybook en el 6006
 | `pnpm test:watch`                      | la suite en watch, modo oscuro                      |
 | `pnpm check:tokens`                    | falla si `src/tokens/` importa algo de fuera        |
 | `pnpm check:namespace`                 | falla si un token pisa un nombre de Tailwind        |
-| `pnpm check:exports`                   | verifica que `dist/` tiene lo que `exports` promete |
+| `pnpm check:exports`                   | verifica que `dist/` tiene lo que `exports` promete, y que las portables no traen React ni por sus chunks |
 | `pnpm check:llms`                      | falla si `llms.txt` no cuadra con los tipos         |
 | `pnpm check:release`                   | valida la configuración de release-please           |
 | `pnpm build:tokens`                    | regenera `dist/tokens/theme.css`                    |
@@ -69,11 +73,14 @@ cambio toca color, contraste o marcado.
 ```
 src/
   tokens/       tokens.ts es LA fuente. No importa nada. Se publica en ./tokens
-  primitives/   los 28 primitivos sobre shadcn/Radix, con su .stories.tsx al lado
+  primitives/   los 31 primitivos sobre shadcn/Radix, con su .stories.tsx al lado
   components/   las piezas de identidad, una carpeta por componente
   brand/        logo, isotipo, mascota y el catálogo de PNG
+  tema/         el modo claro/oscuro y `scriptTema`. Sin React. Se publica en ./tema
   og/           plantillas de Satori. Sin React. Se publica en ./og
   shiki/        el tema de resaltado. Sin React. Se publica en ./shiki
+  form/         la capa de formulario. Se publica en ./form; pide react-hook-form
+  chart/        el chasis de las gráficas. Se publica en ./chart; pide recharts
   lib/          cn, los glifos inline y los iconos sociales
 stories/        stories que no son de un componente (tokens, marca, og) y utils
 scripts/        los generadores y los checks
@@ -164,6 +171,14 @@ Reglas del patrón, todas con motivo:
   no informa a nadie. El repo entero está escrito así; mantenlo.
 - **Reutiliza los primitivos.** Un componente de `components/` que escribe sus
   propias clases de tipografía en vez de usar `Text` está duplicando la escala.
+- **Una dependencia pesada va a su propia subruta**, como dependencia de pares
+  opcional, nunca colgando de la raíz. `./form` pide `react-hook-form` y
+  `./chart` pide `recharts`: si colgaran del índice principal, los cuatro
+  proyectos que no las usan tendrían que instalarlas igualmente para que su
+  bundler resolviera un import que nunca ejecutan. La subruta nueva se declara en
+  `exports`, en `tsup.config.ts` —entrada **y** `external`— y en las `ENTRADAS` y
+  `SECCIONES` de `scripts/build-llms.mjs`, o sus componentes desaparecen del
+  inventario sin que nada avise.
 
 ### 3 · Colores, tamaños y espaciados
 
@@ -280,9 +295,15 @@ docs(readme): la tercera corrección de contraste
 ```
 
 Ámbitos válidos, y la lista es corta a propósito: `tokens`, `primitives`,
-`components`, `brand`, `og`, `shiki`, `storybook`, `a11y`, `deps`,
-`deps-dev`, `ci`. **Un cambio de proceso del repo va sin ámbito** —`docs:`,
-`ci:`—: no hay ámbito para «cómo trabajamos», y uno inventado se rechaza.
+`components`, `brand`, `tema`, `og`, `shiki`, `form`, `chart`, `storybook`,
+`a11y`, `deps`, `deps-dev`, `ci`. **Un cambio de proceso del repo va sin ámbito**
+—`docs:`, `ci:`—: no hay ámbito para «cómo trabajamos», y uno inventado se
+rechaza.
+
+La regla que gobierna la lista: **una subruta publicada de `exports` es un
+ámbito.** Es lo que ya hacían `og` y `shiki`, y por eso `tema`, `form` y `chart`
+entraron con ellas en la 0.4.0 en vez de repartirse entre `tokens` y
+`components`. Un ámbito nuevo sin subruta detrás sí hay que discutirlo.
 
 Cuidado con una trampa: el workflow valida el **título del PR**, no los ámbitos
 de los commits que van dentro. Un `docs(agents):` enterrado en un PR titulado

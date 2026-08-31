@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Nota } from '../../../stories/utils.tsx';
+import { Logo } from '../../brand/logo.tsx';
 import { Correo, Discord, GitHub, Instagram, LinkedIn, Rss, X, YouTube } from '../../lib/social.tsx';
-import { Footer } from './index.tsx';
+import { Footer, FooterLink } from './index.tsx';
 
 const meta = {
   title: 'Componentes/Footer',
@@ -71,6 +72,26 @@ export const Iconos: Story = {
           <span className="text-meta font-mono">{r.label}</span>
         </span>
       ))}
+    </div>
+  ),
+};
+
+export const ConMarca: Story = {
+  name: 'Con la fila de marca',
+  render: () => (
+    <div className="-m-step-lg">
+      <Footer brand={<Logo />} social={REDES}>
+        <FooterLink href="/rss.xml">./rss</FooterLink>
+        <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
+      </Footer>
+
+      <div className="p-step-lg">
+        <Nota>
+          La marca tiene ranura propia. Antes acababa dentro de `children` con un
+          `w-full` para que se llevara su propia línea: funcionaba y era un apaño,
+          porque la marca no es un enlace de texto más.
+        </Nota>
+      </div>
     </div>
   ),
 };

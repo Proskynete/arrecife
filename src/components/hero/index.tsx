@@ -10,12 +10,21 @@ import { Text } from '../../primitives/typography.tsx';
  * conversión, y por la misma razón: si hay dos, no hay ninguno.
  *
  * Degradado, radio de panel, texto al 62 % del ancho y la pose sangrando por el
- * borde inferior derecho. NUNCA centrada: una mascota centrada bajo un titular
- * es una ilustración de portada, y esto es una cabecera.
+ * borde inferior derecho. Eso es la variante `cabecera`, que es el defecto.
  *
  * En móvil no hay borde por el que sangrar, así que la pose baja al flujo, bajo
  * los botones. No es un `hidden` en pantalla pequeña: la pose es el 40 % de la
  * personalidad del hero.
+ *
+ * La otra variante es `centrado`, y existe porque la regla de arriba tiene un
+ * caso donde no aplica. «Nunca centrada» se escribió contra el hero de una
+ * página con más contenido debajo: ahí una mascota centrada bajo el titular es
+ * una ilustración de portada, no una cabecera. Pero una página de enlaces es
+ * centrada de extremo a extremo y la mascota es el protagonista, no el remate.
+ * Ese proyecto se saltaba `Hero` entero por esto, que es peor: una regla
+ * declarada y con nombre se discute; una copia del degradado en otro repo se
+ * desincroniza. La pose va ARRIBA del titular, no debajo, para que siga sin
+ * leerse como la ilustración que cierra un bloque de texto.
  *
  * El degradado viene de `--gradient-hero`, así que sigue el modo. No hay ángulo
  * escrito a mano en ningún proyecto.
@@ -30,6 +39,11 @@ export type HeroProps = Omit<ComponentPropsWithoutRef<'section'>, 'title'> & {
   /** La pose de Tiburoncín. Sin ella el hero es un panel con texto. */
   pose?: Pose | undefined;
   basePath?: string | undefined;
+  /**
+   * `cabecera` sangra la pose por la esquina; `centrado` la pone arriba y
+   * centra el texto, para una página que es solo esto.
+   */
+  variant?: 'cabecera' | 'centrado';
 };
 
 export function Hero({
@@ -39,9 +53,12 @@ export function Hero({
   action,
   pose,
   basePath,
+  variant = 'cabecera',
   className,
   ...props
 }: HeroProps) {
+  const centrado = variant === 'centrado';
+
   return (
     <section
       className={cn(
@@ -52,7 +69,20 @@ export function Hero({
       )}
       {...props}
     >
-      <div className="gap-step-md flex flex-col md:max-w-[62%]">
+      {centrado && pose ? (
+        <Mascota
+          pose={pose}
+          basePath={basePath}
+          className="mb-step-md mx-auto w-48 md:w-56"
+        />
+      ) : null}
+
+      <div
+        className={cn(
+          'gap-step-md flex flex-col',
+          centrado ? 'items-center text-center' : 'md:max-w-[62%]',
+        )}
+      >
         {eyebrow ? (
           <Text variant="eyebrow" tone="accent" as="p">
             {eyebrow}
@@ -69,10 +99,19 @@ export function Hero({
           </Text>
         ) : null}
 
-        {action ? <div className="gap-step-sm mt-step-xs flex flex-wrap items-center">{action}</div> : null}
+        {action ? (
+          <div
+            className={cn(
+              'gap-step-sm mt-step-xs flex flex-wrap items-center',
+              centrado && 'justify-center',
+            )}
+          >
+            {action}
+          </div>
+        ) : null}
       </div>
 
-      {pose ? (
+      {!centrado && pose ? (
         <Mascota
           pose={pose}
           basePath={basePath}

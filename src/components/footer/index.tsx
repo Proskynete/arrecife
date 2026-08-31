@@ -33,18 +33,29 @@ export type FooterProps = ComponentPropsWithoutRef<'footer'> & {
   year?: number;
   /** Enlaces de texto: aviso legal, RSS, mapa del sitio. */
   children?: ReactNode;
+  /**
+   * La fila de marca: la aleta y el wordmark, arriba del todo.
+   *
+   * Existe porque sin ella acababa metida en `children` con un `w-full` para
+   * que se llevara su propia línea. Funcionaba y era un apaño: la marca no es
+   * un enlace de texto más, y una ranura propia lo dice en el tipo.
+   */
+  brand?: ReactNode;
 };
 
 export function Footer({
   social,
   year = new Date().getFullYear(),
   children,
+  brand,
   className,
   ...props
 }: FooterProps) {
   return (
     <footer className={cn('border-hairline w-full border-t', className)} {...props}>
       <div className="max-w-wide px-step-md py-step-xl gap-step-lg mx-auto flex flex-col">
+        {brand ? <div className="flex items-center">{brand}</div> : null}
+
         {children ? <div className="gap-step-md flex flex-wrap items-center">{children}</div> : null}
 
         {social && social.length > 0 ? (

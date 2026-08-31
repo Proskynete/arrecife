@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Nota } from '../../../stories/utils.tsx';
-import { TableOfContents } from './index.tsx';
+import { TableOfContents, type Entrada } from './index.tsx';
 
 const meta = {
   title: 'Componentes/TableOfContents',
@@ -37,4 +37,60 @@ export const Basico: Story = {
       </Nota>
     </div>
   ),
+};
+
+export const Hover: Story = {
+  parameters: { pseudo: { hover: true } },
+  render: (args) => (
+    <div className="max-w-60">
+      <TableOfContents {...args} />
+      <Nota>
+        Con el ratón encima de todas: la activa se queda en bioluz. Las clases del
+        activo llevan las dos variantes juntas —`aria-[current]:hover:`— para que
+        ganen por especificidad y no por el orden en que Tailwind emita las
+        reglas.
+      </Nota>
+    </div>
+  ),
+};
+
+export const Focus: Story = {
+  parameters: { pseudo: { focusVisible: true } },
+  render: (args) => (
+    <div className="max-w-60">
+      <TableOfContents {...args} />
+    </div>
+  ),
+};
+
+/**
+ * El caso que obligaba a hidratar el índice como isla de React en cada artículo.
+ */
+function MarcadoDesdeFuera({ items }: { items: readonly Entrada[] }) {
+  // Lo que hace el script de scroll-spy del sitio: poner el atributo en el
+  // enlace visible. React no se entera y no tiene por qué.
+  const marcar = (nodo: HTMLDivElement | null) => {
+    nodo?.querySelector('a[href="#el-contrato"]')?.setAttribute('aria-current', 'true');
+  };
+
+  return (
+    <div className="max-w-60" ref={marcar}>
+      <TableOfContents items={items} />
+      <Nota>
+        Aquí `activeHref` no se pasa: el atributo lo pone un script, como hace el
+        blog con quince líneas y cero JavaScript de framework. El estilo lo aplica
+        la variante `aria-[current]:`, así que el resultado es el mismo que
+        controlado.
+      </Nota>
+      <Nota>
+        El gancho es la PRESENCIA del atributo. Para desmarcar se quita; no se
+        pone `aria-current="false"`.
+      </Nota>
+    </div>
+  );
+}
+
+export const SinControlar: Story = {
+  name: 'Sin controlar, con el atributo puesto a mano',
+  render: (args) => <MarcadoDesdeFuera items={args.items} />,
 };

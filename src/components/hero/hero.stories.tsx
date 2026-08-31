@@ -67,3 +67,34 @@ export const SinPose: Story = {
     </div>
   ),
 };
+
+export const Centrado: Story = {
+  name: 'Variante centrada',
+  args: { variant: 'centrado' },
+  render: (args) => (
+    <div className="p-step-lg">
+      <Hero
+        {...args}
+        eyebrow="enlaces"
+        title="Eduardo Álvarez"
+        description="Todo lo que publico, en un sitio."
+        action={<Button variant="secondary">Ver el blog</Button>}
+      />
+      <Nota>
+        La regla del sistema es que la pose NUNCA va centrada, y sigue siendo
+        cierta para una cabecera con más página debajo: ahí una mascota centrada
+        bajo el titular es una ilustración de portada.
+      </Nota>
+      <Nota>
+        Una página de enlaces es otro caso: es centrada de extremo a extremo y la
+        mascota es el protagonista. Ese proyecto se saltaba `Hero` entero por
+        esto, que es peor — una regla con nombre se discute, una copia del
+        degradado en otro repo se desincroniza.
+      </Nota>
+      <Nota>
+        La pose va ARRIBA del titular, no debajo: así sigue sin leerse como la
+        ilustración que cierra un bloque de texto.
+      </Nota>
+    </div>
+  ),
+};

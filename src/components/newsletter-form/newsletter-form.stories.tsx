@@ -60,3 +60,28 @@ export const Reposo: Story = { args: { state: 'reposo' } };
 export const Enviando: Story = { args: { state: 'enviando' } };
 export const Exito: Story = { name: 'Éxito', args: { state: 'exito' } };
 export const Error: Story = { args: { state: 'error' } };
+
+export const ConNombre: Story = {
+  name: 'Con campo de nombre',
+  args: { nameField: true, nameInputProps: { minLength: 2, maxLength: 50 } },
+  render: (args) => (
+    <>
+      <NewsletterForm {...args} />
+      <Nota>
+        Con dos campos, los dos se reparten la línea y el botón baja: tres
+        controles en fila dejan el correo en un ancho donde no cabe un correo.
+      </Nota>
+      <Nota>
+        No es una prop de estilo. El endpoint del portafolio valida nombre y
+        correo y responde 400 si falta el primero, así que un formulario de un
+        solo campo ahí no era más pobre: enviaba algo que el servidor rechaza.
+      </Nota>
+      <Nota>
+        La librería NO valida el nombre. Los `minLength` y `maxLength` de esta
+        story llegan por `nameInputProps`: la regla es del proyecto y del servidor
+        que la comprueba de verdad, y copiarla aquí serían dos fuentes que se
+        desincronizan en silencio.
+      </Nota>
+    </>
+  ),
+};

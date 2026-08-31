@@ -53,3 +53,23 @@ export const Rejilla: Story = {
     </div>
   ),
 };
+
+export const ComoH2: Story = {
+  name: 'headingLevel 2',
+  args: { headingLevel: 2 },
+  render: (args) => (
+    <div className="max-w-content">
+      <ArticleCard {...args} />
+      <Nota>
+        `h3` por defecto: una tarjeta suelta en una rejilla no gana el nivel que
+        su posición no le da. En la página de listado sí lo gana —las tarjetas
+        SON el encabezado principal de la sección— y esa intención se perdía con
+        el nivel fijo.
+      </Nota>
+      <Nota>
+        Acotado a `2 | 3`. Abrirlo hasta `h5` es invitar a saltarse niveles, que
+        es el fallo que la constante evitaba.
+      </Nota>
+    </div>
+  ),
+};

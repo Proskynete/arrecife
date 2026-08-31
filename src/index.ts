@@ -6,6 +6,7 @@
  * nada de la raíz.
  */
 export * from './tokens/index.ts';
+export * from './tema/index.ts';
 export * from './primitives/index.ts';
 export * from './components/index.ts';
 export * from './brand/index.ts';

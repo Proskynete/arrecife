@@ -14,6 +14,11 @@ export type TalkCardProps = Omit<TarjetaProps, 'children' | 'title'> & {
   location?: ReactNode;
   /** Etiqueta corta de estado: «con vídeo», «próxima», «solo audio». */
   status?: ReactNode;
+  /**
+   * De qué iba la charla. Se corta a dos líneas, igual que el `excerpt` de
+   * `ArticleCard`, para que la rejilla no se desalinee.
+   */
+  description?: ReactNode;
 };
 
 export function TalkCard({
@@ -23,6 +28,7 @@ export function TalkCard({
   dateTime,
   location,
   status,
+  description,
   className,
   ...props
 }: TalkCardProps) {
@@ -44,6 +50,12 @@ export function TalkCard({
         <Text as="h3" variant="h3" className="group-hover:text-accent transition-standard">
           {title}
         </Text>
+
+        {description ? (
+          <Text variant="ui" tone="secondary" className="line-clamp-2">
+            {description}
+          </Text>
+        ) : null}
 
         {pie.length > 0 ? (
           <Text variant="label" tone="muted" as="p" className="gap-step-xs mt-auto flex items-center pt-step-sm">

@@ -135,6 +135,41 @@ describe('theme.css sobre Tailwind v4', () => {
     expect(regla(css, 'text-h1')).toContain('var(--text-h1)');
   });
 
+  it('sirve las cuatro series de gráfica y las cambia con el modo', async () => {
+    const css = await compilar(['bg-serie-1', 'bg-serie-4']);
+
+    expect(regla(css, 'bg-serie-1')).toBe('background-color: var(--color-serie-1);');
+    // El bloque del modo claro tiene que redeclarar las cuatro: si solo salieran
+    // en `@theme`, la gráfica se quedaría con la paleta oscura sobre papel.
+    const claro = css.slice(css.indexOf("[data-theme='light']"));
+    for (const n of [1, 2, 3, 4]) {
+      expect(claro, `--color-serie-${n} en modo claro`).toMatch(
+        new RegExp(`--color-serie-${n}\\s*:`),
+      );
+    }
+  });
+
+  /**
+   * El gancho de `TableOfContents`. La variante tiene que compilar a un selector
+   * de PRESENCIA del atributo —`[aria-current]`, sin valor— porque el scroll-spy
+   * del sitio pone `aria-current="true"` y el componente controlado pone
+   * `"location"`: si el selector se atara a un valor, una de las dos formas
+   * dejaría de pintarse y nada avisaría.
+   */
+  it('el activo del índice reacciona a aria-current con cualquier valor', async () => {
+    const css = await compilar([
+      'aria-[current]:text-accent',
+      'aria-[current]:hover:text-accent',
+      'hover:text-text-primary',
+    ]);
+
+    expect(css).toContain('[aria-current]');
+    expect(css).not.toContain('[aria-current="location"]');
+    // Y el hover del activo lleva las dos variantes, para ganar por
+    // especificidad al `hover:` genérico en vez de por orden de emisión.
+    expect(css).toContain('[aria-current]:hover');
+  });
+
   it('pisa font-sans y font-mono a propósito, con las familias del sistema', async () => {
     const css = await compilar(['font-sans', 'font-mono', 'font-display']);
 

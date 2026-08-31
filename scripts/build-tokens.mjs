@@ -75,6 +75,17 @@ function bloqueTipografia() {
   return lineas.join('\n');
 }
 
+/**
+ * `--color-serie-1` … `--color-serie-4`. Numeradas y no con nombre porque una
+ * serie no ES bioluz: es la primera del gráfico, y que hoy le toque bioluz es
+ * una decisión de paleta que puede cambiar sin que cambie el código que la usa.
+ */
+function bloqueSeries(modo, indent = '  ') {
+  return tokens.series[modo]
+    .map((hex, i) => `${indent}--color-serie-${i + 1}: ${hex};`)
+    .join('\n');
+}
+
 function bloqueGradientes(modo, indent = '  ') {
   return Object.entries(tokens.gradient[modo])
     .map(([nombre, valor]) => `${indent}--gradient-${kebab(nombre)}: ${valor};`)
@@ -127,6 +138,9 @@ ${bloqueColores(tokens.colors.dark)}
   /* --- marca · iguales en los dos modos ---------------------------------- */
 ${bloqueMarca()}
 
+  /* --- series de gráfica · modo oscuro (default) --------------------------- */
+${bloqueSeries('dark')}
+
   /* --- tipografía --------------------------------------------------------- */
 ${bloqueTipografia()}
 
@@ -145,11 +159,15 @@ ${bloqueGradientes('dark')}
 [data-theme='dark'] {
 ${bloqueColores(tokens.colors.dark)}
 
+${bloqueSeries('dark')}
+
 ${bloqueGradientes('dark')}
 }
 
 [data-theme='light'] {
 ${bloqueColores(tokens.colors.light)}
+
+${bloqueSeries('light')}
 
 ${bloqueGradientes('light')}
 }

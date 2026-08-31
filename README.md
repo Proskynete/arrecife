@@ -64,6 +64,25 @@ mismo objeto `tokens`: la fuente no cambia.
 El modo oscuro es el primario y es el default. Un proyecto en modo claro declara
 `data-theme="light"` en `<html>`; uno oscuro no necesita declarar nada.
 
+**Si además vas a usar componentes, falta una línea, y sin ella no falla nada.**
+Tailwind no escanea `node_modules`, así que purga todas las clases que emiten los
+componentes: `border-hairline`, `rounded-pill` y `p-step-lg` resuelven a la nada.
+No hay error en consola, no hay aviso en el build, no hay clase sin definir — la
+tarjeta simplemente sale con borde `currentColor` y la píldora, cuadrada.
+
+```css
+@import "tailwindcss";
+@import "@eduardoalvarez/arrecife/tokens/theme.css";
+
+/* Sin esto, los componentes se montan sin ningún estilo del sistema. */
+@source "../node_modules/@eduardoalvarez/arrecife/dist";
+```
+
+La ruta es relativa al archivo CSS donde va la directiva, así que en un proyecto
+con la hoja en `src/styles/` sube dos niveles y no uno. Lo detectaron los tests
+E2E del blog, no el build, y hasta la 0.3.0 esto solo estaba escrito en
+`llms.txt` — el archivo que lee un agente y no una persona.
+
 > **Vienes de la 0.2.0 o anterior.** Los cinco escalones de espaciado se
 > renombraron: `p-md` es ahora `p-step-md`, `gap-sm` es `gap-step-sm`. Es un
 > cambio incompatible, y si tu proyecto usa `max-w-sm`, `max-w-md` o `max-w-lg`,
@@ -100,6 +119,49 @@ solución es declararlo con el nombre que pide el token:
   font-display: swap;
 }
 ```
+
+#### En Next, con `next/font`
+
+Es el mismo fallo por otra puerta, y muerde a los dos proyectos Next. `next/font`
+registra cada familia bajo un nombre GENERADO —`__Geist_a1b2c3`— y la expone como
+una custom property; el nombre literal `"Geist"` que declaran los tokens no
+existe en ningún `@font-face` de la página.
+
+Importar `theme.css` sobrescribe `--font-sans` con ese literal, y las tres
+familias caen a la fuente del sistema. En silencio: no hay 404, porque la fuente
+sí se cargó — con otro nombre.
+
+La solución es reafirmar las tres DESPUÉS del import, apuntando a las variables
+que genera `next/font`:
+
+```ts
+// app/fuentes.ts
+import { Geist, Bricolage_Grotesque, JetBrains_Mono } from 'next/font/google';
+
+export const sans = Geist({ subsets: ['latin'], variable: '--fuente-sans' });
+export const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--fuente-display' });
+export const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--fuente-mono' });
+```
+
+```css
+@import "tailwindcss";
+@import "@eduardoalvarez/arrecife/tokens/theme.css";
+@source "../node_modules/@eduardoalvarez/arrecife/dist";
+
+/* Después del import, o gana el literal que no está cargado. */
+@theme {
+  --font-sans: var(--fuente-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--fuente-display), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--fuente-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+```
+
+Las variables se llaman `--fuente-*` y no `--font-*` a propósito: `--font-sans`
+es el nombre que Tailwind usa para SU token, y dárselo a `next/font` deja las dos
+capas peleando por la misma propiedad.
+
+El `variable` de cada familia va en la clase del `<html>`, como pide Next:
+`className={`${sans.variable} ${display.variable} ${mono.variable}`}`.
 
 ### Mapa de tokens a utilidades
 
@@ -191,6 +253,31 @@ Comprobado empaquetando la librería con `pnpm pack` e instalándola en un proye
 aparte: los tipos resuelven desde `dist/`, `./tokens` carga sin arrastrar React y
 `./tokens/theme.css` se resuelve por subruta.
 
+### Las dos subrutas que piden una dependencia
+
+`./form` y `./chart` no cuelgan de la raíz, y es a propósito. Cada una pide una
+dependencia de pares **opcional** —`react-hook-form` y `recharts`—, y colgarlas
+del índice principal obligaría a los cinco proyectos a instalarlas para que su
+bundler resolviera un import que cuatro de ellos nunca ejecutan.
+
+Es la misma decisión que `./og` y `./shiki`, mirada desde el otro lado: allí se
+saca React del camino de quien no lo monta; aquí se saca Recharts del camino de
+quien no dibuja.
+
+```tsx
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage }
+  from '@eduardoalvarez/arrecife/form';
+
+import { ChartContainer, ChartTooltip, ChartTooltipContent, colorDeSerie }
+  from '@eduardoalvarez/arrecife/chart';
+```
+
+`check:exports` verifica que las cuatro portables —`./tokens`, `./tema`, `./og` y
+`./shiki`— no traen React en el `dist/` publicado, **siguiendo los imports
+relativos**. Sin eso el check era papel mojado: con `treeshake` activo, cada
+entrada portable queda en dos líneas que reexportan de un `chunk-XXXX.js`, y un
+grep sobre esas dos líneas no encuentra React ni aunque el chunk lo importe.
+
 ## Scripts
 
 | | |
@@ -199,7 +286,7 @@ aparte: los tipos resuelven desde `dist/`, `./tokens` carga sin arrastrar React 
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint, incluido el veto a hex literales fuera de `tokens.ts` |
 | `pnpm check:tokens` | falla si `src/tokens/` importa algo de fuera |
-| `pnpm test` | corre axe sobre las 161 stories, en los dos modos |
+| `pnpm test` | compila Tailwind y corre axe sobre las 193 stories, en los dos modos |
 | `pnpm check:exports` | verifica que `dist/` tiene lo que `exports` promete |
 | `pnpm check:release` | valida `release-please-config.json` contra el esquema oficial |
 | `pnpm storybook` | genera los tokens y levanta Storybook en el 6006 |

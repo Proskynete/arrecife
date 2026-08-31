@@ -99,31 +99,63 @@ escribe con el nombre de la tabla.
 
 ## Qué importar de dónde
 
-`exports` tiene cinco subrutas y la elección importa: tres de ellas **no
-arrastran React**, y por eso pueden consumirse desde un worker, un
-`astro.config.mjs`, un script de build o un generador con Satori.
+La elección importa, y por dos motivos distintos. Cuatro subrutas **no arrastran
+React**, así que pueden consumirse desde un worker, un `astro.config.mjs`, un
+script de build o un generador con Satori. Otras dos piden una **dependencia de
+pares opcional** que solo instala quien las use.
 
-| Subruta | Arrastra React | Para qué |
-| --- | --- | --- |
-| `@eduardoalvarez/arrecife` | sí | Componentes, primitivos, marca, `cn`. Reexporta tokens |
-| `@eduardoalvarez/arrecife/tokens` | **no** | El objeto `tokens` en JS. Satori, Astro, scripts |
-| `@eduardoalvarez/arrecife/tokens/theme.css` | — | El `@theme` de Tailwind v4 |
-| `@eduardoalvarez/arrecife/og` | **no** | Las plantillas de Open Graph para Satori |
-| `@eduardoalvarez/arrecife/shiki` | **no** | El tema de resaltado de sintaxis |
-| `@eduardoalvarez/arrecife/brand` | sí | Logo, isotipo y mascota como componentes |
-| `@eduardoalvarez/arrecife/assets/*` | — | Los PNG de la marca |
+| Subruta | Arrastra React | Pide además | Para qué |
+| --- | --- | --- | --- |
+| `@eduardoalvarez/arrecife` | sí | — | Componentes, primitivos, marca, `cn`. Reexporta tokens y tema |
+| `@eduardoalvarez/arrecife/tokens` | **no** | — | El objeto `tokens` en JS. Satori, Astro, scripts |
+| `@eduardoalvarez/arrecife/tokens/theme.css` | — | — | El `@theme` de Tailwind v4 |
+| `@eduardoalvarez/arrecife/tema` | **no** | — | `scriptTema` para el `<head>`, y leer o cambiar el modo |
+| `@eduardoalvarez/arrecife/og` | **no** | — | Las plantillas de Open Graph para Satori |
+| `@eduardoalvarez/arrecife/shiki` | **no** | — | El tema de resaltado de sintaxis |
+| `@eduardoalvarez/arrecife/brand` | sí | — | Logo, isotipo y mascota como componentes |
+| `@eduardoalvarez/arrecife/form` | sí | `react-hook-form` | La capa de formulario: etiquetas, errores y `aria-*` |
+| `@eduardoalvarez/arrecife/chart` | sí | `recharts` | El chasis de las gráficas y la paleta de series |
+| `@eduardoalvarez/arrecife/assets/*` | — | — | Los PNG de la marca |
 
 Importar la raíz desde un script de build para sacar un token es el error que las
 subrutas existen para evitar: arrastra React entero a un worker que no lo monta.
+
+`./form` y `./chart` están fuera de la raíz por el motivo simétrico: si colgaran
+del índice principal, los proyectos que no dibujan gráficas ni usan React Hook
+Form tendrían que instalar esas dependencias igualmente para que su bundler
+resolviera un import que nunca ejecutan.
 
 ```ts
 // Bien, en un generador de OG o en astro.config.mjs
 import { tokens } from '@eduardoalvarez/arrecife/tokens';
 import { arrecife } from '@eduardoalvarez/arrecife/shiki';
 
+// Bien, en el <head> de un Astro que no monta React
+import { scriptTema } from '@eduardoalvarez/arrecife/tema';
+
 // Mal: monta React donde no hace falta
 import { tokens } from '@eduardoalvarez/arrecife';
 ```
+
+### El tema, y el parpadeo de la primera pintura
+
+`ThemeToggle` es el botón; lo difícil está en `./tema`. Sin `scriptTema` inline en
+el `<head>`, la primera pintura sale con el modo por defecto y el elegido entra
+un frame después: en un sitio oscuro que el usuario dejó en claro, eso es un
+fogonazo blanco en cada carga.
+
+```astro
+---
+import { scriptTema } from '@eduardoalvarez/arrecife/tema';
+---
+<head>
+  <script is:inline set:html={scriptTema} />
+</head>
+```
+
+Tiene que ir INLINE. Un `<script src>`, aunque sea síncrono, se descarga, y el
+parpadeo vuelve. El script reengancha en `astro:after-swap` porque las
+transiciones de vista reemplazan el `<html>` entero.
 
 ## Tokens
 
@@ -260,7 +292,76 @@ primitiva de Radix se resumen en la línea `Extiende`, y son los de siempre.
 
 ## Primitivos
 
-Se importan de `@eduardoalvarez/arrecife`. 100 exportaciones.
+Se importan de `@eduardoalvarez/arrecife`. 115 exportaciones.
+
+### Accordion, AccordionItem, AccordionTrigger, AccordionContent
+
+Fuente: `src/primitives/accordion.tsx`
+
+**Accordion**
+El plegable. Lo pedían dos proyectos: el FAQ del portafolio y el temario de cursos, que es literalmente una lista de secciones que se abren.
+
+- Extiende: `ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>`
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AccordionItem**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AccordionTrigger**
+El disparador es el encabezado, así que va DENTRO de un `<h3>`: Radix envuelve el botón en `AccordionPrimitive.Header`, que renderiza el elemento que se le pida. Sin eso, un lector de pantalla ve una lista de botones sueltos y pierde la estructura de la página, que es justo lo que un FAQ necesita conservar.
+
+- Extiende: `ComponentPropsWithoutRef< typeof AccordionPrimitive.Trigger >`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `headingLevel` | `4 \| 2 \| 3` |  | `3` | Nivel del encabezado que envuelve al disparador. |
+
+**AccordionContent**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+### AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction, AlertDialog, AlertDialogTrigger
+
+Fuente: `src/primitives/alert-dialog.tsx`
+
+**AlertDialogOverlay**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogContent**
+Sin entrada animada, igual que `Dialog`: aparece donde va a quedarse.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogHeader**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogFooter**
+Cancelar a la IZQUIERDA de confirmar en escritorio y ABAJO en móvil, que es lo que da `flex-col-reverse`: el orden del DOM pone cancelar primero —es donde va el foco— y en columna el dedo lo encuentra donde toca sin cambiar la tabulación.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogTitle**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogDescription**
+Lo que se pierde, dicho entero. Es lo que el rol `alertdialog` hace que se anuncie de entrada, así que aquí no va «esta acción no se puede deshacer» suelto: va qué se borra y qué se lleva por delante.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogCancel**
+El que se lleva el foco al abrir.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogAction**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialog**
+La confirmación destructiva. NO es un `Dialog` con otro texto, y por eso está en su propio archivo y sobre su propia primitiva de Radix.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AlertDialogTrigger**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
 
 ### Alert
 
@@ -764,6 +865,19 @@ Sin deslizamiento de entrada: el aviso aparece donde va a quedarse.
 **ToastAction**
 - Sin props propios: pasa los del elemento o la primitiva que envuelve.
 
+### Toaster
+
+Fuente: `src/primitives/toaster.tsx`
+
+Va UNA vez, lo más arriba posible del árbol. Dos `Toaster` montados pintan cada aviso dos veces: la lista es del módulo, no de la instancia.
+
+- Extiende: `{ /** Cuánto dura un aviso que no dice lo contrario. */ duration?: number; /** * Nombre del landmark que Radix crea para la región de avisos. Se traduce * porque lo lee un lector de pantalla, y el default de Radix está en inglés. */ label?: string; }`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `duration` | `number` |  | `5000` | Cuánto dura un aviso que no dice lo contrario. |
+| `label` | `string` |  | `Avisos` | Nombre del landmark que Radix crea para la región de avisos. Se traduce porque lo lee un lector de pantalla, y el default de Radix está en inglés. |
+
 ### TooltipContent, TooltipProvider, Tooltip, TooltipTrigger
 
 Fuente: `src/primitives/tooltip.tsx`
@@ -788,15 +902,15 @@ Fuente: `src/primitives/typography.tsx`
 
 | prop | tipo | req. | defecto | qué hace |
 | --- | --- | --- | --- | --- |
-| `as` | `"caption" \| "dd" \| "dt" \| "em" \| "figcaption" \| "h1" \| "h2" \| "h3" \| "h4" \| "legend" \| "li" \| "p" \| "span" \| "strong"` |  |  | Etiqueta HTML. Por defecto, la que corresponde a la escala. |
+| `as` | `"h2" \| "h3" \| "li" \| "p" \| "span" \| "caption" \| "dd" \| "dt" \| "em" \| "figcaption" \| "h1" \| "h4" \| "legend" \| "strong"` |  |  | Etiqueta HTML. Por defecto, la que corresponde a la escala. |
 | `asChild` | `boolean` |  | `false` | Renderiza el hijo en vez de crear un elemento, para envolver un enlace. |
 | `measure` | `boolean` |  |  | Corta la línea a 68ch. Activo por defecto en `body`, que es la única escala pensada para leerse en párrafos largos. |
 | `tone` | `"accent" \| "success" \| "warning" \| "error" \| "warm" \| "primary" \| "secondary" \| "muted"` |  | `primary` |  |
-| `variant` | `"display" \| "body" \| "h1" \| "h2" \| "h3" \| "label" \| "meta" \| "stat" \| "lead" \| "ui" \| "tag" \| "chip" \| "eyebrow"` |  | `body` |  |
+| `variant` | `"display" \| "h2" \| "h3" \| "label" \| "body" \| "h1" \| "meta" \| "stat" \| "lead" \| "ui" \| "tag" \| "chip" \| "eyebrow"` |  | `body` |  |
 
 ## Componentes
 
-Se importan de `@eduardoalvarez/arrecife`. 21 exportaciones.
+Se importan de `@eduardoalvarez/arrecife`. 23 exportaciones.
 
 ### ArticleCard
 
@@ -812,6 +926,7 @@ La línea de metadatos va en `meta` y no en `eyebrow`: `18 ago 2026 · 8 min de 
 | `date` | `ReactNode` |  |  | Fecha ya formateada por el proyecto: la librería no impone locale. |
 | `dateTime` | `string` |  |  | Valor de `datetime` del `<time>`, en ISO. |
 | `excerpt` | `ReactNode` |  |  | Entradilla. Se corta a dos líneas para que la rejilla no se desalinee. |
+| `headingLevel` | `2 \| 3` |  | `3` | Nivel del titular. `h3` por defecto: una tarjeta suelta en una rejilla no gana el nivel que su posición no le da. |
 | `readingMinutes` | `number` |  |  |  |
 | `tags` | `readonly string[]` |  |  |  |
 | `title` | `ReactNode` | sí |  |  |
@@ -925,6 +1040,7 @@ Fuente: `src/components/footer/index.tsx`
 
 | prop | tipo | req. | defecto | qué hace |
 | --- | --- | --- | --- | --- |
+| `brand` | `ReactNode` |  |  | La fila de marca: la aleta y el wordmark, arriba del todo. |
 | `social` | `readonly Red[]` |  |  |  |
 | `year` | `number` |  | `new Date().getFullYear()` | Año de la firma. |
 
@@ -951,6 +1067,7 @@ UNO por sitio. Es la única pieza del sistema que se gasta como el botón de con
 | `eyebrow` | `ReactNode` |  |  | Mono, versalitas, en acento. |
 | `pose` | `"desk" \| "laptop-coffee" \| "peek" \| "surf"` |  |  | La pose de Tiburoncín. Sin ella el hero es un panel con texto. |
 | `title` | `ReactNode` | sí |  |  |
+| `variant` | `"cabecera" \| "centrado"` |  | `cabecera` | `cabecera` sangra la pose por la esquina; `centrado` la pone arriba y centra el texto, para una página que es solo esto. |
 
 ### LinkRow
 
@@ -1006,7 +1123,11 @@ Fuente: `src/components/newsletter-form/index.tsx`
 | `errorMessage` | `ReactNode` |  | `No se pudo suscribir ese correo. Revísalo y vuelve a intentar.` |  |
 | `expresion` | `"annoyed" \| "confused" \| "hearts" \| "laughing" \| "shades" \| "waiting" \| "wink"` |  |  |  |
 | `fieldLabel` | `string` |  | `Correo electrónico` |  |
-| `onSubmitEmail` | `(email: string) => void` |  |  | Se dispara con el correo ya leído del campo. |
+| `nameField` | `boolean` |  | `false` | Añade el campo de nombre delante del correo. |
+| `nameInputProps` | `Omit<InputProps, "id" \| "disabled" \| "name">` |  |  | Lo que el proyecto necesite colgar del campo de nombre: `minLength`, `maxLength`, `pattern`. La librería no impone ninguna de las tres. |
+| `nameLabel` | `string` |  | `Nombre` |  |
+| `namePlaceholder` | `string` |  | `Cómo te llamas` |  |
+| `onSubmitEmail` | `(email: string, name?: string \| undefined) => void` |  |  | Se dispara con el correo ya leído del campo, y con el nombre si el campo está puesto. |
 | `placeholder` | `string` |  | `tu@correo.dev` |  |
 | `state` | `"error" \| "reposo" \| "enviando" \| "exito"` |  | `reposo` |  |
 | `submitLabel` | `string` |  | `Suscribirme` |  |
@@ -1024,11 +1145,25 @@ Una sola cabecera en dos escalas, no dos componentes.
 | prop | tipo | req. | defecto | qué hace |
 | --- | --- | --- | --- | --- |
 | `action` | `ReactNode` |  |  | Ranura para las llamadas a la acción. Si aquí va un botón de conversión, es el único de la pantalla. |
-| `as` | `"h1" \| "h2"` |  | `h1` | Nivel del titular. `h1` salvo que la página ya tenga uno. |
+| `as` | `"h2" \| "h1"` |  | `h1` | Nivel del titular. `h1` salvo que la página ya tenga uno. |
 | `description` | `ReactNode` |  |  |  |
 | `eyebrow` | `ReactNode` |  |  | Mono, versalitas, en acento. Es la sección a la que pertenece la página. |
 | `size` | `"display" \| "page"` |  | `page` |  |
 | `title` | `ReactNode` | sí |  |  |
+
+### ScrollingProgressBar
+
+Fuente: `src/components/scrolling-progress-bar/index.tsx`
+
+Cuánto llevas leído. NO es `Progress` con otro nombre.
+
+- Extiende: `Omit<ComponentPropsWithoutRef<'div'>, 'children'>`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `sticky` | `boolean` |  | `true` | Pega la barra al borde superior de la ventana. |
+| `target` | `RefObject<HTMLElement \| null>` |  |  | El elemento que se mide. Sin él, el documento entero. |
+| `tone` | `"accent" \| "warm"` |  | `accent` | Arena en vez de bioluz, para igualar el progreso de curso. |
 
 ### SidebarItem, SidebarNav
 
@@ -1079,10 +1214,26 @@ Fuente: `src/components/talk-card/index.tsx`
 | `asChild` | `boolean \| undefined` |  |  | Renderiza el hijo en vez de un `<a>`. Es como se enchufa el `Link` de Next o de Astro sin que la librería dependa de ningún enrutador. |
 | `date` | `ReactNode` |  |  |  |
 | `dateTime` | `string` |  |  |  |
+| `description` | `ReactNode` |  |  | De qué iba la charla. Se corta a dos líneas, igual que el `excerpt` de `ArticleCard`, para que la rejilla no se desalinee. |
 | `event` | `ReactNode` | sí |  | Dónde se dio: la conferencia, el meetup, el equipo. |
 | `location` | `ReactNode` |  |  |  |
 | `status` | `ReactNode` |  |  | Etiqueta corta de estado: «con vídeo», «próxima», «solo audio». |
 | `title` | `ReactNode` | sí |  |  |
+
+### ThemeToggle
+
+Fuente: `src/components/theme-toggle/index.tsx`
+
+El control que faltaba. La librería definía todo el sistema de temas y no exponía lo que lo cambia, así que dos proyectos lo reimplementaban.
+
+- Extiende: `Omit<ComponentPropsWithoutRef<'button'>, 'onClick'>`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `label` | `string` |  | `Cambiar de tema` | Nombre accesible. El botón no tiene texto visible, así que es lo único que lo nombra. |
+| `onThemeChange` | `(tema: Tema) => void` |  |  | Se dispara con el tema que quedó puesto, por si el proyecto quiere anotarlo. |
+| `size` | `"sm" \| "md" \| "lg" \| "icon"` |  | `icon` |  |
+| `variant` | `"primary" \| "conversion" \| "secondary" \| "tertiary"` |  | `secondary` |  |
 
 ### TableOfContents
 
@@ -1152,6 +1303,100 @@ La cabeza de Tiburoncín, con expresión.
 | `basePath` | `string` |  | `RUTA_ASSETS` |  |
 | `expresion` | `"annoyed" \| "confused" \| "hearts" \| "laughing" \| "shades" \| "waiting" \| "wink"` | sí |  |  |
 
+## Formularios
+
+Se importan de `@eduardoalvarez/arrecife/form` · pide `react-hook-form`. 7 exportaciones.
+
+### FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage, Form
+
+Fuente: `src/form/index.tsx`
+
+**FormField**
+Un campo controlado. Envuelve el `Controller` de RHF y además publica el nombre en contexto, que es de donde lo leen la etiqueta y el mensaje sin que haya que repetirlo tres veces.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**FormItem**
+La caja del campo: etiqueta, control, ayuda y mensaje, en columna.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**FormLabel**
+La etiqueta NO se tiñe de rojo cuando el campo falla.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**FormControl**
+Envuelve al control y le cablea los atributos: el `id` que la etiqueta apunta, el `aria-describedby` con la ayuda y el mensaje, y el `aria-invalid`.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**FormDescription**
+La ayuda del campo. Se anuncia siempre, haya error o no.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**FormMessage**
+El mensaje de validación. Sin error no renderiza nada: un hueco reservado para el fallo desplaza el resto del formulario cada vez que aparece.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**Form**
+La capa que ata los controles a un formulario con validación y mensajes.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+## Gráficas
+
+Se importan de `@eduardoalvarez/arrecife/chart` · pide `recharts`. 5 exportaciones.
+
+### ChartContainer, ChartTooltip, ChartLegend, ChartTooltipContent, ChartLegendContent
+
+Fuente: `src/chart/index.tsx`
+
+**ChartContainer**
+Envuelve la gráfica en un `<figure>` con nombre accesible y le da a Recharts el alto concreto que necesita para medirse.
+
+- Extiende: `Omit<ComponentPropsWithoutRef<'figure'>, 'title'>`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `height` | `number` |  | `320` | Alto en píxeles. Recharts necesita uno concreto para medir. |
+| `label` | `string` | sí |  | Qué muestra la gráfica, en una frase. Obligatorio, como el `label` de `Progress`: un `<svg>` de barras sin nombre accesible no es «una gráfica sin etiqueta», es una región vacía. |
+| `summary` | `ReactNode` |  |  | Lo que la gráfica dice, en palabras. Va en un `figcaption` oculto visualmente. |
+
+**ChartTooltip**
+El `Tooltip` de Recharts con los defectos del sistema: sin animación y con el cursor teñido de `surfaceRaised`.
+
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**ChartLegend**
+- Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**ChartTooltipContent**
+La caja del tooltip. Es una tarjeta del sistema —`surface`, borde de control, sombra estándar— y no la caja blanca de Recharts, que en modo oscuro es un rectángulo blanco encima de un panel oscuro.
+
+- Extiende: `{ active?: boolean \| undefined; payload?: readonly ChartPayloadItem[] \| undefined; label?: ReactNode; /** Formatea el valor. Sin ella se imprime tal cual: la librería no impone locale. */ formatter?: ((valor: unknown, item: ChartPayloadItem) => ReactNode) \| undefined; /** Oculta el encabezado, para una gráfica de una sola categoría. */ hideLabel?: boolean; className?: string; }`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `active` | `boolean \| undefined` |  |  |  |
+| `className` | `string` |  |  |  |
+| `formatter` | `(valor: unknown, item: ChartPayloadItem) => ReactNode` |  |  | Formatea el valor. Sin ella se imprime tal cual: la librería no impone locale. |
+| `hideLabel` | `boolean` |  | `false` | Oculta el encabezado, para una gráfica de una sola categoría. |
+| `label` | `ReactNode` |  |  |  |
+| `payload` | `readonly ChartPayloadItem[]` |  |  |  |
+
+**ChartLegendContent**
+La leyenda con la misma marca cuadrada del tooltip y la escala `label`.
+
+- Extiende: `{ payload?: readonly ChartPayloadItem[] \| undefined; className?: string; }`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `className` | `string` |  |  |  |
+| `payload` | `readonly ChartPayloadItem[]` |  |  |  |
+
 ## Exportaciones que no son componentes
 
 La raíz reexporta todo lo de `./tokens` y `./brand` por conveniencia. Cada uno
@@ -1173,15 +1418,16 @@ no monta React, esa subruta es la que hay que importar.
 | `motion` | `{ readonly duration: "150ms"; readonly easing: "ease-out"; readonly properties: "color, background-color, border-color, fill, stroke"; }` | 150ms ease-out — solo color y borde. El sistema no anima posición ni escala: los estados se comunican con borde y color, no con movimiento. |
 | `naming` | `{ readonly wordmark: "Eduardo Álvarez"; readonly mascot: "Tiburoncín"; readonly domain: "eduardoalvarez.dev"; }` | El wordmark siempre dice «Eduardo Álvarez». La mascota se llama Tiburoncín y nunca aparece escrita dentro del logo. |
 | `radius` | `{ readonly chip: 6; readonly control: 10; readonly card: 14; readonly panel: 16; readonly pill: 999; }` |  |
+| `series` | `{ readonly dark: readonly ["#35D6C0", "#F2A65A", "#3E7CB1", "#71919C"]; readonly light: readonly ["#0D7C6F", "#A65B27", "#3E7CB1", "#626A75"]; }` | La paleta de series de las gráficas. CUATRO, por el mismo motivo que la de sintaxis: el sistema se comunica con color y borde, no con ruido cromático. |
 | `shadow` | `{ readonly standard: "0 1px 2px rgba(0, 0, 0, 0.35)"; }` | Un solo nivel. No hay escala de elevación. |
 | `sintaxis` | `{ fondo, identificador, literal, palabraClave, comentario, invalido }` | La paleta del resaltado de sintaxis. |
 | `size` | `{ readonly nav: 64; readonly content: 760; readonly wide: 1180; }` |  |
 | `spacing` | `{ readonly stepXs: 8; readonly stepSm: 12; readonly stepMd: 16; readonly stepLg: 26; readonly stepXl: 40; readonly section: 96; }` | El ritmo de página. Los cinco escalones llevan `step` en el nombre, y no es decoración: es la corrección de un bug que no dio la cara en ningún sitio. |
 | `tagline` | `{ largo, corto, en }` |  |
-| `tokens` | `{ colors, brand, fonts, typeScale, limits, radius, control, spacing, size, gradient, sintaxis, shadow, motion, tagline, naming }` | Todos los tokens en un solo objeto, para plantillas Satori y generadores. |
+| `tokens` | `{ colors, brand, fonts, typeScale, limits, radius, control, spacing, size, gradient, sintaxis, series, shadow, motion, tagline, naming }` | Todos los tokens en un solo objeto, para plantillas Satori y generadores. |
 | `typeScale` | `{ display, stat, h1, h2, h3, body, lead, ui, label, tag, chip, meta, eyebrow }` |  |
 
-Tipos (12): `BrandToken`, `ColorMode`, `ColorToken`, `ControlToken`, `FontToken`, `GradientToken`, `RadiusToken`, `SintaxisToken`, `SizeToken`, `SpacingToken`, `Tokens`, `TypeScaleToken`.
+Tipos (13): `BrandToken`, `ColorMode`, `ColorToken`, `ControlToken`, `FontToken`, `GradientToken`, `RadiusToken`, `SeriesToken`, `SintaxisToken`, `SizeToken`, `SpacingToken`, `Tokens`, `TypeScaleToken`.
 
 ### `@eduardoalvarez/arrecife/brand`
 
@@ -1204,6 +1450,38 @@ Tipos (8): `Aleta`, `Cara`, `CaraDeMascotaProps`, `Fondo`, `IsotipoProps`, `Logo
 | `arrecife` | `TemaShiki` |  |
 
 Tipos (1): `TemaShiki`.
+
+### `@eduardoalvarez/arrecife/chart`
+
+| export | tipo | qué es |
+| --- | --- | --- |
+| `colorDeSerie` | `(indice: number): string` | El color de la serie `indice`, como custom property. |
+| `COLORES_DE_SERIE` | `string[]` | Las cuatro, en orden, para pasárselas de golpe a un `Pie` con `Cell`. |
+
+Tipos (4): `ChartContainerProps`, `ChartLegendContentProps`, `ChartPayloadItem`, `ChartTooltipContentProps`.
+
+### `@eduardoalvarez/arrecife/tema`
+
+| export | tipo | qué es |
+| --- | --- | --- |
+| `alternarTema` | `(): Tema` | Cambia al contrario y devuelve el que quedó. |
+| `aplicarTema` | `(tema: Tema, persistir?: boolean): void` | Pone el tema en el `<html>` y lo persiste. |
+| `escucharTema` | `(alCambiar: (tema: Tema) => void): () => void` | Se suscribe a los cambios de tema y devuelve la función que cancela. |
+| `scriptTema` | `string` | El script que va INLINE en el `<head>`, antes de cualquier hoja de estilo. |
+| `TEMA_ATRIBUTO` | `"data-theme"` | El atributo que leen los bloques `[data-theme]` de `theme.css`. |
+| `TEMA_CLAVE` | `"arrecife-tema"` | La clave de `localStorage`. |
+| `TEMA_EVENTO` | `"arrecife:tema"` | El evento que se emite cuando el tema cambia. |
+| `temaActual` | `(): Tema` | El tema que hay puesto ahora mismo, leído del DOM. |
+| `temaGuardado` | `(): Tema \| null` | La preferencia guardada, si la hay. `null` significa «nadie ha elegido», que no es lo mismo que «eligió oscuro»: sin elección manda el sistema. |
+| `temaPreferido` | `(): Tema` | El tema que corresponde: lo elegido, y si no hay elección, lo que pida el sistema. Sin `prefers-color-scheme` declarado, oscuro, que es el primario. |
+
+Tipos (1): `Tema`.
+
+### `@eduardoalvarez/arrecife/form`
+
+| export | tipo | qué es |
+| --- | --- | --- |
+| `useFormField` | `(): { invalid: boolean; isDirty: boolean; isTouched: boolean; isValidating: boolean; error?: FieldError; name: string; id: string; idDescripcion: string; idMensaje: string; }` | Lo que necesita cualquier pieza del campo: el nombre, los tres ids y el estado de validación. |
 
 ### `@eduardoalvarez/arrecife/og`
 
@@ -1232,8 +1510,10 @@ Tipos (6): `DatosArticulo`, `DatosBase`, `DatosCharla`, `DatosCurso`, `DatosDefe
 | `social` | `typeof import("src/lib/social")` |  |
 | `SUPERFICIE_TARJETA` | `"rounded-card border-hairline bg-surface border"` | El contenedor de superficie del sistema, y la única definición de lo que es una tarjeta: `surface`, borde `hairline`, radio de tarjeta. |
 | `textVariants` | `(props?: (ConfigVariants<{ variant: { display: string; stat: string; h1: string; h2: string; h3: string; body: string; lead: string; ui: string; label: string; tag: string; chip: string; meta: string; eyebrow: string; }; tone: { ...; }; }> & ClassProp) \| undefined): string` |  |
+| `toast` | `(mensaje: ReactNode, opciones?: ToastOptions \| undefined): string` | Lanza un aviso. Devuelve su id, que es lo que hay que guardar para cerrarlo a mano —el caso de «guardando…» que se reemplaza cuando termina la petición. |
+| `useTema` | `(): Tema` | El tema puesto ahora mismo, para un proyecto que necesite ramificar en React —un logo distinto por modo, una imagen que no tiene versión clara—. |
 
-Tipos (51): `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `DateFieldProps`, `EmptyStateProps`, `Entrada`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `Migaja`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `Red`, `SeparatorProps`, `SheetContentProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ToastProps`.
+Tipos (58): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `DateFieldProps`, `EmptyStateProps`, `Entrada`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `Migaja`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `Red`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastProps`, `ToastVariant`, `ToasterProps`.
 
 # Dónde mirar si esto no basta
 

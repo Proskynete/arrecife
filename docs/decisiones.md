@@ -368,6 +368,83 @@ espaciado que la utilidad es `p-step-md`, no `p-md`.
 
 ---
 
+## 17 · La pose del hero SÍ puede ir centrada, en una página que es solo eso
+
+**Documento y código, hasta ahora:** «la pose sangra por el borde inferior
+derecho, NUNCA centrada. Una mascota centrada bajo un titular es una ilustración
+de portada, y esto es una cabecera».
+
+**Qué quedó:** la regla sigue siendo el defecto —`variant="cabecera"`— y se le
+añade `variant="centrado"`.
+
+La regla se escribió contra el hero de una página con más contenido debajo, y ahí
+es correcta. `links` no es esa página: es centrada de extremo a extremo, no tiene
+nada más, y la mascota es el protagonista y no el remate. Ese proyecto no discutía
+la regla, **se saltaba `Hero` entero**, que es el peor resultado posible: acabó
+con una copia del degradado en otro repositorio, que es exactamente la clase de
+desincronización por la que esta librería existe.
+
+Una regla con nombre se discute; una copia no. La variante lleva la pose ARRIBA
+del titular y no debajo, que es lo que la mantiene fuera del caso que la regla
+prohíbe: no cierra un bloque de texto, lo encabeza.
+
+**Acción en el documento:** anotar la excepción y su condición —página completa,
+sin contenido después—, no la variante a secas.
+
+---
+
+## 18 · La paleta de series de gráfica no está en el documento
+
+**Documento:** no dice nada. No hay gráficas en los canvas.
+
+**Qué quedó:** `tokens.series`, cuatro colores por modo, ninguno nuevo.
+
+`cursos` dibuja métricas con Recharts, y sin token cada gráfica elige sus colores:
+es el fallo de la paleta de resaltado otra vez, con otro nombre. La alternativa
+—no meter gráficas en la librería— deja el problema en pie, porque el proyecto va
+a dibujarlas igual.
+
+Los cuatro son bioluz, arena, `brand.body` y plancton. Tres decisiones detrás:
+
+- **Cuatro, no cinco ni siete.** Es el mismo criterio que la paleta de sintaxis,
+  que también son cuatro a propósito: el sistema se comunica con color y borde,
+  no con ruido cromático. `colorDeSerie` da la vuelta pasada la cuarta, y que dos
+  series compartan color es la señal correcta — sobran categorías.
+- **Se distinguen por tono, no por luminosidad.** Turquesa, naranja, azul y gris.
+  Bioluz y `success` habrían dado dos verdes casi idénticos en modo claro, y dos
+  series indistinguibles para quien no separa rojo y verde.
+- **`brand.body` entra aquí y no en el resaltado**, por la misma regla vista al
+  derecho: el sistema lo restringe a relleno y nunca a texto, y una serie de
+  gráfica es relleno. En el resaltado medía 4.2:1 y quedó fuera.
+
+El umbral que aplica es el de objeto gráfico, 3:1 contra el fondo, no el de
+texto. El peor de los ocho valores es `brand.body` sobre papel, 3.9:1.
+
+**Acción en el documento:** añadir la paleta de series y la regla de las cuatro.
+
+---
+
+## 19 · La barra de progreso de lectura no es una barra de progreso
+
+**Qué quedó:** `ScrollingProgressBar` va `aria-hidden` y sin `role="progressbar"`.
+
+`Progress` mide una tarea: hay un total, alguien la empezó y va a terminar. La
+barra de lectura mide una POSICIÓN en un documento, que se recorre en los dos
+sentidos y de la que no hay nada que completar. Anunciar «37 %» a quien ya sabe
+dónde está en el documento es ruido, no información.
+
+Es la decisión contraria a la de `ChartContainer`, y conviene ver por qué no se
+contradicen. Allí también se intentó `aria-hidden`, con el mismo argumento —«cada
+tick no cuenta lo que la gráfica cuenta»— y estaba mal: la gráfica **es** el
+contenido y además contiene elementos enfocables, así que esconderla mete el foco
+en algo que no existe para quien escucha. La barra de lectura no es contenido y no
+tiene nada enfocable dentro. La prueba es la suite: la versión con `aria-hidden`
+del contenedor de gráficas tiró tres stories con `aria-hidden-focus`.
+
+**Acción en el documento:** ninguna.
+
+---
+
 ## Lo que NO se tocó
 
 Sigue vigente la lista de la auditoría: las tres correcciones de contraste

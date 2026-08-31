@@ -15,6 +15,11 @@ import { naming } from '../../tokens/tokens.ts';
  * Los enlaces de redes son iconos SIN texto visible, así que `aria-label` no es
  * una mejora: es lo único que los hace legibles. Por eso es obligatorio en el
  * tipo y no una prop opcional que se olvide.
+ *
+ * La firma va arriba a la derecha, al nivel de la PRIMERA fila que exista, no
+ * al final del bloque. Es una decisión de composición y no de estilo: el pie
+ * puede llevar marca, enlaces y redes, y colgar la firma de una fila concreta
+ * la hunde en cuanto esa fila deja de ser la primera.
  */
 export type Red = {
   /** Lo que reemplaza al texto visible. Obligatorio. */
@@ -51,52 +56,79 @@ export function Footer({
   className,
   ...props
 }: FooterProps) {
+  const firma = (
+    <Text variant="meta" tone="muted" as="p" className="ml-auto shrink-0">
+      <span aria-hidden="true" className="text-accent">
+        ${' '}
+      </span>
+      cd ~/{naming.domain}/{year}
+    </Text>
+  );
+
+  /*
+    Las filas del pie, en orden y sin las vacías. Se arman antes de pintar
+    porque la firma va SIEMPRE en la primera que exista, y cuál es la primera
+    depende de qué le pasen: con marca es la marca, sin marca son los enlaces, y
+    con solo redes son los iconos.
+
+    Es la diferencia entre «la firma va a la derecha» y «la firma va a la
+    derecha del todo». Pegarla a la fila de redes —como estaba— la dejaba en la
+    tercera línea en cuanto el pie tenía marca y enlaces encima, que es
+    exactamente donde no va.
+  */
+  const filas = [
+    brand ? (
+      <div key="marca" className="flex items-center">
+        {brand}
+      </div>
+    ) : null,
+
+    children ? (
+      <div key="enlaces" className="gap-step-md flex flex-wrap items-center">
+        {children}
+      </div>
+    ) : null,
+
+    social && social.length > 0 ? (
+      // 18px de separación, del documento. No es un escalón de `spacing`:
+      // es el ritmo de una fila de iconos, no el de una página.
+      <ul key="redes" className="flex items-center gap-[18px]">
+        {social.map((red) => (
+          <li key={red.href}>
+            <a
+              href={red.href}
+              aria-label={red.label}
+              className={cn(
+                'text-text-muted hover:text-accent transition-standard block cursor-pointer text-[19px]',
+                'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+              )}
+            >
+              {red.icon}
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : null,
+  ].filter(Boolean);
+
+  const [primera, ...resto] = filas;
+
   return (
     <footer className={cn('border-hairline w-full border-t', className)} {...props}>
       <div className="max-w-wide px-step-md py-step-xl gap-step-lg mx-auto flex flex-col">
-        {brand ? <div className="flex items-center">{brand}</div> : null}
-
-        {children ? <div className="gap-step-md flex flex-wrap items-center">{children}</div> : null}
-
         {/*
-          Los iconos a la izquierda y la firma a la derecha, en la MISMA línea.
-          La firma lleva `ml-auto` y no basta con `justify-between`: sin redes,
-          un `justify-between` la dejaría pegada al borde izquierdo, que es
-          justo donde no va.
-
-          En pantalla estrecha las dos filas se parten con `flex-wrap` en vez de
-          apretarse: la firma es mono y no se puede truncar sin que deje de
-          leerse como una ruta.
+          `items-center` y no `items-start`: la firma es una línea de 13px y la
+          marca mide 28, así que alinear por arriba la deja flotando alta. En
+          pantalla estrecha `flex-wrap` la baja a su propia línea — ahí no hay
+          ancho para las dos y apretarlas rompería la ruta, que es mono y no se
+          puede truncar sin dejar de leerse.
         */}
         <div className="gap-step-md flex flex-wrap items-center">
-          {social && social.length > 0 ? (
-            // 18px de separación, del documento. No es un escalón de `spacing`:
-            // es el ritmo de una fila de iconos, no el de una página.
-            <ul className="flex items-center gap-[18px]">
-              {social.map((red) => (
-                <li key={red.href}>
-                  <a
-                    href={red.href}
-                    aria-label={red.label}
-                    className={cn(
-                      'text-text-muted hover:text-accent transition-standard block cursor-pointer text-[19px]',
-                      'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-                    )}
-                  >
-                    {red.icon}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-
-          <Text variant="meta" tone="muted" as="p" className="ml-auto">
-            <span aria-hidden="true" className="text-accent">
-              ${' '}
-            </span>
-            cd ~/{naming.domain}/{year}
-          </Text>
+          {primera ?? null}
+          {firma}
         </div>
+
+        {resto}
       </div>
     </footer>
   );

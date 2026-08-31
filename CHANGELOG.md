@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.0](https://github.com/Proskynete/arrecife/compare/v0.2.0...v0.3.0) (2026-08-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **tokens:** los cinco escalones de espaciado se renombran. Los valores no cambian ni un píxel.
+
+### 🚀 Novedades
+
+* **tokens:** el ritmo de página lleva step, para no comerse max-w-* ([1f8b79d](https://github.com/Proskynete/arrecife/commit/1f8b79d74b6e56b9c716ce2a1fdcee06042d78a0))
+
+
+### 📚 Documentación
+
+* **agents:** cómo se sube la versión, para no editar el CHANGELOG a mano ([b6e3997](https://github.com/Proskynete/arrecife/commit/b6e3997cd8ab20e7e8e28383c1995dd449919cf8))
+* del footer BREAKING CHANGE solo llega el primer párrafo ([807d891](https://github.com/Proskynete/arrecife/commit/807d891d018245a1050d135eb1688449d8ef2c2e))
+
 ## [0.2.0](https://github.com/Proskynete/arrecife/compare/v0.1.1...v0.2.0) (2026-08-27)
 
 

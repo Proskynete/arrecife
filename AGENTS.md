@@ -346,6 +346,28 @@ De ahí las dos reglas que importan:
 Los `Co-Authored-By:` y demás pies de página van al final del todo, nunca en
 medio del footer.
 
+### `main` está protegida
+
+No se empuja a `main`. Ni con `--force`, ni siendo el dueño del repo: el ruleset
+rechaza el push antes de que llegue. Todo entra por PR.
+
+- **Los seis checks tienen que estar en verde**: ESLint, `Build · Node 22.x`,
+  `Build · Node 24.x`, `Accesibilidad y contraste`, `Formato de commit
+  convencional` y `Escaneo de seguridad`. Ninguno tiene filtro de `paths`, así
+  que los seis corren en todos los PRs y ninguno se queda sin reportar.
+- **Un PR de fuera necesita la aprobación de @Proskynete**, y solo la suya:
+  `CODEOWNERS` es `* @Proskynete` y la regla exige revisión de code owner, así
+  que la aprobación de cualquier otro no cuenta.
+- **El dueño puede mergear sus propios PRs sin aprobación**, porque GitHub no
+  deja aprobarse a uno mismo y si no se quedaría atascado. El bypass está
+  limitado a `pull_request`: sirve para mergear, **no** para empujar a `main`.
+- **Solo squash y rebase.** El merge commit está desactivado en el repo y el
+  historial es lineal por regla. `main` nunca ha tenido un merge commit.
+- La rama se borra sola al mergear.
+
+Si un check se cuelga o no reporta, el dueño puede forzar el merge del PR desde
+la interfaz. Es la única salida, y deja rastro.
+
 **No publiques a npm a mano.** El workflow publica con OIDC y genera procedencia.
 
 ## Errores que se cometen en este repo

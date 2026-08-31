@@ -25,7 +25,6 @@ export * from './switch.tsx';
 export * from './table.tsx';
 export * from './tabs.tsx';
 export * from './textarea.tsx';
-export * from './toast.tsx';
 export * from './toaster.tsx';
 export * from './tooltip.tsx';
 export * from './typography.tsx';

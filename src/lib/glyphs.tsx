@@ -115,6 +115,26 @@ export const Spinner = (props: GlyphProps) => (
   </svg>
 );
 
+/* -------------------------------------------------------------------- tema */
+
+/**
+ * Los dos del control de tema. Se dibujan a 16 como el resto, y el sol lleva
+ * los rayos como un solo `path` para que herede el grosor de `Glyph` sin
+ * excepciones.
+ */
+export const Sol = (props: GlyphProps) => (
+  <Glyph {...props}>
+    <circle cx="8" cy="8" r="3" />
+    <path d="M8 1.5v1.2M8 13.3v1.2M14.5 8h-1.2M2.7 8H1.5M12.6 3.4l-.85.85M4.25 11.75l-.85.85M12.6 12.6l-.85-.85M4.25 4.25l-.85-.85" />
+  </Glyph>
+);
+
+export const Luna = (props: GlyphProps) => (
+  <Glyph {...props}>
+    <path d="M13.5 9.4A5.8 5.8 0 0 1 6.6 2.5a5.8 5.8 0 1 0 6.9 6.9Z" />
+  </Glyph>
+);
+
 /* ------------------------------------------------------------------ media */
 
 /**

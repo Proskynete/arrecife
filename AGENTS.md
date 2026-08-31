@@ -361,6 +361,10 @@ rechaza el push antes de que llegue. Todo entra por PR.
 - **El dueño puede mergear sus propios PRs sin aprobación**, porque GitHub no
   deja aprobarse a uno mismo y si no se quedaría atascado. El bypass está
   limitado a `pull_request`: sirve para mergear, **no** para empujar a `main`.
+  No es automático, hay que pedirlo: `gh pr merge <n> --rebase --admin`, o el
+  botón de la interfaz que avisa de que te saltas la regla. Un `gh pr merge` a
+  secas responde «the base branch policy prohibits the merge», y eso **no** es
+  que esté roto: es la regla haciendo su trabajo.
 - **Solo squash y rebase.** El merge commit está desactivado en el repo y el
   historial es lineal por regla. `main` nunca ha tenido un merge commit.
 - La rama se borra sola al mergear.

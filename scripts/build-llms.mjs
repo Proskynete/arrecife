@@ -36,27 +36,53 @@ const MARCA = '<!-- INVENTARIO -->';
 const ENTRADAS = [
   { subruta: '.', archivo: 'src/index.ts' },
   { subruta: './tokens', archivo: 'src/tokens/index.ts' },
+  { subruta: './tema', archivo: 'src/tema/index.ts' },
   { subruta: './brand', archivo: 'src/brand/index.ts' },
   { subruta: './og', archivo: 'src/og/index.ts' },
   { subruta: './shiki', archivo: 'src/shiki/index.ts' },
+  { subruta: './form', archivo: 'src/form/index.tsx' },
+  { subruta: './chart', archivo: 'src/chart/index.tsx' },
 ];
 
-/** De qué directorio sale cada sección del inventario, en orden. */
+/**
+ * De qué directorio sale cada sección del inventario, en orden, y por qué
+ * entrada se llega a él.
+ *
+ * Las tres primeras cuelgan de la raíz. `./form` y `./chart` no: viven en su
+ * propia subruta porque cada uno arrastra una dependencia de pares OPCIONAL
+ * —React Hook Form y Recharts—, y sin `archivo` propio aquí sus componentes
+ * quedarían fuera del inventario sin que nada avisara.
+ */
 const SECCIONES = [
   {
     titulo: 'Primitivos',
     dir: 'src/primitives/',
+    archivo: 'src/index.ts',
     entrada: '`@eduardoalvarez/arrecife`',
   },
   {
     titulo: 'Componentes',
     dir: 'src/components/',
+    archivo: 'src/index.ts',
     entrada: '`@eduardoalvarez/arrecife`',
   },
   {
     titulo: 'Marca',
     dir: 'src/brand/',
+    archivo: 'src/index.ts',
     entrada: '`@eduardoalvarez/arrecife` o `@eduardoalvarez/arrecife/brand`',
+  },
+  {
+    titulo: 'Formularios',
+    dir: 'src/form/',
+    archivo: 'src/form/index.tsx',
+    entrada: '`@eduardoalvarez/arrecife/form` · pide `react-hook-form`',
+  },
+  {
+    titulo: 'Gráficas',
+    dir: 'src/chart/',
+    archivo: 'src/chart/index.tsx',
+    entrada: '`@eduardoalvarez/arrecife/chart` · pide `recharts`',
   },
 ];
 
@@ -343,11 +369,16 @@ function leerEntrada(archivoEntrada) {
 const lineas = [];
 const escribir = (s = '') => lineas.push(s);
 
-const raiz = leerEntrada('src/index.ts');
+/** Cada entrada se lee una sola vez: leerla es compilar el programa entero. */
+const leidas = new Map();
+const entrada = (archivo) => {
+  if (!leidas.has(archivo)) leidas.set(archivo, leerEntrada(archivo));
+  return leidas.get(archivo);
+};
 
 for (const seccion of SECCIONES) {
   const dir = resolve(root, seccion.dir);
-  const suyos = raiz.componentes.filter((c) =>
+  const suyos = entrada(seccion.archivo).componentes.filter((c) =>
     resolve(root, c.archivo).startsWith(dir),
   );
   if (suyos.length === 0) continue;
@@ -520,7 +551,7 @@ if (COMPROBAR) {
   console.log('arrecife · llms.txt al día con los tipos');
 } else {
   await writeFile(DESTINO, salida, 'utf8');
-  const componentes = raiz.componentes.length;
+  const componentes = [...leidas.values()].reduce((n, e) => n + e.componentes.length, 0);
   console.log(
     `arrecife · llms.txt → ${relative(root, DESTINO)} (${componentes} componentes, ${
       salida.split('\n').length

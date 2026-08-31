@@ -8,9 +8,12 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     'tokens/index': 'src/tokens/index.ts',
+    'tema/index': 'src/tema/index.ts',
     'brand/index': 'src/brand/index.ts',
     'og/index': 'src/og/index.ts',
     'shiki/index': 'src/shiki/index.ts',
+    'form/index': 'src/form/index.tsx',
+    'chart/index': 'src/chart/index.tsx',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -21,5 +24,9 @@ export default defineConfig({
   // depurar la librería la tiene entera en el repo, con su historia.
   sourcemap: false,
   target: 'es2022',
-  external: ['react', 'react-dom'],
+  // Las dos últimas son dependencias de pares OPCIONALES: solo las instala el
+  // proyecto que importa `./form` o `./chart`. Van aquí porque en este repo son
+  // devDependencies —hacen falta para compilar y para las stories— y sin esta
+  // línea tsup las metería dentro del bundle publicado.
+  external: ['react', 'react-dom', 'react-hook-form', 'recharts'],
 });

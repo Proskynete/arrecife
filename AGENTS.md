@@ -304,10 +304,27 @@ La versión **se pide desde el mensaje del commit**, y es lo único que la decid
 
 | Lo que escribes en el commit | Lo que sale |
 | ---------------------------- | ----------- |
-| `fix(...)`, `perf(...)`      | patch · `0.2.0` → `0.2.1` |
-| `feat(...)`                  | minor · `0.2.0` → `0.3.0` |
-| `feat(...)!` + footer `BREAKING CHANGE:` | minor · `0.2.0` → `0.3.0` |
-| `docs`, `ci`, `chore`, `test`, `style`, `refactor` | nada, no corta versión |
+| `fix(...)`, `perf(...)`      | patch · `0.3.0` → `0.3.1` |
+| `feat(...)`                  | minor · `0.3.0` → `0.4.0` |
+| `feat(...)!` + footer `BREAKING CHANGE:` | minor · `0.3.0` → `0.4.0` |
+| `docs`, `ci`, `refactor`, `test`, `build` | **patch**, también cortan versión |
+| `chore`, `style`             | nada |
+
+La cuarta fila sorprende y es la que hay que tener presente. En este repo
+**`docs:` corta una release**: dos commits de documentación seguidos abrieron un
+`chore(main): release 0.3.1`. No es el comportamiento por defecto de
+release-please, sale de nuestro `changelog-sections`: **todo tipo listado ahí sin
+`hidden: true` es releasable**, y ahí están `docs`, `ci`, `refactor`, `test` y
+`build`. Los únicos ocultos, y por tanto los únicos mudos, son `chore` y `style`.
+
+De ahí una distinción que hay que hacer al elegir el tipo:
+
+- **Documentación que se publica** —`README.md`, `llms.txt`, `docs/` que lee un
+  consumidor— va como `docs:`, y que corte un patch está bien: `llms.txt` viaja
+  dentro del tarball, así que el paquete de verdad cambió.
+- **Documentación de proceso del repo** —`AGENTS.md`, notas de workflows— va como
+  `chore:`. No entra en `files`, así que un `docs:` publicaría en npm un paquete
+  idéntico al anterior salvo por el número de versión.
 
 `release-please-config.json` tiene `bump-minor-pre-major: true`, así que mientras
 estemos en `0.x` **un cambio incompatible sube la minor, no la major**. El `!` y

@@ -1,4 +1,6 @@
+export * from './accordion.tsx';
 export * from './alert.tsx';
+export * from './alert-dialog.tsx';
 export * from './avatar.tsx';
 export * from './badge.tsx';
 export * from './button.tsx';
@@ -24,5 +26,6 @@ export * from './table.tsx';
 export * from './tabs.tsx';
 export * from './textarea.tsx';
 export * from './toast.tsx';
+export * from './toaster.tsx';
 export * from './tooltip.tsx';
 export * from './typography.tsx';

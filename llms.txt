@@ -157,6 +157,25 @@ Tiene que ir INLINE. Un `<script src>`, aunque sea síncrono, se descarga, y el
 parpadeo vuelve. El script reengancha en `astro:after-swap` porque las
 transiciones de vista reemplazan el `<html>` entero.
 
+### Los iconos de redes van agrupados
+
+```tsx
+// ❌ no existe
+import { GitHub } from '@eduardoalvarez/arrecife';
+
+// ✅
+import { social } from '@eduardoalvarez/arrecife';
+<social.GitHub />
+```
+
+Los ocho: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
+`Correo`. Van bajo namespace porque uno se llama `X` y sueltos colisiona.
+
+Los glifos internos —`Close`, `ChevronDown`, `Sol`— **no se exportan** y no van a
+exportarse: son el juego mínimo de los primitivos. Un componente que necesita un
+icono lo recibe por prop (`Stat` tiene `icon`, cada `Red` de `Footer` tiene el
+suyo). No pidas que se publiquen: pasa el tuyo.
+
 ## Tokens
 
 La fuente es un objeto de TypeScript y la salida CSS se genera de él, así que el
@@ -292,7 +311,7 @@ primitiva de Radix se resumen en la línea `Extiende`, y son los de siempre.
 
 ## Primitivos
 
-Se importan de `@eduardoalvarez/arrecife`. 115 exportaciones.
+Se importan de `@eduardoalvarez/arrecife`. 110 exportaciones.
 
 ### Accordion, AccordionItem, AccordionTrigger, AccordionContent
 
@@ -378,7 +397,7 @@ El aviso lleva el color en el fondo, no solo en el borde.
 | `title` | `ReactNode` |  |  |  |
 | `variant` | `"accent" \| "success" \| "warning" \| "error"` |  | `accent` |  |
 
-### Avatar, AvatarImage, AvatarFallback
+### Avatar, AvatarImage, AvatarFallback, AvatarUpload
 
 Fuente: `src/primitives/avatar.tsx`
 
@@ -398,6 +417,21 @@ Uno solo para todo: la foto del autor y la de cualquier persona del sistema. No 
 Iniciales mientras la imagen carga, o cuando no hay imagen.
 
 - Sin props propios: pasa los del elemento o la primitiva que envuelve.
+
+**AvatarUpload**
+El avatar que se puede cambiar. `Avatar` muestra; este además deja elegir.
+
+- Extiende: `Omit<ComponentPropsWithoutRef<'div'>, 'onSelect' \| 'children'> & VariantProps<typeof avatar>`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `accept` | `string` |  | `image/*` | Qué acepta el diálogo del sistema. |
+| `disabled` | `boolean \| undefined` |  | `false` |  |
+| `fallback` | `ReactNode` |  |  | Iniciales mientras no hay imagen. |
+| `label` | `string` |  | `Cambiar la foto` | Nombre accesible del control. Es lo único que lo nombra: no hay texto visible. |
+| `onSelectFile` | `(archivo: File) => void` |  |  | Se dispara con el archivo elegido. La subida la hace el proyecto. |
+| `size` | `"sm" \| "md" \| "lg" \| "xl"` |  |  |  |
+| `src` | `string` |  |  | La imagen actual, ya subida. La previsualización local la gana mientras dure. |
 
 ### Badge, CategoryBadge, MetricBadge
 
@@ -837,34 +871,6 @@ Fuente: `src/primitives/textarea.tsx`
 | --- | --- | --- | --- | --- |
 | `invalid` | `boolean` |  | `false` |  |
 
-### ToastViewport, Toast, ToastTitle, ToastDescription, ToastProvider, ToastAction
-
-Fuente: `src/primitives/toast.tsx`
-
-**ToastViewport**
-- Sin props propios: pasa los del elemento o la primitiva que envuelve.
-
-**Toast**
-Sin deslizamiento de entrada: el aviso aparece donde va a quedarse.
-
-- Extiende: `ComponentPropsWithoutRef<typeof ToastPrimitive.Root> & VariantProps<typeof toast>`
-
-| prop | tipo | req. | defecto | qué hace |
-| --- | --- | --- | --- | --- |
-| `variant` | `"success" \| "error" \| "neutral"` |  | `neutral` |  |
-
-**ToastTitle**
-- Sin props propios: pasa los del elemento o la primitiva que envuelve.
-
-**ToastDescription**
-- Sin props propios: pasa los del elemento o la primitiva que envuelve.
-
-**ToastProvider**
-- Sin props propios: pasa los del elemento o la primitiva que envuelve.
-
-**ToastAction**
-- Sin props propios: pasa los del elemento o la primitiva que envuelve.
-
 ### Toaster
 
 Fuente: `src/primitives/toaster.tsx`
@@ -910,7 +916,7 @@ Fuente: `src/primitives/typography.tsx`
 
 ## Componentes
 
-Se importan de `@eduardoalvarez/arrecife`. 23 exportaciones.
+Se importan de `@eduardoalvarez/arrecife`. 24 exportaciones.
 
 ### ArticleCard
 
@@ -1030,6 +1036,24 @@ La regla más importante de la mascota, por fin como código.
 | `description` | `ReactNode` |  |  | Una línea explicando qué falta o qué hacer. |
 | `expresion` | `"annoyed" \| "confused" \| "hearts" \| "laughing" \| "shades" \| "waiting" \| "wink"` | sí |  | La cara. Obligatoria: sin ella esto es un párrafo centrado. |
 | `title` | `ReactNode` | sí |  |  |
+
+### EventCalendar
+
+Fuente: `src/components/event-calendar/index.tsx`
+
+- Extiende: `Omit<ComponentPropsWithoutRef<'div'>, 'onSelect' \| 'children'>`
+
+| prop | tipo | req. | defecto | qué hace |
+| --- | --- | --- | --- | --- |
+| `emptyMessage` | `ReactNode` |  | `Nada en este día.` | Texto del panel cuando el día elegido no tiene nada. |
+| `events` | `readonly EventoCalendario[]` | sí |  |  |
+| `formatDay` | `(dia: Date) => string` |  | `(dia) => format(dia, "EEEE d de MMMM", { locale: es })` | Encabezado del panel. Por defecto, `es` de date-fns, como `Calendar`. |
+| `formatTime` | `(fecha: Date) => string` |  | `(fecha) => format(fecha, HH:mm, { locale: es })` |  |
+| `onCreateEvent` | `(evento: Omit<EventoCalendario, "id">) => void` |  |  | Sin él, la agenda es de solo lectura y no se pinta el formulario. |
+| `onDeleteEvent` | `(id: string) => void` |  |  |  |
+| `onSelectDay` | `(dia: Date) => void` |  |  |  |
+| `onUpdateEvent` | `(evento: EventoCalendario) => void` |  |  |  |
+| `selected` | `Date` |  |  | Día seleccionado, si el proyecto lo controla. Sin él, empieza en hoy. |
 
 ### Footer, FooterLink
 
@@ -1198,6 +1222,8 @@ Una métrica grande: el número en la escala `stat` y su nombre debajo.
 
 | prop | tipo | req. | defecto | qué hace |
 | --- | --- | --- | --- | --- |
+| `description` | `ReactNode` |  |  | La bajada: el matiz que el número solo no da. «12 aplicaciones» no dice si son muchas, y aquí es donde se dice. |
+| `icon` | `ReactNode` |  |  | Glifo al lado del título, a 1em. Hereda `currentColor`, así que sigue al tono del título y no hay que teñirlo aparte. |
 | `label` | `ReactNode` | sí |  | Qué se está contando. Va en mono versalitas. |
 | `progress` | `number` |  |  | Con `progress`, la métrica se lee como avance y añade la barra. |
 | `tone` | `"neutral" \| "alerta"` |  | `neutral` | `alerta` solo cuando el número ES el problema. |
@@ -1274,6 +1300,7 @@ El wordmark sale de `naming.wordmark`, no de una cadena escrita a mano, y siempr
 | prop | tipo | req. | defecto | qué hace |
 | --- | --- | --- | --- | --- |
 | `basePath` | `string` |  | `RUTA_ASSETS` |  |
+| `conLema` | `boolean \| undefined` |  | `false` | Añade el lema bajo el wordmark, separado de la aleta por una divisoria. |
 | `sobre` | `"oscuro" \| "claro"` |  | `oscuro` |  |
 | `soloIsotipo` | `boolean \| undefined` |  | `false` | Oculta el wordmark y deja solo la aleta, para barras muy estrechas. |
 
@@ -1513,7 +1540,7 @@ Tipos (6): `DatosArticulo`, `DatosBase`, `DatosCharla`, `DatosCurso`, `DatosDefe
 | `toast` | `(mensaje: ReactNode, opciones?: ToastOptions \| undefined): string` | Lanza un aviso. Devuelve su id, que es lo que hay que guardar para cerrarlo a mano —el caso de «guardando…» que se reemplaza cuando termina la petición. |
 | `useTema` | `(): Tema` | El tema puesto ahora mismo, para un proyecto que necesite ramificar en React —un logo distinto por modo, una imagen que no tiene versión clara—. |
 
-Tipos (58): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `DateFieldProps`, `EmptyStateProps`, `Entrada`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `Migaja`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `Red`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastProps`, `ToastVariant`, `ToasterProps`.
+Tipos (60): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `DateFieldProps`, `EmptyStateProps`, `Entrada`, `EventCalendarProps`, `EventoCalendario`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `Migaja`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `Red`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`.
 
 # Dónde mirar si esto no basta
 

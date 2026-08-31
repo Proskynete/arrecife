@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/Proskynete/arrecife/compare/v0.3.0...v0.3.1) (2026-08-31)
+
+
+### 📚 Documentación
+
+* main está protegida y así se trabaja con ella ([a625a49](https://github.com/Proskynete/arrecife/commit/a625a499ba871ebf7f13a8f7f0cc9f7fbfff17fc))
+* mergear saltándose la regla se pide, no pasa solo ([c3aca08](https://github.com/Proskynete/arrecife/commit/c3aca08d3926885edea1f500200f0a7496ab13bb))
+
 ## [0.3.0](https://github.com/Proskynete/arrecife/compare/v0.2.0...v0.3.0) (2026-08-31)
 
 

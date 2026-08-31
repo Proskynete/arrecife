@@ -281,7 +281,13 @@ docs(readme): la tercera corrección de contraste
 
 Ámbitos válidos, y la lista es corta a propósito: `tokens`, `primitives`,
 `components`, `brand`, `og`, `shiki`, `storybook`, `a11y`, `deps`,
-`deps-dev`, `ci`.
+`deps-dev`, `ci`. **Un cambio de proceso del repo va sin ámbito** —`docs:`,
+`ci:`—: no hay ámbito para «cómo trabajamos», y uno inventado se rechaza.
+
+Cuidado con una trampa: el workflow valida el **título del PR**, no los ámbitos
+de los commits que van dentro. Un `docs(agents):` enterrado en un PR titulado
+`feat(tokens)!:` pasa el lint y llega al CHANGELOG con un ámbito que no existe.
+Ya pasó una vez, en la 0.3.0.
 
 Las ramas siguen el mismo vocabulario que el commit:
 `tipo/descripcion-en-espanol-con-guiones` — `feat/espaciado-con-prefijo-step`,
@@ -308,34 +314,37 @@ estemos en `0.x` **un cambio incompatible sube la minor, no la major**. El `!` y
 el footer siguen siendo obligatorios: no cambian el número, pero son lo que hace
 que el CHANGELOG lo anuncie como ruptura en vez de esconderlo entre novedades.
 
-Un cambio incompatible se escribe así, y **el footer es el texto que acaba en el
-`CHANGELOG.md`**: es el único sitio donde se explica la migración, así que se
-escribe para quien la va a hacer, no para quien la hizo. Qué renombrar, qué deja
-de funcionar en silencio y qué hay que revisar después.
+Un cambio incompatible se escribe así:
 
 ```
 feat(tokens)!: el ritmo de página lleva step, para no comerse max-w-*
 
 <el porqué, como en cualquier commit del repo>
 
-BREAKING CHANGE: los cinco escalones de espaciado se renombran. Los valores no
-cambian ni un píxel.
+BREAKING CHANGE: `p-md` pasa a ser `p-step-md` y `spacing.md` a `spacing.stepMd`.
+Los valores no cambian. Migración en docs/migracion-0.3.md.
 
-| Antes          | Ahora               |
-| -------------- | ------------------- |
-| `--spacing-md` | `--spacing-step-md` |
-
-Un `p-md` sin migrar NO da error: cae en la escala numérica y no hace nada.
+<todo lo que quieras: aquí abajo ya no lo lee nadie más que quien abra el commit>
 ```
 
-Todo lo que va después de `BREAKING CHANGE:` se copia al CHANGELOG hasta el
-siguiente pie de página, así que los `Co-Authored-By:` y demás van al final del
-todo, nunca en medio.
+**Del footer solo llega al CHANGELOG el PRIMER PÁRRAFO.** Lo que va después de la
+primera línea en blanco se pierde, y se pierde en silencio. Comprobado en la
+0.3.0: el footer llevaba dos tablas y tres avisos, y en el CHANGELOG salió una
+sola frase.
 
-Si la migración no cabe en un footer, va a un documento en `docs/` y el footer lo
-enlaza — `docs/migracion-0.3.md` es el precedente. El CHANGELOG no existe hasta
-que se corta la release; el documento sí, y es lo que se puede enlazar desde el
-README mientras tanto.
+De ahí las dos reglas que importan:
+
+1. **Ese párrafo tiene que valerse solo**, y se escribe para quien va a migrar, no
+   para quien hizo el cambio. Cabe justo lo esencial: qué se renombra, si los
+   valores cambian, y a dónde ir para el resto. Ni una tabla, ni un ejemplo de
+   código: no van a llegar.
+2. **La migración de verdad va a un documento en `docs/`**, y el párrafo lo
+   enlaza. No es un premio de consolación: el documento existe antes de que se
+   corte la release, se puede enlazar desde el README mientras tanto, y no está
+   limitado a un párrafo. `docs/migracion-0.3.md` es el precedente.
+
+Los `Co-Authored-By:` y demás pies de página van al final del todo, nunca en
+medio del footer.
 
 **No publiques a npm a mano.** El workflow publica con OIDC y genera procedencia.
 

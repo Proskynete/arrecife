@@ -276,6 +276,33 @@ export const sintaxis = {
 } as const;
 
 /**
+ * La paleta de series de las gráficas. CUATRO, por el mismo motivo que la de
+ * sintaxis: el sistema se comunica con color y borde, no con ruido cromático.
+ *
+ * Ninguno es un color nuevo. Son cuatro que ya están en la identidad y que se
+ * distinguen por TONO, no por luminosidad —turquesa, naranja, azul y gris—,
+ * que es la única forma de que sigan siendo cuatro series para quien no
+ * distingue rojo y verde. Elegir bioluz y `success` habría dado dos verdes
+ * casi idénticos en modo claro.
+ *
+ * `brand.body` entra aquí y no en el resaltado por la misma regla vista al
+ * derecho: el sistema lo restringe a RELLENO y nunca a texto, y una serie de
+ * gráfica es relleno. Es igual en los dos modos porque es color de marca.
+ *
+ * El umbral que aplica es el de objeto gráfico, 3:1 contra el fondo, no el de
+ * texto. Medidos contra `background`, los cuatro lo pasan en los dos modos con
+ * margen: el peor es `brand.body` sobre papel, con 3.9:1.
+ *
+ * Una quinta serie no se añade inventando un tono. Si una gráfica necesita
+ * cinco categorías, o sobran categorías o hace falta agrupar en «otros»: ver
+ * `docs/decisiones.md`.
+ */
+export const series = {
+  dark: [dark.accent, dark.warm, brand.body, dark.textMuted],
+  light: [light.accent, light.warm, brand.body, light.textMuted],
+} as const;
+
+/**
  * Los dos únicos bloques con degradado del sistema: el hero y el panel de
  * sección (newsletter). Sin token, los cinco proyectos los escriben a mano
  * distinto, que es exactamente cómo se desincroniza una identidad.
@@ -353,3 +380,5 @@ export type GradientToken = keyof typeof gradient.dark;
 export type SintaxisToken = keyof typeof sintaxis;
 export type SpacingToken = keyof typeof spacing;
 export type SizeToken = keyof typeof size;
+/** El índice de una serie de gráfica: 0, 1, 2 o 3. */
+export type SeriesToken = 0 | 1 | 2 | 3;

@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 export const Basico: Story = {
   name: 'Básico',
   render: (args) => (
-    <div className="p-lg">
+    <div className="p-step-lg">
       <Hero
         {...args}
         action={
@@ -58,7 +58,7 @@ export const SinPose: Story = {
   name: 'Sin pose',
   args: { pose: undefined },
   render: (args) => (
-    <div className="p-lg">
+    <div className="p-step-lg">
       <Hero {...args} action={<Button variant="conversion">Agenda una llamada</Button>} />
       <Nota>
         Válido, pero es un panel con texto. La pose es la mitad de lo que hace que

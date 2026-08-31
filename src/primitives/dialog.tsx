@@ -32,7 +32,7 @@ export function DialogContent({
       <DialogPrimitive.Content
         className={cn(
           'fixed top-1/2 left-1/2 z-50 w-full max-w-content -translate-x-1/2 -translate-y-1/2',
-          'gap-md p-lg flex flex-col',
+          'gap-step-md p-step-lg flex flex-col',
           'rounded-panel border-border bg-surface shadow-standard border',
           'text-text-primary font-sans',
           className,
@@ -57,12 +57,12 @@ export function DialogContent({
 }
 
 export function DialogHeader({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn('gap-xs flex flex-col pr-8', className)} {...props} />;
+  return <div className={cn('gap-step-xs flex flex-col pr-8', className)} {...props} />;
 }
 
 export function DialogFooter({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   return (
-    <div className={cn('gap-sm flex flex-col-reverse sm:flex-row sm:justify-end', className)} {...props} />
+    <div className={cn('gap-step-sm flex flex-col-reverse sm:flex-row sm:justify-end', className)} {...props} />
   );
 }
 

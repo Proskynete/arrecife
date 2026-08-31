@@ -82,6 +82,21 @@ Bricolage Grotesque (`font-display`), Geist (`font-sans`) y JetBrains Mono
 (`font-mono`) como prefiera —`next/font`, `@fontsource`, un `<link>`—. Si no las
 carga, el navegador cae al fallback y la tipografía se ve mal.
 
+El nombre tiene que coincidir **exactamente** con el que declaran los tokens, y
+esto ya ha fallado en dos proyectos:
+
+| Utilidad | Nombre que pide el token |
+| --- | --- |
+| `font-display` | `"Bricolage Grotesque"` |
+| `font-sans` | `"Geist"` |
+| `font-mono` | `"JetBrains Mono"` |
+
+Varios paquetes de fuentes las publican como `"Bricolage Grotesque Variable"` o
+`"Geist Variable"`. Registrar el `@font-face` con ese nombre NO carga lo que los
+tokens piden: la familia cae al sistema en silencio, sin error en consola. El
+`font-family` del `@font-face` es un alias que elige el proyecto, así que se
+escribe con el nombre de la tabla.
+
 ## Qué importar de dónde
 
 `exports` tiene cinco subrutas y la elección importa: tres de ellas **no
@@ -122,7 +137,8 @@ mismo valor está disponible en los dos sitios y no pueden discrepar.
 | `typeScale.h1` | `--text-h1` | `text-h1` (arrastra line-height, weight y tracking) |
 | `fonts.display` | `--font-display` | `font-display` |
 | `radius.card` | `--radius-card` | `rounded-card` |
-| `spacing.lg` | `--spacing-lg` | `p-lg`, `gap-lg`, `mb-lg` |
+| `spacing.stepLg` | `--spacing-step-lg` | `p-step-lg`, `gap-step-lg`, `mb-step-lg` |
+| `spacing.section` | `--spacing-section` | `py-section`, `mb-section` |
 | `control.md` | `--spacing-control-md` | `px-control-md` |
 | `control.icon` | `--spacing-control-icon` | `size-control-icon` (42×42) |
 | `gradient[modo].hero` | `--gradient-hero` | `degradado-hero` |
@@ -134,6 +150,15 @@ mismo valor está disponible en los dos sitios y no pueden discrepar.
 
 `transition-standard` es la única transición del sistema y solo puede animar
 color y borde: así está escrita la utilidad.
+
+**Los escalones de espaciado llevan `step` en el nombre y no es opcional.**
+`p-md` no es una clase de Arrecife: en un proyecto con Tailwind v4 cae en la
+escala numérica y no hace nada visible. El ritmo de página es `p-step-md`,
+`gap-step-sm`, `py-step-xl`. Llevan prefijo porque `xs, sm, md, lg, xl` son los
+nombres de la escala `--container-*` de Tailwind, y un `--spacing-md` propio se
+comía `max-w-md` en todo el proyecto sin avisar de nada. `max-w-*`, `w-*` y `h-*`
+son de Tailwind y se usan tal cual. Guía de migración desde la 0.2.0:
+<https://github.com/Proskynete/arrecife/blob/main/docs/migracion-0.3.md>.
 
 ## Reglas del sistema que el código consumidor no debe romper
 

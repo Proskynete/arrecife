@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 const campo = (args: Parameters<NonNullable<Story['render']>>[0], etiqueta = 'Publicar el') => (
   <Pila>
-    <div className="gap-xs flex flex-col">
+    <div className="gap-step-xs flex flex-col">
       <Label htmlFor="fecha">{etiqueta}</Label>
       <DateField id="fecha" {...args} />
     </div>

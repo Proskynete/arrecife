@@ -33,12 +33,12 @@ export function LinkRow({
 
   return (
     <Tarjeta
-      className={cn('px-md py-sm', className)}
+      className={cn('px-step-md py-step-sm', className)}
       {...props}
       rel={rel}
       {...(target ? { target } : {})}
     >
-      <span className="gap-sm flex items-center">
+      <span className="gap-step-sm flex items-center">
         {icon ? (
           <span className="text-text-muted group-hover:text-accent transition-standard shrink-0 text-2xl">
             {icon}

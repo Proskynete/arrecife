@@ -81,20 +81,20 @@ export function SheetContent({ className, side, children, ...props }: SheetConte
 export function SheetHeader({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   return (
     <div
-      className={cn('border-hairline gap-xs p-lg flex flex-col border-b pr-12', className)}
+      className={cn('border-hairline gap-step-xs p-step-lg flex flex-col border-b pr-12', className)}
       {...props}
     />
   );
 }
 
 export function SheetBody({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn('p-lg flex-1 overflow-y-auto', className)} {...props} />;
+  return <div className={cn('p-step-lg flex-1 overflow-y-auto', className)} {...props} />;
 }
 
 export function SheetFooter({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   return (
     <div
-      className={cn('border-hairline gap-sm p-lg flex flex-wrap justify-end border-t', className)}
+      className={cn('border-hairline gap-step-sm p-step-lg flex flex-wrap justify-end border-t', className)}
       {...props}
     />
   );

@@ -16,6 +16,9 @@ import {
 } from '../src/tokens/index.ts';
 import type { ColorMode } from '../src/tokens/index.ts';
 
+/** camelCase → kebab-case, igual que en `scripts/build-tokens.mjs`. */
+const kebab = (nombre: string) => nombre.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+
 /* ------------------------------------------------------- contraste medido */
 
 /** Canal sRGB linealizado, WCAG 2.1. */
@@ -64,7 +67,7 @@ function useModo(): ColorMode {
 function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
     <section className="mb-section">
-      <h2 className="text-h2 font-display text-text-primary mb-md">{titulo}</h2>
+      <h2 className="text-h2 font-display text-text-primary mb-step-md">{titulo}</h2>
       {children}
     </section>
   );
@@ -72,16 +75,16 @@ function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) 
 
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="text-eyebrow font-mono text-text-muted uppercase mb-sm">{children}</p>
+    <p className="text-eyebrow font-mono text-text-muted uppercase mb-step-sm">{children}</p>
   );
 }
 
 function Pagina({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
-    <div className="bg-background text-text-primary font-sans min-h-screen px-xl py-xl">
+    <div className="bg-background text-text-primary font-sans min-h-screen px-step-xl py-step-xl">
       <div className="max-w-wide mx-auto">
         <Eyebrow>arrecife · tokens</Eyebrow>
-        <h1 className="text-h1 font-display text-text-primary mb-xl">{titulo}</h1>
+        <h1 className="text-h1 font-display text-text-primary mb-step-xl">{titulo}</h1>
         {children}
       </div>
     </div>
@@ -160,21 +163,21 @@ function Muestra({
   const pasa = razon >= minimo;
 
   return (
-    <div className="border-hairline rounded-card border p-md">
+    <div className="border-hairline rounded-card border p-step-md">
       <div
-        className="rounded-chip mb-sm h-12 w-full border"
+        className="rounded-chip mb-step-sm h-12 w-full border"
         style={{ backgroundColor: hex, borderColor: 'var(--color-hairline)' }}
       />
       <p className="text-label font-sans text-text-primary">{nombre}</p>
       <p className="text-eyebrow font-mono text-text-muted uppercase">{hex}</p>
-      <p className="text-label font-mono mt-sm text-text-secondary">
+      <p className="text-label font-mono mt-step-sm text-text-secondary">
         {format(razon)} <span className={pasa ? 'text-success' : 'text-error'}>
           {pasa ? 'AA' : `bajo ${minimo}:1`}
         </span>
       </p>
-      <p className="text-eyebrow font-mono text-text-muted mt-xs uppercase">{etiqueta}</p>
+      <p className="text-eyebrow font-mono text-text-muted mt-step-xs uppercase">{etiqueta}</p>
       {advertencia ? (
-        <p className="text-label font-sans text-warning mt-xs">{advertencia}</p>
+        <p className="text-label font-sans text-warning mt-step-xs">{advertencia}</p>
       ) : null}
     </div>
   );
@@ -186,7 +189,7 @@ function Paleta() {
 
   return (
     <Pagina titulo={`Paleta · modo ${modo === 'dark' ? 'oscuro' : 'claro'}`}>
-      <p className="text-body font-sans text-text-secondary max-w-measure mb-xl">
+      <p className="text-body font-sans text-text-secondary max-w-measure mb-step-xl">
         Los contrastes están medidos, no estimados. Cada razón de esta página se
         calcula en tiempo de render desde <code className="font-mono">tokens.ts</code>: si
         alguien cambia un hex, el número cambia aquí antes de llegar a producción.
@@ -196,9 +199,9 @@ function Paleta() {
       {GRUPOS.map((grupo) => (
         <Seccion key={grupo.titulo} titulo={grupo.titulo}>
           {grupo.nota ? (
-            <p className="text-ui font-sans text-text-muted mb-md max-w-measure">{grupo.nota}</p>
+            <p className="text-ui font-sans text-text-muted mb-step-md max-w-measure">{grupo.nota}</p>
           ) : null}
-          <div className="gap-md grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+          <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
             {grupo.claves.map((clave) => {
               if (grupo.medicion === 'fondo') {
                 return (
@@ -230,10 +233,10 @@ function Paleta() {
       ))}
 
       <Seccion titulo="Marca">
-        <p className="text-ui font-sans text-text-muted mb-md max-w-measure">
+        <p className="text-ui font-sans text-text-muted mb-step-md max-w-measure">
           Iguales en los dos modos. Son relleno de ilustración, no paleta de interfaz.
         </p>
-        <div className="gap-md grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+        <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
           <Muestra
             nombre="brand.body"
             hex={brand.body}
@@ -305,7 +308,7 @@ const EJEMPLO: Record<keyof typeof typeScale, string> = {
 function Tipografia() {
   return (
     <Pagina titulo="Escala tipográfica">
-      <p className="text-body font-sans text-text-secondary max-w-measure mb-xl">
+      <p className="text-body font-sans text-text-secondary max-w-measure mb-step-xl">
         Display solo para titulares y números grandes, nunca cuerpo. Mínimos
         absolutos: {limits.minScreenPx}px en pantalla, {limits.minPrintPt}pt impreso.
         Medida máxima de cuerpo: {limits.measure}.
@@ -324,8 +327,8 @@ function Tipografia() {
           .join('  ');
 
         return (
-          <div key={clave} className="border-hairline py-lg border-b last:border-b-0">
-            <div className="gap-sm mb-sm flex flex-wrap items-baseline">
+          <div key={clave} className="border-hairline py-step-lg border-b last:border-b-0">
+            <div className="gap-step-sm mb-step-sm flex flex-wrap items-baseline">
               <span className="text-eyebrow font-mono text-accent uppercase">{clave}</span>
               <span className="text-label font-mono text-text-muted">{detalles}</span>
             </div>
@@ -347,14 +350,14 @@ function FormaYRitmo() {
   return (
     <Pagina titulo="Forma y ritmo">
       <Seccion titulo="Radio">
-        <div className="gap-md flex flex-wrap">
+        <div className="gap-step-md flex flex-wrap">
           {(Object.keys(radius) as (keyof typeof radius)[]).map((clave) => (
             <div key={clave}>
               <div
                 className="bg-surface-raised border-border h-24 w-24 border"
                 style={{ borderRadius: `var(--radius-${clave})` }}
               />
-              <p className="text-label font-mono text-text-secondary mt-xs">
+              <p className="text-label font-mono text-text-secondary mt-step-xs">
                 {clave} · {radius[clave]}
               </p>
             </div>
@@ -363,15 +366,23 @@ function FormaYRitmo() {
       </Seccion>
 
       <Seccion titulo="Espaciado">
-        <div className="gap-sm flex flex-col">
+        <p className="text-ui font-sans text-text-muted mb-step-md max-w-measure">
+          Los cinco escalones llevan <code className="font-mono">step</code> en el nombre
+          porque <code className="font-mono">xs</code>…<code className="font-mono">xl</code>{' '}
+          son los de la escala <code className="font-mono">--container-*</code> de Tailwind,
+          y <code className="font-mono">--spacing-*</code> se la comía: un proyecto que
+          importara los tokens se quedaba con <code className="font-mono">max-w-sm</code> en
+          12px. Ver <code className="font-mono">tokens.ts</code>.
+        </p>
+        <div className="gap-step-sm flex flex-col">
           {(Object.keys(spacing) as (keyof typeof spacing)[]).map((clave) => (
-            <div key={clave} className="gap-md flex items-center">
-              <span className="text-label font-mono text-text-muted w-24">
-                {clave} · {spacing[clave]}
+            <div key={clave} className="gap-step-md flex items-center">
+              <span className="text-label font-mono text-text-muted w-56">
+                --spacing-{kebab(clave)} · {spacing[clave]}
               </span>
               <span
                 className="bg-accent rounded-chip h-3"
-                style={{ width: `var(--spacing-${clave})` }}
+                style={{ width: `var(--spacing-${kebab(clave)})` }}
               />
             </div>
           ))}
@@ -379,7 +390,7 @@ function FormaYRitmo() {
       </Seccion>
 
       <Seccion titulo="Medidas">
-        <div className="gap-sm flex flex-col">
+        <div className="gap-step-sm flex flex-col">
           {(Object.keys(size) as (keyof typeof size)[]).map((clave) => (
             <p key={clave} className="text-label font-mono text-text-secondary">
               {clave} · {size[clave]}px
@@ -392,17 +403,17 @@ function FormaYRitmo() {
       </Seccion>
 
       <Seccion titulo="Sombra y movimiento">
-        <div className="gap-lg flex flex-wrap items-start">
-          <div className="bg-surface border-hairline rounded-card shadow-standard p-lg border">
+        <div className="gap-step-lg flex flex-wrap items-start">
+          <div className="bg-surface border-hairline rounded-card shadow-standard p-step-lg border">
             <p className="text-label font-mono text-text-secondary">shadow.standard</p>
             <p className="text-label font-mono text-text-muted">{shadow.standard}</p>
           </div>
-          <div className="bg-surface border-hairline rounded-card p-lg border">
+          <div className="bg-surface border-hairline rounded-card p-step-lg border">
             <p className="text-label font-mono text-text-secondary">motion</p>
             <p className="text-label font-mono text-text-muted">
               {motion.duration} {motion.easing}
             </p>
-            <p className="text-ui font-sans text-text-secondary max-w-measure mt-sm">
+            <p className="text-ui font-sans text-text-secondary max-w-measure mt-step-sm">
               Solo color y borde. Nada de escala ni desplazamiento.
             </p>
           </div>

@@ -41,7 +41,7 @@ export const SoloSuperficie: Story = {
   name: 'Solo superficie',
   render: () => (
     <Pila>
-      <Card className="p-md">
+      <Card className="p-step-md">
         <Text variant="ui" tone="secondary">
           Sin cabecera ni pie: a veces una tarjeta solo es una caja con borde.
         </Text>

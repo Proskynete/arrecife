@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Lista: Story = {
   render: (args) => (
-    <div className="gap-xs max-w-content flex flex-col">
+    <div className="gap-step-xs max-w-content flex flex-col">
       <LinkRow {...args} />
       <LinkRow {...args} name="LinkedIn" description="in/eduardo-alvarez" />
       <LinkRow {...args} name="Cursos" description="cursos.eduardoalvarez.dev" icon={<ArrowUpRight />} />

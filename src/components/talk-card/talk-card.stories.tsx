@@ -30,7 +30,7 @@ export const Hover: Story = {
 
 export const Rejilla: Story = {
   render: (args) => (
-    <div className="gap-md grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
+    <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
       <TalkCard {...args} />
       <TalkCard {...args} title="Deuda técnica con nombre y apellido" event="NerdearLA" date="Octubre 2024" dateTime="2024-10" location="Buenos Aires" status={undefined} />
       <TalkCard {...args} title="Decisiones documentadas" event="Interno" date="Próxima" dateTime="2026-03" location={undefined} status="próxima" />

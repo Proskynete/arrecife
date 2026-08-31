@@ -12,7 +12,7 @@ export function Textarea({ className, invalid = false, ...props }: TextareaProps
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}
       className={cn(
-        'min-h-24 w-full px-sm py-xs',
+        'min-h-24 w-full px-step-sm py-step-xs',
         'rounded-control border border-border bg-surface',
         'font-sans text-ui text-text-primary placeholder:text-text-muted',
         'transition-standard',

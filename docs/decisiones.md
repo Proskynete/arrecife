@@ -315,6 +315,59 @@ puede derivar, se deriva.
 
 ---
 
+## 16 · El ritmo de página lleva `step` en el nombre
+
+**Documento:** la escala de espaciado es `xs 8 · sm 12 · md 16 · lg 26 · xl 40`.
+**Código:** los mismos cinco valores, con los nombres `stepXs`…`stepXl`.
+
+Esta no es una discrepancia de criterio: es un choque de nombres con Tailwind, y
+los valores no se mueven ni un píxel.
+
+En Tailwind v4 el nombre de la custom property **es** la API, y `--spacing-*` no
+alimenta solo `p-*`, `m-*` y `gap-*`: también resuelve `w-*`, `h-*`, `max-w-*`,
+`min-w-*`, `max-h-*`, `min-h-*`, `basis-*` y `size-*`, donde **gana** a la escala
+`--container-*`. Nuestros escalones se llamaban exactamente igual que esa escala,
+así que en cualquier proyecto que importara `theme.css`:
+
+| Clase | Tailwind | Con arrecife 0.2.0 |
+| --- | --- | --- |
+| `max-w-sm` | 384px | **12px** |
+| `max-w-md` | 448px | **16px** |
+| `max-w-lg` | 512px | **26px** |
+| `max-w-xl` | 576px | **40px** |
+
+Redeclarar `--container-sm` y compañía **no** lo arregla: se probó, y `--spacing-*`
+gana igual. La única salida era que la librería dejara de usar esos nombres.
+
+El prefijo sigue el patrón que ya tenía `control` —un grupo con nombre propio
+dentro de `--spacing-*`, que da `px-control-md`—, así que no estrena una forma:
+la extiende. `section` se queda sin prefijo porque no choca con nada.
+
+**Lo que hay que quedarse, que es más importante que el rename:** el bug no lo
+detectó nada. Ni el build, ni los tipos, ni Storybook, ni la suite de axe en los
+dos modos. Vivía en el hueco entre lo que la librería **publica** y lo que la
+librería **usa**: Arrecife no escribe `max-w-sm` por dentro, así que ninguna
+story podía enseñarlo. Se descubrió en producción, en `cursos.eduardoalvarez.dev`,
+con el párrafo de un hero saliendo a una palabra por línea.
+
+De ahí las dos defensas nuevas, y son dos porque son razonamientos independientes:
+
+- `scripts/check-tokens-namespace.mjs` falla el build si un token nuestro pisa un
+  nombre que Tailwind reserva. La lista de nombres no está escrita a mano: se lee
+  del `theme.css` de la versión instalada, así que un escalón nuevo de Tailwind se
+  detecta al actualizar la dependencia.
+- `scripts/theme-css.test.mjs` compila Tailwind de verdad con los tokens encima y
+  comprueba a qué resuelve cada utilidad. Es la primera prueba del repo que mide
+  lo que se publica y no lo que se usa.
+
+La guía para los proyectos que consumen la librería está en
+[`migracion-0.3.md`](migracion-0.3.md).
+
+**Acción en el documento:** ninguna sobre los valores. Anotar en la tabla de
+espaciado que la utilidad es `p-step-md`, no `p-md`.
+
+---
+
 ## Lo que NO se tocó
 
 Sigue vigente la lista de la auditoría: las tres correcciones de contraste

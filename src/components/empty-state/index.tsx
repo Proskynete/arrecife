@@ -45,7 +45,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div
-      className={cn(SUPERFICIE_TARJETA, 'p-lg gap-sm flex flex-col items-center text-center', className)}
+      className={cn(SUPERFICIE_TARJETA, 'p-step-lg gap-step-sm flex flex-col items-center text-center', className)}
       {...props}
     >
       <CaraDeMascota expresion={expresion} className={CARA} basePath={basePath} />
@@ -60,7 +60,7 @@ export function EmptyState({
         </Text>
       ) : null}
 
-      {action ? <div className="mt-xs">{action}</div> : null}
+      {action ? <div className="mt-step-xs">{action}</div> : null}
     </div>
   );
 }

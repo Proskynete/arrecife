@@ -47,12 +47,12 @@ export function Hero({
       className={cn(
         'degradado-hero rounded-panel border-hairline relative overflow-hidden border',
         // 44 arriba, 40 a los lados y abajo. Del documento.
-        'px-xl pt-[44px] pb-xl',
+        'px-step-xl pt-[44px] pb-step-xl',
         className,
       )}
       {...props}
     >
-      <div className="gap-md flex flex-col md:max-w-[62%]">
+      <div className="gap-step-md flex flex-col md:max-w-[62%]">
         {eyebrow ? (
           <Text variant="eyebrow" tone="accent" as="p">
             {eyebrow}
@@ -69,7 +69,7 @@ export function Hero({
           </Text>
         ) : null}
 
-        {action ? <div className="gap-sm mt-xs flex flex-wrap items-center">{action}</div> : null}
+        {action ? <div className="gap-step-sm mt-step-xs flex flex-wrap items-center">{action}</div> : null}
       </div>
 
       {pose ? (
@@ -79,7 +79,7 @@ export function Hero({
           className={cn(
             // En móvil, en el flujo y bajo los botones. Desde md, sangrando por
             // la esquina inferior derecha.
-            'mt-lg mx-auto w-40',
+            'mt-step-lg mx-auto w-40',
             'md:mt-0 md:absolute md:right-0 md:-bottom-4 md:mx-0 md:w-64',
           )}
         />

@@ -6,7 +6,7 @@ import { cn } from '../lib/cn.ts';
 export type TabsProps = ComponentPropsWithoutRef<typeof TabsPrimitive.Root>;
 
 export function Tabs({ className, ...props }: TabsProps) {
-  return <TabsPrimitive.Root className={cn('gap-md flex flex-col', className)} {...props} />;
+  return <TabsPrimitive.Root className={cn('gap-step-md flex flex-col', className)} {...props} />;
 }
 
 export function TabsList({
@@ -15,7 +15,7 @@ export function TabsList({
 }: ComponentPropsWithoutRef<typeof TabsPrimitive.List>) {
   return (
     <TabsPrimitive.List
-      className={cn('rounded-control bg-surface gap-xs inline-flex items-center p-1', className)}
+      className={cn('rounded-control bg-surface gap-step-xs inline-flex items-center p-1', className)}
       {...props}
     />
   );
@@ -28,7 +28,7 @@ export function TabsTrigger({
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        'rounded-chip px-sm inline-flex h-8 cursor-pointer items-center justify-center whitespace-nowrap',
+        'rounded-chip px-step-sm inline-flex h-8 cursor-pointer items-center justify-center whitespace-nowrap',
         'font-sans text-label text-text-secondary',
         'transition-standard',
         'hover:text-text-primary',

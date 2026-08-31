@@ -39,7 +39,7 @@ import { cn } from '../lib/cn.ts';
  * «Publicado» o «Borrador» con todas sus letras.
  */
 const badge = cva(
-  ['inline-flex items-center gap-xs', 'rounded-chip px-xs py-0.5', 'font-sans text-tag', 'transition-standard'],
+  ['inline-flex items-center gap-step-xs', 'rounded-chip px-step-xs py-0.5', 'font-sans text-tag', 'transition-standard'],
   {
     variants: {
       variant: {
@@ -76,8 +76,8 @@ export function Badge({ className, variant, ...props }: BadgeProps) {
  */
 const categoria = cva(
   [
-    'inline-flex items-center gap-xs',
-    'rounded-pill px-sm py-0.5',
+    'inline-flex items-center gap-step-xs',
+    'rounded-pill px-step-sm py-0.5',
     'font-mono text-chip',
     'border transition-standard',
   ],
@@ -116,7 +116,7 @@ export function CategoryBadge({ className, active = false, ...props }: CategoryB
  * `marca.stories.tsx` cuando renderizaba `LAPTOP-COFFEE` sobre un nombre de
  * archivo que en realidad es `pose-laptop-coffee.png`.
  */
-const metrica = ['inline-flex items-center gap-xs', 'rounded-pill', 'font-mono text-chip text-text-muted'];
+const metrica = ['inline-flex items-center gap-step-xs', 'rounded-pill', 'font-mono text-chip text-text-muted'];
 
 export type MetricBadgeProps = ComponentPropsWithoutRef<'span'> & {
   /** Añade el aro de hairline. Por defecto la métrica va sin caja. */
@@ -126,7 +126,7 @@ export type MetricBadgeProps = ComponentPropsWithoutRef<'span'> & {
 export function MetricBadge({ className, boxed = false, ...props }: MetricBadgeProps) {
   return (
     <span
-      className={cn(metrica, boxed && 'border-hairline px-sm py-0.5 border', className)}
+      className={cn(metrica, boxed && 'border-hairline px-step-sm py-0.5 border', className)}
       {...props}
     />
   );

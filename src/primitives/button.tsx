@@ -31,7 +31,7 @@ import { Spinner } from '../lib/glyphs.tsx';
  */
 const button = cva(
   [
-    'inline-flex cursor-pointer items-center justify-center gap-xs whitespace-nowrap select-none',
+    'inline-flex cursor-pointer items-center justify-center gap-step-xs whitespace-nowrap select-none',
     'rounded-control font-sans font-medium',
     'transition-standard',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',

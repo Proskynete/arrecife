@@ -29,7 +29,7 @@ const preview: Preview = {
     // Todo se monta sobre `background`: si un componente no declara su propio
     // fondo, se ve exactamente como se va a ver en un proyecto real.
     (Story) => (
-      <div className="bg-background text-text-primary font-sans p-lg">
+      <div className="bg-background text-text-primary font-sans p-step-lg">
         <Story />
       </div>
     ),

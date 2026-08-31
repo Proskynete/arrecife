@@ -32,9 +32,9 @@ export function TalkCard({
   ].filter(Boolean);
 
   return (
-    <Tarjeta className={cn('p-lg', className)} {...props}>
-      <article className="gap-sm flex h-full flex-col">
-        <div className="gap-sm flex items-start justify-between">
+    <Tarjeta className={cn('p-step-lg', className)} {...props}>
+      <article className="gap-step-sm flex h-full flex-col">
+        <div className="gap-step-sm flex items-start justify-between">
           <Text variant="eyebrow" tone="accent" as="p">
             {event}
           </Text>
@@ -46,9 +46,9 @@ export function TalkCard({
         </Text>
 
         {pie.length > 0 ? (
-          <Text variant="label" tone="muted" as="p" className="gap-xs mt-auto flex items-center pt-sm">
+          <Text variant="label" tone="muted" as="p" className="gap-step-xs mt-auto flex items-center pt-step-sm">
             {pie.map((m, i) => (
-              <span key={i} className="gap-xs flex items-center">
+              <span key={i} className="gap-step-xs flex items-center">
                 {i > 0 ? <span aria-hidden="true">·</span> : null}
                 {m}
               </span>

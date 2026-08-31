@@ -77,8 +77,8 @@ export function Calendar({
         // la raíz, y sin esto se ancla al primer ancestro posicionado —o al
         // viewport— y las flechas acaban en los bordes de la página.
         root: cn('relative', fullWidth ? 'w-full' : 'w-fit'),
-        months: cn('gap-md flex flex-col sm:flex-row', fullWidth && 'w-full'),
-        month: cn('gap-sm flex flex-col', fullWidth && 'min-w-0 flex-1'),
+        months: cn('gap-step-md flex flex-col sm:flex-row', fullWidth && 'w-full'),
+        month: cn('gap-step-sm flex flex-col', fullWidth && 'min-w-0 flex-1'),
         month_caption: 'h-8 flex items-center justify-center',
         caption_label: 'text-ui font-sans font-medium text-text-primary capitalize',
         nav: 'absolute inset-x-0 top-0 flex items-center justify-between',
@@ -106,7 +106,7 @@ export function Calendar({
         range_start: '[&_button]:bg-accent [&_button]:text-accent-on [&_button]:rounded-r-none',
         range_middle: '[&_button]:bg-surface-raised [&_button]:text-text-primary [&_button]:rounded-none',
         range_end: '[&_button]:bg-accent [&_button]:text-accent-on [&_button]:rounded-l-none',
-        footer: 'text-label font-sans text-text-secondary pt-sm',
+        footer: 'text-label font-sans text-text-secondary pt-step-sm',
         ...classNames,
       }}
       components={{

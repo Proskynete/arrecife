@@ -27,7 +27,7 @@ export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
 
 export function Stat({ value, label, tone = 'neutral', progress, className, ...props }: StatProps) {
   return (
-    <div className={cn(SUPERFICIE_TARJETA, 'p-lg gap-xs flex flex-col', className)} {...props}>
+    <div className={cn(SUPERFICIE_TARJETA, 'p-step-lg gap-step-xs flex flex-col', className)} {...props}>
       <Text variant="stat" as="p" tone={tone === 'alerta' ? 'warm' : 'accent'}>
         {value}
       </Text>
@@ -41,7 +41,7 @@ export function Stat({ value, label, tone = 'neutral', progress, className, ...p
           value={progress}
           tone={tone === 'alerta' ? 'warm' : 'accent'}
           label={`${label}: ${progress}%`}
-          className="mt-sm"
+          className="mt-step-sm"
         />
       ) : null}
     </div>

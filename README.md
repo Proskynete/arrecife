@@ -64,8 +64,42 @@ mismo objeto `tokens`: la fuente no cambia.
 El modo oscuro es el primario y es el default. Un proyecto en modo claro declara
 `data-theme="light"` en `<html>`; uno oscuro no necesita declarar nada.
 
+> **Vienes de la 0.2.0 o anterior.** Los cinco escalones de espaciado se
+> renombraron: `p-md` es ahora `p-step-md`, `gap-sm` es `gap-step-sm`. Es un
+> cambio incompatible, y si tu proyecto usa `max-w-sm`, `max-w-md` o `max-w-lg`,
+> además te estaban valiendo 12, 16 y 26px sin que nada lo dijera. El porqué, el
+> patrón de migración y qué revisar después están en
+> [`docs/migracion-0.3.md`](docs/migracion-0.3.md).
+
 Las familias tipográficas se declaran por nombre. Cada proyecto carga Bricolage
 Grotesque, Geist y JetBrains Mono como prefiera: la librería no impone cómo.
+
+**Los nombres tienen que coincidir EXACTAMENTE**, y esto ya ha mordido dos veces.
+Los tokens declaran las familias así:
+
+| Token | `font-family` que declara | Utilidad |
+| --- | --- | --- |
+| `fonts.display` | `"Bricolage Grotesque"` | `font-display` |
+| `fonts.sans` | `"Geist"` | `font-sans` |
+| `fonts.mono` | `"JetBrains Mono"` | `font-mono` |
+
+Un proyecto que registre su `@font-face` como `"Bricolage Grotesque Variable"` o
+`"Geist Variable"` —el nombre con el que las publican varios paquetes de fuentes—
+**no** está cargando lo que los tokens piden: la display y la mono caen a la
+fuente del sistema, en silencio y sin un aviso en consola. Es exactamente lo que
+pasó en dos de los cinco proyectos.
+
+El `family` del `@font-face` es un alias que elige el proyecto, así que la
+solución es declararlo con el nombre que pide el token:
+
+```css
+@font-face {
+  font-family: "Bricolage Grotesque"; /* NO "Bricolage Grotesque Variable" */
+  src: url("/fuentes/bricolage-grotesque.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  font-display: swap;
+}
+```
 
 ### Mapa de tokens a utilidades
 
@@ -76,7 +110,8 @@ Grotesque, Geist y JetBrains Mono como prefiera: la librería no impone cómo.
 | `typeScale.h1` | `--text-h1` | `text-h1` (arrastra line-height, weight y tracking) |
 | `fonts.display` | `--font-display` | `font-display` |
 | `radius.card` | `--radius-card` | `rounded-card` |
-| `spacing.lg` | `--spacing-lg` | `p-lg`, `gap-lg`, `mb-lg` |
+| `spacing.stepLg` | `--spacing-step-lg` | `p-step-lg`, `gap-step-lg`, `mb-step-lg` |
+| `spacing.section` | `--spacing-section` | `py-section`, `mb-section` |
 | `control.md` | `--spacing-control-md` | `px-control-md` (padding de botón) |
 | `control.icon` | `--spacing-control-icon` | `size-control-icon` (botón de icono 42×42) |
 | `gradient[modo].hero` | `--gradient-hero` | `degradado-hero` (utilidad, sigue el modo) |

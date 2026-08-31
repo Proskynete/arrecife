@@ -21,7 +21,7 @@ const OPCIONES = [
 const grupo = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   <RadioGroup {...args}>
     {OPCIONES.map(({ valor, texto }) => (
-      <div key={valor} className="gap-sm flex items-center">
+      <div key={valor} className="gap-step-sm flex items-center">
         <RadioGroupItem value={valor} id={valor} />
         <Etiqueta htmlFor={valor}>{texto}</Etiqueta>
       </div>

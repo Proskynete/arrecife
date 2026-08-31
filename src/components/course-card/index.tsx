@@ -30,8 +30,8 @@ export function CourseCard({
   ...props
 }: CourseCardProps) {
   return (
-    <Tarjeta className={cn('p-lg', className)} {...props}>
-      <article className="gap-sm flex h-full flex-col">
+    <Tarjeta className={cn('p-step-lg', className)} {...props}>
+      <article className="gap-step-sm flex h-full flex-col">
         {status ? (
           <div>
             <Badge variant="warm">{status}</Badge>
@@ -49,9 +49,9 @@ export function CourseCard({
         ) : null}
 
         {meta && meta.length > 0 ? (
-          <Text variant="label" tone="muted" as="p" className="gap-xs flex flex-wrap items-center">
+          <Text variant="label" tone="muted" as="p" className="gap-step-xs flex flex-wrap items-center">
             {meta.map((m, i) => (
-              <span key={i} className="gap-xs flex items-center">
+              <span key={i} className="gap-step-xs flex items-center">
                 {i > 0 ? <span aria-hidden="true">·</span> : null}
                 {m}
               </span>
@@ -60,7 +60,7 @@ export function CourseCard({
         ) : null}
 
         {typeof progress === 'number' ? (
-          <div className="gap-xs mt-auto flex flex-col pt-sm">
+          <div className="gap-step-xs mt-auto flex flex-col pt-step-sm">
             <Progress value={progress} tone="warm" label={`Progreso del curso: ${progress}%`} />
             <Text variant="label" tone="muted" as="p">
               {progress}% cursado

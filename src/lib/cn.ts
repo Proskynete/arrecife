@@ -18,11 +18,16 @@ import { control, radius, spacing, typeScale } from '../tokens/tokens.ts';
  * porque aquí no hay nada que añadir. La dirección de la dependencia es la de
  * siempre: `lib/` puede importar tokens, los tokens no importan nada.
  */
+
+/** camelCase → kebab-case, igual que en `scripts/build-tokens.mjs`. */
+const kebab = (nombre: string) => nombre.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+
 const escalas = Object.keys(typeScale);
 const radios = Object.keys(radius);
-const espacios = Object.keys(spacing);
+/** `spacing.stepMd` se emite como `--spacing-step-md` → `p-step-md`. */
+const espacios = Object.keys(spacing).map(kebab);
 /** `control.md` se emite como `--spacing-control-md` → `px-control-md`. */
-const controles = Object.keys(control).map((nombre) => `control-${nombre}`);
+const controles = Object.keys(control).map((nombre) => `control-${kebab(nombre)}`);
 
 const twMerge = extendTailwindMerge({
   extend: {

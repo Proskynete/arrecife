@@ -13,7 +13,7 @@ export const Tarjeta: Story = {
   render: () => (
     <>
       <Pila>
-        <Card className="p-lg gap-sm flex flex-col">
+        <Card className="p-step-lg gap-step-sm flex flex-col">
           <Skeleton className="h-3 w-24" />
           <Skeleton className="h-6 w-3/4" />
           <Skeleton className="h-4 w-full" />
@@ -40,7 +40,7 @@ export const Quieto: Story = {
   render: () => (
     <>
       <Pila>
-        <div className="gap-xs flex flex-col">
+        <div className="gap-step-xs flex flex-col">
           {Array.from({ length: 6 }, (_, i) => (
             <Skeleton key={i} still className="h-9 w-full" />
           ))}

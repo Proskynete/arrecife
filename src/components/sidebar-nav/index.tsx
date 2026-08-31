@@ -36,7 +36,7 @@ export function SidebarItem({
       <Raiz
         aria-current={active ? 'page' : undefined}
         className={cn(
-          'rounded-chip px-sm gap-xs flex cursor-pointer items-center py-1.5',
+          'rounded-chip px-step-sm gap-step-xs flex cursor-pointer items-center py-1.5',
           'font-mono text-meta transition-standard',
           'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
           // El activo es fondo `surfaceRaised` y tinta primaria, igual que
@@ -83,13 +83,13 @@ export function SidebarNav({
     <nav
       aria-label={typeof title === 'string' ? title : 'Administración'}
       className={cn(
-        'border-hairline bg-surface p-sm gap-sm flex h-full flex-col border-r',
+        'border-hairline bg-surface p-step-sm gap-step-sm flex h-full flex-col border-r',
         className,
       )}
       {...props}
     >
       {title ? (
-        <Text variant="eyebrow" tone="muted" as="p" className="px-sm">
+        <Text variant="eyebrow" tone="muted" as="p" className="px-step-sm">
           {title}
         </Text>
       ) : null}
@@ -97,7 +97,7 @@ export function SidebarNav({
       <ul className="gap-0.5 flex flex-1 flex-col">{children}</ul>
 
       {pie.length > 0 ? (
-        <Text variant="meta" tone="muted" as="p" className="border-hairline px-sm pt-sm border-t">
+        <Text variant="meta" tone="muted" as="p" className="border-hairline px-step-sm pt-step-sm border-t">
           {pie.map((p, i) => (
             <span key={i}>
               {i > 0 ? <span aria-hidden="true"> · </span> : null}

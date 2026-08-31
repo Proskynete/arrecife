@@ -81,7 +81,7 @@ export const DosEscalas: Story = {
   name: 'Las dos escalas',
   args: { title: 'Escalar con criterio' },
   render: () => (
-    <div className="gap-lg flex flex-col">
+    <div className="gap-step-lg flex flex-col">
       <PageHeader size="display" eyebrow="portada" title="Escalar con criterio" as="h1" />
       <PageHeader size="page" eyebrow="sección" title="Escalar con criterio" as="h2" />
       <Nota>

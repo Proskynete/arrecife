@@ -41,12 +41,12 @@ export function ArticleCard({
   ].filter(Boolean);
 
   return (
-    <Tarjeta className={cn('p-lg', className)} {...props}>
-      <article className="gap-sm flex h-full flex-col">
+    <Tarjeta className={cn('p-step-lg', className)} {...props}>
+      <article className="gap-step-sm flex h-full flex-col">
         {meta.length > 0 ? (
-          <Text variant="meta" tone="muted" as="p" className="gap-xs flex items-center">
+          <Text variant="meta" tone="muted" as="p" className="gap-step-xs flex items-center">
             {meta.map((m, i) => (
-              <span key={i} className="gap-xs flex items-center">
+              <span key={i} className="gap-step-xs flex items-center">
                 {i > 0 ? <span aria-hidden="true">·</span> : null}
                 {m}
               </span>
@@ -65,7 +65,7 @@ export function ArticleCard({
         ) : null}
 
         {tags && tags.length > 0 ? (
-          <div className="gap-xs mt-auto flex flex-wrap pt-sm">
+          <div className="gap-step-xs mt-auto flex flex-wrap pt-step-sm">
             {tags.map((t) => (
               <CategoryBadge key={t}>{t}</CategoryBadge>
             ))}

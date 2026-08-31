@@ -17,7 +17,7 @@ const panel = [
 ];
 
 const item = [
-  'rounded-chip px-sm relative flex h-9 cursor-default items-center gap-2 select-none',
+  'rounded-chip px-step-sm relative flex h-9 cursor-default items-center gap-2 select-none',
   'text-ui text-text-secondary transition-standard',
   'data-[highlighted]:bg-surface data-[highlighted]:text-text-primary',
   'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
@@ -83,7 +83,7 @@ export function DropdownMenuLabel({
 }: ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>) {
   return (
     <DropdownMenuPrimitive.Label
-      className={cn('px-sm text-eyebrow font-mono text-text-secondary py-1.5 uppercase', className)}
+      className={cn('px-step-sm text-eyebrow font-mono text-text-secondary py-1.5 uppercase', className)}
       {...props}
     />
   );

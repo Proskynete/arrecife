@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
 
 const control = (args: Parameters<NonNullable<Story['render']>>[0], disabled = false) => (
   <Pila>
-    <div className="gap-xs flex flex-col">
+    <div className="gap-step-xs flex flex-col">
       <span id="velocidad-etiqueta" className="text-label font-sans text-text-secondary">
         Velocidad
       </span>

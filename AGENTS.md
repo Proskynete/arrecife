@@ -283,6 +283,60 @@ docs(readme): la tercera corrección de contraste
 `components`, `brand`, `og`, `shiki`, `storybook`, `a11y`, `deps`,
 `deps-dev`, `ci`.
 
+Las ramas siguen el mismo vocabulario que el commit:
+`tipo/descripcion-en-espanol-con-guiones` — `feat/espaciado-con-prefijo-step`,
+`fix/ambito-deps-dev`, `docs/documentos-para-agentes`.
+
+### Cómo se sube la versión
+
+**No edites nunca `version` en `package.json` ni `CHANGELOG.md`.** Tampoco
+`.release-please-manifest.json`. Los tres los escribe release-please, y editarlos
+a mano descuadra el manifiesto contra el tag: el workflow de release compara los
+dos y se corta.
+
+La versión **se pide desde el mensaje del commit**, y es lo único que la decide:
+
+| Lo que escribes en el commit | Lo que sale |
+| ---------------------------- | ----------- |
+| `fix(...)`, `perf(...)`      | patch · `0.2.0` → `0.2.1` |
+| `feat(...)`                  | minor · `0.2.0` → `0.3.0` |
+| `feat(...)!` + footer `BREAKING CHANGE:` | minor · `0.2.0` → `0.3.0` |
+| `docs`, `ci`, `chore`, `test`, `style`, `refactor` | nada, no corta versión |
+
+`release-please-config.json` tiene `bump-minor-pre-major: true`, así que mientras
+estemos en `0.x` **un cambio incompatible sube la minor, no la major**. El `!` y
+el footer siguen siendo obligatorios: no cambian el número, pero son lo que hace
+que el CHANGELOG lo anuncie como ruptura en vez de esconderlo entre novedades.
+
+Un cambio incompatible se escribe así, y **el footer es el texto que acaba en el
+`CHANGELOG.md`**: es el único sitio donde se explica la migración, así que se
+escribe para quien la va a hacer, no para quien la hizo. Qué renombrar, qué deja
+de funcionar en silencio y qué hay que revisar después.
+
+```
+feat(tokens)!: el ritmo de página lleva step, para no comerse max-w-*
+
+<el porqué, como en cualquier commit del repo>
+
+BREAKING CHANGE: los cinco escalones de espaciado se renombran. Los valores no
+cambian ni un píxel.
+
+| Antes          | Ahora               |
+| -------------- | ------------------- |
+| `--spacing-md` | `--spacing-step-md` |
+
+Un `p-md` sin migrar NO da error: cae en la escala numérica y no hace nada.
+```
+
+Todo lo que va después de `BREAKING CHANGE:` se copia al CHANGELOG hasta el
+siguiente pie de página, así que los `Co-Authored-By:` y demás van al final del
+todo, nunca en medio.
+
+Si la migración no cabe en un footer, va a un documento en `docs/` y el footer lo
+enlaza — `docs/migracion-0.3.md` es el precedente. El CHANGELOG no existe hasta
+que se corta la release; el documento sí, y es lo que se puede enlazar desde el
+README mientras tanto.
+
 **No publiques a npm a mano.** El workflow publica con OIDC y genera procedencia.
 
 ## Errores que se cometen en este repo

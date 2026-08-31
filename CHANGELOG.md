@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.4.0](https://github.com/Proskynete/arrecife/compare/v0.3.0...v0.4.0) (2026-08-31)
+
+
+### 🚀 Novedades
+
+* **components:** ScrollingProgressBar y las cinco ranuras que faltaban ([52325cc](https://github.com/Proskynete/arrecife/commit/52325ccff7eedbda39d449c98386668df7a518bf))
+* **form:** la capa de formulario y el chasis de gráficas, en su subruta ([4a40857](https://github.com/Proskynete/arrecife/commit/4a40857e9e9efc8bbe4011bf72f6313347c97541))
+* **primitives:** Accordion, AlertDialog y el Toast imperativo ([239120d](https://github.com/Proskynete/arrecife/commit/239120d510ea395159719581ef69c26734d82441))
+* **tema:** el modo claro y oscuro, sin parpadeo y sin React ([c99995c](https://github.com/Proskynete/arrecife/commit/c99995c8eae6313ece6ffdcf927d9120f6050866))
+* **tokens:** la paleta de series de gráfica, cuatro colores por tono ([b660a30](https://github.com/Proskynete/arrecife/commit/b660a30376c794be82f6a11808d9de175a31d5d9))
+
+
+### 🐛 Correcciones
+
+* **ci:** check:exports no veía React dentro de un chunk ([3354ab1](https://github.com/Proskynete/arrecife/commit/3354ab12feb867a81480e1c3b612280c40f765ad))
+
+
+### 📚 Documentación
+
+* los dos requisitos de consumo que no dan ningún error ([0a3a7fd](https://github.com/Proskynete/arrecife/commit/0a3a7fd71124aa2dafa3b70df4a90f8fd080544d))
+* main está protegida y así se trabaja con ella ([a625a49](https://github.com/Proskynete/arrecife/commit/a625a499ba871ebf7f13a8f7f0cc9f7fbfff17fc))
+* mergear saltándose la regla se pide, no pasa solo ([c3aca08](https://github.com/Proskynete/arrecife/commit/c3aca08d3926885edea1f500200f0a7496ab13bb))
+
 ## [0.3.0](https://github.com/Proskynete/arrecife/compare/v0.2.0...v0.3.0) (2026-08-31)
 
 

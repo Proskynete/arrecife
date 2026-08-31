@@ -101,7 +101,7 @@ export const Banner: Story = {
 export const Controles: Story = {
   args: { mode: 'full' },
   render: (args) => (
-    <div className="gap-lg flex flex-col">
+    <div className="gap-step-lg flex flex-col">
       <Bloque titulo="lo que se conserva del original">
         <AudioPlayer {...args} />
       </Bloque>

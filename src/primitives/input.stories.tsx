@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 const conEtiqueta = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   <Pila>
-    <div className="gap-xs flex flex-col">
+    <div className="gap-step-xs flex flex-col">
       <Etiqueta htmlFor="correo">Correo</Etiqueta>
       <Input id="correo" {...args} />
     </div>

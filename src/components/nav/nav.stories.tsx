@@ -20,7 +20,7 @@ const SECCIONES = ['artículos', 'cursos', 'charlas', 'sobre-mí'] as const;
 export const Basico: Story = {
   name: 'Básico',
   render: () => (
-    <div className="-m-lg">
+    <div className="-m-step-lg">
       <Nav
         brand={<Logo sobre="oscuro" className="h-7" />}
         actions={<Button variant="conversion">Agenda una llamada</Button>}
@@ -32,7 +32,7 @@ export const Basico: Story = {
         ))}
       </Nav>
 
-      <div className="px-md py-section max-w-wide mx-auto">
+      <div className="px-step-md py-section max-w-wide mx-auto">
         <Text variant="body" tone="secondary" measure>
           Baja la página para ver el desenfoque. La barra es abismo al 86 % con
           14px de desenfoque detrás, y el alfa va sobre el token, así que en modo
@@ -47,7 +47,7 @@ export const Basico: Story = {
 export const Formato: Story = {
   name: 'El ./ lo pone el componente',
   render: () => (
-    <div className="-m-lg">
+    <div className="-m-step-lg">
       <Nav brand={<Logo sobre="oscuro" className="h-7" />}>
         {SECCIONES.map((s) => (
           <NavItem key={s} href={`/${s}`} active={s === 'cursos'}>
@@ -55,7 +55,7 @@ export const Formato: Story = {
           </NavItem>
         ))}
       </Nav>
-      <div className="p-lg">
+      <div className="p-step-lg">
         <Nota>
           Quien usa el componente escribe `artículos`, no `./artículos`. Es la
           misma decisión que el botón terciario: el formato es parte de la pieza y

@@ -43,13 +43,13 @@ function iniciales(nombre: string) {
 
 export function AuthorCard({ name, role, src, bio, action, className, ...props }: AuthorCardProps) {
   return (
-    <div className={cn(SUPERFICIE_TARJETA, 'p-lg gap-md flex items-start', className)} {...props}>
+    <div className={cn(SUPERFICIE_TARJETA, 'p-step-lg gap-step-md flex items-start', className)} {...props}>
       <Avatar className={cn(AVATAR, 'shrink-0')}>
         {src ? <AvatarImage src={src} alt="" /> : null}
         <AvatarFallback>{iniciales(name)}</AvatarFallback>
       </Avatar>
 
-      <div className="gap-xs flex min-w-0 flex-1 flex-col">
+      <div className="gap-step-xs flex min-w-0 flex-1 flex-col">
         <Text variant="ui" as="p" className="font-medium">
           {name}
         </Text>
@@ -61,12 +61,12 @@ export function AuthorCard({ name, role, src, bio, action, className, ...props }
         ) : null}
 
         {bio ? (
-          <Text variant="ui" tone="secondary" className="mt-xs">
+          <Text variant="ui" tone="secondary" className="mt-step-xs">
             {bio}
           </Text>
         ) : null}
 
-        {action ? <div className="mt-xs gap-sm flex flex-wrap items-center">{action}</div> : null}
+        {action ? <div className="mt-step-xs gap-step-sm flex flex-wrap items-center">{action}</div> : null}
       </div>
     </div>
   );

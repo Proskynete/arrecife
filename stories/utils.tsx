@@ -5,17 +5,17 @@ import { Text } from '../src/primitives/typography.tsx';
 /** Andamiaje compartido de las stories. No forma parte de la API pública. */
 
 export function Fila({ children }: { children: ReactNode }) {
-  return <div className="gap-md flex flex-wrap items-center">{children}</div>;
+  return <div className="gap-step-md flex flex-wrap items-center">{children}</div>;
 }
 
 export function Pila({ children }: { children: ReactNode }) {
-  return <div className="gap-md flex max-w-content flex-col">{children}</div>;
+  return <div className="gap-step-md flex max-w-content flex-col">{children}</div>;
 }
 
 export function Bloque({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
-    <section className="mb-lg">
-      <Text variant="eyebrow" tone="muted" className="mb-sm">
+    <section className="mb-step-lg">
+      <Text variant="eyebrow" tone="muted" className="mb-step-sm">
         {titulo}
       </Text>
       {children}
@@ -25,7 +25,7 @@ export function Bloque({ titulo, children }: { titulo: string; children: ReactNo
 
 export function Nota({ children }: { children: ReactNode }) {
   return (
-    <Text variant="ui" tone="secondary" measure className="mt-sm">
+    <Text variant="ui" tone="secondary" measure className="mt-step-sm">
       {children}
     </Text>
   );

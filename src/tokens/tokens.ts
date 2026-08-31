@@ -194,12 +194,34 @@ export const control = {
   icon: 42,
 } as const;
 
+/**
+ * El ritmo de página. Los cinco escalones llevan `step` en el nombre, y no es
+ * decoración: es la corrección de un bug que no dio la cara en ningún sitio.
+ *
+ * En Tailwind v4, `--spacing-*` no alimenta solo `p-*`, `m-*` y `gap-*`:
+ * también resuelve `w-*`, `h-*`, `max-w-*`, `min-w-*`, `basis-*` y `size-*`, y
+ * ahí GANA a la escala `--container-*`. Los escalones se llamaban `xs, sm, md,
+ * lg, xl`, que son exactamente los nombres de esa escala, así que cualquier
+ * proyecto que importara `theme.css` se quedaba con `max-w-sm` valiendo 12px en
+ * vez de 384px. Nada avisaba: ni el build, ni los tipos, ni Storybook, ni la
+ * suite —la librería no usa esas utilidades por dentro—. Se descubrió en
+ * producción, con el párrafo de un hero a una palabra por línea.
+ *
+ * Redeclarar `--container-sm` NO lo arregla: `--spacing-*` gana la resolución.
+ * La única salida es que la librería no use esos nombres.
+ *
+ * El prefijo sigue el patrón que ya tenía `control`: un grupo con nombre propio
+ * dentro del espacio `--spacing-*`. `scripts/check-tokens-namespace.mjs` impide
+ * la recaída.
+ *
+ * `section` no lleva prefijo porque no choca con nada de Tailwind.
+ */
 export const spacing = {
-  xs: 8,
-  sm: 12,
-  md: 16,
-  lg: 26,
-  xl: 40,
+  stepXs: 8,
+  stepSm: 12,
+  stepMd: 16,
+  stepLg: 26,
+  stepXl: 40,
   section: 96,
 } as const;
 

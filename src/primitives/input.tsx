@@ -13,7 +13,7 @@ export function Input({ className, invalid = false, ...props }: InputProps) {
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}
       className={cn(
-        'h-10 w-full px-sm',
+        'h-10 w-full px-step-sm',
         'rounded-control border border-border bg-surface',
         'font-sans text-ui text-text-primary placeholder:text-text-muted',
         'transition-standard',
@@ -21,7 +21,7 @@ export function Input({ className, invalid = false, ...props }: InputProps) {
         'focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[invalid]:border-error data-[invalid]:focus-visible:outline-error',
-        'file:mr-sm file:border-0 file:bg-transparent file:font-sans file:text-label file:text-text-secondary',
+        'file:mr-step-sm file:border-0 file:bg-transparent file:font-sans file:text-label file:text-text-secondary',
         className,
       )}
       {...props}

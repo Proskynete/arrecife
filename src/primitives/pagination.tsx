@@ -15,7 +15,7 @@ export function Pagination({ className, ...props }: ComponentPropsWithoutRef<'na
 }
 
 export function PaginationContent({ className, ...props }: ComponentPropsWithoutRef<'ul'>) {
-  return <ul className={cn('gap-xs flex flex-row items-center', className)} {...props} />;
+  return <ul className={cn('gap-step-xs flex flex-row items-center', className)} {...props} />;
 }
 
 export function PaginationItem(props: ComponentPropsWithoutRef<'li'>) {
@@ -29,7 +29,7 @@ export function PaginationLink({ className, isActive = false, ...props }: Pagina
     <a
       aria-current={isActive ? 'page' : undefined}
       className={cn(
-        'rounded-chip px-sm inline-flex h-9 min-w-9 cursor-pointer items-center justify-center',
+        'rounded-chip px-step-sm inline-flex h-9 min-w-9 cursor-pointer items-center justify-center',
         'font-sans text-ui text-text-secondary',
         'transition-standard',
         'hover:bg-surface hover:text-text-primary',
@@ -44,7 +44,7 @@ export function PaginationLink({ className, isActive = false, ...props }: Pagina
 
 export function PaginationPrevious({ className, ...props }: PaginationLinkProps) {
   return (
-    <PaginationLink aria-label="Página anterior" className={cn('gap-xs', className)} {...props}>
+    <PaginationLink aria-label="Página anterior" className={cn('gap-step-xs', className)} {...props}>
       <ChevronLeft />
       Anterior
     </PaginationLink>
@@ -53,7 +53,7 @@ export function PaginationPrevious({ className, ...props }: PaginationLinkProps)
 
 export function PaginationNext({ className, ...props }: PaginationLinkProps) {
   return (
-    <PaginationLink aria-label="Página siguiente" className={cn('gap-xs', className)} {...props}>
+    <PaginationLink aria-label="Página siguiente" className={cn('gap-step-xs', className)} {...props}>
       Siguiente
       <ChevronRight />
     </PaginationLink>

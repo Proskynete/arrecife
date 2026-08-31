@@ -37,7 +37,7 @@ export function DateField({
       data-invalid={invalid || undefined}
       aria-invalid={invalid || undefined}
       className={cn(
-        'px-sm h-10 w-full',
+        'px-step-sm h-10 w-full',
         'rounded-control border-border bg-surface border',
         'font-mono text-ui text-text-primary',
         'transition-standard',

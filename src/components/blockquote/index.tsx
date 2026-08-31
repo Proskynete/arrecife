@@ -20,7 +20,7 @@ export type BlockquoteProps = Omit<ComponentPropsWithoutRef<'blockquote'>, 'cite
 export function Blockquote({ children, author, source, className, ...props }: BlockquoteProps) {
   return (
     <blockquote
-      className={cn('border-accent pl-md my-lg border-l-2', className)}
+      className={cn('border-accent pl-step-md my-step-lg border-l-2', className)}
       {...props}
     >
       <Text variant="body" tone="secondary">
@@ -28,7 +28,7 @@ export function Blockquote({ children, author, source, className, ...props }: Bl
       </Text>
 
       {author || source ? (
-        <footer className="mt-sm">
+        <footer className="mt-step-sm">
           <Text variant="label" tone="muted" as="span">
             {author ? <cite className="not-italic">{author}</cite> : null}
             {author && source ? ' · ' : null}

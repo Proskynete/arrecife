@@ -9,7 +9,7 @@ type Story = StoryObj<typeof meta>;
 
 const pista = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   <TooltipProvider>
-    <div className="py-xl flex justify-center">
+    <div className="py-step-xl flex justify-center">
       <Tooltip {...args}>
         <TooltipTrigger asChild>
           <Button variant="secondary">Retroceder 15s</Button>

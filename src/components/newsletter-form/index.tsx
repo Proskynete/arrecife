@@ -75,12 +75,12 @@ export function NewsletterForm({
   return (
     <section
       className={cn(
-        'degradado-seccion rounded-panel border-hairline p-lg gap-md flex flex-col border',
+        'degradado-seccion rounded-panel border-hairline p-step-lg gap-step-md flex flex-col border',
         className,
       )}
       {...props}
     >
-      <div className="gap-xs flex flex-col">
+      <div className="gap-step-xs flex flex-col">
         <Text as="h2" variant="h3">
           {title}
         </Text>
@@ -91,8 +91,8 @@ export function NewsletterForm({
         ) : null}
       </div>
 
-      <form onSubmit={enviar} className="gap-sm flex flex-col sm:flex-row sm:items-end" noValidate>
-        <div className="gap-xs flex flex-1 flex-col">
+      <form onSubmit={enviar} className="gap-step-sm flex flex-col sm:flex-row sm:items-end" noValidate>
+        <div className="gap-step-xs flex flex-1 flex-col">
           <Label htmlFor={id}>{fieldLabel}</Label>
           <Input
             id={id}
@@ -132,7 +132,7 @@ export function NewsletterForm({
       ) : null}
 
       {disclaimer ? (
-        <div className="gap-sm flex items-center">
+        <div className="gap-step-sm flex items-center">
           {expresion ? (
             <CaraDeMascota expresion={expresion} basePath={basePath} className="w-10 max-w-none" />
           ) : null}

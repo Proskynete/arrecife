@@ -26,7 +26,7 @@ export const Horizontal: Story = {
 
 export const Vertical: Story = {
   render: () => (
-    <div className="gap-sm flex h-8 items-center">
+    <div className="gap-step-sm flex h-8 items-center">
       <Text variant="label" tone="secondary">2025</Text>
       <Separator orientation="vertical" />
       <Text variant="label" tone="secondary">8 min</Text>

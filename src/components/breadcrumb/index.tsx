@@ -55,13 +55,13 @@ export function Breadcrumb({
 
   return (
     <nav aria-label="Ruta" className={cn('font-mono text-meta text-text-muted', className)} {...props}>
-      <ol className="gap-xs flex flex-wrap items-center">
+      <ol className="gap-step-xs flex flex-wrap items-center">
         <li>{enlace(homeHref, <span aria-label={homeLabel}>~</span>)}</li>
 
         {items.map((item, i) => {
           const ultimo = i === items.length - 1;
           return (
-            <li key={i} className="gap-xs flex items-center">
+            <li key={i} className="gap-step-xs flex items-center">
               <span aria-hidden="true" className="text-border">
                 /
               </span>

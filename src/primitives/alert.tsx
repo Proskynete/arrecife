@@ -49,7 +49,7 @@ import { cn } from '../lib/cn.ts';
  * sistema. Usa el de tarjeta antes que estrenar un sexto — ver
  * `docs/decisiones.md`.
  */
-const alert = cva('w-full rounded-card border p-md font-sans text-ui', {
+const alert = cva('w-full rounded-card border p-step-md font-sans text-ui', {
   variants: {
     variant: {
       accent: 'text-text-secondary',
@@ -122,7 +122,7 @@ export function Alert({
       className={cn(alert({ variant, enfasis }), className)}
       {...props}
     >
-      <div className="gap-sm flex items-start">
+      <div className="gap-step-sm flex items-start">
         <span
           aria-hidden="true"
           className={cn('font-mono text-ui leading-normal select-none', glifoColor[tono])}
@@ -132,7 +132,7 @@ export function Alert({
 
         <div className="min-w-0 flex-1">
           {title ? (
-            <p className="mb-xs text-text-primary font-medium">{title}</p>
+            <p className="mb-step-xs text-text-primary font-medium">{title}</p>
           ) : null}
           {children ? <div className="max-w-measure">{children}</div> : null}
         </div>

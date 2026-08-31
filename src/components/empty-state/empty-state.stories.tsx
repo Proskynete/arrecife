@@ -48,7 +48,7 @@ export const DelDocumento: Story = {
   name: 'Los cuatro del documento',
   render: () => (
     <>
-      <div className="gap-md grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
+      <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
         <EmptyState
           expresion="confused"
           title="404 · aguas desconocidas"

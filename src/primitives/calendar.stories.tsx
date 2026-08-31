@@ -61,8 +61,8 @@ export const DosMeses: Story = {
 export const AnchoCompleto: Story = {
   name: 'Ancho completo',
   render: () => (
-    <div className="gap-lg flex flex-col">
-      <div className="border-hairline rounded-card p-md border">
+    <div className="gap-step-lg flex flex-col">
+      <div className="border-hairline rounded-card p-step-md border">
         <Calendar fullWidth mode="single" selected={DIA} defaultMonth={MES} />
       </div>
       <Nota>
@@ -78,7 +78,7 @@ export const AnchoCompleto: Story = {
 export const AnchoCompletoDosMeses: Story = {
   name: 'Ancho completo, dos meses',
   render: () => (
-    <div className="border-hairline rounded-card p-md border">
+    <div className="border-hairline rounded-card p-step-md border">
       <Calendar fullWidth mode="range" numberOfMonths={2} defaultMonth={MES}
         selected={{ from: new Date(2026, 2, 9), to: new Date(2026, 3, 2) }} />
     </div>
@@ -94,7 +94,7 @@ function SelectorDeFecha() {
           {fecha ? fecha.toLocaleDateString('es') : 'Elegir fecha'}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" aria-label="Elegir fecha" className="w-auto p-sm">
+      <PopoverContent align="start" aria-label="Elegir fecha" className="w-auto p-step-sm">
         <Calendar mode="single" selected={fecha} onSelect={setFecha} defaultMonth={MES} />
       </PopoverContent>
     </Popover>

@@ -41,7 +41,7 @@ function aReact(nodo: NodoSatori | string | null | undefined | false, clave?: nu
 function Lienzo({ titulo, nodo }: { titulo: string; nodo: NodoSatori }) {
   return (
     <figure className="mb-section">
-      <Text variant="eyebrow" tone="muted" as="figcaption" className="mb-sm">
+      <Text variant="eyebrow" tone="muted" as="figcaption" className="mb-step-sm">
         {titulo} · {OG.width}×{OG.height}
       </Text>
       {/* Se escala a la mitad para que quepan las cuatro sin desplazarse. El
@@ -71,8 +71,8 @@ function Lienzo({ titulo, nodo }: { titulo: string; nodo: NodoSatori }) {
 export const Todas: StoryObj = {
   name: 'Las cuatro',
   render: () => (
-    <div className="bg-background text-text-primary font-sans px-xl py-xl min-h-screen">
-      <Text as="h1" variant="h2" className="mb-sm">
+    <div className="bg-background text-text-primary font-sans px-step-xl py-step-xl min-h-screen">
+      <Text as="h1" variant="h2" className="mb-step-sm">
         Plantillas OG
       </Text>
       <Text variant="body" tone="secondary" className="mb-section">

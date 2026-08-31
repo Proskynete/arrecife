@@ -37,18 +37,18 @@ export function Nav({ brand, children, actions, className, ...props }: NavProps)
       )}
       {...props}
     >
-      <div className="max-w-wide px-md h-nav gap-lg mx-auto flex items-center">
+      <div className="max-w-wide px-step-md h-nav gap-step-lg mx-auto flex items-center">
         {brand ? <div className="shrink-0">{brand}</div> : null}
 
         {children ? (
           <nav aria-label="Principal" className="min-w-0 flex-1">
-            <ul className="gap-md flex items-center">{children}</ul>
+            <ul className="gap-step-md flex items-center">{children}</ul>
           </nav>
         ) : (
           <div className="flex-1" />
         )}
 
-        {actions ? <div className="gap-sm flex shrink-0 items-center">{actions}</div> : null}
+        {actions ? <div className="gap-step-sm flex shrink-0 items-center">{actions}</div> : null}
       </div>
     </header>
   );

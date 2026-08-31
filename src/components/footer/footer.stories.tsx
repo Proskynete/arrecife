@@ -31,10 +31,10 @@ const REDES = [
 export const Basico: Story = {
   name: 'Básico',
   render: () => (
-    <div className="-m-lg">
+    <div className="-m-step-lg">
       <Footer social={REDES} />
 
-      <div className="p-lg">
+      <div className="p-step-lg">
         <Nota>
           Solo iconos, sin texto de red al lado. Iconos a 19px en plancton,
           separación de 18px y hover en bioluz. El `aria-label` es lo que
@@ -64,9 +64,9 @@ export const Basico: Story = {
 export const Iconos: Story = {
   name: 'Los ocho iconos',
   render: () => (
-    <div className="p-lg gap-lg flex flex-wrap items-center text-[28px]">
+    <div className="p-step-lg gap-step-lg flex flex-wrap items-center text-[28px]">
       {REDES.map((r) => (
-        <span key={r.label} className="text-text-muted gap-sm flex items-center">
+        <span key={r.label} className="text-text-muted gap-step-sm flex items-center">
           {r.icon}
           <span className="text-meta font-mono">{r.label}</span>
         </span>

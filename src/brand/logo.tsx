@@ -28,7 +28,7 @@ export function Logo({
   ...props
 }: LogoProps) {
   return (
-    <span className={cn('gap-xs inline-flex items-center', className)} {...props}>
+    <span className={cn('gap-step-xs inline-flex items-center', className)} {...props}>
       <Isotipo
         sobre={sobre}
         basePath={basePath}

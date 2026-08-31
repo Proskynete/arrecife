@@ -43,6 +43,13 @@ jobs:
       - name: 🔒 Verificar la pureza de los tokens
         run: pnpm check:tokens
 
+      # El nombre de la custom property ES la API de Tailwind v4. `--spacing-md`
+      # se comía `max-w-md` en los cinco proyectos y no lo detectó nada: la
+      # librería no usa `max-w-*` por dentro, así que el fallo solo existía
+      # aguas abajo y sin un solo error en consola.
+      - name: 🧱 Verificar que ningún token pisa a Tailwind
+        run: pnpm check:namespace
+
       # release-please ignora en silencio las claves que no conoce, así que una
       # configuración rota parece correcta hasta que el release no se corta.
       - name: 🏷️ Validar la configuración de release-please
@@ -80,6 +87,12 @@ jobs:
 
       - name: 🎨 Generar los tokens
         run: pnpm build:tokens
+
+      # Compila Tailwind de verdad contra `theme.css` y comprueba a qué resuelve
+      # cada utilidad. Es el hueco que dejaba la suite de stories: mide lo que
+      # la librería PUBLICA, no solo lo que la librería usa.
+      - name: 🧪 Regresión de tokens contra Tailwind
+        run: pnpm test:unidad
 
       # Monta cada story en un Chromium real y le pasa axe. Corre DOS veces,
       # una por modo: un color solo falla en uno de los dos, así que pasar en

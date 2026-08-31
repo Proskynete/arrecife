@@ -40,20 +40,20 @@ export function TableOfContents({
   ...props
 }: TableOfContentsProps) {
   return (
-    <nav aria-label={typeof title === 'string' ? title : 'En esta página'} className={cn('gap-sm flex flex-col', className)} {...props}>
+    <nav aria-label={typeof title === 'string' ? title : 'En esta página'} className={cn('gap-step-sm flex flex-col', className)} {...props}>
       <Text variant="eyebrow" tone="muted" as="p">
         {title}
       </Text>
 
-      <ul className="border-hairline gap-xs flex flex-col border-l">
+      <ul className="border-hairline gap-step-xs flex flex-col border-l">
         {items.map((item) => {
           const activo = item.href === activeHref;
           const clases = cn(
-            'px-sm -ml-px block border-l',
+            'px-step-sm -ml-px block border-l',
             'font-sans text-label transition-standard',
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
             'cursor-pointer',
-            item.nested && 'pl-lg',
+            item.nested && 'pl-step-lg',
             activo
               ? 'border-accent text-accent'
               : 'border-transparent text-text-secondary hover:text-text-primary',

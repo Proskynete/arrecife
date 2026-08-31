@@ -15,7 +15,7 @@ export function ToastViewport({
   return (
     <ToastPrimitive.Viewport
       className={cn(
-        'gap-sm p-lg fixed right-0 bottom-0 z-50 flex max-h-screen w-full flex-col-reverse',
+        'gap-step-sm p-step-lg fixed right-0 bottom-0 z-50 flex max-h-screen w-full flex-col-reverse',
         'sm:max-w-[420px] sm:flex-col',
         className,
       )}
@@ -26,7 +26,7 @@ export function ToastViewport({
 
 const toast = cva(
   [
-    'gap-md p-md pr-10 relative flex w-full items-start justify-between',
+    'gap-step-md p-step-md pr-10 relative flex w-full items-start justify-between',
     'rounded-card border bg-surface shadow-standard',
     'font-sans text-ui text-text-secondary',
   ],

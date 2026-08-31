@@ -48,7 +48,7 @@ export function TableHead({ className, ...props }: ComponentPropsWithoutRef<'th'
   return (
     <th
       className={cn(
-        'px-sm h-10 text-left align-middle',
+        'px-step-sm h-10 text-left align-middle',
         'text-eyebrow font-mono text-text-muted uppercase',
         className,
       )}
@@ -59,10 +59,10 @@ export function TableHead({ className, ...props }: ComponentPropsWithoutRef<'th'
 
 export function TableCell({ className, ...props }: ComponentPropsWithoutRef<'td'>) {
   return (
-    <td className={cn('px-sm py-sm text-text-secondary align-middle', className)} {...props} />
+    <td className={cn('px-step-sm py-step-sm text-text-secondary align-middle', className)} {...props} />
   );
 }
 
 export function TableCaption({ className, ...props }: ComponentPropsWithoutRef<'caption'>) {
-  return <caption className={cn('mt-sm text-label text-text-muted', className)} {...props} />;
+  return <caption className={cn('mt-step-sm text-label text-text-muted', className)} {...props} />;
 }

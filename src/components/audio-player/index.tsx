@@ -212,7 +212,7 @@ function Volumen({
   onCambiarVolumen: (e: ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <div className="gap-xs hidden items-center sm:flex">
+    <div className="gap-step-xs hidden items-center sm:flex">
       <button
         type="button"
         onClick={onSilenciar}
@@ -491,8 +491,8 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
       />
 
       <div className="bg-surface/95 border-accent/25 border-t backdrop-blur-md">
-        <div className="gap-sm px-md flex items-center py-5">
-          <div className="gap-xs flex shrink-0 items-center">
+        <div className="gap-step-sm px-step-md flex items-center py-5">
+          <div className="gap-step-xs flex shrink-0 items-center">
             <Onda grosor="w-[2px]" alto="h-4" sonando={isPlaying} />
             <span className="text-eyebrow font-mono text-accent hidden uppercase sm:block">
               Narración
@@ -511,7 +511,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
           <div className="flex shrink-0 items-center gap-1">
             <BotonSalto segundos={-15} className="p-1.5" tamano="w-5 h-5" onSaltar={skip} />
             <BotonPlay
-              className="rounded-pill px-sm gap-xs flex items-center py-1.5"
+              className="rounded-pill px-step-sm gap-step-xs flex items-center py-1.5"
               tamano="w-4 h-4"
               etiqueta={etiquetaPlay}
               onAlternar={togglePlay}
@@ -536,7 +536,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
         <audio ref={audioRef} src={src} preload="metadata" />
 
         <div ref={staticRef}>
-          <div className="gap-sm mb-md flex items-center">
+          <div className="gap-step-sm mb-step-md flex items-center">
             <Onda grosor="w-[3px]" alto="h-5" sonando={isPlaying} />
             <span className="text-eyebrow font-mono text-accent uppercase">
               Narración de audio
@@ -546,14 +546,14 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
             </span>
           </div>
 
-          <div className="mb-md">
+          <div className="mb-step-md">
             <BarraProgreso alto="h-1.5" perilla={14} progreso={progress} {...puntero} />
           </div>
 
-          <div className="gap-sm flex items-center">
+          <div className="gap-step-sm flex items-center">
             <BotonSalto segundos={-15} className="p-2" tamano="w-6 h-6" onSaltar={skip} />
             <BotonPlay
-              className="rounded-pill px-lg gap-xs text-ui flex items-center py-2 font-medium"
+              className="rounded-pill px-step-lg gap-step-xs text-ui flex items-center py-2 font-medium"
               tamano="w-4 h-4"
               etiqueta={etiquetaPlay}
               texto={etiquetaPlay}
@@ -562,7 +562,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
             />
             <BotonSalto segundos={15} className="p-2" tamano="w-6 h-6" onSaltar={skip} />
 
-            <div className="gap-sm ml-auto flex items-center">
+            <div className="gap-step-sm ml-auto flex items-center">
               <BotonVelocidad
                 className="text-label px-2 py-1"
                 velocidad={playbackRate}
@@ -592,11 +592,11 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
         <audio ref={audioRef} src={src} preload="metadata" />
 
         <div ref={staticRef} className="w-full">
-          <div className="mb-xs">
+          <div className="mb-step-xs">
             <BarraProgreso alto="h-1.5" perilla={12} progreso={progress} {...puntero} />
           </div>
 
-          <div className="text-chip font-mono text-text-muted mb-sm flex justify-between">
+          <div className="text-chip font-mono text-text-muted mb-step-sm flex justify-between">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
@@ -629,24 +629,24 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
   /* ─── full · podcasts y páginas dedicadas ──────────────────────────────── */
   return (
-    <div className="bg-surface rounded-control border-border p-md w-full border">
+    <div className="bg-surface rounded-control border-border p-step-md w-full border">
       <audio ref={audioRef} src={src} preload="metadata" />
 
       {title ? (
-        <p className="text-ui font-sans text-text-secondary mb-sm truncate">{title}</p>
+        <p className="text-ui font-sans text-text-secondary mb-step-sm truncate">{title}</p>
       ) : null}
 
-      <div className="mb-sm">
+      <div className="mb-step-sm">
         <BarraProgreso alto="h-2" perilla={16} progreso={progress} {...puntero} />
       </div>
 
-      <div className="text-chip font-mono text-text-muted mb-sm flex justify-between">
+      <div className="text-chip font-mono text-text-muted mb-step-sm flex justify-between">
         <span>{formatTime(currentTime)}</span>
         <span>{formatTime(duration)}</span>
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="gap-xs flex items-center">
+        <div className="gap-step-xs flex items-center">
           <BotonSalto segundos={-15} className="p-2" tamano="w-5 h-5" onSaltar={skip} />
           <BotonPlay
             // 48px, del documento.
@@ -659,7 +659,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
           <BotonSalto segundos={15} className="p-2" tamano="w-5 h-5" onSaltar={skip} />
         </div>
 
-        <div className="gap-sm flex items-center">
+        <div className="gap-step-sm flex items-center">
           <BotonVelocidad
             className="text-label px-2 py-1"
             velocidad={playbackRate}

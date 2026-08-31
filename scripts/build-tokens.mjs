@@ -7,10 +7,15 @@
  *
  * Si algún día hay que volver a publicar el preset de v3 (portfolio sin migrar),
  * es añadir un emisor más abajo que lea el mismo `tokens`: la fuente no cambia.
+ *
+ * Exporta `themeCss` además de escribirlo. `check-tokens-namespace.mjs` y el
+ * test de regresión analizan EXACTAMENTE el CSS que se publica, sin volver a
+ * escribir las reglas de emisión por su cuenta: duplicarlas es cómo se coló el
+ * choque de `--spacing-*` con la escala `--container-*` de Tailwind.
  */
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const { tokens } = await import(resolve(root, 'src/tokens/index.ts'));
@@ -82,8 +87,11 @@ function bloqueForma() {
     lineas.push(`  --radius-${nombre}: ${px(valor)};`);
   }
   lineas.push('');
+  // `stepMd` sale como `--spacing-step-md` → `p-step-md`. El prefijo existe
+  // porque xs/sm/md/lg/xl son los nombres de la escala `--container-*` de
+  // Tailwind y se la comían: ver el comentario en `tokens.ts`.
   for (const [nombre, valor] of Object.entries(tokens.spacing)) {
-    lineas.push(`  --spacing-${nombre}: ${px(valor)};`);
+    lineas.push(`  --spacing-${kebab(nombre)}: ${px(valor)};`);
   }
   lineas.push('');
   // Los controles entran en la escala de espaciado con prefijo propio: dan
@@ -105,7 +113,7 @@ function bloqueForma() {
   return lineas.join('\n');
 }
 
-const themeCss = `${AVISO}
+export const themeCss = `${AVISO}
 
 /* El modo se elige con data-theme. El oscuro es el primario, así que es el
    default: un proyecto claro declara data-theme="light" en <html>. */
@@ -229,8 +237,11 @@ ${bloqueGradientes('light')}
 }
 `;
 
-const destino = resolve(root, 'dist/tokens/theme.css');
-await mkdir(dirname(destino), { recursive: true });
-await writeFile(destino, themeCss, 'utf8');
+// Solo escribe cuando se ejecuta como script. Importado, es una fuente de CSS.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const destino = resolve(root, 'dist/tokens/theme.css');
+  await mkdir(dirname(destino), { recursive: true });
+  await writeFile(destino, themeCss, 'utf8');
 
-console.log(`arrecife · tokens → ${destino.replace(`${root}/`, '')}`);
+  console.log(`arrecife · tokens → ${destino.replace(`${root}/`, '')}`);
+}

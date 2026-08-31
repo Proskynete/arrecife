@@ -16,7 +16,7 @@ export const Metricas: Story = {
   name: 'Métricas de charla',
   render: () => (
     <>
-      <div className="gap-md grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
+      <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
         <Stat value="12" label="aplicaciones" />
         <Stat value="4h 20m" label="duración" />
         <Stat value="0" label="design system" tone="alerta" />
@@ -34,7 +34,7 @@ export const Metricas: Story = {
 export const ConProgreso: Story = {
   name: 'Con progreso',
   render: () => (
-    <div className="gap-md grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+    <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
       <Stat value="38%" label="progreso del curso" progress={38} />
     </div>
   ),

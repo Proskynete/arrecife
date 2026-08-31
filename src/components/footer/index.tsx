@@ -44,8 +44,8 @@ export function Footer({
 }: FooterProps) {
   return (
     <footer className={cn('border-hairline w-full border-t', className)} {...props}>
-      <div className="max-w-wide px-md py-xl gap-lg mx-auto flex flex-col">
-        {children ? <div className="gap-md flex flex-wrap items-center">{children}</div> : null}
+      <div className="max-w-wide px-step-md py-step-xl gap-step-lg mx-auto flex flex-col">
+        {children ? <div className="gap-step-md flex flex-wrap items-center">{children}</div> : null}
 
         {social && social.length > 0 ? (
           // 18px de separación, del documento. No es un escalón de `spacing`:

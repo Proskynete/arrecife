@@ -28,7 +28,7 @@ export function Card({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
 }
 
 export function CardHeader({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn('gap-xs p-lg flex flex-col', className)} {...props} />;
+  return <div className={cn('gap-step-xs p-step-lg flex flex-col', className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: ComponentPropsWithoutRef<'h3'>) {
@@ -40,13 +40,13 @@ export function CardDescription({ className, ...props }: ComponentPropsWithoutRe
 }
 
 export function CardContent({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn('px-lg pb-lg', className)} {...props} />;
+  return <div className={cn('px-step-lg pb-step-lg', className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   return (
     <div
-      className={cn('border-hairline px-lg py-md gap-sm flex items-center border-t', className)}
+      className={cn('border-hairline px-step-lg py-step-md gap-step-sm flex items-center border-t', className)}
       {...props}
     />
   );

@@ -39,11 +39,11 @@ export default meta;
 function Seccion({ titulo, nota, children }: { titulo: string; nota?: ReactNode; children: ReactNode }) {
   return (
     <section className="mb-section">
-      <Text as="h2" variant="h2" className="mb-xs">
+      <Text as="h2" variant="h2" className="mb-step-xs">
         {titulo}
       </Text>
       {nota ? (
-        <Text variant="ui" tone="secondary" measure className="mb-lg">
+        <Text variant="ui" tone="secondary" measure className="mb-step-lg">
           {nota}
         </Text>
       ) : null}
@@ -78,10 +78,10 @@ function Ficha({
 
   return (
     <Card className="overflow-hidden">
-      <div data-theme={tema} className={`${fondo} p-md flex min-h-36 items-center justify-center`}>
+      <div data-theme={tema} className={`${fondo} p-step-md flex min-h-36 items-center justify-center`}>
         {children}
       </div>
-      <div className="border-hairline p-sm gap-xs flex flex-col border-t">
+      <div className="border-hairline p-step-sm gap-step-xs flex flex-col border-t">
         <Text variant="label" as="p">
           {nombre}
         </Text>
@@ -91,7 +91,7 @@ function Ficha({
         <Button
           size="sm"
           variant="tertiary"
-          className="mt-xs justify-start"
+          className="mt-step-xs justify-start"
           onClick={() => {
             void navigator.clipboard.writeText(codigo).then(
               () => setCopiado(true),
@@ -106,11 +106,11 @@ function Ficha({
   );
 }
 
-const rejilla = 'gap-md grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]';
+const rejilla = 'gap-step-md grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]';
 
 function Pagina({ children }: { children: ReactNode }) {
   return (
-    <div className="bg-background text-text-primary font-sans px-xl py-xl min-h-screen">
+    <div className="bg-background text-text-primary font-sans px-step-xl py-step-xl min-h-screen">
       <div className="max-w-wide mx-auto">{children}</div>
     </div>
   );
@@ -122,10 +122,10 @@ export const Todo: StoryObj = {
   name: 'Catálogo',
   render: () => (
     <Pagina>
-      <Text variant="eyebrow" tone="accent" as="p" className="mb-sm">
+      <Text variant="eyebrow" tone="accent" as="p" className="mb-step-sm">
         arrecife · marca
       </Text>
-      <Text as="h1" variant="h1" className="mb-md">
+      <Text as="h1" variant="h1" className="mb-step-md">
         Tiburoncín
       </Text>
       <Text variant="body" tone="secondary" className="mb-section">
@@ -226,12 +226,12 @@ export const Todo: StoryObj = {
         titulo="Cómo se consume"
         nota="Los nombres son un tipo, así que el autocompletado los ofrece y un nombre inventado no compila."
       >
-        <Card className="p-md gap-sm flex flex-col">
+        <Card className="p-step-md gap-step-sm flex flex-col">
           <Text variant="meta" tone="secondary" as="p">
             import {'{'} Logo, Mascota, CaraDeMascota, listaCaras {'}'} from
             &apos;@eduardoalvarez/arrecife/brand&apos;;
           </Text>
-          <div className="gap-xs flex flex-wrap">
+          <div className="gap-step-xs flex flex-wrap">
             {listaCaras.map((c: Cara) => (
               <MetricBadge key={c} boxed>
                 {c}

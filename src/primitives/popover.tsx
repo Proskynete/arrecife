@@ -33,7 +33,7 @@ export function PopoverContent({
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          'z-50 w-72 p-md',
+          'z-50 w-72 p-step-md',
           'rounded-panel border-border bg-surface-raised shadow-standard border',
           'text-text-primary font-sans text-ui',
           'outline-none',

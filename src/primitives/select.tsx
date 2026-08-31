@@ -16,7 +16,7 @@ export function SelectTrigger({
   return (
     <SelectPrimitive.Trigger
       className={cn(
-        'gap-sm px-sm flex h-10 w-full cursor-pointer items-center justify-between',
+        'gap-step-sm px-step-sm flex h-10 w-full cursor-pointer items-center justify-between',
         'rounded-control border-border bg-surface border',
         'font-sans text-ui text-text-primary',
         'transition-standard',
@@ -74,7 +74,7 @@ export function SelectLabel({
 }: ComponentPropsWithoutRef<typeof SelectPrimitive.Label>) {
   return (
     <SelectPrimitive.Label
-      className={cn('px-sm text-eyebrow font-mono text-text-secondary py-1.5 uppercase', className)}
+      className={cn('px-step-sm text-eyebrow font-mono text-text-secondary py-1.5 uppercase', className)}
       {...props}
     />
   );
@@ -88,7 +88,7 @@ export function SelectItem({
   return (
     <SelectPrimitive.Item
       className={cn(
-        'rounded-chip px-sm relative flex h-9 w-full cursor-default items-center pr-8 select-none',
+        'rounded-chip px-step-sm relative flex h-9 w-full cursor-default items-center pr-8 select-none',
         'text-ui text-text-secondary transition-standard',
         'data-[highlighted]:bg-surface data-[highlighted]:text-text-primary',
         'data-[state=checked]:text-text-primary',

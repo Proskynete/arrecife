@@ -39,7 +39,7 @@ const panel = (args: Parameters<NonNullable<Story['render']>>[0], side: Lado = '
         <SheetDescription>Los cambios se aplican a los canjes futuros, no a los ya hechos.</SheetDescription>
       </SheetHeader>
       <SheetBody>
-        <div className="gap-xs flex flex-col">
+        <div className="gap-step-xs flex flex-col">
           <Label htmlFor="codigo">Código</Label>
           <Input id="codigo" defaultValue="LANZAMIENTO25" />
         </div>

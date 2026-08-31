@@ -69,8 +69,8 @@ export const Escalas: Story = {
   render: () => (
     <div className="flex flex-col">
       {ESCALAS.map(({ variant, detalle, ejemplo }) => (
-        <div key={variant} className="border-hairline py-lg border-b last:border-b-0">
-          <div className="gap-sm mb-sm flex flex-wrap items-baseline">
+        <div key={variant} className="border-hairline py-step-lg border-b last:border-b-0">
+          <div className="gap-step-sm mb-step-sm flex flex-wrap items-baseline">
             <Text variant="eyebrow" tone="accent">
               {variant}
             </Text>
@@ -105,7 +105,7 @@ export const SemanticaYEstilo: Story = {
         <Text as="h2" variant="h2">
           Un h2 que se ve como un h2
         </Text>
-        <Text as="h2" variant="h3" className="mt-md">
+        <Text as="h2" variant="h3" className="mt-step-md">
           Un h2 que se ve como un h3
         </Text>
       </Bloque>
@@ -121,7 +121,7 @@ export const SemanticaYEstilo: Story = {
 
 export const Medida: Story = {
   render: () => (
-    <div className="gap-lg flex flex-col">
+    <div className="gap-step-lg flex flex-col">
       <Bloque titulo="body · 68ch por defecto">
         <Text variant="body">
           La medida máxima de cuerpo es 68ch y la pone el componente, no quien

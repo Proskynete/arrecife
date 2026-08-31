@@ -40,7 +40,7 @@ export const Hover: Story = {
 
 export const Rejilla: Story = {
   render: (args) => (
-    <div className="gap-md grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
+    <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
       <ArticleCard {...args} />
       <ArticleCard
         {...args}

@@ -23,11 +23,11 @@ import { Text } from '../../primitives/typography.tsx';
  * accesibilidad. Dentro de `<main>` no es landmark y sí es la cabecera del
  * contenido, que es lo que este componente es.
  */
-const cabecera = cva('gap-sm flex flex-col', {
+const cabecera = cva('gap-step-sm flex flex-col', {
   variants: {
     size: {
       display: 'py-section',
-      page: 'py-xl',
+      page: 'py-step-xl',
     },
   },
   defaultVariants: { size: 'page' },
@@ -76,7 +76,7 @@ export function PageHeader({
         </Text>
       ) : null}
 
-      {action ? <div className="gap-sm mt-sm flex flex-wrap items-center">{action}</div> : null}
+      {action ? <div className="gap-step-sm mt-step-sm flex flex-wrap items-center">{action}</div> : null}
     </header>
   );
 }

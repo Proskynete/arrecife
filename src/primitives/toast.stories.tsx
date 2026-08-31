@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Variantes: Story = {
   render: () => (
     <ToastProvider duration={Infinity}>
-      <div className="gap-md flex max-w-content flex-col">
+      <div className="gap-step-md flex max-w-content flex-col">
         <Toast open variant="neutral">
           <div>
             <ToastTitle>Borrador guardado</ToastTitle>

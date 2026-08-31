@@ -7,7 +7,7 @@ export type RadioGroupProps = ComponentPropsWithoutRef<typeof RadioGroupPrimitiv
 export type RadioGroupItemProps = ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>;
 
 export function RadioGroup({ className, ...props }: RadioGroupProps) {
-  return <RadioGroupPrimitive.Root className={cn('gap-sm grid', className)} {...props} />;
+  return <RadioGroupPrimitive.Root className={cn('gap-step-sm grid', className)} {...props} />;
 }
 
 export function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {

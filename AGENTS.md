@@ -48,10 +48,12 @@ pnpm storybook        # genera los tokens y levanta Storybook en el 6006
 | `pnpm build`                           | pureza de tokens → tsup → `theme.css` → `llms.txt`  |
 | `pnpm typecheck`                       | `tsc --noEmit`                                      |
 | `pnpm lint`                            | ESLint, incluido el veto a hex literales            |
-| `pnpm test`                            | axe sobre todas las stories, en los **dos** modos   |
-| `pnpm test:oscuro` / `pnpm test:claro` | un modo cada uno                                    |
+| `pnpm test`                            | regresión de tokens + axe en los **dos** modos      |
+| `pnpm test:unidad`                     | compila Tailwind y comprueba a qué resuelve cada utilidad |
+| `pnpm test:oscuro` / `pnpm test:claro` | axe sobre las stories, un modo cada uno             |
 | `pnpm test:watch`                      | la suite en watch, modo oscuro                      |
 | `pnpm check:tokens`                    | falla si `src/tokens/` importa algo de fuera        |
+| `pnpm check:namespace`                 | falla si un token pisa un nombre de Tailwind        |
 | `pnpm check:exports`                   | verifica que `dist/` tiene lo que `exports` promete |
 | `pnpm check:llms`                      | falla si `llms.txt` no cuadra con los tipos         |
 | `pnpm check:release`                   | valida la configuración de release-please           |
@@ -166,14 +168,20 @@ Reglas del patrón, todas con motivo:
 ### 3 · Colores, tamaños y espaciados
 
 Todo sale de un token, por su utilidad de Tailwind: `bg-surface-raised`,
-`text-h1`, `rounded-card`, `p-lg`, `gap-xs`, `h-nav`, `max-w-content`.
+`text-h1`, `rounded-card`, `p-step-lg`, `gap-step-xs`, `h-nav`, `max-w-content`.
 
+- **El ritmo de página lleva `step`**: `p-step-md`, `gap-step-sm`, `py-step-xl`.
+  No es verbosidad gratuita. `xs, sm, md, lg, xl` son los nombres de la escala
+  `--container-*` de Tailwind, y un `--spacing-md` nuestro se comía `max-w-md` en
+  todos los proyectos consumidores sin dejar rastro. Un `p-md` escrito hoy no
+  falla: cae en la escala numérica y no hace nada. Ver `docs/decisiones.md` § 16.
 - **Cero hex literales.** ESLint lo bloquea en todo `src/**` salvo en
   `src/tokens/tokens.ts`, que es donde viven.
 - **Nada de valores arbitrarios** tipo `p-[13px]` o `text-[15px]`: si el valor no
   tiene token, la pregunta es si debería tenerlo, y eso se decide antes.
 - Un token nuevo entra en `tokens.ts`, sale solo en `theme.css` y se usa por su
-  utilidad. No hay paso intermedio.
+  utilidad. No hay paso intermedio. Si su nombre choca con uno de Tailwind,
+  `pnpm check:namespace` lo para: dale un grupo propio, como `step` o `control`.
 
 ### 4 · Movimiento
 
@@ -275,10 +283,6 @@ docs(readme): la tercera corrección de contraste
 `components`, `brand`, `og`, `shiki`, `storybook`, `a11y`, `deps`,
 `deps-dev`, `ci`.
 
-**No toques la versión ni el `CHANGELOG.md`.** Los hace release-please a partir
-de los commits. Mientras la versión sea `0.x`, un cambio que rompe sube la minor,
-no la major.
-
 **No publiques a npm a mano.** El workflow publica con OIDC y genera procedencia.
 
 ## Errores que se cometen en este repo
@@ -295,3 +299,5 @@ Por orden de frecuencia real:
 6. Correr la suite en un solo modo. Un color falla en uno y pasa en el otro.
 7. Añadir una story sin estados: hover y focus se fuerzan, no se confían.
 8. Escribir un componente nuevo que ya existe como primitivo con otro nombre.
+9. Escribir `p-md` o `gap-sm` por costumbre. El escalón es `p-step-md`, y el
+   nombre viejo no da error: no hace nada.

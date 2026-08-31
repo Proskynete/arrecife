@@ -134,6 +134,9 @@ jobs:
 
       # La suite completa antes de publicar, no solo en el PR. Entre que el PR
       # pasó y la versión se corta pueden haber entrado otros merges.
+      - name: 🧪 Regresión de tokens contra Tailwind
+        run: pnpm test:unidad
+
       - name: 🌑 Suite en modo oscuro
         run: pnpm test:oscuro
 

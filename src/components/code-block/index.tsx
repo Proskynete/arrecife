@@ -46,7 +46,7 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
       )}
       {...props}
     >
-      <div className="border-hairline px-sm flex items-center justify-between border-b py-1.5">
+      <div className="border-hairline px-step-sm flex items-center justify-between border-b py-1.5">
         <span className="text-eyebrow font-mono text-text-muted uppercase">
           <span className="text-accent">❯</span> {language ?? 'código'}
         </span>
@@ -58,7 +58,7 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
             aria-label={copiado ? 'Código copiado' : 'Copiar código'}
             aria-live="polite"
             className={cn(
-              'gap-xs rounded-chip flex items-center px-2 py-1',
+              'gap-step-xs rounded-chip flex items-center px-2 py-1',
               'text-label font-mono text-text-muted cursor-pointer',
               'transition-standard hover:bg-surface hover:text-text-primary',
               'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
@@ -70,7 +70,7 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
         ) : null}
       </div>
 
-      <pre className="p-md font-mono text-meta text-text-primary overflow-x-auto leading-relaxed">
+      <pre className="p-step-md font-mono text-meta text-text-primary overflow-x-auto leading-relaxed">
         {children}
       </pre>
     </div>

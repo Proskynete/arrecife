@@ -15,6 +15,16 @@ export type ArticleCardProps = Omit<TarjetaProps, 'children' | 'title'> & {
   dateTime?: string | undefined;
   readingMinutes?: number | undefined;
   tags?: readonly string[] | undefined;
+  /**
+   * Nivel del titular. `h3` por defecto: una tarjeta suelta en una rejilla no
+   * gana el nivel que su posición no le da.
+   *
+   * Acotado a dos valores a propósito. La página de listado —donde las tarjetas
+   * SÍ son el encabezado principal de la sección— necesita `h2`, y esa
+   * intención se perdía con la constante; abrirlo hasta `h4` o `h5`, en cambio,
+   * es invitar a saltarse niveles, que es el fallo que la constante evitaba.
+   */
+  headingLevel?: 2 | 3;
 };
 
 /**
@@ -32,6 +42,7 @@ export function ArticleCard({
   dateTime,
   readingMinutes,
   tags,
+  headingLevel = 3,
   className,
   ...props
 }: ArticleCardProps) {
@@ -54,7 +65,11 @@ export function ArticleCard({
           </Text>
         ) : null}
 
-        <Text as="h3" variant="h3" className="group-hover:text-accent transition-standard">
+        <Text
+          as={headingLevel === 2 ? 'h2' : 'h3'}
+          variant="h3"
+          className="group-hover:text-accent transition-standard"
+        >
           {title}
         </Text>
 

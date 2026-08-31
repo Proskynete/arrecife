@@ -13,6 +13,20 @@ import { Text } from '../../primitives/typography.tsx';
  *
  * El activo se marca con `aria-current`, no solo con color — la sección en la
  * que estás no puede comunicarse únicamente con bioluz.
+ *
+ * Y ese atributo es además EL GANCHO: las clases del activo se aplican con la
+ * variante `aria-[current]:`, no con un ternario en el render. La diferencia es
+ * la que hay entre servir solo controlado y servir también sin controlar.
+ *
+ * Un sitio Astro resuelve el scroll-spy con quince líneas de script que ponen
+ * `aria-current` en el enlace visible y quitan el del anterior. Con el estado
+ * calculado en el render, ese script no podía hacer nada: había que hidratar el
+ * índice como isla de React en cada artículo para algo que cuesta cero
+ * JavaScript de framework. Ahora el CSS reacciona al atributo y las dos formas
+ * de usarlo dan el mismo resultado.
+ *
+ * El gancho es la PRESENCIA del atributo, así que se quita para desmarcar; no
+ * se pone `aria-current="false"`.
  */
 export type Entrada = {
   /** El ancla, con `#`. */
@@ -54,9 +68,11 @@ export function TableOfContents({
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
             'cursor-pointer',
             item.nested && 'pl-step-lg',
-            activo
-              ? 'border-accent text-accent'
-              : 'border-transparent text-text-secondary hover:text-text-primary',
+            'border-transparent text-text-secondary hover:text-text-primary',
+            // El hover del activo se declara con las dos variantes juntas para
+            // que gane al `hover:` de arriba por especificidad y no por el orden
+            // en que Tailwind decida emitir las reglas.
+            'aria-[current]:border-accent aria-[current]:text-accent aria-[current]:hover:text-accent',
           );
 
           return (

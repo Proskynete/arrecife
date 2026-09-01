@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/Proskynete/arrecife/compare/v0.5.0...v0.5.1) (2026-08-31)
+
+
+### 🐛 Correcciones
+
+* **components:** la firma del pie va con la primera fila, no la última ([1a854ab](https://github.com/Proskynete/arrecife/commit/1a854ab7d71e66ab4998802ae3dc498f96e47b57))
+
 ## [0.5.0](https://github.com/Proskynete/arrecife/compare/v0.4.0...v0.5.0) (2026-08-31)
 
 

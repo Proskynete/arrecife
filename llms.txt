@@ -185,9 +185,18 @@ that is a white flash on every load.
 import { themeScript } from '@eduardoalvarez/arrecife/theme';
 ---
 <head>
-  <script is:inline set:html={themeScript} />
+  <!-- The site follows the reader's OS, falling back to dark. -->
+  <script is:inline set:html={themeScript()} />
+
+  <!-- Or: this site IS dark, and the OS is not consulted. -->
+  <script is:inline set:html={themeScript({ base: 'dark' })} />
 </head>
 ```
+
+`base` is not «the fallback», it is «this site IS this mode». A stored choice
+still wins over it, so the toggle keeps working — it sets what happens when
+nobody has chosen yet. Use it when the project has already decided its mode and
+does not want the OS overruling that.
 
 It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
@@ -1521,16 +1530,16 @@ Types (13): `BrandToken`, `ColorMode`, `ColorToken`, `ControlToken`, `FontToken`
 | --- | --- | --- |
 | `applyTheme` | `(theme: Theme, persist?: boolean): void` | Sets the theme on `<html>` and persists it. |
 | `currentTheme` | `(): Theme` | The theme currently in place, read from the DOM. |
-| `preferredTheme` | `(): Theme` | The theme that applies: whatever was chosen, and with no choice, whatever the system asks for. With no `prefers-color-scheme` declared, dark, which is primary. |
+| `preferredTheme` | `({ base }?: ThemeOptions): Theme` | The theme that applies: whatever was chosen, and with no choice, `base` if the site declared one, else whatever the system asks for. With no `prefers-color-scheme` declared, dark, which is primary. |
 | `storedTheme` | `(): Theme \| null` | The stored preference, if any. `null` means «nobody has chosen», which is not the same as «chose dark»: with no choice, the system decides. |
 | `THEME_ATTRIBUTE` | `"data-theme"` | The attribute the `[data-theme]` blocks in `theme.css` read. |
 | `THEME_EVENT` | `"arrecife:theme"` | The event emitted when the theme changes. |
 | `THEME_KEY` | `"arrecife-theme"` | The `localStorage` key. |
-| `themeScript` | `string` | The script that goes INLINE in the `<head>`, before any stylesheet. |
+| `themeScript` | `({ base }?: ThemeOptions): string` | The script that goes INLINE in the `<head>`, before any stylesheet. |
 | `toggleTheme` | `(): Theme` | Switches to the opposite one and returns whichever stuck. |
-| `watchTheme` | `(onChange: (theme: Theme) => void): () => void` | Subscribes to theme changes and returns the function that cancels it. |
+| `watchTheme` | `(onChange: (theme: Theme) => void, options?: ThemeOptions): () => void` | Subscribes to theme changes and returns the function that cancels it. |
 
-Types (1): `Theme`.
+Types (2): `Theme`, `ThemeOptions`.
 
 ### `@eduardoalvarez/arrecife/brand`
 

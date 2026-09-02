@@ -889,6 +889,29 @@ three actions per table row, and at 42 the row grows with them.
 a toolbar mixing the two stays on one baseline. It does not replace `icon` — a
 page's primary action stays at 42. See `docs/decisions.md` § 22.
 
+### The theme script, and the mode a site already decided
+
+```astro
+<script is:inline set:html={themeScript({ base: 'dark' })} />
+```
+
+Until 0.7.0 `themeScript` was a fixed string and resolved stored choice →
+`prefers-color-scheme` → dark. That is the right default for a library, and it
+was wrong for all five of these projects: they are dark BY DECISION, and
+`eduardoalvarez.dev`'s own script said so out loud — «dark is the brand's PRIMARY
+mode, so it's the default and doesn't follow the OS setting». With the OS in
+charge, a reader whose machine is in light mode saw the blog in light.
+
+There was no way to say otherwise, so those projects kept their own
+`public/theme.js` and the library published the hard part for nobody. Migrating
+just the button did not help either: `ThemeToggle` persists under
+`arrecife-theme` and their script read `theme`, so the two would have gone out of
+step.
+
+`base` stops the OS from being consulted at all. A stored choice still wins over
+it — it sets what happens when nobody has chosen yet, not what happens instead of
+choosing, so the toggle keeps working.
+
 ### `Text` — the scale as API
 
 `Text` was not on the original list and was added later, because without it the

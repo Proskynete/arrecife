@@ -185,9 +185,18 @@ that is a white flash on every load.
 import { themeScript } from '@eduardoalvarez/arrecife/theme';
 ---
 <head>
-  <script is:inline set:html={themeScript} />
+  <!-- The site follows the reader's OS, falling back to dark. -->
+  <script is:inline set:html={themeScript()} />
+
+  <!-- Or: this site IS dark, and the OS is not consulted. -->
+  <script is:inline set:html={themeScript({ base: 'dark' })} />
 </head>
 ```
+
+`base` is not «the fallback», it is «this site IS this mode». A stored choice
+still wins over it, so the toggle keeps working — it sets what happens when
+nobody has chosen yet. Use it when the project has already decided its mode and
+does not want the OS overruling that.
 
 It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because

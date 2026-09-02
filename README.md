@@ -843,6 +843,52 @@ timing, and it sits behind `motion-safe`.
 `Calendar` does **not** animate the month change: react-day-picker's `animate`
 stays on its default, which is off.
 
+### The danger variant, and where it does not go
+
+`Button` has `destructive` and `destructiveOutline` since 0.7.0. For four
+versions it had neither, on an argument that is still half right: inside an
+`AlertDialog` the confirm button is **not** red, because a title explains what is
+about to happen, focus starts on cancel and clicking outside does not close it.
+The context does the work and a red button on top of it is shouting.
+
+What broke the argument is the table row. `cursos` has eight destructive buttons
+in row actions and toolbars, next to «Editar» and «Duplicar», with nothing around
+them doing that work — and rendered as `secondary`, «Eliminar curso» looked
+exactly like «Cancelar».
+
+The palette is not `error`, and the reason is the role. `error` is a text color:
+it reads against a dark surface, so it sits mid-red. `danger` is a fill: what
+reads is the ink on top of it, so it goes lighter. Same split as `accent` and
+`accentOn`. In light mode both land on `#C0392B`, because over paper a red dark
+enough to carry white ink is also the red that reads as text.
+
+| | dark | light |
+| --- | --- | --- |
+| ink over fill | 6.53 | 5.11 |
+| ink over hover | 7.92 | 6.61 |
+| fill over background | 6.71 | 4.87 |
+| fill over surfaceRaised | 4.91 | **4.50** |
+
+That last cell is exactly on the AA line, which is where every light semantic in
+this palette sits. It matters because it is the outline variant's border and
+text, and `surfaceRaised` is where a toolbar lives.
+
+`destructiveOutline` fills on hover, and that is a declared exception to
+«secondary is never filled» — a destructive that looks identical to a secondary
+until you read it is the problem the variant exists to fix. See
+`docs/decisions.md` § 21.
+
+### `icon-sm`, for the one admin app
+
+42×42 is the right measure for a control you hit with a thumb, and four of the
+five projects are reading sites where that fits. `cursos` is the odd one out:
+three actions per table row, and at 42 the row grows with them.
+
+`size="icon-sm"` is 32×32, and it is 32 and not the 28 that project actually had:
+32 is `sm`'s height, so a dense icon button lines up with a small text button and
+a toolbar mixing the two stays on one baseline. It does not replace `icon` — a
+page's primary action stays at 42. See `docs/decisions.md` § 22.
+
 ### `Text` — the scale as API
 
 `Text` was not on the original list and was added later, because without it the

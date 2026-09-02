@@ -257,8 +257,10 @@ compiles and looks wrong, or that fails the project's accessibility audit.
 1. **Zero literal hexes.** Every color comes from a token or its custom property.
 2. **`Button variant="conversion"` appears once per screen.** It is not enforced
    at runtime; two on the same page are a design error.
-3. **There is no danger variant in `Button`.** The system's error lives in alerts
-   and in field validation, not in a red button.
+3. **`Button variant="destructive"` is for the irreversible only.** Never for
+   «cancel» on a form, and not inside an `AlertDialog` — there the confirm button
+   stays `primary`, because the title, the focus on cancel and the no-click-outside
+   already carry the weight. See `docs/decisions.md` § 21.
 4. **`secondary` is never filled.** It is border and text.
 5. **No entrance animations.** Modals, menus, tooltips and toasts appear where
    they will stay. The only exception is the `Button loading` spinner.
@@ -271,7 +273,9 @@ compiles and looks wrong, or that fails the project's accessibility audit.
    Putting `accent` over its own tint at 8 % gives 4.12 and does not reach AA.
 9. **`Progress` requires `label`.** A bar with no accessible name does not say
    what it is about.
-10. **`Button size="icon"` requires `aria-label`.** It carries no text.
+10. **`Button size="icon"` and `size="icon-sm"` require `aria-label`.** They carry
+    no text. `icon` is 42×42 and is a page action; `icon-sm` is 32×32 and is for a
+    dense table row.
 11. **The mascot's faces only appear** in empty states, confirmations, errors,
     course progress and celebration. Never in a hero, pricing, services, contact
     or the CV.
@@ -509,8 +513,8 @@ Source: `src/primitives/button.tsx`
 | `asChild` | `boolean` |  | `false` | Renders the child instead of a `<button>`, to wrap a link. |
 | `icon` | `ReactNode` |  |  | SVG glyph before the text. Hidden while loading. |
 | `loading` | `boolean` |  | `false` | Disables and announces `aria-busy`. Incompatible with `asChild`. |
-| `size` | `"sm" \| "md" \| "lg" \| "icon"` |  |  |  |
-| `variant` | `"primary" \| "conversion" \| "secondary" \| "tertiary"` |  |  |  |
+| `size` | `"sm" \| "md" \| "lg" \| "icon" \| "icon-sm"` |  |  |  |
+| `variant` | `"primary" \| "conversion" \| "secondary" \| "tertiary" \| "destructive" \| "destructiveOutline"` |  |  |  |
 
 ### Calendar
 
@@ -1298,8 +1302,8 @@ The control that was missing. The library defined the whole theming system and e
 | --- | --- | --- | --- | --- |
 | `label` | `string` |  | `Cambiar de theme` | Accessible name. The button has no visible text, so it is the only thing naming it. |
 | `onThemeChange` | `(theme: Theme) => void` |  |  | Fires with whichever theme ended up set, in case the project wants to record it. |
-| `size` | `"sm" \| "md" \| "lg" \| "icon"` |  | `icon` |  |
-| `variant` | `"primary" \| "conversion" \| "secondary" \| "tertiary"` |  | `secondary` |  |
+| `size` | `"sm" \| "md" \| "lg" \| "icon" \| "icon-sm"` |  | `icon` |  |
+| `variant` | `"primary" \| "conversion" \| "secondary" \| "tertiary" \| "destructive" \| "destructiveOutline"` |  | `secondary` |  |
 
 ### TableOfContents
 
@@ -1477,7 +1481,7 @@ it: if the code does not mount React, that subpath is the one to import.
 | `alertVariants` | `(props?: (ConfigVariants<{ variant: { accent: string; success: string; warning: string; error: string; }; emphasis: { subtle: string; strong: string; }; }> & ClassProp) \| undefined): string` |  |
 | `avatarVariants` | `(props?: (ConfigVariants<{ size: { sm: string; md: string; lg: string; xl: string; }; }> & ClassProp) \| undefined): string` |  |
 | `badgeVariants` | `(props?: (ConfigVariants<{ variant: { neutral: string; accent: string; warm: string; success: string; warning: string; error: string; }; }> & ClassProp) \| undefined): string` |  |
-| `buttonVariants` | `(props?: (ConfigVariants<{ variant: { primary: string[]; conversion: string; secondary: string[]; tertiary: string[]; }; size: { sm: string; md: string; lg: string; icon: string; }; }> & ClassProp) \| undefined): string` |  |
+| `buttonVariants` | `(props?: (ConfigVariants<{ variant: { primary: string[]; conversion: string; secondary: string[]; tertiary: string[]; destructive: string; destructiveOutline: string[]; }; size: { sm: string; md: string; lg: string; icon: string; 'icon-sm': string; }; }> & ClassProp) \| undefined): string` |  |
 | `CARD` | `string[]` |  |
 | `CARD_HOVER` | `"transition-standard hover:border-hairline-hover"` |  |
 | `CARD_SURFACE` | `"rounded-card border-hairline bg-surface border"` |  |
@@ -1491,11 +1495,11 @@ it: if the code does not mount React, that subpath is the one to import.
 | --- | --- | --- |
 | `brand` | `{ readonly body: "#3E7CB1"; readonly spots: "#C2D7E7"; readonly hull: "#0B1524"; }` | Brand — identical in both modes. |
 | `colors` | `{ dark, light }` |  |
-| `control` | `{ readonly sm: 14; readonly md: 22; readonly lg: 30; readonly icon: 42; }` | Controls, from the document: `sm 8/14 · md 12/22 · lg 15/30 · icon 42×42`. |
-| `dark` | `{ background, surface, surfaceRaised, border, hairline, hairlineHover, textPrimary, textSecondary, textMuted, accent, accentHover, accentOn, warm, warmHover, warmOn, success, warning, error }` | Dark mode (primary). Contrast measured against `background` #091319. |
+| `control` | `{ readonly sm: 14; readonly md: 22; readonly lg: 30; readonly icon: 42; readonly iconSm: 32; }` | Controls, from the document: `sm 8/14 · md 12/22 · lg 15/30 · icon 42×42`. |
+| `dark` | `{ background, surface, surfaceRaised, border, hairline, hairlineHover, textPrimary, textSecondary, textMuted, accent, accentHover, accentOn, warm, warmHover, warmOn, success, warning, error, danger, dangerHover, dangerOn }` | Dark mode (primary). Contrast measured against `background` #091319. |
 | `fonts` | `{ display, sans, mono }` |  |
 | `gradient` | `{ dark, light }` |  |
-| `light` | `{ background, surface, surfaceRaised, border, hairline, hairlineHover, textPrimary, textSecondary, textMuted, accent, accentHover, accentOn, warm, warmHover, warmOn, success, warning, error }` | Light mode. Contrast measured against `background` #F6F2EA. `background` is WARM white: never #FFF as the page background. |
+| `light` | `{ background, surface, surfaceRaised, border, hairline, hairlineHover, textPrimary, textSecondary, textMuted, accent, accentHover, accentOn, warm, warmHover, warmOn, success, warning, error, danger, dangerHover, dangerOn }` | Light mode. Contrast measured against `background` #F6F2EA. `background` is WARM white: never #FFF as the page background. |
 | `limits` | `{ readonly minScreenPx: 13; readonly minPrintPt: 12; readonly measure: "68ch"; }` | Hard legibility limits. |
 | `motion` | `{ readonly duration: "150ms"; readonly easing: "ease-out"; readonly properties: "color, background-color, border-color, fill, stroke"; }` | 150ms ease-out — color and border only. The system animates neither position nor scale: states are communicated with border and color, not with movement. |
 | `naming` | `{ readonly wordmark: "Eduardo Álvarez"; readonly mascot: "Tiburoncín"; readonly domain: "eduardoalvarez.dev"; }` | The wordmark always reads «Eduardo Álvarez». The mascot is called Tiburoncín and its name never appears inside the logo. |

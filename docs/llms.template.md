@@ -257,8 +257,10 @@ compiles and looks wrong, or that fails the project's accessibility audit.
 1. **Zero literal hexes.** Every color comes from a token or its custom property.
 2. **`Button variant="conversion"` appears once per screen.** It is not enforced
    at runtime; two on the same page are a design error.
-3. **There is no danger variant in `Button`.** The system's error lives in alerts
-   and in field validation, not in a red button.
+3. **`Button variant="destructive"` is for the irreversible only.** Never for
+   «cancel» on a form, and not inside an `AlertDialog` — there the confirm button
+   stays `primary`, because the title, the focus on cancel and the no-click-outside
+   already carry the weight. See `docs/decisions.md` § 21.
 4. **`secondary` is never filled.** It is border and text.
 5. **No entrance animations.** Modals, menus, tooltips and toasts appear where
    they will stay. The only exception is the `Button loading` spinner.
@@ -271,7 +273,9 @@ compiles and looks wrong, or that fails the project's accessibility audit.
    Putting `accent` over its own tint at 8 % gives 4.12 and does not reach AA.
 9. **`Progress` requires `label`.** A bar with no accessible name does not say
    what it is about.
-10. **`Button size="icon"` requires `aria-label`.** It carries no text.
+10. **`Button size="icon"` and `size="icon-sm"` require `aria-label`.** They carry
+    no text. `icon` is 42×42 and is a page action; `icon-sm` is 32×32 and is for a
+    dense table row.
 11. **The mascot's faces only appear** in empty states, confirmations, errors,
     course progress and celebration. Never in a hero, pricing, services, contact
     or the CV.

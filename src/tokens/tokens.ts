@@ -50,6 +50,21 @@ export const dark = {
   success: '#4FB477',
   warning: '#E8A33D',
   error: '#E15757', //                                 4.51:1 over surface
+  /**
+   * The destructive fill. It is NOT `error`, and the difference is the role.
+   *
+   * `error` is a TEXT color: it has to read against a dark surface, so it sits
+   * mid-red. `danger` is a FILL: what has to read is the ink ON TOP of it, so it
+   * goes lighter. Same reasoning as `accent` and `accentOn` — one is measured
+   * against the page, the other against what it carries.
+   *
+   * Measured: ink 6.53:1 over the fill and 7.92:1 over the hover; the fill
+   * itself 6.71:1 over abyss, 5.94 over surface and 4.91 over surfaceRaised, so
+   * the outline variant reads as text on all three.
+   */
+  danger: '#F4736B',
+  dangerHover: '#F78D86',
+  dangerOn: '#2B0A08', //             ink over danger    6.53:1
 } as const;
 
 /**
@@ -75,6 +90,20 @@ export const light = {
   success: '#0F6B52',
   warning: '#8D6111', //                               4.51:1 over surfaceRaised
   error: '#C0392B',
+  /**
+   * In light mode `danger` and `error` land on the same hex, and that is not an
+   * oversight: over paper a red dark enough to carry white ink is also the red
+   * that reads as text. In dark they part company because the fill has to be
+   * lighter than the text color, not darker.
+   *
+   * Measured: ink 5.11:1 over the fill and 6.61:1 over the hover; the fill
+   * itself 4.87:1 over paper, 5.44 over surface and 4.50 over surfaceRaised —
+   * the last one is exactly on the AA line, which is where every light semantic
+   * in this palette sits.
+   */
+  danger: '#C0392B',
+  dangerHover: '#A32F22',
+  dangerOn: '#FFF6F4', //                              5.11:1 over danger
 } as const;
 
 export const colors = { dark, light } as const;
@@ -193,6 +222,22 @@ export const control = {
   lg: 30,
   /** Icon button: square, no text. */
   icon: 42,
+  /**
+   * The dense icon button, 32×32.
+   *
+   * 42 is the right measure for a control you hit with a thumb, and the four
+   * reading sites are where that fits. `cursos` is the odd one out: it is the
+   * only admin app of the set, with three actions per table row, and at 42 the
+   * row grows with them — the original used 24 and 28.
+   *
+   * It is 32 and not 28 because 32 is `sm`'s height. A dense icon button lines
+   * up with a small text button, so a toolbar mixing the two stays on one
+   * baseline; 28 would have been a fifth height that matches nothing.
+   *
+   * It does not replace `icon`. A page's primary action stays at 42; this is for
+   * a row of a table. See `docs/decisions.md` § 22.
+   */
+  iconSm: 32,
 } as const;
 
 /**

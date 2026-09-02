@@ -20,10 +20,15 @@ import { buttonVariants } from '../variants/button.ts';
  *   3. It does NOT close on outside click and has no X. Leaving a confirmation
  *      is a decision, not a slip: you have to say no.
  *
- * The confirm button is NOT red. The system has no danger variant — `Button`
- * says so explicitly — and error lives in alerts and in field validation, not in
- * a button. What communicates the gravity is the text: «Borrar el artículo», not
- * «Aceptar».
+ * The confirm button is NOT red, and since 0.7.0 that is a choice and no longer
+ * the absence of an option: `Button` has `destructive`, and here it is still not
+ * used. Everything above already carries the gravity — a title that says what is
+ * about to happen, focus on cancel, no closing by clicking outside — and a red
+ * button on top of that is shouting. What communicates the gravity is the text:
+ * «Borrar el artículo», not «Aceptar».
+ *
+ * `destructive` is for the destructive button that has none of that around it:
+ * a table row, a toolbar. See `docs/decisions.md` § 21.
  */
 export const AlertDialog = AlertDialogPrimitive.Root;
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;

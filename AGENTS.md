@@ -227,6 +227,16 @@ Everything comes from a token, through its Tailwind utility:
   used through its utility. There is no intermediate step. If its name collides
   with a Tailwind one, `pnpm check:namespace` stops you: give it a group of its
   own, like `step` or `control`.
+- **`danger` is a fill, `error` is text.** They are two different reds in dark
+  mode and the same one in light, and the difference is what each has to read
+  against: `error` against the page, `danger` against the ink it carries. A
+  destructive button is `Button variant="destructive"`; an invalid field's border
+  and message are `error`. Neither is a substitute for the other.
+- **A destructive button is for the irreversible, and never inside an
+  `AlertDialog`.** There the title, the focus on cancel and the no-close-on-
+  outside already carry the gravity, and a red button on top of that is shouting.
+  The variant exists for the destructive that has none of that around it — a
+  table row, a toolbar. See `docs/decisions.md` § 21.
 
 ### 4 · Motion
 

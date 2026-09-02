@@ -1,5 +1,5 @@
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { type VariantProps } from 'class-variance-authority';
 import {
   useEffect,
   useId,
@@ -12,20 +12,7 @@ import {
 import { cn } from '../lib/cn.ts';
 import { Camera } from '../lib/glyphs.tsx';
 
-const avatar = cva(
-  'relative flex shrink-0 overflow-hidden rounded-pill bg-surface-raised border border-hairline',
-  {
-    variants: {
-      size: {
-        sm: 'size-8',
-        md: 'size-10',
-        lg: 'size-14',
-        xl: 'size-24',
-      },
-    },
-    defaultVariants: { size: 'md' },
-  },
-);
+import { avatarVariants as avatar } from '../variants/avatar.ts';
 
 export type AvatarProps = ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> &
   VariantProps<typeof avatar>;
@@ -176,4 +163,3 @@ export function AvatarUpload({
   );
 }
 
-export { avatar as avatarVariants };

@@ -251,11 +251,19 @@ jobs:
 
       # El CLI va fijado a una major: `latest` en un `npx` de CI es una
       # dependencia sin lockfile que puede cambiar entre dos releases.
+      #
+      # Las dos URLs del resumen no son la misma cosa, y conviene saberlo antes
+      # de pensar que algo se rompió: la del despliegue es única de este run y
+      # está detrás del SSO del equipo —la protección de Vercel es
+      # `all_except_custom_domains`—, así que abrirla desde fuera devuelve un
+      # 302 al login. La pública es el dominio propio.
       - name: 🚀 Desplegar a producción
         if: steps.credenciales.outputs.listo == 'true'
         run: |
           version="$(node -p "require('./package.json').version")"
           url="$(npx --yes vercel@59 deploy --prebuilt --prod --yes --token "$VERCEL_TOKEN")"
-          echo "### Storybook $version" >> "$GITHUB_STEP_SUMMARY"
-          echo "- despliegue: $url" >> "$GITHUB_STEP_SUMMARY"
-          echo "- producción: https://arrecife.eduardoalvarez.dev" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "### Storybook $version"
+            echo "- este despliegue (pide sesión del equipo): $url"
+            echo "- público: https://arrecife.eduardoalvarez.dev"
+          } >> "$GITHUB_STEP_SUMMARY"

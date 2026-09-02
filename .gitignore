@@ -5,3 +5,4 @@ storybook-static/
 .DS_Store
 .zsh_history_project
 .vercel/
+.env*

@@ -82,7 +82,7 @@ export function storedTheme(): Theme | null {
  * agreed.
  *
  * Left out, the OS decides and dark is the fallback. That was the only
- * behaviour until 0.7.0, and it is still the right default for a library: a site
+ * behaviour until 0.6.0, and it is still the right default for a library: a site
  * that has not decided should follow the reader.
  */
 export type ThemeOptions = {

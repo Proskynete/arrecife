@@ -170,7 +170,7 @@ absolute size.
 ## 8 · There was no danger button · REVERSED in § 21
 
 > **This rule no longer holds.** `Button` has `destructive` and
-> `destructiveOutline` since 0.7.0. The entry stays because the file's contract
+> `destructiveOutline` since 0.6.0. The entry stays because the file's contract
 > is that a reversal comes with a new argument and not by forgetting — the new
 > argument is in § 21. What survives of this one is the half that was right:
 > inside an `AlertDialog` the confirm button is still not red.

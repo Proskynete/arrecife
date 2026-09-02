@@ -53,7 +53,7 @@ export function PaginationPrevious({ className, ...props }: PaginationLinkProps)
 
 export function PaginationNext({ className, ...props }: PaginationLinkProps) {
   return (
-    <PaginationLink aria-label="Página next" className={cn('gap-step-xs', className)} {...props}>
+    <PaginationLink aria-label="Página siguiente" className={cn('gap-step-xs', className)} {...props}>
       Siguiente
       <ChevronRight />
     </PaginationLink>

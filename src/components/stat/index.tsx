@@ -1,41 +1,42 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../../lib/cn.ts';
-import { SUPERFICIE_TARJETA } from '../../primitives/card.tsx';
+import { CARD_SURFACE } from '../../primitives/card.tsx';
 import { Progress } from '../../primitives/progress.tsx';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * Una métrica grande: el número en la escala `stat` y su nombre debajo.
+ * A large metric: the number in the `stat` scale and its name underneath.
  *
- * La regla del documento no es de estilo, es de semántica: «bioluz para lo
- * neutro y arena SOLO cuando el número es el problema». Un 12 de aplicaciones
- * es un dato; un 0 de design systems es el problema del que trata la charla.
- * Por eso `tone` no es una paleta abierta — son dos valores y significan cosas
- * distintas.
+ * The document's rule is not one of style, it is one of semantics: «biolume for
+ * the neutral and sand ONLY when the number is the problem». A 12 of
+ * applications is a datum; a 0 of design systems is the problem the talk is
+ * about. That is why `tone` is not an open palette — there are two values and
+ * they mean different things.
  *
- * El orden de lectura es icono + título, el número grande, y la bajada debajo.
- * El número va en MEDIO y no al final a propósito: es lo que se viene a leer, y
- * una bajada de dos líneas entre el título y la cifra la entierra. Arriba queda
- * de qué va, en medio cuánto, y abajo el matiz que solo lee quien se para.
+ * The reading order is icon + title, the big number, and the standfirst below.
+ * The number goes in the MIDDLE and not at the end on purpose: it is what people
+ * came to read, and a two-line standfirst between the title and the figure
+ * buries it. The top says what it is about, the middle says how much, and the
+ * bottom holds the nuance only someone who stops will read.
  */
 export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
-  /** El número, ya formateado. La librería no impone locale. */
+  /** The number, already formatted. The library imposes no locale. */
   value: ReactNode;
-  /** Qué se está contando. Va en mono versalitas. */
+  /** What is being counted. It goes in mono small caps. */
   label: ReactNode;
-  /** `alerta` solo cuando el número ES el problema. */
+  /** `alerta` only when the number IS the problem. */
   tone?: 'neutral' | 'alerta';
-  /** Con `progress`, la métrica se lee como avance y añade la barra. */
+  /** With `progress`, the metric reads as progress and adds the bar. */
   progress?: number | undefined;
   /**
-   * Glifo al lado del título, a 1em. Hereda `currentColor`, así que sigue al
-   * tono del título y no hay que teñirlo aparte.
+   * Glyph beside the title, at 1em. It inherits `currentColor`, so it follows
+   * the title's tone and does not have to be tinted separately.
    */
   icon?: ReactNode;
   /**
-   * La bajada: el matiz que el número solo no da. «12 aplicaciones» no dice si
-   * son muchas, y aquí es donde se dice.
+   * The standfirst: the nuance the number alone does not give. «12 aplicaciones»
+   * does not say whether that is a lot, and this is where that gets said.
    */
   description?: ReactNode;
 };
@@ -51,12 +52,12 @@ export function Stat({
   ...props
 }: StatProps) {
   return (
-    <div className={cn(SUPERFICIE_TARJETA, 'p-step-lg gap-step-xs flex flex-col', className)} {...props}>
+    <div className={cn(CARD_SURFACE, 'p-step-lg gap-step-xs flex flex-col', className)} {...props}>
       <Text variant="eyebrow" tone="muted" as="p" className="gap-step-xs flex items-center">
         {icon ? (
-          // `aria-hidden` no hace falta: los glifos del sistema ya lo traen
-          // puesto. Lo que sí hace falta es que no encoja al lado de un título
-          // largo, porque un icono aplastado se lee como otro icono.
+          // `aria-hidden` is not needed: the system's glyphs already carry it.
+          // What IS needed is that it does not shrink next to a long title,
+          // because a squashed icon reads as a different icon.
           <span className="shrink-0">{icon}</span>
         ) : null}
         {label}

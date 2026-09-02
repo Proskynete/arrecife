@@ -6,8 +6,8 @@ import { cn } from '../lib/cn.ts';
 export type SeparatorProps = ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>;
 
 /**
- * `hairline`, no `border`: una división entre contenidos es sutil por
- * definición. Para delimitar un control existe `border`, que es otro token.
+ * `hairline`, not `border`: a division between pieces of content is subtle by
+ * definition. To delimit a control there is `border`, which is another token.
  */
 export function Separator({
   className,

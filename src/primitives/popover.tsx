@@ -8,19 +8,20 @@ export const PopoverTrigger = PopoverPrimitive.Trigger;
 export const PopoverAnchor = PopoverPrimitive.Anchor;
 
 /**
- * Radix le pone `role="dialog"` al contenido, y un diálogo sin nombre accesible
- * no le dice nada a quien navega con lector de pantalla. Por eso el tipo exige
- * uno de los dos: `aria-label` con el texto, o `aria-labelledby` apuntando al
- * título que ya se ve en pantalla. No se puede olvidar porque no compila.
+ * Radix puts `role="dialog"` on the content, and a dialog with no accessible
+ * name says nothing to someone navigating with a screen reader. That is why the
+ * type demands one of the two: `aria-label` with the text, or `aria-labelledby`
+ * pointing at the title already visible on screen. It cannot be forgotten
+ * because it does not compile.
  */
-type Etiquetado =
+type Labelled =
   | { 'aria-label': string; 'aria-labelledby'?: never }
   | { 'aria-labelledby': string; 'aria-label'?: never };
 
 export type PopoverContentProps = ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
-  Etiquetado;
+  Labelled;
 
-/** Sin animación de entrada: aparece donde va a quedarse, como el resto. */
+/** No entrance animation: it appears where it will stay, like the rest. */
 export function PopoverContent({
   className,
   align = 'center',

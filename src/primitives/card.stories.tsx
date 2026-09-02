@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota, Pila } from '../../stories/utils.tsx';
+import { Note, Stack } from '../../stories/utils.tsx';
 import { Button } from './button.tsx';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card.tsx';
 import { Text } from './typography.tsx';
 
-const meta = { title: 'Primitivos/Card', component: Card } satisfies Meta<typeof Card>;
+const meta = { title: 'Primitives/Card', component: Card } satisfies Meta<typeof Card>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <Pila>
+    <Stack>
       <Card>
         <CardHeader>
           <CardTitle>Cupón de lanzamiento</CardTitle>
@@ -24,28 +24,28 @@ export const Default: Story = {
         </CardContent>
         <CardFooter>
           <Button size="sm">Guardar</Button>
-          <Button size="sm" variant="tertiary">./descartar →</Button>
+          <Button size="sm" variant="tertiary">./discard →</Button>
         </CardFooter>
       </Card>
-      <Nota>
-        Es la única definición de qué es una superficie de tarjeta en el sistema:
-        `surface`, borde `hairline`, radio de tarjeta. `ArticleCard`, `TalkCard`,
-        `CourseCard` y `LinkRow` reutilizan estas mismas clases, así que un cambio
-        de radio las mueve a todas a la vez.
-      </Nota>
-    </Pila>
+      <Note>
+        It is the system's only definition of what a card surface is: `surface`,
+        `hairline` border, card radius. `ArticleCard`, `TalkCard`, `CourseCard`
+        and `LinkRow` reuse these same classes, so a change of radius moves all of
+        them at once.
+      </Note>
+    </Stack>
   ),
 };
 
-export const SoloSuperficie: Story = {
-  name: 'Solo superficie',
+export const SurfaceOnly: Story = {
+  name: 'Surface only',
   render: () => (
-    <Pila>
+    <Stack>
       <Card className="p-step-md">
         <Text variant="ui" tone="secondary">
           Sin cabecera ni pie: a veces una tarjeta solo es una caja con borde.
         </Text>
       </Card>
-    </Pila>
+    </Stack>
   ),
 };

@@ -1,25 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { tagline } from '../../tokens/tokens.ts';
 import { PageHeader } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/PageHeader',
+  title: 'Components/PageHeader',
   component: PageHeader,
   argTypes: {
     size: {
       control: 'inline-radio',
       options: ['display', 'page'],
-      description: 'display para portadas, page para cabeceras de sección.',
+      description: 'display for covers, page for section headers.',
       table: { defaultValue: { summary: 'page' } },
     },
     as: { control: 'inline-radio', options: ['h1', 'h2'] },
   },
   parameters: { layout: 'padded' },
-  // Va dentro de `<main>`: fuera se convertiría en landmark `banner` y chocaría
-  // con la cabecera del sitio.
+  // It goes inside `<main>`: outside it would become a `banner` landmark and
+  // clash with the site header.
   decorators: [
     (Story) => (
       <main>
@@ -32,11 +32,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Portada: Story = {
+export const Cover: Story = {
   args: {
     size: 'display',
-    eyebrow: 'inicio',
-    title: tagline.largo,
+    eyebrow: 'start',
+    title: tagline.long,
     description:
       'Trabajo con equipos que crecieron más rápido que su arquitectura. Empiezo por leer el código y terminar hablando con quien lo escribió.',
   },
@@ -51,18 +51,18 @@ export const Portada: Story = {
           </>
         }
       />
-      <Nota>
-        El titular sale del token `tagline.largo`, no de una cadena escrita a mano:
-        el wordmark y la frase viven en `tokens.ts` para que no se bifurquen entre
-        proyectos. La ranura `action` lleva el único botón de conversión de la
-        pantalla.
-      </Nota>
+      <Note>
+        The headline comes from the `tagline.long` token, not from a hand-written
+        string: the wordmark and the phrase live in `tokens.ts` so they do not fork
+        between projects. The `action` slot carries the screen's only conversion
+        button.
+      </Note>
     </>
   ),
 };
 
-export const Seccion: Story = {
-  name: 'Cabecera de sección',
+export const Section: Story = {
+  name: 'Section header',
   args: {
     size: 'page',
     eyebrow: 'artículos',
@@ -72,22 +72,22 @@ export const Seccion: Story = {
   },
 };
 
-export const SinEyebrow: Story = {
-  name: 'Sin eyebrow ni descripción',
+export const NoEyebrow: Story = {
+  name: 'No eyebrow, no description',
   args: { size: 'page', title: 'Contacto' },
 };
 
-export const DosEscalas: Story = {
-  name: 'Las dos escalas',
+export const TwoScales: Story = {
+  name: 'The two scales',
   args: { title: 'Escalar con criterio' },
   render: () => (
     <div className="gap-step-lg flex flex-col">
       <PageHeader size="display" eyebrow="portada" title="Escalar con criterio" as="h1" />
       <PageHeader size="page" eyebrow="sección" title="Escalar con criterio" as="h2" />
-      <Nota>
-        El mismo esqueleto en 76 y en 44 píxeles. Antes eran dos componentes, `Hero`
-        y `PageHeader`, con la misma regla escrita dos veces.
-      </Nota>
+      <Note>
+        The same skeleton at 76 and at 44 pixels. They used to be two components,
+        `Hero` and `PageHeader`, with the same rule written twice.
+      </Note>
     </div>
   ),
 };

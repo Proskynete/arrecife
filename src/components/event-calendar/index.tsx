@@ -22,68 +22,68 @@ import { Label } from '../../primitives/label.tsx';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * El calendario con eventos: verlos, crearlos, editarlos y borrarlos.
+ * The calendar with events: seeing them, creating, editing and deleting them.
  *
- * `Calendar` es la primitiva y sigue siendo una rejilla de fechas: sirve para
- * ELEGIR un día y no sabe nada de contenido. Esto es la agenda, y por eso vive
- * en `components/` y no al lado de aquella — tiene estado, tiene formulario y
- * codifica cómo se ve un día con cosas dentro.
+ * `Calendar` is the primitive and remains a grid of dates: it serves to PICK a
+ * day and knows nothing about content. This is the schedule, which is why it
+ * lives in `components/` and not next to that one — it has state, it has a form
+ * and it encodes what a day with things in it looks like.
  *
- * Es presentacional, como el resto de la librería: recibe `events` y emite
- * `onCreateEvent`, `onUpdateEvent` y `onDeleteEvent`. No guarda nada, no llama a
- * ninguna API y no genera ids — el id lo pone quien persiste, porque es quien
- * sabe si viene de una base de datos o de un fichero.
+ * It is presentational, like the rest of the library: it takes `events` and
+ * emits `onCreateEvent`, `onUpdateEvent` and `onDeleteEvent`. It stores nothing,
+ * calls no API and generates no ids — the id is set by whoever persists,
+ * because they are the one who knows whether it comes from a database or a file.
  *
- * DOS COLUMNAS y no un popover sobre el día. El popover es lo que hace todo el
- * mundo y esconde el contenido detrás de un clic: con la lista al lado, un mes
- * con quince eventos se lee de un vistazo y el día seleccionado no tapa la
- * rejilla. En pantalla estrecha se apilan.
+ * TWO COLUMNS and not a popover over the day. The popover is what everyone does
+ * and it hides the content behind a click: with the list beside it, a month with
+ * fifteen events reads at a glance and the selected day does not cover the grid.
+ * On a narrow screen they stack.
  *
- * El borrado pasa por `AlertDialog` y no por un botón directo. Es exactamente el
- * caso para el que existe: una acción destructiva sin deshacer.
+ * Deleting goes through `AlertDialog` and not through a direct button. It is
+ * precisely the case it exists for: a destructive action with no undo.
  */
-export type EventoCalendario = {
-  /** Lo pone el proyecto. La librería nunca lo inventa. */
+export type CalendarEvent = {
+  /** Set by the project. The library never invents it. */
   id: string;
-  /** Cuándo empieza, con hora. */
+  /** When it starts, with a time. */
   start: Date;
   title: string;
-  /** `warm` cuando el evento es el problema, igual que en `Stat`. */
+  /** `warm` when the event is the problem, same as in `Stat`. */
   tone?: 'accent' | 'warm' | undefined;
 };
 
 export type EventCalendarProps = Omit<ComponentPropsWithoutRef<'div'>, 'onSelect' | 'children'> & {
-  events: readonly EventoCalendario[];
-  /** Sin él, la agenda es de solo lectura y no se pinta el formulario. */
-  onCreateEvent?: ((evento: Omit<EventoCalendario, 'id'>) => void) | undefined;
-  onUpdateEvent?: ((evento: EventoCalendario) => void) | undefined;
+  events: readonly CalendarEvent[];
+  /** Without it, the schedule is read-only and the form is not painted. */
+  onCreateEvent?: ((event: Omit<CalendarEvent, 'id'>) => void) | undefined;
+  onUpdateEvent?: ((event: CalendarEvent) => void) | undefined;
   onDeleteEvent?: ((id: string) => void) | undefined;
-  /** Día seleccionado, si el proyecto lo controla. Sin él, empieza en hoy. */
+  /** Selected day, if the project controls it. Without it, it starts on today. */
   selected?: Date | undefined;
-  onSelectDay?: ((dia: Date) => void) | undefined;
-  /** Encabezado del panel. Por defecto, `es` de date-fns, como `Calendar`. */
-  formatDay?: ((dia: Date) => string) | undefined;
-  formatTime?: ((fecha: Date) => string) | undefined;
-  /** Texto del panel cuando el día elegido no tiene nada. */
+  onSelectDay?: ((day: Date) => void) | undefined;
+  /** The panel's heading. Defaults to date-fns' `es`, like `Calendar`. */
+  formatDay?: ((day: Date) => string) | undefined;
+  formatTime?: ((date: Date) => string) | undefined;
+  /** The panel's text when the chosen day has nothing on it. */
   emptyMessage?: ReactNode;
 };
 
-const mismoDia = (a: Date, b: Date) =>
+const sameDay = (a: Date, b: Date) =>
   a.getFullYear() === b.getFullYear() &&
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
 
 /**
- * `Date` → el valor que espera un `datetime-local`, en hora LOCAL.
+ * `Date` → the value a `datetime-local` expects, in LOCAL time.
  *
- * `toISOString()` no sirve y es el error clásico: devuelve UTC, así que un
- * evento de las 00:30 en Santiago se edita como del día anterior.
+ * `toISOString()` does not work and it is the classic bug: it returns UTC, so an
+ * event at 00:30 in Santiago gets edited as belonging to the previous day.
  */
-function aValorDeCampo(fecha: Date): string {
-  const dos = (n: number) => String(n).padStart(2, '0');
-  return `${fecha.getFullYear()}-${dos(fecha.getMonth() + 1)}-${dos(fecha.getDate())}T${dos(
-    fecha.getHours(),
-  )}:${dos(fecha.getMinutes())}`;
+function toFieldValue(date: Date): string {
+  const two = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${two(date.getMonth() + 1)}-${two(date.getDate())}T${two(
+    date.getHours(),
+  )}:${two(date.getMinutes())}`;
 }
 
 export function EventCalendar({
@@ -93,87 +93,87 @@ export function EventCalendar({
   onDeleteEvent,
   selected,
   onSelectDay,
-  formatDay = (dia) => format(dia, "EEEE d 'de' MMMM", { locale: es }),
-  formatTime = (fecha) => format(fecha, 'HH:mm', { locale: es }),
+  formatDay = (day) => format(day, "EEEE d 'de' MMMM", { locale: es }),
+  formatTime = (date) => format(date, 'HH:mm', { locale: es }),
   emptyMessage = 'Nada en este día.',
   className,
   ...props
 }: EventCalendarProps) {
   const id = useId();
   const [diaInterno, setDiaInterno] = useState<Date>(() => selected ?? new Date());
-  const dia = selected ?? diaInterno;
+  const day = selected ?? diaInterno;
 
-  // El mes visible va aparte del día elegido: pasar de página no debe cambiar la
-  // selección. Con `month={dia}` a secas, navegar a octubre seleccionaba el 1 de
-  // octubre y la lista de al lado cambiaba sola.
-  const [mes, setMes] = useState<Date>(() => dia);
+  // The visible month is tracked separately from the chosen day: paging must not
+  // change the selection. With a bare `month={day}`, navigating to October
+  // selected the 1st of October and the list beside it changed on its own.
+  const [month, setMonth] = useState<Date>(() => day);
 
-  const [editando, setEditando] = useState<string | null>(null);
-  const [titulo, setTitulo] = useState('');
-  const [cuando, setCuando] = useState('');
+  const [editing, setEditing] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
+  const [when, setWhen] = useState('');
 
   const editable = Boolean(onCreateEvent ?? onUpdateEvent);
-  const delDia = events
-    .filter((e) => mismoDia(e.start, dia))
+  const ofTheDay = events
+    .filter((e) => sameDay(e.start, day))
     .sort((a, b) => a.start.getTime() - b.start.getTime());
 
-  function elegirDia(nuevo: Date | undefined) {
+  function pickDay(nuevo: Date | undefined) {
     if (!nuevo) return;
     setDiaInterno(nuevo);
-    setMes(nuevo);
+    setMonth(nuevo);
     onSelectDay?.(nuevo);
-    cancelar();
+    cancel();
   }
 
-  function cancelar() {
-    setEditando(null);
-    setTitulo('');
-    setCuando('');
+  function cancel() {
+    setEditing(null);
+    setTitle('');
+    setWhen('');
   }
 
-  function editar(evento: EventoCalendario) {
-    setEditando(evento.id);
-    setTitulo(evento.title);
-    setCuando(aValorDeCampo(evento.start));
+  function edit(event: CalendarEvent) {
+    setEditing(event.id);
+    setTitle(event.title);
+    setWhen(toFieldValue(event.start));
   }
 
-  function enviar(e: FormEvent<HTMLFormElement>) {
+  function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!titulo.trim() || !cuando) return;
+    if (!title.trim() || !when) return;
 
-    const start = new Date(cuando);
+    const start = new Date(when);
     if (Number.isNaN(start.getTime())) return;
 
-    if (editando) {
-      // Se parte del evento original para no perder lo que el formulario no
-      // edita —hoy `tone`, mañana lo que se añada—. Si ya no existe, se ignora:
-      // otra pestaña lo borró mientras esto estaba abierto.
-      const previo = events.find((ev) => ev.id === editando);
-      if (previo) onUpdateEvent?.({ ...previo, title: titulo.trim(), start });
+    if (editing) {
+      // It starts from the original event so as not to lose what the form does
+      // not edit — `tone` today, whatever gets added tomorrow. If it no longer
+      // exists, it is ignored: another tab deleted it while this was open.
+      const previous = events.find((ev) => ev.id === editing);
+      if (previous) onUpdateEvent?.({ ...previous, title: title.trim(), start });
     } else {
-      onCreateEvent?.({ title: titulo.trim(), start });
+      onCreateEvent?.({ title: title.trim(), start });
     }
-    cancelar();
+    cancel();
   }
 
-  // Los días con algo, para la marca de la rejilla.
-  const conEvento = events.map((e) => e.start);
+  // The days with something on them, for the grid's marker.
+  const withEvent = events.map((e) => e.start);
 
   return (
     <div className={cn('gap-step-lg flex flex-col md:flex-row md:items-start', className)} {...props}>
       <Calendar
         mode="single"
-        selected={dia}
-        onSelect={elegirDia}
-        month={mes}
-        onMonthChange={setMes}
-        modifiers={{ conEvento }}
+        selected={day}
+        onSelect={pickDay}
+        month={month}
+        onMonthChange={setMonth}
+        modifiers={{ withEvent }}
         modifiersClassNames={{
-          // El punto va bajo el número, no encima del fondo del día: sobre el
-          // seleccionado —que es bioluz sólido— un punto de acento desaparece.
-          // `after:` en Tailwind v4 ya trae `content: ""`, así que no hace falta
-          // declararlo con un valor arbitrario.
-          conEvento: cn(
+          // The dot goes under the number, not on top of the day's background:
+          // over the selected one — which is solid biolume — an accent dot
+          // disappears. `after:` in Tailwind v4 already ships `content: ""`, so
+          // there is no need to declare it with an arbitrary value.
+          withEvent: cn(
             'after:bg-accent after:absolute after:bottom-1 after:left-1/2',
             'after:size-1 after:-translate-x-1/2 after:rounded-pill',
             '[&[data-selected=true]]:after:bg-accent-on',
@@ -187,59 +187,59 @@ export function EventCalendar({
         className="border-hairline rounded-card p-step-md gap-step-md flex min-w-0 flex-1 flex-col border"
       >
         <Text as="h3" variant="h3" id={`${id}-dia`} className="first-letter:uppercase">
-          {formatDay(dia)}
+          {formatDay(day)}
         </Text>
 
-        {delDia.length > 0 ? (
+        {ofTheDay.length > 0 ? (
           <ul className="gap-step-xs flex flex-col">
-            {delDia.map((evento) => (
+            {ofTheDay.map((event) => (
               <li
-                key={evento.id}
+                key={event.id}
                 className="border-hairline gap-step-sm py-step-xs flex items-center border-b last:border-b-0"
               >
                 <Text
                   as="span"
                   variant="meta"
-                  tone={evento.tone === 'warm' ? 'warm' : 'accent'}
+                  tone={event.tone === 'warm' ? 'warm' : 'accent'}
                   className="shrink-0 tabular-nums"
                 >
-                  <time dateTime={evento.start.toISOString()}>{formatTime(evento.start)}</time>
+                  <time dateTime={event.start.toISOString()}>{formatTime(event.start)}</time>
                 </Text>
 
                 <Text as="span" variant="ui" className="min-w-0 flex-1 truncate">
-                  {evento.title}
+                  {event.title}
                 </Text>
 
                 {onUpdateEvent ? (
                   <Button
                     variant="tertiary"
                     size="sm"
-                    onClick={() => editar(evento)}
-                    aria-label={`Editar «${evento.title}»`}
+                    onClick={() => edit(event)}
+                    aria-label={`Editar «${event.title}»`}
                   >
-                    ./editar
+                    ./edit
                   </Button>
                 ) : null}
 
                 {onDeleteEvent ? (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="tertiary" size="sm" aria-label={`Borrar «${evento.title}»`}>
+                      <Button variant="tertiary" size="sm" aria-label={`Borrar «${event.title}»`}>
                         ./borrar
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Borrar «{evento.title}»</AlertDialogTitle>
+                        <AlertDialogTitle>Borrar «{event.title}»</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Se borra del {formatDay(evento.start)} a las {formatTime(evento.start)}. No
+                          Se borra del {formatDay(event.start)} a las {formatTime(event.start)}. No
                           se puede deshacer.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Mejor no</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => onDeleteEvent(evento.id)}>
-                          Borrar el evento
+                        <AlertDialogAction onClick={() => onDeleteEvent(event.id)}>
+                          Borrar el event
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -249,46 +249,46 @@ export function EventCalendar({
             ))}
           </ul>
         ) : (
-          // `EmptyState` no: lleva una cara de la mascota, y la mascota tiene
-          // siete sitios contados donde puede aparecer. Un día vacío de una
-          // agenda no es uno de ellos — y en un mes de treinta días, la mitad lo
-          // serían.
+          // `EmptyState` is not used: it carries a mascot face, and the mascot
+          // has seven counted places where it may appear. An empty day in a
+          // schedule is not one of them — and in a thirty-day month, half of them
+          // would be.
           <Text as="p" variant="ui" tone="muted">
             {emptyMessage}
           </Text>
         )}
 
         {editable ? (
-          <form onSubmit={enviar} className="gap-step-sm border-hairline pt-step-md flex flex-col border-t">
+          <form onSubmit={submit} className="gap-step-sm border-hairline pt-step-md flex flex-col border-t">
             <div className="gap-step-xs flex flex-col">
-              <Label htmlFor={`${id}-titulo`}>Título</Label>
+              <Label htmlFor={`${id}-title`}>Título</Label>
               <Input
-                id={`${id}-titulo`}
-                value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
+                id={`${id}-title`}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 placeholder="Publicar el artículo"
                 required
               />
             </div>
 
             <div className="gap-step-xs flex flex-col">
-              <Label htmlFor={`${id}-cuando`}>Cuándo</Label>
+              <Label htmlFor={`${id}-when`}>Cuándo</Label>
               <DateField
-                id={`${id}-cuando`}
+                id={`${id}-when`}
                 withTime
-                value={cuando}
-                onChange={(e) => setCuando(e.target.value)}
+                value={when}
+                onChange={(e) => setWhen(e.target.value)}
                 required
               />
             </div>
 
             <div className="gap-step-sm flex flex-wrap items-center">
               <Button type="submit" size="sm">
-                {editando ? 'Guardar' : 'Añadir'}
+                {editing ? 'Guardar' : 'Añadir'}
               </Button>
-              {editando ? (
-                <Button type="button" variant="tertiary" size="sm" onClick={cancelar}>
-                  ./cancelar
+              {editing ? (
+                <Button type="button" variant="tertiary" size="sm" onClick={cancel}>
+                  ./cancel
                 </Button>
               ) : null}
             </div>

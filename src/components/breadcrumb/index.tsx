@@ -4,36 +4,36 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
 
 /**
- * La ruta como una ruta: `~ / artículos / cómo-escalar-un-equipo`.
+ * The path as a path: `~ / artículos / cómo-escalar-un-equipo`.
  *
- * El `~` no es decoración ni un icono de casa: es el home del sistema de
- * archivos, y por eso el breadcrumb es mono y no sans. Los separadores van en
- * `border` (#22414F), que es el token más tenue que sigue leyéndose como línea.
+ * The `~` is neither decoration nor a house icon: it is the filesystem's home,
+ * which is why the breadcrumb is mono and not sans. The separators use `border`
+ * (#22414F), the faintest token that still reads as a line.
  *
- * El último tramo es la página actual, así que no es un enlace y lleva
- * `aria-current="page"`. Es la diferencia entre una miga de pan accesible y
- * cuatro enlaces seguidos, uno de los cuales no va a ninguna parte.
+ * The last crumb is the current page, so it is not a link and carries
+ * `aria-current="page"`. That is the difference between an accessible breadcrumb
+ * and four consecutive links, one of which goes nowhere.
  */
-export type Migaja = {
+export type Crumb = {
   label: ReactNode;
-  /** Sin `href`, el tramo es texto. El último nunca debería llevarlo. */
+  /** With no `href`, the crumb is text. The last one should never carry it. */
   href?: string | undefined;
 };
 
 export type BreadcrumbProps = Omit<ComponentPropsWithoutRef<'nav'>, 'children'> & {
-  items: readonly Migaja[];
-  /** Destino del `~`. Por defecto, la raíz del sitio. */
+  items: readonly Crumb[];
+  /** Where the `~` goes. The site root by default. */
   homeHref?: string;
-  /** Etiqueta accesible del `~`, que si no se lee como una tilde suelta. */
+  /** Accessible label for the `~`, which otherwise reads as a stray tilde. */
   homeLabel?: string;
   /**
-   * Renderiza los enlaces con el hijo, para enchufar el `Link` de Next o Astro.
-   * Recibe cada `href` en el `props` del Slot.
+   * Renders the links through the child, to plug in Next's or Astro's `Link`.
+   * It receives each `href` in the Slot's `props`.
    */
   linkAsChild?: ((props: { href: string; children: ReactNode }) => ReactNode) | undefined;
 };
 
-const ENLACE =
+const LINK =
   'transition-standard hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-chip cursor-pointer';
 
 export function Breadcrumb({
@@ -44,31 +44,31 @@ export function Breadcrumb({
   className,
   ...props
 }: BreadcrumbProps) {
-  const enlace = (href: string, contenido: ReactNode) =>
+  const link = (href: string, content: ReactNode) =>
     linkAsChild ? (
-      <Slot className={ENLACE}>{linkAsChild({ href, children: contenido })}</Slot>
+      <Slot className={LINK}>{linkAsChild({ href, children: content })}</Slot>
     ) : (
-      <a href={href} className={ENLACE}>
-        {contenido}
+      <a href={href} className={LINK}>
+        {content}
       </a>
     );
 
   return (
     <nav aria-label="Ruta" className={cn('font-mono text-meta text-text-muted', className)} {...props}>
       <ol className="gap-step-xs flex flex-wrap items-center">
-        <li>{enlace(homeHref, <span aria-label={homeLabel}>~</span>)}</li>
+        <li>{link(homeHref, <span aria-label={homeLabel}>~</span>)}</li>
 
         {items.map((item, i) => {
-          const ultimo = i === items.length - 1;
+          const last = i === items.length - 1;
           return (
             <li key={i} className="gap-step-xs flex items-center">
               <span aria-hidden="true" className="text-border">
                 /
               </span>
-              {item.href && !ultimo ? (
-                enlace(item.href, item.label)
+              {item.href && !last ? (
+                link(item.href, item.label)
               ) : (
-                <span aria-current={ultimo ? 'page' : undefined} className="text-text-secondary">
+                <span aria-current={last ? 'page' : undefined} className="text-text-secondary">
                   {item.label}
                 </span>
               )}

@@ -5,31 +5,31 @@ import { cn } from '../lib/cn.ts';
 import { ChevronDown } from '../lib/glyphs.tsx';
 
 /**
- * El plegable. Lo pedían dos proyectos: el FAQ del portafolio y el temario de
- * cursos, que es literalmente una lista de secciones que se abren.
+ * The disclosure. Two projects asked for it: the portfolio FAQ and the course
+ * syllabus, which is literally a list of sections that open.
  *
- * La altura SÍ se anima, y es la cuarta excepción declarada del sistema.
+ * The height IS animated, and it is the system's fourth declared exception.
  *
- * Merece explicarse, porque la regla general es la contraria y este componente
- * nació sin animar citándola. La diferencia es que aquí no APARECE nada: se
- * abre un hueco, y todo lo que hay debajo del acordeón se desplaza. Sin
- * transición ese desplazamiento es un salto, y quien acaba de pulsar pierde el
- * sitio en la página — que es justo el daño que la regla «nada de movimiento»
- * existe para evitar. Es la misma categoría que el panel lateral, la segunda
- * excepción, y no la de una animación de entrada.
+ * It deserves explaining, because the general rule says the opposite and this
+ * component was born unanimated citing it. The difference is that nothing
+ * APPEARS here: a gap opens, and everything below the accordion shifts. Without
+ * a transition that shift is a jump, and whoever just clicked loses their place
+ * on the page — which is exactly the harm the «no movement» rule exists to
+ * prevent. It is the same category as the side panel, the second exception, and
+ * not that of an entrance animation.
  *
- * Va detrás de `motion-safe`, dura `--duration-standard` y usa
- * `--ease-standard`, así que no estrena un tiempo ni una curva. Quien pidió
- * menos movimiento sigue viendo el panel aparecer donde va a quedarse.
+ * It sits behind `motion-safe`, lasts `--duration-standard` and uses
+ * `--ease-standard`, so it introduces neither a new timing nor a new curve.
+ * Whoever asked for less motion still sees the panel appear where it will stay.
  *
- * Ver `docs/decisiones.md` § 20.
+ * See `docs/decisions.md` § 20.
  *
- * El galón, en cambio, gira sin transición: `transition-standard` solo cubre
- * color y borde, así que `rotate` salta aunque la clase esté puesta. Es el mismo
- * trato que recibe el ancho de `Progress`.
+ * The chevron, by contrast, rotates with no transition: `transition-standard`
+ * only covers color and border, so `rotate` snaps even with the class in place.
+ * It is the same treatment `Progress` gives its width.
  *
- * La división entre items es `hairline`, no `border`: es una separación de
- * lectura, no el borde de un control.
+ * The divider between items is `hairline`, not `border`: it is a reading
+ * separation, not the border of a control.
  */
 export type AccordionProps = ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>;
 
@@ -50,19 +50,19 @@ export function AccordionItem({
 }
 
 /**
- * El disparador es el encabezado, así que va DENTRO de un `<h3>`: Radix envuelve
- * el botón en `AccordionPrimitive.Header`, que renderiza el elemento que se le
- * pida. Sin eso, un lector de pantalla ve una lista de botones sueltos y pierde
- * la estructura de la página, que es justo lo que un FAQ necesita conservar.
+ * The trigger IS the heading, so it goes INSIDE an `<h3>`: Radix wraps the
+ * button in `AccordionPrimitive.Header`, which renders whichever element you ask
+ * of it. Without that, a screen reader sees a list of loose buttons and loses
+ * the page structure, which is precisely what a FAQ needs to keep.
  *
- * `headingLevel` existe porque el nivel correcto depende de dónde se monte: en
- * una página de FAQ el bloque cuelga de un `<h2>` de sección, y en un temario
- * puede colgar de un `<h3>`. Fijarlo aquí sería adivinar.
+ * `headingLevel` exists because the correct level depends on where it is
+ * mounted: on a FAQ page the block hangs off a section `<h2>`, and in a syllabus
+ * it may hang off an `<h3>`. Pinning it here would be guessing.
  */
 export type AccordionTriggerProps = ComponentPropsWithoutRef<
   typeof AccordionPrimitive.Trigger
 > & {
-  /** Nivel del encabezado que envuelve al disparador. */
+  /** The level of the heading wrapping the trigger. */
   headingLevel?: 2 | 3 | 4;
 };
 
@@ -72,11 +72,11 @@ export function AccordionTrigger({
   headingLevel = 3,
   ...props
 }: AccordionTriggerProps) {
-  const Encabezado = `h${headingLevel}` as const;
+  const Heading = `h${headingLevel}` as const;
 
   return (
     <AccordionPrimitive.Header asChild>
-      <Encabezado>
+      <Heading>
         <AccordionPrimitive.Trigger
           className={cn(
             'gap-step-sm py-step-sm flex w-full cursor-pointer items-center justify-between text-left',
@@ -93,7 +93,7 @@ export function AccordionTrigger({
           {children}
           <ChevronDown className="text-text-muted shrink-0" />
         </AccordionPrimitive.Trigger>
-      </Encabezado>
+      </Heading>
     </AccordionPrimitive.Header>
   );
 }
@@ -107,7 +107,7 @@ export function AccordionContent({
     <AccordionPrimitive.Content
       className={cn(
         'overflow-hidden',
-        'motion-safe:data-[state=open]:desplegar motion-safe:data-[state=closed]:replegar',
+        'motion-safe:data-[state=open]:expand motion-safe:data-[state=closed]:collapse',
       )}
       {...props}
     >

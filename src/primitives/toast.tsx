@@ -45,7 +45,7 @@ const toast = cva(
 export type ToastProps = ComponentPropsWithoutRef<typeof ToastPrimitive.Root> &
   VariantProps<typeof toast>;
 
-/** Sin deslizamiento de entrada: el aviso aparece donde va a quedarse. */
+/** No slide-in: the toast appears where it will stay. */
 export function Toast({ className, variant, children, ...props }: ToastProps) {
   return (
     <ToastPrimitive.Root className={cn(toast({ variant }), className)} {...props}>

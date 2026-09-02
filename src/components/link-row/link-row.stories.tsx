@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { ArrowUpRight } from '../../lib/glyphs.tsx';
 import { LinkRow } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/LinkRow',
+  title: 'Components/LinkRow',
   component: LinkRow,
   args: { href: '#', name: 'GitHub', description: 'github.com/Proskynete', external: true },
 } satisfies Meta<typeof LinkRow>;
@@ -13,7 +13,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Lista: Story = {
+export const List: Story = {
   render: (args) => (
     <div className="gap-step-xs max-w-content flex flex-col">
       <LinkRow {...args} />
@@ -29,11 +29,11 @@ export const Hover: Story = {
   render: (args) => (
     <div className="max-w-content">
       <LinkRow {...args} />
-      <Nota>
-        El original en `links` escalaba la tarjeta al 102 %, subía el título un
-        píxel y giraba y agrandaba el icono. Aquí el hover cambia el borde y el
-        color, y nada más.
-      </Nota>
+      <Note>
+        The original in `links` scaled the card to 102 %, lifted the title by a
+        pixel and rotated and enlarged the icon. Here the hover changes the border
+        and the color, and nothing else.
+      </Note>
     </div>
   ),
 };

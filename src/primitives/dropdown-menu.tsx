@@ -23,7 +23,7 @@ const item = [
   'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
 ];
 
-/** Sin animación de entrada: el menú aparece, no se despliega. */
+/** No entrance animation: the menu appears, it does not unfold. */
 export function DropdownMenuContent({
   className,
   sideOffset = 6,

@@ -3,22 +3,22 @@ import type { ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
 import { ArrowUpRight } from '../../lib/glyphs.tsx';
 import { Text } from '../../primitives/typography.tsx';
-import { Tarjeta, type TarjetaProps } from '../card-base.tsx';
+import { CardShell, type CardShellProps } from '../card-base.tsx';
 
-export type LinkRowProps = Omit<TarjetaProps, 'children'> & {
+export type LinkRowProps = Omit<CardShellProps, 'children'> & {
   name: ReactNode;
   description?: ReactNode;
-  /** Glifo SVG del destino. Nunca un emoji. */
+  /** The target's SVG glyph. Never an emoji. */
   icon?: ReactNode;
-  /** Marca el enlace como externo: añade la flecha y el `rel` seguro. */
+  /** Marks the link as external: adds the arrow and the safe `rel`. */
   external?: boolean | undefined;
 };
 
 /**
- * Migrado desde `links/src/components/Card.astro`. El original escalaba la
- * tarjeta al 102 %, subía el título un píxel y giraba y agrandaba el icono en
- * hover — cuatro movimientos que el sistema no permite. Aquí el hover cambia el
- * borde y el color del icono, y nada más.
+ * Migrated from `links/src/components/Card.astro`. The original scaled the card
+ * to 102 %, lifted the title by a pixel and rotated and enlarged the icon on
+ * hover — four movements the system does not allow. Here the hover changes the
+ * border and the icon's color, and nothing else.
  */
 export function LinkRow({
   name,
@@ -32,7 +32,7 @@ export function LinkRow({
   const target = external ? '_blank' : props.target;
 
   return (
-    <Tarjeta
+    <CardShell
       className={cn('px-step-md py-step-sm', className)}
       {...props}
       rel={rel}
@@ -63,6 +63,6 @@ export function LinkRow({
           />
         ) : null}
       </span>
-    </Tarjeta>
+    </CardShell>
   );
 }

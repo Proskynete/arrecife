@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { ArticleCard } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/ArticleCard',
+  title: 'Components/ArticleCard',
   component: ArticleCard,
   args: {
     href: '#',
@@ -30,22 +30,23 @@ export const Hover: Story = {
   render: (args) => (
     <div className="max-w-content">
       <ArticleCard {...args} />
-      <Nota>
-        El hover cambia el borde de `hairline` a `hairlineHover` y tiñe el título
-        de acento. Nada más: ni escala, ni elevación, ni desplazamiento.
-      </Nota>
+      <Note>
+        The hover changes the border from `hairline` to `hairlineHover` and tints
+        the title with accent. Nothing else: no scale, no elevation, no
+        displacement.
+      </Note>
     </div>
   ),
 };
 
-export const Rejilla: Story = {
+export const Grid: Story = {
   render: (args) => (
     <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
       <ArticleCard {...args} />
       <ArticleCard
         {...args}
         title="Arquitecturas que sobreviven al equipo que las escribió"
-        excerpt="Una decisión sin escribir es una decisión que se vuelve a tomar cada seis meses, peor cada vez."
+        excerpt="Una decisión sin write es una decisión que se vuelve a tomar cada seis meses, peor cada vez."
         readingMinutes={12}
         tags={['adr']}
       />
@@ -54,22 +55,21 @@ export const Rejilla: Story = {
   ),
 };
 
-export const ComoH2: Story = {
+export const AsH2: Story = {
   name: 'headingLevel 2',
   args: { headingLevel: 2 },
   render: (args) => (
     <div className="max-w-content">
       <ArticleCard {...args} />
-      <Nota>
-        `h3` por defecto: una tarjeta suelta en una rejilla no gana el nivel que
-        su posición no le da. En la página de listado sí lo gana —las tarjetas
-        SON el encabezado principal de la sección— y esa intención se perdía con
-        el nivel fijo.
-      </Nota>
-      <Nota>
-        Acotado a `2 | 3`. Abrirlo hasta `h5` es invitar a saltarse niveles, que
-        es el fallo que la constante evitaba.
-      </Nota>
+      <Note>
+        `h3` by default: a lone card in a grid does not earn a level its position
+        does not give it. On the listing page it does earn it — the cards ARE the
+        section's main heading — and that intent was lost with a fixed level.
+      </Note>
+      <Note>
+        Restricted to `2 | 3`. Opening it up to `h5` is an invitation to skip
+        levels, which is the failure the constant was preventing.
+      </Note>
     </div>
   ),
 };

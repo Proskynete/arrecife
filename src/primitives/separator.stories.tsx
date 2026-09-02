@@ -1,26 +1,26 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota, Pila } from '../../stories/utils.tsx';
+import { Note, Stack } from '../../stories/utils.tsx';
 import { Separator } from './separator.tsx';
 import { Text } from './typography.tsx';
 
-const meta = { title: 'Primitivos/Separator', component: Separator } satisfies Meta<typeof Separator>;
+const meta = { title: 'Primitives/Separator', component: Separator } satisfies Meta<typeof Separator>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Horizontal: Story = {
   render: () => (
-    <Pila>
+    <Stack>
       <Text variant="ui">Charlas</Text>
       <Separator />
       <Text variant="ui">Cursos</Text>
       <Separator />
       <Text variant="ui">Escritos</Text>
-      <Nota>
-        Usa `hairline`, no `border`: una división entre contenidos es sutil por
-        definición. `border` es para delimitar un control.
-      </Nota>
-    </Pila>
+      <Note>
+        It uses `hairline`, not `border`: a division between pieces of content is
+        subtle by definition. `border` is for delimiting a control.
+      </Note>
+    </Stack>
   ),
 };
 

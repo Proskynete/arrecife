@@ -10,166 +10,169 @@ import {
 } from './toast.tsx';
 
 /**
- * Lo ÚNICO que se reexporta de `toast.tsx`. El resto de la primitiva de Radix
- * —`Toast`, `ToastProvider`, `ToastViewport`, `ToastTitle`,
- * `ToastDescription`— dejó de ser API pública en la 0.5.0.
+ * The ONLY thing re-exported from `toast.tsx`. The rest of the Radix primitive —
+ * `Toast`, `ToastProvider`, `ToastViewport`, `ToastTitle`, `ToastDescription` —
+ * stopped being public API in 0.5.0.
  *
- * El motivo es que no tenía un caso de uso propio. `Toaster` está construido
- * encima y cubre todo lo que los proyectos hacen; la capa de abajo solo servía
- * para atar un aviso al ciclo de vida de un componente, que no lo hace nadie.
- * Dos formas de mostrar lo mismo obligan a elegir en cada sitio de uso, y esa
- * elección no tenía criterio que la resolviera.
+ * The reason is that it had no use case of its own. `Toaster` is built on top
+ * and covers everything the projects do; the lower layer only served to bind a
+ * toast to a component's lifecycle, which nobody does. Two ways of showing the
+ * same thing force a choice at every call site, and that choice had no criterion
+ * to settle it.
  *
- * `ToastAction` sí se queda: es lo que se pasa en `action` cuando el aviso
- * ofrece deshacer, y sin él esa prop no se puede construir desde fuera.
+ * `ToastAction` does stay: it is what you pass in `action` when the toast offers
+ * an undo, and without it that prop cannot be built from outside.
  */
 export { ToastAction } from './toast.tsx';
 
 /**
- * La cara imperativa del `Toast` de Radix: `toast('Guardado')` desde cualquier
- * sitio, sin pasar el aviso por props hasta el componente que lo dispara.
+ * The imperative face of Radix's `Toast`: `toast('Guardado')` from anywhere,
+ * without threading the notice through props down to the component that fires
+ * it.
  *
- * Existe porque dos proyectos traían `sonner` para esto. `Toast` cubre el mismo
- * rol y tiene otra forma: Radix es declarativo con proveedor, y para mostrar un
- * aviso desde el `catch` de un `fetch` hay que subir estado hasta donde vive el
- * proveedor. Eso es exactamente lo que `sonner` evita, y es una necesidad real,
- * no una preferencia de API.
+ * It exists because two projects were pulling in `sonner` for this. `Toast`
+ * covers the same role and has a different shape: Radix is declarative with a
+ * provider, and to show a notice from a `fetch`'s `catch` you have to lift state
+ * up to where the provider lives. That is exactly what `sonner` avoids, and it
+ * is a real need, not an API preference.
  *
- * La alternativa era que los dos proyectos se adaptaran. Se descartó: el aviso
- * lo dispara la capa de datos, que no tiene —ni debería tener— un componente
- * cerca al que subirle un `useState`.
+ * The alternative was for the two projects to adapt. It was ruled out: the
+ * notice is fired by the data layer, which has no component nearby to hang a
+ * `useState` on — nor should it.
  *
- * Lo que NO se copió de `sonner` es el catálogo entero. No hay `toast.promise`,
- * ni `toast.custom`, ni posiciones configurables, ni apilado con perspectiva:
- * son cuatro variantes de lo mismo y cada una es superficie pública que hay que
- * mantener. Están las tres formas que los proyectos usan de verdad —neutral,
- * éxito, error—, `dismiss` y nada más.
+ * What was NOT copied from `sonner` is the whole catalogue. There is no
+ * `toast.promise`, no `toast.custom`, no configurable positions, no stacking
+ * with perspective: they are four variations on the same thing and each one is
+ * public surface that has to be maintained. What is here are the three shapes
+ * the projects actually use — neutral, success, error — plus `dismiss`, and
+ * nothing else.
  *
- * El estado vive en un módulo, no en un contexto, porque el punto es que se
- * pueda llamar desde fuera del árbol. `Toaster` se suscribe con
- * `useSyncExternalStore`, que es la forma que React 19 tiene de leer un estado
- * externo sin efectos ni renders en cascada.
+ * State lives in a module, not in a context, because the whole point is being
+ * callable from outside the tree. `Toaster` subscribes with
+ * `useSyncExternalStore`, which is React 19's way of reading external state
+ * without effects or cascading renders.
  */
 export type ToastVariant = NonNullable<ToastProps['variant']>;
 
 export type ToastOptions = {
-  /** La primera línea, en negrita. Sin ella el aviso es una sola frase. */
+  /** The first line, in bold. Without it the notice is a single sentence. */
   title?: ReactNode;
   description?: ReactNode;
   variant?: ToastVariant;
-  /** Milisegundos en pantalla. `Infinity` lo deja hasta que se cierre a mano. */
+  /** Milliseconds on screen. `Infinity` leaves it until it is closed by hand. */
   duration?: number;
-  /** Un `ToastAction`, si el aviso ofrece deshacer. */
+  /** A `ToastAction`, if the notice offers an undo. */
   action?: ReactNode;
 };
 
-type Aviso = ToastOptions & { id: string; abierto: boolean };
+type Notice = ToastOptions & { id: string; open: boolean };
 
-let avisos: readonly Aviso[] = [];
-const suscriptores = new Set<() => void>();
-let contador = 0;
+let warnings: readonly Notice[] = [];
+const subscribers = new Set<() => void>();
+let counter = 0;
 
-function emitir(siguientes: readonly Aviso[]) {
-  avisos = siguientes;
-  for (const avisar of suscriptores) avisar();
+function emit(next: readonly Notice[]) {
+  warnings = next;
+  for (const warn of subscribers) warn();
 }
 
-const suscribirse = (avisar: () => void) => {
-  suscriptores.add(avisar);
+const subscribe = (warn: () => void) => {
+  subscribers.add(warn);
   return () => {
-    suscriptores.delete(avisar);
+    subscribers.delete(warn);
   };
 };
 
-const leer = () => avisos;
+const read = () => warnings;
 
 /**
- * En el servidor la lista siempre está vacía, y tiene que ser SIEMPRE EL MISMO
- * array: devolver `[]` recién creado en cada llamada hace que React lo vea como
- * un valor nuevo en cada render y entre en bucle.
+ * On the server the list is always empty, and it has to be ALWAYS THE SAME
+ * array: returning a freshly created `[]` on every call makes React see a new
+ * value on every render and loop.
  */
-const VACIO: readonly Aviso[] = [];
-const enServidor = () => VACIO;
+const EMPTY: readonly Notice[] = [];
+const onServer = () => EMPTY;
 
-function crear(mensaje: ReactNode, opciones: ToastOptions = {}): string {
-  contador += 1;
-  const id = `arrecife-toast-${contador}`;
-  const { description, ...resto } = opciones;
+function create(message: ReactNode, options: ToastOptions = {}): string {
+  counter += 1;
+  const id = `arrecife-toast-${counter}`;
+  const { description, ...rest } = options;
 
-  emitir([
-    ...avisos,
+  emit([
+    ...warnings,
     {
-      ...resto,
-      // El primer argumento es la línea principal. Si además llega `title`, el
-      // mensaje pasa a ser la descripción: así `toast('Guardado')` y
-      // `toast('No se pudo guardar', { title: 'Error' })` se leen igual de bien.
-      ...(opciones.title
-        ? { description: description ?? mensaje }
-        : { title: mensaje, ...(description === undefined ? {} : { description }) }),
+      ...rest,
+      // The first argument is the main line. If a `title` also arrives, the
+      // message becomes the description: that way `toast('Guardado')` and
+      // `toast('No se pudo guardar', { title: 'Error' })` both read well.
+      ...(options.title
+        ? { description: description ?? message }
+        : { title: message, ...(description === undefined ? {} : { description }) }),
       id,
-      abierto: true,
+      open: true,
     },
   ]);
 
   return id;
 }
 
-/** Cierra un aviso, o todos si no se le dice cuál. */
-function descartar(id?: string) {
-  emitir(avisos.map((a) => (id === undefined || a.id === id ? { ...a, abierto: false } : a)));
+/** Closes one notice, or all of them if it is not told which. */
+function discard(id?: string) {
+  emit(warnings.map((a) => (id === undefined || a.id === id ? { ...a, open: false } : a)));
 }
 
-/** El que sale del DOM cuando Radix termina de cerrarlo. */
-function retirar(id: string) {
-  emitir(avisos.filter((a) => a.id !== id));
+/** The one that leaves the DOM when Radix has finished closing it. */
+function remove(id: string) {
+  emit(warnings.filter((a) => a.id !== id));
 }
 
-type Lanzador = {
-  (mensaje: ReactNode, opciones?: ToastOptions): string;
-  success: (mensaje: ReactNode, opciones?: ToastOptions) => string;
-  error: (mensaje: ReactNode, opciones?: ToastOptions) => string;
+type Trigger = {
+  (message: ReactNode, options?: ToastOptions): string;
+  success: (message: ReactNode, options?: ToastOptions) => string;
+  error: (message: ReactNode, options?: ToastOptions) => string;
   dismiss: (id?: string) => void;
 };
 
 /**
- * Lanza un aviso. Devuelve su id, que es lo que hay que guardar para cerrarlo a
- * mano —el caso de «guardando…» que se reemplaza cuando termina la petición.
+ * Fires a notice. It returns its id, which is what you keep in order to close it
+ * by hand — the «guardando…» case that gets replaced when the request finishes.
  */
-export const toast: Lanzador = Object.assign(crear, {
-  success: (mensaje: ReactNode, opciones: ToastOptions = {}) =>
-    crear(mensaje, { ...opciones, variant: 'success' }),
-  error: (mensaje: ReactNode, opciones: ToastOptions = {}) =>
-    crear(mensaje, { ...opciones, variant: 'error' }),
-  dismiss: descartar,
+export const toast: Trigger = Object.assign(create, {
+  success: (message: ReactNode, options: ToastOptions = {}) =>
+    create(message, { ...options, variant: 'success' }),
+  error: (message: ReactNode, options: ToastOptions = {}) =>
+    create(message, { ...options, variant: 'error' }),
+  dismiss: discard,
 });
 
 export type ToasterProps = {
-  /** Cuánto dura un aviso que no dice lo contrario. */
+  /** How long a notice lasts when it does not say otherwise. */
   duration?: number;
   /**
-   * Nombre del landmark que Radix crea para la región de avisos. Se traduce
-   * porque lo lee un lector de pantalla, y el default de Radix está en inglés.
+   * The name of the landmark Radix creates for the notices region. It is
+   * translated because a screen reader reads it, and Radix's default is in
+   * English.
    */
   label?: string;
 };
 
 /**
- * Va UNA vez, lo más arriba posible del árbol. Dos `Toaster` montados pintan
- * cada aviso dos veces: la lista es del módulo, no de la instancia.
+ * Mount it ONCE, as high in the tree as possible. Two mounted `Toaster`s paint
+ * every notice twice: the list belongs to the module, not to the instance.
  */
 export function Toaster({ duration = 5000, label = 'Avisos' }: ToasterProps) {
-  const lista = useSyncExternalStore(suscribirse, leer, enServidor);
+  const list = useSyncExternalStore(subscribe, read, onServer);
 
   return (
     <ToastProvider duration={duration} label={label}>
-      {lista.map(({ id, title, description, variant, duration: propio, action, abierto }) => (
+      {list.map(({ id, title, description, variant, duration: own, action, open }) => (
         <Toast
           key={id}
-          open={abierto}
+          open={open}
           variant={variant ?? 'neutral'}
-          {...(propio === undefined ? {} : { duration: propio })}
-          onOpenChange={(sigue) => {
-            if (!sigue) retirar(id);
+          {...(own === undefined ? {} : { duration: own })}
+          onOpenChange={(stillOpen) => {
+            if (!stillOpen) remove(id);
           }}
         >
           <div className="min-w-0 flex-1">

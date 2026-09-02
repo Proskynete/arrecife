@@ -4,24 +4,25 @@ import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from '@tailwindcss/vite';
 
 /**
- * Dos proyectos, dos preguntas distintas.
+ * Two projects, two different questions.
  *
- * `storybook` monta cada story en un Chromium real y le pasa axe: el criterio
- * de aceptación «el addon de a11y no reporta fallos de contraste en ninguna
- * story» solo vale si alguien lo puede volver a correr, así que un color mal
- * medido rompe el build y no se queda esperando a que alguien abra el panel.
+ * `storybook` mounts every story in a real Chromium and runs axe over it: the
+ * acceptance criterion «the a11y addon reports no contrast failures in any
+ * story» is only worth anything if somebody can re-run it, so a badly measured
+ * color breaks the build instead of waiting for someone to open the panel.
  *
- * `unidad` corre en Node y compila Tailwind de verdad contra `theme.css`. Es lo
- * que faltaba cuando `--spacing-md` se comió `max-w-md`: la suite de stories no
- * podía verlo porque la librería no usa `max-w-*` por dentro, así que el fallo
- * solo existía en los proyectos que la consumen. Ver `scripts/theme-css.test.mjs`.
+ * `unit` runs in Node and compiles Tailwind for real against `theme.css`. It is
+ * what was missing when `--spacing-md` swallowed `max-w-md`: the story suite
+ * could not see it because the library does not use `max-w-*` internally, so the
+ * failure only existed in the projects consuming it. See
+ * `scripts/theme-css.test.mjs`.
  */
 export default defineConfig({
   test: {
     projects: [
       {
         test: {
-          name: 'unidad',
+          name: 'unit',
           environment: 'node',
           include: ['scripts/**/*.test.mjs'],
         },

@@ -5,17 +5,17 @@ import { Text } from '../../primitives/typography.tsx';
 
 export type BlockquoteProps = Omit<ComponentPropsWithoutRef<'blockquote'>, 'cite'> & {
   children: ReactNode;
-  /** Quién lo dijo. Se marca como `<cite>`. */
+  /** Who said it. Marked up as `<cite>`. */
   author?: ReactNode;
-  /** Dónde lo dijo: charla, artículo, conversación. */
+  /** Where they said it: a talk, an article, a conversation. */
   source?: ReactNode;
 };
 
 /**
- * La barra lateral es `accent`, que es el color interactivo, porque una cita es
- * la voz de otro entrando en el texto. No lleva comillas decorativas: los
- * glifos del sistema son SVG y una comilla de adorno no aporta nada que el
- * borde y la sangría no digan ya.
+ * The side bar is `accent`, the interactive color, because a quotation is
+ * somebody else's voice entering the text. It carries no decorative quote marks:
+ * the system's glyphs are SVG, and an ornamental quote adds nothing the border
+ * and the indent do not already say.
  */
 export function Blockquote({ children, author, source, className, ...props }: BlockquoteProps) {
   return (

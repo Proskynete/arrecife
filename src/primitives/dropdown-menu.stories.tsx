@@ -18,7 +18,7 @@ import {
 } from './dropdown-menu.tsx';
 
 const meta = {
-  title: 'Primitivos/DropdownMenu',
+  title: 'Primitives/DropdownMenu',
   component: DropdownMenu,
 } satisfies Meta<typeof DropdownMenu>;
 
@@ -54,21 +54,21 @@ const menu = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   </DropdownMenu>
 );
 
-export const Cerrado: Story = { render: menu };
+export const Closed: Story = { render: menu };
 
 /**
  * Se abre pulsando, no montando `open`: así el test de accesibilidad mide el
- * estado real, con el foco ya movido dentro del portal.
+ * state real, con el foco ya movido dentro del portal.
  */
 /**
  * Radix marca `aria-hidden` todo lo que queda fuera del portal, y el disparador
  * se queda dentro de esa región siendo focusable. axe lo reporta, pero el foco
  * está atrapado en el portal por el `FocusScope` de Radix, así que en la práctica
  * no se puede tabular hasta él. Es un desacuerdo conocido entre axe y Radix, no
- * algo que introduzca Arrecife: se desactiva esta regla y solo esta, aquí y no
- * en el resto de la librería.
+ * algo que introduzca Arrecife: se desactiva esta rule y solo esta, aquí y no
+ * en el rest de la librería.
  */
-export const Abierto: Story = {
+export const Open: Story = {
   parameters: {
     a11y: { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } },
   },

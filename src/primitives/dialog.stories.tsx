@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../stories/utils.tsx';
+import { Note } from '../../stories/utils.tsx';
 import { Button } from './button.tsx';
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from './dialog.tsx';
 
-const meta = { title: 'Primitivos/Dialog', component: Dialog } satisfies Meta<typeof Dialog>;
+const meta = { title: 'Primitives/Dialog', component: Dialog } satisfies Meta<typeof Dialog>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
@@ -40,19 +40,19 @@ const modal = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   </Dialog>
 );
 
-export const Cerrado: Story = { render: modal };
-export const Abierto: Story = { args: { open: true }, render: modal };
+export const Closed: Story = { render: modal };
+export const Open: Story = { args: { open: true }, render: modal };
 
-export const SinEntrada: Story = {
-  name: 'Sin animación de entrada',
+export const NoInput: Story = {
+  name: 'No entrance animation',
   args: { open: true },
   render: (args) => (
     <>
       {modal(args)}
-      <Nota>
-        El modal aparece donde va a quedarse: no escala ni se desliza. El velo es
-        `brand.hull` al 70%, que es el mismo casco del contorno de la mascota.
-      </Nota>
+      <Note>
+        The modal appears where it will stay: it neither scales nor slides. The
+        scrim is `brand.hull` at 70%, the same hull as the mascot's outline.
+      </Note>
     </>
   ),
 };

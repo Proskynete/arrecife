@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { TalkCard } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/TalkCard',
+  title: 'Components/TalkCard',
   component: TalkCard,
   args: {
     href: '#',
@@ -29,7 +29,7 @@ export const Hover: Story = {
   render: (args) => <div className="max-w-content"><TalkCard {...args} /></div>,
 };
 
-export const Rejilla: Story = {
+export const Grid: Story = {
   render: (args) => (
     <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
       <TalkCard {...args} />
@@ -39,25 +39,25 @@ export const Rejilla: Story = {
   ),
 };
 
-export const ConDescripcion: Story = {
-  name: 'Con descripción',
+export const WithDescription: Story = {
+  name: 'With description',
   args: {
     description:
-      'Qué se rompe cuando un equipo pasa de ocho a treinta, por qué casi nunca es la arquitectura, y las tres decisiones que conviene escribir antes de que haga falta.',
+      'Qué se rompe when un equipo passes de ocho a treinta, por qué casi nunca es la arquitectura, y las tres decisiones que conviene write antes de que haga falta.',
   },
   render: (args) => (
     <div className="max-w-content">
       <TalkCard {...args} />
-      <Nota>
-        La descripción se corta a dos líneas, igual que el `excerpt` de
-        `ArticleCard`: la rejilla de charlas tiene que seguir alineada aunque una
-        charla se explique en el doble de palabras que la de al lado.
-      </Nota>
-      <Nota>
-        Sin esta ranura, migrar el listado de charlas del portafolio no era un
-        cambio de estilo: PERDÍA contenido. Por eso ese proyecto seguía con su
-        propio marcado.
-      </Nota>
+      <Note>
+        The description clamps to two lines, same as `ArticleCard`'s `excerpt`: the
+        talks grid has to stay aligned even when one talk explains itself in twice
+        as many words as the one beside it.
+      </Note>
+      <Note>
+        Without this slot, migrating the portfolio's talk listing was not a change
+        of style: it LOST content. Which is why that project stuck with its own
+        markup.
+      </Note>
     </div>
   ),
 };

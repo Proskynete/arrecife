@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
-import { EventCalendar, type EventoCalendario } from './index.tsx';
+import { Note } from '../../../stories/utils.tsx';
+import { EventCalendar, type CalendarEvent } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/EventCalendar',
+  title: 'Components/EventCalendar',
   component: EventCalendar,
   args: { events: [] },
 } satisfies Meta<typeof EventCalendar>;
@@ -13,91 +13,91 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Fijos, no `new Date()`: una story que cambia de mes no es reproducible. */
-const HOY = new Date(2026, 8, 15, 9, 0);
+/** Fijos, no `new Date()`: una story que cambia de month no es reproducible. */
+const TODAY = new Date(2026, 8, 15, 9, 0);
 
-const EVENTOS: readonly EventoCalendario[] = [
+const EVENTS: readonly CalendarEvent[] = [
   { id: '1', start: new Date(2026, 8, 15, 10, 0), title: 'Publicar «Escalar con criterio»' },
   { id: '2', start: new Date(2026, 8, 15, 16, 30), title: 'Revisar el borrador de la newsletter' },
   { id: '3', start: new Date(2026, 8, 18, 12, 0), title: 'Charla en JSConf', tone: 'warm' },
   { id: '4', start: new Date(2026, 8, 24, 9, 0), title: 'Cierre del curso' },
 ];
 
-function Agenda({ soloLectura = false }: { soloLectura?: boolean }) {
-  const [eventos, setEventos] = useState<readonly EventoCalendario[]>(EVENTOS);
+function Schedule({ soloLectura = false }: { soloLectura?: boolean }) {
+  const [events, setEventos] = useState<readonly CalendarEvent[]>(EVENTS);
 
   if (soloLectura) {
-    return <EventCalendar events={eventos} selected={HOY} />;
+    return <EventCalendar events={events} selected={TODAY} />;
   }
 
   return (
     <EventCalendar
-      events={eventos}
-      selected={HOY}
-      onCreateEvent={(evento) => {
-        // El id sale del máximo que ya hay, dentro del actualizador. Un contador
+      events={events}
+      selected={TODAY}
+      onCreateEvent={(event) => {
+        // El id sale del máximo que ya hay, dentro del actualizador. Un counter
         // en una variable de la función se reasignaría después del render y
-        // volvería a empezar en cuanto algo remonte: dos eventos con el mismo id.
+        // volvería a empezar en cuanto algo remonte: two events con el mismo id.
         setEventos((previos) => {
           const id = Math.max(0, ...previos.map((e) => Number(e.id) || 0)) + 1;
-          return [...previos, { ...evento, id: String(id) }];
+          return [...previos, { ...event, id: String(id) }];
         });
       }}
-      onUpdateEvent={(evento) =>
-        setEventos((previos) => previos.map((e) => (e.id === evento.id ? evento : e)))
+      onUpdateEvent={(event) =>
+        setEventos((previos) => previos.map((e) => (e.id === event.id ? event : e)))
       }
       onDeleteEvent={(id) => setEventos((previos) => previos.filter((e) => e.id !== id))}
     />
   );
 }
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: () => (
     <div>
-      <Agenda />
-      <Nota>
-        Dos columnas, no un popover sobre el día. El popover es lo que hace todo
-        el mundo y esconde el contenido detrás de un clic; con la lista al lado,
-        un mes con quince eventos se lee de un vistazo.
-      </Nota>
-      <Nota>
-        Los días con algo llevan un punto bajo el número. Sobre el día
-        seleccionado el punto pasa a `accentOn`, porque un punto de acento sobre
-        un fondo de acento sólido no existe.
-      </Nota>
-      <Nota>
-        El componente no guarda nada ni inventa ids: emite `onCreateEvent`,
-        `onUpdateEvent` y `onDeleteEvent`, y el id lo pone quien persiste.
-      </Nota>
+      <Schedule />
+      <Note>
+        Two columns, not a popover over the day. The popover is what everyone does
+        and it hides the content behind a click; with the list beside it, a month
+        with fifteen events reads at a glance.
+      </Note>
+      <Note>
+        Days with something on them carry a dot under the number. Over the selected
+        day the dot switches to `accentOn`, because an accent dot on a solid accent
+        background does not exist.
+      </Note>
+      <Note>
+        The component stores nothing and invents no ids: it emits `onCreateEvent`,
+        `onUpdateEvent` and `onDeleteEvent`, and the id is set by whoever persists.
+      </Note>
     </div>
   ),
 };
 
-export const SoloLectura: Story = {
-  name: 'Solo lectura',
+export const ReadOnly: Story = {
+  name: 'Read only',
   render: () => (
     <div>
-      <Agenda soloLectura />
-      <Nota>
-        Sin `onCreateEvent` ni `onUpdateEvent` no se pinta el formulario, y sin
-        `onDeleteEvent` no aparece el botón de borrar. La agenda de solo lectura
-        no es una prop: es no pasar los manejadores.
-      </Nota>
+      <Schedule soloLectura />
+      <Note>
+        With no `onCreateEvent` or `onUpdateEvent` the form is not painted, and
+        with no `onDeleteEvent` the delete button does not appear. A read-only
+        schedule is not a prop: it is not passing the handlers.
+      </Note>
     </div>
   ),
 };
 
-export const Borrado: Story = {
-  name: 'El borrado pide confirmación',
+export const Deleted: Story = {
+  name: 'Deleting asks for confirmation',
   render: () => (
     <div>
-      <Agenda />
-      <Nota>
-        `./borrar` abre un `AlertDialog`, no borra directo. Es exactamente el caso
-        para el que existe esa primitiva: destructivo y sin deshacer. El foco
-        entra en «Mejor no».
-      </Nota>
+      <Schedule />
+      <Note>
+        `./borrar` opens an `AlertDialog`, it does not delete directly. It is
+        precisely the case that primitive exists for: destructive and with no undo.
+        Focus lands on «Mejor no».
+      </Note>
     </div>
   ),
 };

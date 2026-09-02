@@ -5,83 +5,83 @@ import { cn } from '../lib/cn.ts';
 import { Text } from '../primitives/typography.tsx';
 
 /**
- * El chasis de las gráficas: contenedor, tooltip y leyenda con el vocabulario
- * del sistema. Recharts pinta; esto decide cómo se ve.
+ * The chassis for charts: container, tooltip and legend in the system's
+ * vocabulary. Recharts paints; this decides how it looks.
  *
- * Se publica en `@eduardoalvarez/arrecife/chart` y NO en la raíz. Recharts pesa,
- * y solo uno de los cinco proyectos dibuja métricas: colgarlo del índice
- * principal obligaría a los otros cuatro a instalarlo para que su bundler
- * resolviera un import que nunca ejecutan. Es dependencia de pares OPCIONAL, por
- * el mismo criterio con el que `./og` y `./shiki` se mantienen sin React.
+ * It is published at `@eduardoalvarez/arrecife/chart` and NOT at the root.
+ * Recharts is heavy, and only one of the five projects draws metrics: hanging it
+ * off the main index would force the other four to install it just so their
+ * bundler could resolve an import they never execute. It is an OPTIONAL peer
+ * dependency, by the same criterion that keeps `./og` and `./shiki` React-free.
  *
- * Lo que esta capa aporta —y lo que se perdía copiando el `chart.tsx` de shadcn
- * en cada proyecto— son tres cosas que se desincronizan solas:
+ * What this layer adds — and what was lost by copying shadcn's `chart.tsx` into
+ * each project — are three things that drift on their own:
  *
- *   1. La paleta de series sale de `tokens.series` y sigue el modo. Son cuatro
- *      y se distinguen por tono, no por luminosidad.
- *   2. La rejilla, los ejes y el cursor usan `hairline` y `textMuted`, no los
- *      grises por defecto de Recharts, que no son de esta identidad.
- *   3. El tooltip aparece donde va a quedarse: `isAnimationActive` apagado en
- *      todas partes, porque el sistema no anima posición.
+ *   1. The series palette comes from `tokens.series` and follows the mode. There
+ *      are four and they are told apart by hue, not by lightness.
+ *   2. The grid, the axes and the cursor use `hairline` and `textMuted`, not
+ *      Recharts' default greys, which are not part of this identity.
+ *   3. The tooltip appears where it will stay: `isAnimationActive` is off
+ *      everywhere, because the system does not animate position.
  *
- * Las piezas de datos —`BarChart`, `Line`, `XAxis`— NO se reexportan. Son la API
- * de Recharts, el proyecto ya la conoce y envolverlas sería una capa de nombres
- * que hay que mantener sincronizada con la versión de la librería.
+ * The data pieces — `BarChart`, `Line`, `XAxis` — are NOT re-exported. They are
+ * Recharts' API, the project already knows it, and wrapping them would be a
+ * layer of names to keep in sync with the library's version.
  */
 
 /**
- * El color de la serie `indice`, como custom property.
+ * The color of series `index`, as a custom property.
  *
- * Devuelve `var(--color-serie-N)` y no el hexadecimal: leído en JS, el hex sería
- * el del modo que había cuando se montó el componente y no cambiaría al alternar
- * el tema. La variable la resuelve el navegador en cada pintura.
+ * It returns `var(--color-series-N)` and not the hexadecimal: read in JS, the
+ * hex would be the one from whichever mode was active when the component
+ * mounted, and it would not change when the theme is toggled. The variable is
+ * resolved by the browser on every paint.
  *
- * Da la vuelta pasadas las cuatro. Que dos series compartan color es un fallo
- * visible, y es la señal correcta: la gráfica tiene más categorías de las que
- * esta identidad sabe distinguir, y lo que toca es agrupar en «otros».
+ * It wraps around past four. Two series sharing a color is a visible failure,
+ * and that is the correct signal: the chart has more categories than this
+ * identity can tell apart, and what to do is group them into «otros».
  */
-export function colorDeSerie(indice: number): string {
-  return `var(--color-serie-${(Math.abs(indice) % 4) + 1})`;
+export function seriesColor(index: number): string {
+  return `var(--color-series-${(Math.abs(index) % 4) + 1})`;
 }
 
-/** Las cuatro, en orden, para pasárselas de golpe a un `Pie` con `Cell`. */
-export const COLORES_DE_SERIE = [0, 1, 2, 3].map(colorDeSerie);
+/** All four, in order, to hand to a `Pie` with `Cell` in one go. */
+export const SERIES_COLORS = [0, 1, 2, 3].map(seriesColor);
 
 export type ChartContainerProps = Omit<ComponentPropsWithoutRef<'figure'>, 'title'> & {
   /**
-   * Qué muestra la gráfica, en una frase. Obligatorio, como el `label` de
-   * `Progress`: un `<svg>` de barras sin nombre accesible no es «una gráfica sin
-   * etiqueta», es una región vacía.
+   * What the chart shows, in one sentence. Mandatory, like `Progress`'s `label`:
+   * a bar `<svg>` with no accessible name is not «a chart without a label», it
+   * is an empty region.
    */
   label: string;
   /**
-   * Lo que la gráfica dice, en palabras. Va en un `figcaption` oculto
-   * visualmente.
+   * What the chart says, in words. It goes in a visually hidden `figcaption`.
    *
-   * No sustituye a la gráfica: la capa de accesibilidad de Recharts ya permite
-   * recorrer los puntos con el teclado. Es el titular —«sube de 24 a 52 con una
-   * caída en mayo»— que ningún recorrido punto a punto da.
+   * It does not replace the chart: Recharts' accessibility layer already lets
+   * you walk the points with the keyboard. It is the headline — «sube de 24 a 52
+   * con una caída en mayo» — that no point-by-point walk gives you.
    */
   summary?: ReactNode;
-  /** Alto en píxeles. Recharts necesita uno concreto para medir. */
+  /** Height in pixels. Recharts needs a concrete one to measure itself. */
   height?: number;
   children: ReactNode;
 };
 
 /**
- * Envuelve la gráfica en un `<figure>` con nombre accesible y le da a Recharts
- * el alto concreto que necesita para medirse.
+ * Wraps the chart in a `<figure>` with an accessible name and gives Recharts the
+ * concrete height it needs to measure itself.
  *
- * El `<figure>` NO lleva `role`: ya tiene el suyo implícito, y ponerle `group`
- * encima es un rol no permitido para el elemento —axe lo señala—. Lo que sí
- * lleva es `aria-label`, que es lo que lo nombra.
+ * The `<figure>` carries NO `role`: it already has its implicit one, and putting
+ * `group` on top of it is a role not allowed for the element — axe flags it.
+ * What it does carry is `aria-label`, which is what names it.
  *
- * Y el contenido NO va `aria-hidden`. Fue lo primero que se intentó, con el
- * argumento de que anunciar cada tick no cuenta lo que la gráfica cuenta, y está
- * mal por dos motivos: la capa de accesibilidad de Recharts hace la gráfica
- * recorrible con el teclado, y esconder un subárbol que contiene elementos
- * enfocables es una violación por sí misma —el foco entra en algo que no existe
- * para quien escucha—. El resumen se suma a eso, no lo reemplaza.
+ * And the content is NOT `aria-hidden`. That was the first thing tried, with the
+ * argument that announcing every tick does not tell what the chart tells, and it
+ * is wrong for two reasons: Recharts' accessibility layer makes the chart
+ * walkable with the keyboard, and hiding a subtree containing focusable elements
+ * is a violation in itself — focus lands on something that does not exist for
+ * whoever is listening. The summary adds to that, it does not replace it.
  */
 export function ChartContainer({
   label,
@@ -96,9 +96,9 @@ export function ChartContainer({
       aria-label={label}
       className={cn(
         'w-full',
-        // La rejilla y los ejes, con los tokens del sistema en vez de los grises
-        // por defecto de Recharts. Van como variantes de descendiente porque los
-        // nodos los pinta la librería y no hay dónde ponerles una clase.
+        // The grid and the axes, with the system's tokens instead of Recharts'
+        // default greys. They go as descendant variants because the nodes are
+        // painted by the library and there is nowhere to put a class on them.
         '[&_.recharts-cartesian-grid_line]:stroke-hairline',
         '[&_.recharts-cartesian-axis-line]:stroke-hairline',
         '[&_.recharts-cartesian-axis-tick_text]:fill-text-muted',
@@ -124,10 +124,10 @@ export function ChartContainer({
 }
 
 /**
- * El `Tooltip` de Recharts con los defectos del sistema: sin animación y con el
- * cursor teñido de `surfaceRaised`.
+ * Recharts' `Tooltip` with the system's defaults: no animation, and the cursor
+ * tinted `surfaceRaised`.
  *
- * Se pasa `content={<ChartTooltipContent />}` para la caja.
+ * You pass `content={<ChartTooltipContent />}` for the box.
  */
 export function ChartTooltip(props: ComponentPropsWithoutRef<typeof Tooltip>) {
   return <Tooltip isAnimationActive={false} {...props} />;
@@ -138,11 +138,11 @@ export function ChartLegend(props: ComponentPropsWithoutRef<typeof Legend>) {
 }
 
 /**
- * Lo que Recharts le pasa a un `content`, declarado aquí en corto.
+ * What Recharts passes to a `content`, declared here in short form.
  *
- * Los tipos de Recharts para esto son abiertos y arrastran genéricos que no
- * aportan nada al sitio de uso; `any` está prohibido en el repo, así que se
- * declara lo que de verdad se lee y el valor se trata como `unknown`.
+ * Recharts' types for this are open and drag in generics that add nothing at the
+ * call site; `any` is banned in this repo, so what is actually read is declared
+ * and the value is treated as `unknown`.
  */
 export type ChartPayloadItem = {
   name?: string | number | undefined;
@@ -155,21 +155,21 @@ export type ChartTooltipContentProps = {
   active?: boolean | undefined;
   payload?: readonly ChartPayloadItem[] | undefined;
   label?: ReactNode;
-  /** Formatea el valor. Sin ella se imprime tal cual: la librería no impone locale. */
-  formatter?: ((valor: unknown, item: ChartPayloadItem) => ReactNode) | undefined;
-  /** Oculta el encabezado, para una gráfica de una sola categoría. */
+  /** Formats the value. Without it, it is printed as is: the library imposes no locale. */
+  formatter?: ((value: unknown, item: ChartPayloadItem) => ReactNode) | undefined;
+  /** Hides the header, for a single-category chart. */
   hideLabel?: boolean;
   className?: string;
 };
 
 /**
- * La caja del tooltip. Es una tarjeta del sistema —`surface`, borde de control,
- * sombra estándar— y no la caja blanca de Recharts, que en modo oscuro es un
- * rectángulo blanco encima de un panel oscuro.
+ * The tooltip's box. It is a system card — `surface`, control border, standard
+ * shadow — and not Recharts' white box, which in dark mode is a white rectangle
+ * on top of a dark panel.
  *
- * El punto de color es un cuadrado de 8px, no un círculo: es la misma marca que
- * usa la leyenda, y en 8 píxeles un círculo y un cuadrado se distinguen peor
- * entre sí que dos colores de la paleta.
+ * The color swatch is an 8px square, not a circle: it is the same mark the
+ * legend uses, and at 8 pixels a circle and a square are harder to tell apart
+ * from each other than two colors of the palette are.
  */
 export function ChartTooltipContent({
   active,
@@ -200,7 +200,7 @@ export function ChartTooltipContent({
             <span
               aria-hidden="true"
               className="rounded-chip size-2 shrink-0"
-              style={{ backgroundColor: item.color ?? colorDeSerie(i) }}
+              style={{ backgroundColor: item.color ?? seriesColor(i) }}
             />
             <Text as="span" variant="label" tone="secondary" className="font-normal">
               {item.name}
@@ -220,7 +220,7 @@ export type ChartLegendContentProps = {
   className?: string;
 };
 
-/** La leyenda con la misma marca cuadrada del tooltip y la escala `label`. */
+/** The legend, with the tooltip's same square swatch and the `label` scale. */
 export function ChartLegendContent({ payload, className }: ChartLegendContentProps) {
   if (!payload || payload.length === 0) return null;
 
@@ -231,7 +231,7 @@ export function ChartLegendContent({ payload, className }: ChartLegendContentPro
           <span
             aria-hidden="true"
             className="rounded-chip size-2 shrink-0"
-            style={{ backgroundColor: item.color ?? colorDeSerie(i) }}
+            style={{ backgroundColor: item.color ?? seriesColor(i) }}
           />
           <Text as="span" variant="label" tone="secondary" className="font-normal">
             {item.value as ReactNode}

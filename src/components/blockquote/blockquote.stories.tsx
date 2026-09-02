@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Pila } from '../../../stories/utils.tsx';
+import { Stack } from '../../../stories/utils.tsx';
 import { Blockquote } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/Blockquote',
+  title: 'Components/Blockquote',
   component: Blockquote,
   args: {
     children:
@@ -15,10 +15,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = { render: (args) => <Pila><Blockquote {...args} /></Pila> };
+export const Default: Story = { render: (args) => <Stack><Blockquote {...args} /></Stack> };
 
-export const ConAutoria: Story = {
-  name: 'Con autoría',
+export const WithByline: Story = {
+  name: 'With byline',
   args: { author: 'Eduardo Álvarez', source: 'Escalar sin romper el equipo, JSConf 2025' },
-  render: (args) => <Pila><Blockquote {...args} /></Pila>,
+  render: (args) => <Stack><Blockquote {...args} /></Stack>,
 };

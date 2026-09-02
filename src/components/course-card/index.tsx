@@ -4,18 +4,18 @@ import { cn } from '../../lib/cn.ts';
 import { Badge } from '../../primitives/badge.tsx';
 import { Progress } from '../../primitives/progress.tsx';
 import { Text } from '../../primitives/typography.tsx';
-import { Tarjeta, type TarjetaProps } from '../card-base.tsx';
+import { CardShell, type CardShellProps } from '../card-base.tsx';
 
-export type CourseCardProps = Omit<TarjetaProps, 'children' | 'title'> & {
+export type CourseCardProps = Omit<CardShellProps, 'children' | 'title'> & {
   title: ReactNode;
   summary?: ReactNode;
-  /** Nivel, duración, número de lecciones: lo que el proyecto quiera listar. */
+  /** Level, duration, number of lessons: whatever the project wants to list. */
   meta?: readonly ReactNode[] | undefined;
-  /** Etiqueta de estado: «próximamente», «gratis», «nuevo». */
+  /** Status label: «próximamente», «gratis», «nuevo». */
   status?: ReactNode;
   /**
-   * Porcentaje cursado. Solo tiene sentido para quien ya está inscrito; cuando
-   * se pasa, la barra va en arena, que es el color del progreso de curso.
+   * Percentage completed. It only makes sense for someone already enrolled;
+   * when passed, the bar goes in sand, which is the color of course progress.
    */
   progress?: number | undefined;
 };
@@ -30,7 +30,7 @@ export function CourseCard({
   ...props
 }: CourseCardProps) {
   return (
-    <Tarjeta className={cn('p-step-lg', className)} {...props}>
+    <CardShell className={cn('p-step-lg', className)} {...props}>
       <article className="gap-step-sm flex h-full flex-col">
         {status ? (
           <div>
@@ -68,6 +68,6 @@ export function CourseCard({
           </div>
         ) : null}
       </article>
-    </Tarjeta>
+    </CardShell>
   );
 }

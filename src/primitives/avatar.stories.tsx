@@ -1,72 +1,72 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Fila, Nota, Pila } from '../../stories/utils.tsx';
+import { Row, Note, Stack } from '../../stories/utils.tsx';
 import { Avatar, AvatarFallback, AvatarImage, AvatarUpload } from './avatar.tsx';
 
-const meta = { title: 'Primitivos/Avatar', component: Avatar } satisfies Meta<typeof Avatar>;
+const meta = { title: 'Primitives/Avatar', component: Avatar } satisfies Meta<typeof Avatar>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Iniciales: Story = {
+export const Initials: Story = {
   render: () => (
-    <Fila>
+    <Row>
       <Avatar size="sm"><AvatarFallback>EA</AvatarFallback></Avatar>
       <Avatar size="md"><AvatarFallback>EA</AvatarFallback></Avatar>
       <Avatar size="lg"><AvatarFallback>EA</AvatarFallback></Avatar>
       <Avatar size="xl"><AvatarFallback>EA</AvatarFallback></Avatar>
-    </Fila>
+    </Row>
   ),
 };
 
-export const ConImagen: Story = {
-  name: 'Con imagen',
+export const WithImage: Story = {
+  name: 'With image',
   render: () => (
-    <Pila>
-      <Fila>
+    <Stack>
+      <Row>
         <Avatar size="lg">
           <AvatarImage src="/no-existe.jpg" alt="" />
           <AvatarFallback>EA</AvatarFallback>
         </Avatar>
-      </Fila>
-      <Nota>
-        Aquí la imagen no carga a propósito: el respaldo de iniciales es lo que se
-        ve mientras llega, y lo que queda si no llega nunca. Es un solo `Avatar`
-        para todo — no hay un `brand/Avatar` aparte, porque tu foto es esto con
-        otro `src`.
-      </Nota>
-    </Pila>
+      </Row>
+      <Note>
+        The image deliberately does not load here: the initials fallback is what
+        you see while it arrives, and what remains if it never does. It is a single
+        `Avatar` for everything — there is no separate `brand/Avatar`, because your
+        photo is this with a different `src`.
+      </Note>
+    </Stack>
   ),
 };
 
-export const Subida: Story = {
+export const Upload: Story = {
   name: 'AvatarUpload',
   render: () => (
     <div>
-      <Fila>
+      <Row>
         <AvatarUpload size="lg" fallback="EA" />
         <AvatarUpload size="xl" fallback="EA" />
         <AvatarUpload size="lg" fallback="EA" disabled />
-      </Fila>
-      <Nota>
-        La insignia está SIEMPRE visible, no aparece al pasar el ratón. El velo a
-        hover es más limpio y es de escritorio: en táctil no hay hover, así que el
-        control no existiría hasta que alguien adivine que la foto se toca.
-      </Nota>
-      <Nota>
-        Es un `label` con un `input type="file"` oculto dentro, no un botón que
-        dispara un click sintético. El input real trae el diálogo del sistema, el
-        arrastrar-y-soltar y el foco por teclado.
-      </Nota>
-      <Nota>
-        La previsualización es local y no espera a la subida: emite
-        `onSelectFile(File)` y el `POST` lo hace el proyecto, como en
-        `NewsletterForm`. El `objectURL` se revoca al cambiar y al desmontar.
-      </Nota>
+      </Row>
+      <Note>
+        The badge is ALWAYS visible, it does not appear on hover. The hover scrim
+        is cleaner and it is a desktop solution: there is no hover on touch, so the
+        control would not exist until somebody guessed the photo is tappable.
+      </Note>
+      <Note>
+        It is a `label` with a hidden `input type="file"` inside, not a button
+        firing a synthetic click. The real input brings the system dialog,
+        drag-and-drop and keyboard focus.
+      </Note>
+      <Note>
+        The preview is local and does not wait for the upload: it emits
+        `onSelectFile(File)` and the `POST` is the project's job, as in
+        `NewsletterForm`. The `objectURL` is revoked on change and on unmount.
+      </Note>
     </div>
   ),
 };
 
-export const SubidaFoco: Story = {
+export const UploadFocus: Story = {
   name: 'AvatarUpload · focus',
   parameters: { pseudo: { focusVisible: true } },
   render: () => <AvatarUpload size="lg" fallback="EA" />,

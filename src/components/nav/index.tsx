@@ -4,29 +4,29 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
 
 /**
- * La barra del sitio: 64px, abismo al 86 % y desenfoque de 14px detrás.
+ * The site bar: 64px, abyss at 86 % and a 14px blur behind it.
  *
- * Es composición de página y no un primitivo, pero vive en la librería por una
- * razón concreta: la estética CLI de los items —mono, formato `./sección`— es lo
- * primero que se desincroniza cuando cinco proyectos la reescriben cada uno por
- * su cuenta.
+ * It is page composition and not a primitive, but it lives in the library for a
+ * concrete reason: the CLI aesthetic of the items — mono, `./section` format —
+ * is the first thing that drifts when five projects each rewrite it on their
+ * own.
  *
- * Renderiza `<header>` colgando directamente del `body`, así que ES el landmark
- * `banner` del sitio. Por eso `PageHeader` va dentro de `<main>` y no es
- * landmark: dos banners en una página son un fallo de accesibilidad.
+ * It renders a `<header>` hanging directly off the `body`, so it IS the site's
+ * `banner` landmark. That is why `PageHeader` goes inside `<main>` and is not a
+ * landmark: two banners on one page is an accessibility failure.
  *
- * Los items van a la DERECHA, pegados a las acciones, no a continuación de la
- * marca. Con la marca a la izquierda y los items justo detrás, el bloque de
- * navegación queda flotando en medio de la barra y el ojo tiene que cruzar el
- * hueco dos veces: una para leer la marca y otra para volver a buscar la
- * sección. Agrupados a la derecha, marca y navegación son dos anclas y no tres.
+ * The items go on the RIGHT, next to the actions, not straight after the brand.
+ * With the brand on the left and the items right behind it, the navigation block
+ * floats in the middle of the bar and the eye has to cross the gap twice: once
+ * to read the brand and once to come back and find the section. Grouped on the
+ * right, brand and navigation are two anchors instead of three.
  */
 export type NavProps = ComponentPropsWithoutRef<'header'> & {
-  /** El logo, a la izquierda. */
+  /** The logo, on the left. */
   brand?: ReactNode;
-  /** Los items de sección. Van a la derecha, pegados a `actions`. */
+  /** The section items. They go on the right, next to `actions`. */
   children?: ReactNode;
-  /** Acciones a la derecha: conversión, cambio de tema, buscar. */
+  /** Actions on the right: conversion, theme switch, search. */
   actions?: ReactNode;
 };
 
@@ -35,8 +35,8 @@ export function Nav({ brand, children, actions, className, ...props }: NavProps)
     <header
       className={cn(
         'sticky top-0 z-50 w-full',
-        // abismo al 86 % con 14px de desenfoque detrás. El alfa va sobre el
-        // token, así que sigue el modo: en claro es papel al 86 %.
+        // Abyss at 86 % with 14px of blur behind. The alpha rides on the token,
+        // so it follows the mode: in light it is paper at 86 %.
         'bg-background/86 backdrop-blur-[14px]',
         'border-hairline border-b',
         className,
@@ -50,13 +50,13 @@ export function Nav({ brand, children, actions, className, ...props }: NavProps)
           <nav aria-label="Principal" className="ml-auto min-w-0">
             <ul className="gap-step-md flex items-center">
               {/*
-                El prompt. Es la misma estética CLI del `./` de cada item y del
-                `$` del pie, y va `aria-hidden` por lo mismo: un lector de
-                pantalla anuncia «artículos», no «virgulilla barra artículos».
+                The prompt. It is the same CLI aesthetic as each item's `./` and
+                the footer's `$`, and it is `aria-hidden` for the same reason: a
+                screen reader announces «artículos», not «tilde slash artículos».
 
-                Va fuera de los `<li>` a propósito. Meterlo dentro convertiría el
-                prompt en un elemento de la lista de navegación, y esa lista
-                tiene que tener tantos elementos como secciones.
+                It sits outside the `<li>`s on purpose. Putting it inside would
+                turn the prompt into an element of the navigation list, and that
+                list has to have exactly as many elements as there are sections.
               */}
               <span aria-hidden="true" className="text-text-muted font-mono text-meta select-none">
                 ~/
@@ -75,33 +75,33 @@ export function Nav({ brand, children, actions, className, ...props }: NavProps)
 }
 
 export type NavItemProps = ComponentPropsWithoutRef<'a'> & {
-  /** Sección actual: bioluz con subrayado de 1px. */
+  /** Current section: biolume with a 1px underline. */
   active?: boolean | undefined;
-  /** Renderiza el hijo en vez de un `<a>`, para el `Link` del enrutador. */
+  /** Renders the child instead of an `<a>`, for the router's `Link`. */
   asChild?: boolean | undefined;
 };
 
 /**
- * El `./` lo pone el componente, no quien lo usa.
+ * The `./` is put there by the component, not by whoever uses it.
  *
- * Es la misma decisión que el botón terciario: el formato es parte de la pieza,
- * no una convención que haya que recordar en cinco proyectos. Va `aria-hidden`,
- * así que un lector de pantalla anuncia «artículos» y no «punto barra
+ * It is the same decision as the tertiary button: the format is part of the
+ * piece, not a convention to be remembered across five projects. It is
+ * `aria-hidden`, so a screen reader announces «artículos» and not «dot slash
  * artículos».
  *
- * La sección actual va entre CORCHETES además de en bioluz y subrayada. No es
- * decoración: el subrayado y el color son la misma señal —«esto destaca»— y en
- * una barra de seis items en mono, a 13px, esa señal se lee peor de lo que
- * parece en una maqueta. Los corchetes son la forma en que una terminal marca la
- * ruta activa, así que dicen «estás aquí» sin depender de que se distinga el
- * color. Van `aria-hidden`, porque quien escucha ya tiene `aria-current`.
+ * The current section goes in BRACKETS as well as in biolume and underlined.
+ * That is not decoration: the underline and the color are the same signal —
+ * «this stands out» — and in a six-item mono bar at 13px that signal reads worse
+ * than it looks in a mockup. Brackets are how a terminal marks the active path,
+ * so they say «you are here» without relying on the color being told apart. They
+ * are `aria-hidden`, because whoever is listening already has `aria-current`.
  */
 export function NavItem({ active = false, asChild = false, className, children, ...props }: NavItemProps) {
-  const Raiz = asChild ? Slot : 'a';
+  const Root = asChild ? Slot : 'a';
 
   return (
     <li>
-      <Raiz
+      <Root
         aria-current={active ? 'page' : undefined}
         className={cn(
           'font-mono text-meta transition-standard cursor-pointer',
@@ -127,7 +127,7 @@ export function NavItem({ active = false, asChild = false, className, children, 
             ]
           </span>
         ) : null}
-      </Raiz>
+      </Root>
     </li>
   );
 }

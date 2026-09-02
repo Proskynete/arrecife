@@ -1,8 +1,9 @@
 /**
- * Punto de entrada de `@eduardoalvarez/arrecife/tokens`.
+ * The entry point of `@eduardoalvarez/arrecife/tokens`.
  *
- * Igual que `tokens.ts`: no importa nada fuera de este directorio. Es el único
- * subpaquete que pueden consumir los cinco proyectos, Satori y Astro sin React.
+ * Same as `tokens.ts`: it imports nothing from outside this directory. It is the
+ * only subpackage the five projects, Satori and React-less Astro can all
+ * consume.
  */
 export * from './tokens.ts';
 
@@ -18,14 +19,14 @@ import {
   radius,
   series,
   shadow,
-  sintaxis,
+  syntax,
   size,
   spacing,
   tagline,
   typeScale,
 } from './tokens.ts';
 
-/** Todos los tokens en un solo objeto, para plantillas Satori y generadores. */
+/** Every token in a single object, for Satori templates and generators. */
 export const tokens = {
   colors,
   brand,
@@ -37,7 +38,7 @@ export const tokens = {
   spacing,
   size,
   gradient,
-  sintaxis,
+  syntax,
   series,
   shadow,
   motion,

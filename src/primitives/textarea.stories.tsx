@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Etiqueta, Pila } from '../../stories/utils.tsx';
+import { FieldLabel, Stack } from '../../stories/utils.tsx';
 import { Textarea } from './textarea.tsx';
 
 const meta = {
-  title: 'Primitivos/Textarea',
+  title: 'Primitives/Textarea',
   component: Textarea,
   args: { placeholder: 'Cuéntame en qué estás' },
 } satisfies Meta<typeof Textarea>;
@@ -12,17 +12,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const conEtiqueta = (args: Parameters<NonNullable<Story['render']>>[0]) => (
-  <Pila>
+const withLabel = (args: Parameters<NonNullable<Story['render']>>[0]) => (
+  <Stack>
     <div className="gap-step-xs flex flex-col">
-      <Etiqueta htmlFor="mensaje">Mensaje</Etiqueta>
-      <Textarea id="mensaje" {...args} />
+      <FieldLabel htmlFor="message">Mensaje</FieldLabel>
+      <Textarea id="message" {...args} />
     </div>
-  </Pila>
+  </Stack>
 );
 
-export const Default: Story = { render: conEtiqueta };
-export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: conEtiqueta };
-export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: conEtiqueta };
-export const Invalido: Story = { name: 'Inválido', args: { invalid: true }, render: conEtiqueta };
-export const Deshabilitado: Story = { args: { disabled: true }, render: conEtiqueta };
+export const Default: Story = { render: withLabel };
+export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: withLabel };
+export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: withLabel };
+export const Invalid: Story = { name: 'Invalid', args: { invalid: true }, render: withLabel };
+export const Disabled: Story = { args: { disabled: true }, render: withLabel };

@@ -1,41 +1,41 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-import { CaraDeMascota } from '../../brand/mascota.tsx';
-import type { Cara } from '../../brand/catalogo.ts';
+import { MascotFace } from '../../brand/mascot.tsx';
+import type { Face } from '../../brand/catalog.ts';
 import { cn } from '../../lib/cn.ts';
-import { SUPERFICIE_TARJETA } from '../../primitives/card.tsx';
+import { CARD_SURFACE } from '../../primitives/card.tsx';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * La regla más importante de la mascota, por fin como código.
+ * The mascot's most important rule, finally as code.
  *
- * `catalogo.ts` y `page-header/index.tsx` la citaban los dos —«por eso
- * `EmptyState` recibe una cara y `PageHeader` no»— y el componente no existía,
- * así que la regla vivía en un comentario sobre un componente fantasma. Desde
- * que la story de marca repite la frase, además, era una promesa publicada.
+ * `catalog.ts` and `page-header/index.tsx` both cited it — «that is why
+ * `EmptyState` takes a face and `PageHeader` does not» — and the component did
+ * not exist, so the rule lived in a comment about a ghost component. Once the
+ * brand story started repeating the sentence, it was also a published promise.
  *
- * `expresion` es OBLIGATORIA y no opcional: un estado vacío sin cara es la mitad
- * del componente. Es el único sitio, junto con el 404, el error de servidor, el
- * progreso de curso, la celebración, el toast y el «sin spam» del newsletter,
- * donde una cara puede aparecer.
+ * `expression` is MANDATORY and not optional: an empty state without a face is
+ * half the component. It is the only place, alongside the 404, the server error,
+ * course progress, celebration, the toast and the newsletter's «sin spam», where
+ * a face may appear.
  */
 export type EmptyStateProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
-  /** La cara. Obligatoria: sin ella esto es un párrafo centrado. */
-  expresion: Cara;
+  /** The face. Mandatory: without it this is a centred paragraph. */
+  expression: Face;
   title: ReactNode;
-  /** Una línea explicando qué falta o qué hacer. */
+  /** One line explaining what is missing or what to do. */
   description?: ReactNode;
-  /** La acción que saca del estado vacío. Normalmente un botón terciario. */
+  /** The action that gets you out of the empty state. Usually a tertiary button. */
   action?: ReactNode;
-  /** Dónde se sirven los PNG de la marca. */
+  /** Where the brand PNGs are served from. */
   basePath?: string | undefined;
 };
 
-/** 66px, del documento. Es tamaño de ilustración, no ritmo de página. */
-const CARA = 'w-[66px] max-w-none';
+/** 66px, from the document. It is illustration size, not page rhythm. */
+const FACE = 'w-[66px] max-w-none';
 
 export function EmptyState({
-  expresion,
+  expression,
   title,
   description,
   action,
@@ -45,10 +45,10 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div
-      className={cn(SUPERFICIE_TARJETA, 'p-step-lg gap-step-sm flex flex-col items-center text-center', className)}
+      className={cn(CARD_SURFACE, 'p-step-lg gap-step-sm flex flex-col items-center text-center', className)}
       {...props}
     >
-      <CaraDeMascota expresion={expresion} className={CARA} basePath={basePath} />
+      <MascotFace expression={expression} className={FACE} basePath={basePath} />
 
       <Text variant="ui" as="p" className="font-medium">
         {title}

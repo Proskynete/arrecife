@@ -11,14 +11,14 @@ import {
 } from './pagination.tsx';
 
 const meta = {
-  title: 'Primitivos/Pagination',
+  title: 'Primitives/Pagination',
   component: Pagination,
 } satisfies Meta<typeof Pagination>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const paginacion = () => (
+const pagination = () => (
   <Pagination>
     <PaginationContent>
       <PaginationItem>
@@ -48,6 +48,6 @@ const paginacion = () => (
   </Pagination>
 );
 
-export const Default: Story = { render: paginacion };
-export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: paginacion };
-export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: paginacion };
+export const Default: Story = { render: pagination };
+export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: pagination };
+export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: pagination };

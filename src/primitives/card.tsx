@@ -4,27 +4,29 @@ import { cn } from '../lib/cn.ts';
 import { Text } from './typography.tsx';
 
 /**
- * El contenedor de superficie del sistema, y la única definición de lo que es
- * una tarjeta: `surface`, borde `hairline`, radio de tarjeta.
+ * The system's surface container, and the only definition of what a card is:
+ * `surface`, `hairline` border, card radius.
  *
- * Las tarjetas con dominio — `ArticleCard`, `TalkCard`, `CourseCard`,
- * `LinkRow` — reutilizan estas mismas clases, así que si el radio o el borde
- * cambian, cambian en todas a la vez.
+ * The cards with a domain — `ArticleCard`, `TalkCard`, `CourseCard`, `LinkRow` —
+ * reuse these same classes, so if the radius or the border changes, it changes
+ * in all of them at once.
  *
- * El documento daba a la tarjeta un fondo propio, `#0B1620`, un cuarto nivel de
- * superficie entre abismo y fosa. No entra: no tiene par en modo claro, y una
- * superficie sin par es un token que miente en la mitad de los proyectos. La
- * tarjeta es `surface`, y el documento se corrige — ver `docs/decisiones.md`.
+ * The document gave the card a background of its own, `#0B1620`, a fourth
+ * surface level between abyss and trench. It is not here: it has no counterpart
+ * in light mode, and a surface without a counterpart is a token that lies in
+ * half the projects. The card is `surface`, and the document is corrected — see
+ * `docs/decisions.md`.
  *
- * El padding sí estaba mal: el documento pide 26 (`lg`) y aquí había 16 (`md`).
+ * The padding really was wrong: the document asks for 26 (`lg`) and this had 16
+ * (`md`).
  */
-export const SUPERFICIE_TARJETA = 'rounded-card border-hairline bg-surface border';
+export const CARD_SURFACE = 'rounded-card border-hairline bg-surface border';
 
-/** El hover de la regla 6: solo el borde. Se aplica donde la tarjeta es pulsable. */
-export const HOVER_TARJETA = 'transition-standard hover:border-hairline-hover';
+/** The hover from rule 6: the border only. Applied where the card is clickable. */
+export const CARD_HOVER = 'transition-standard hover:border-hairline-hover';
 
 export function Card({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn(SUPERFICIE_TARJETA, className)} {...props} />;
+  return <div className={cn(CARD_SURFACE, className)} {...props} />;
 }
 
 export function CardHeader({ className, ...props }: ComponentPropsWithoutRef<'div'>) {

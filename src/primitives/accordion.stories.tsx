@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../stories/utils.tsx';
+import { Note } from '../../stories/utils.tsx';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './accordion.tsx';
 
 const meta = {
-  title: 'Primitivos/Accordion',
+  title: 'Primitives/Accordion',
   component: Accordion,
   args: { type: 'single', collapsible: true, defaultValue: 'consultoria' },
 } satisfies Meta<typeof Accordion>;
@@ -12,64 +12,63 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const PREGUNTAS = [
+const QUESTIONS = [
   {
-    valor: 'consultoria',
+    value: 'consultoria',
     pregunta: '¿Trabajas con equipos pequeños?',
-    respuesta:
+    response:
       'Sí. La mayoría de lo que hago es con equipos de entre cinco y treinta personas, que es donde los problemas de escala aparecen antes de que nadie los llame así.',
   },
   {
-    valor: 'remoto',
+    value: 'remoto',
     pregunta: '¿En remoto o presencial?',
-    respuesta:
+    response:
       'Las dos. El trabajo de fondo se hace en remoto y las sesiones de arranque salen mejor en persona, si la distancia lo permite.',
   },
   {
-    valor: 'plazos',
+    value: 'plazos',
     pregunta: '¿Cuánto dura un acompañamiento?',
-    respuesta:
+    response:
       'Entre tres y seis meses. Menos de tres no da tiempo a que un cambio de proceso se note; más de seis y el equipo debería poder seguir sin mí.',
   },
 ] as const;
 
 const items = (deshabilitado = false) =>
-  PREGUNTAS.map((p, i) => (
-    <AccordionItem key={p.valor} value={p.valor} disabled={deshabilitado && i === 2}>
+  QUESTIONS.map((p, i) => (
+    <AccordionItem key={p.value} value={p.value} disabled={deshabilitado && i === 2}>
       <AccordionTrigger headingLevel={3}>{p.pregunta}</AccordionTrigger>
-      <AccordionContent>{p.respuesta}</AccordionContent>
+      <AccordionContent>{p.response}</AccordionContent>
     </AccordionItem>
   ));
 
-const bloque = (args: Parameters<NonNullable<Story['render']>>[0], deshabilitado = false) => (
+const block = (args: Parameters<NonNullable<Story['render']>>[0], deshabilitado = false) => (
   <Accordion {...args}>{items(deshabilitado)}</Accordion>
 );
 
 export const Default: Story = {
   render: (args) => (
     <div>
-      {bloque(args)}
-      <Nota>
-        El panel aparece donde va a quedarse: no hay animación de altura. Radix
-        publica `--radix-accordion-content-height` para animarla y el sistema no
-        la usa, por lo mismo que no se animan menús ni modales.
-      </Nota>
-      <Nota>
-        El disparador va dentro de un `h3`, no suelto. Un FAQ que pierde la
-        estructura de encabezados es una lista de botones para quien navega por
-        landmarks.
-      </Nota>
+      {block(args)}
+      <Note>
+        The panel appears where it will stay: there is no height animation. Radix
+        publishes `--radix-accordion-content-height` to animate it and the system
+        does not use it, for the same reason menus and modals are not animated.
+      </Note>
+      <Note>
+        The trigger goes inside an `h3`, not loose. A FAQ that loses its heading
+        structure is a list of buttons for anyone navigating by landmarks.
+      </Note>
     </div>
   ),
 };
 
 export const Multiple: Story = {
-  name: 'Varios abiertos',
+  name: 'Several open',
   /*
    * Se monta a mano en vez de esparcir los `args` del meta, y no es manía:
-   * `collapsible` solo existe en `type="single"`. Con `type="multiple"`, Radix
+   * `collapsible` solo exists en `type="single"`. Con `type="multiple"`, Radix
    * lo reenvía al `<div>` y React avisa por consola de un atributo inválido —un
-   * aviso que la suite no convierte en fallo, así que vive ahí hasta que alguien
+   * aviso que la suite no convierte en failure, así que vive ahí hasta que alguien
    * lee los logs. Pasó justo eso entre la 0.4.0 y la 0.5.0.
    */
   render: () => (
@@ -77,56 +76,56 @@ export const Multiple: Story = {
       <Accordion type="multiple" defaultValue={['consultoria', 'remoto']}>
         {items()}
       </Accordion>
-      <Nota>
-        `type="multiple"` para un temario, donde comparar dos secciones es el
-        caso normal. Para un FAQ, `single` con `collapsible`.
-      </Nota>
+      <Note>
+        `type="multiple"` for a syllabus, where comparing two sections is the
+        normal case. For a FAQ, `single` with `collapsible`.
+      </Note>
     </div>
   ),
 };
 
-export const Cerrado: Story = {
-  name: 'Todo cerrado',
+export const Closed: Story = {
+  name: 'All closed',
   args: { defaultValue: '' },
-  render: (args) => bloque(args),
+  render: (args) => block(args),
 };
 
 export const Hover: Story = {
   parameters: { pseudo: { hover: true } },
-  render: (args) => bloque(args),
+  render: (args) => block(args),
 };
 
 export const Focus: Story = {
   parameters: { pseudo: { focusVisible: true } },
-  render: (args) => bloque(args),
+  render: (args) => block(args),
 };
 
-export const Deshabilitado: Story = {
+export const Disabled: Story = {
   render: (args) => (
     <div>
-      {bloque(args, true)}
-      <Nota>El tercero está deshabilitado: se atenúa y no responde al puntero.</Nota>
+      {block(args, true)}
+      <Note>The third one is disabled: it dims and does not respond to the pointer.</Note>
     </div>
   ),
 };
 
-export const Movimiento: Story = {
-  name: 'La cuarta excepción de movimiento',
+export const Motion: Story = {
+  name: 'The fourth motion exception',
   render: (args) => (
     <div>
-      {bloque(args)}
-      <Nota>
-        La altura SÍ se anima, y el componente nació sin animarla citando la regla
-        contraria. La diferencia: aquí no APARECE nada, se abre un hueco, y todo
-        lo que hay debajo se desplaza. Sin transición ese desplazamiento es un
-        salto y quien acaba de pulsar pierde el sitio en la página.
-      </Nota>
-      <Nota>
-        Es la misma categoría que el panel lateral —la segunda excepción— y no la
-        de una animación de entrada. Va detrás de `motion-safe`, con
-        `--duration-standard` y `--ease-standard`: no estrena tiempo ni curva.
-      </Nota>
-      <Nota>Ver `docs/decisiones.md` § 20.</Nota>
+      {block(args)}
+      <Note>
+        The height IS animated, and the component was born unanimated citing the
+        opposite rule. The difference: nothing APPEARS here, a gap opens, and
+        everything below it shifts. Without a transition that shift is a jump and
+        whoever just clicked loses their place on the page.
+      </Note>
+      <Note>
+        It is the same category as the side panel — the second exception — and not
+        that of an entrance animation. It sits behind `motion-safe`, with
+        `--duration-standard` and `--ease-standard`: no new timing, no new curve.
+      </Note>
+      <Note>See `docs/decisions.md` § 20.</Note>
     </div>
   ),
 };

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* La salida generada desde src/tokens/tokens.ts. Storybook consume exactamente
-   lo mismo que consumen los cinco proyectos: si un componente tiene un color
-   literal en vez de un token, el switch de tema lo delata. */
+/* The output generated from src/tokens/tokens.ts. Storybook consumes exactly
+   what the five projects consume: if a component holds a literal color instead
+   of a token, the theme switch gives it away. */
 @import "../dist/tokens/theme.css";
 
 html,
@@ -14,32 +14,32 @@ body,
   font-family: var(--font-sans);
 }
 
-/* Storybook le pone el fondo al contenedor de docs con un estilo EN LÍNEA, que
-   gana incluso a un selector de id. `!important` es lo único que lo sobrescribe,
-   y es el caso para el que existe: imponerse a un tercero que escribe estilos
-   inline y al que no se llega de otra forma. */
+/* Storybook sets the docs container background with an INLINE style, which beats
+   even an id selector. `!important` is the only thing that overrides it, and this
+   is the case it exists for: overruling a third party that writes inline styles
+   and cannot be reached any other way. */
 #storybook-docs {
   background-color: var(--color-background) !important;
 }
 
-/* El div de dentro, `sbdocs sbdocs-wrapper css-XXXX`, es el que de verdad pinta
-   el blanco. `.sbdocs-wrapper` y la clase generada por Storybook tienen la MISMA
-   especificidad, así que gana la que se inyecte después — y las suyas se
-   inyectan en tiempo de ejecución. Eso convierte el resultado en una carrera que
-   sale distinta según la máquina.
-   Colgarlo del id sube la especificidad por encima de cualquier clase suya, y el
-   `!important` cubre el caso de que además la escriban en línea. */
+/* The div inside, `sbdocs sbdocs-wrapper css-XXXX`, is the one actually painting
+   white. `.sbdocs-wrapper` and Storybook's generated class have the SAME
+   specificity, so whichever is injected last wins — and theirs are injected at
+   runtime. That turns the result into a race that comes out differently on
+   different machines.
+   Hanging it off the id lifts specificity above any class of theirs, and the
+   `!important` covers the case where they also write it inline. */
 #storybook-docs .sbdocs-wrapper {
   background-color: var(--color-background) !important;
 }
 
-/* La tabla de props tiene el mismo empate de especificidad que el wrapper: su
-   clase generada gana a `.docblock-argstable` por orden de inyección. Se cuelga
-   del id por la misma razón.
+/* The props table has the same specificity tie as the wrapper: their generated
+   class beats `.docblock-argstable` by injection order. It hangs off the id for
+   the same reason.
 
-   Va en `surface`, la misma superficie que los bloques de previsualización: es
-   un panel de información sobre la página, no la página. La cabecera se deja
-   transparente para que descanse sobre el fondo y separe visualmente. */
+   It sits on `surface`, the same surface as the preview blocks: it is a panel of
+   information about the page, not the page. The header is left transparent so it
+   rests on the background and separates visually. */
 #storybook-docs .docblock-argstable,
 #storybook-docs .docblock-argstable tbody,
 #storybook-docs .docblock-argstable tbody tr,
@@ -56,10 +56,10 @@ body,
   border-bottom-color: var(--color-hairline) !important;
 }
 
-/* Los controles de la tabla —campos, desplegables y botones— se pintan con
-   clases generadas cuyo hash cambia entre versiones, así que se apuntan por
-   tipo de elemento. Van en `surfaceRaised`, un escalón por encima de la
-   superficie de la tabla, que es la jerarquía del sistema. */
+/* The table controls — fields, selects and buttons — are painted with generated
+   classes whose hash changes between versions, so they are targeted by element
+   type. They sit on `surfaceRaised`, one step above the table surface, which is
+   the system's hierarchy. */
 #storybook-docs .docblock-argstable textarea,
 #storybook-docs .docblock-argstable input,
 #storybook-docs .docblock-argstable select,
@@ -73,33 +73,33 @@ body,
 @source '../stories';
 
 /* ---------------------------------------------------------------------------
-   Las páginas de documentación que genera Storybook traen su propio tema:
-   fondo blanco y grises propios, que sobre abismo se ven como un parche. Aquí
-   se atan a los tokens, así que siguen el switch de la toolbar como todo lo
-   demás en vez de quedarse en un tema fijo.
+   The documentation pages Storybook generates ship their own theme: white
+   background and greys of their own, which read as a patch over abyss. Here they
+   are tied to the tokens, so they follow the toolbar switch like everything else
+   instead of sitting on a fixed theme.
 
-   Todo cuelga de `.sbdocs-wrapper` como ancestro, y no de dobles clases sobre
-   el propio elemento: el titular, por ejemplo, lleva `sbdocs-title sb-unstyled`
-   pero NO `sbdocs`, así que un selector `.sbdocs.sbdocs-title` no casa con
-   nada. Como descendiente sí casa, y de paso gana en especificidad a los
-   estilos que Storybook inyecta en tiempo de ejecución.
+   Everything hangs off `.sbdocs-wrapper` as an ancestor rather than off double
+   classes on the element itself: the title, for instance, carries
+   `sbdocs-title sb-unstyled` but NOT `sbdocs`, so a `.sbdocs.sbdocs-title`
+   selector matches nothing. As a descendant it does match, and it also wins on
+   specificity against the styles Storybook injects at runtime.
 --------------------------------------------------------------------------- */
 
-/* `.sbdocs` a secas incluida: el contenedor de la página lleva esa clase y
-   pinta blanco por su cuenta, dejando una banda clara arriba justo debajo del
-   titular. La regla del bloque de previsualización va más abajo y le gana por
-   especificidad, así que las tarjetas siguen en `surface`. */
+/* Bare `.sbdocs` included: the page container carries that class and paints
+   white on its own, leaving a light band at the top right under the title. The
+   preview-block rule comes further down and beats it on specificity, so the
+   cards stay on `surface`. */
 .sbdocs,
 .sbdocs-wrapper {
   background-color: var(--color-background);
   font-family: var(--font-sans);
 }
 
-/* Titulares en la escala del sistema, no en la de Storybook.
-   `!important` a propósito y solo aquí: Storybook inyecta el color del titular
-   en tiempo de ejecución con una clase generada, y sin esto gana él y el título
-   queda en gris oscuro sobre abismo, ilegible. Es sobrescribir el tema de un
-   tercero al que no se llega de otra forma, no pereza de especificidad. */
+/* Headings on the system scale, not on Storybook's.
+   `!important` on purpose and only here: Storybook injects the heading color at
+   runtime with a generated class, and without this it wins and the title ends up
+   dark grey on abyss, illegible. This is overriding a third party's theme that
+   cannot be reached otherwise, not specificity laziness. */
 .sbdocs-title,
 .sbdocs-h1,
 .sbdocs-h2,
@@ -108,8 +108,8 @@ body,
 .sbdocs-wrapper h2,
 .sbdocs-wrapper h3 {
   color: var(--color-text-primary) !important;
-  /* Storybook atenúa el titular aparte del color; sin esto se queda a media
-     tinta sobre abismo aunque el color ya sea el correcto. */
+  /* Storybook dims the heading separately from the color; without this it stays
+     half-inked over abyss even when the color is already right. */
   opacity: 1 !important;
   font-family: var(--font-display);
   border-bottom-color: var(--color-hairline);
@@ -128,8 +128,8 @@ body,
   color: var(--color-accent);
 }
 
-/* Cada bloque de previsualización es una tarjeta del sistema, con su barra de
-   herramientas —zoom y recarga— en la superficie elevada. */
+/* Every preview block is a system card, with its toolbar — zoom and reload — on
+   the raised surface. */
 .sbdocs-wrapper .sbdocs-preview,
 .sbdocs-wrapper .docs-story {
   background-color: var(--color-surface);
@@ -153,7 +153,7 @@ body,
   border-color: var(--color-hairline);
 }
 
-/* La tabla de props. */
+/* The props table. */
 .sbdocs-wrapper .docblock-argstable,
 .sbdocs-wrapper .docblock-argstable th,
 .sbdocs-wrapper .docblock-argstable td,

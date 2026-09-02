@@ -1,32 +1,31 @@
 /**
- * Punto de entrada de `@eduardoalvarez/arrecife`.
+ * The entry point of `@eduardoalvarez/arrecife`.
  *
- * Reexporta los tokens por conveniencia. La dirección de las dependencias es
- * siempre la misma: la raíz puede importar tokens, los tokens nunca importan
- * nada de la raíz.
+ * It re-exports the tokens for convenience. The direction of the dependencies is
+ * always the same: the root may import tokens, tokens never import anything from
+ * the root.
  */
 export * from './tokens/index.ts';
-export * from './tema/index.ts';
+export * from './theme/index.ts';
 export * from './primitives/index.ts';
 export * from './components/index.ts';
 export * from './brand/index.ts';
 export { cn } from './lib/cn.ts';
-
 /**
- * Los ocho iconos de redes van agrupados, NO sueltos, y hay un motivo concreto:
- * uno de ellos se llama `X`. Un `export const X` en la raíz de una librería de
- * componentes es una colisión esperando a pasar — con una variable de un genérico,
- * con un `import { X }` de cualquier otra cosa, con el propio JSX.
+ * The eight social icons are exported as a group, NOT loose, and there is a
+ * concrete reason: one of them is called `X`. An `export const X` at the root of
+ * a component library is a collision waiting to happen — with a generic's type
+ * variable, with an `import { X }` of anything else, with JSX itself.
  *
  *   import { social } from '@eduardoalvarez/arrecife';
  *   <social.GitHub />
  *
- * `import { GitHub }` NO existe, y es la primera forma que prueba todo el mundo.
- * Por eso está escrito aquí, en el README y en `llms.txt`.
+ * `import { GitHub }` does NOT exist, and it is the first thing everyone tries.
+ * Which is why it is written here, in the README and in `llms.txt`.
  *
- * Lo que NO se exporta de `lib/` son los glifos: `Close`, `ChevronDown`, `Sol` y
- * compañía son el juego mínimo que necesitan los primitivos y se quedan dentro.
- * Publicarlos convertiría `glyphs.tsx` en la librería de iconos que el sistema
- * decidió no tener, y a partir de ahí crece sola.
+ * What is NOT exported from `lib/` are the glyphs: `Close`, `ChevronDown`, `Sun`
+ * and company are the minimum set the primitives need and they stay inside.
+ * Publishing them would turn `glyphs.tsx` into the icon library the system
+ * decided not to have, and from there it grows on its own.
  */
 export * as social from './lib/social.tsx';

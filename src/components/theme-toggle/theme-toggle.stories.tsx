@@ -1,39 +1,40 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Bloque, Fila, Nota } from '../../../stories/utils.tsx';
-import { scriptTema } from '../../tema/index.ts';
+import { Block, Row, Note } from '../../../stories/utils.tsx';
+import { themeScript } from '../../theme/index.ts';
 import { ThemeToggle } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/ThemeToggle',
+  title: 'Components/ThemeToggle',
   component: ThemeToggle,
 } satisfies Meta<typeof ThemeToggle>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: (args) => (
     <div>
-      <Fila>
+      <Row>
         <ThemeToggle {...args} />
-      </Fila>
-      <Nota>
-        En Storybook el tema lo manda la toolbar, así que pulsar aquí lo cambia y
-        el selector de arriba se queda donde estaba. En un proyecto real no hay
-        dos fuentes: manda `data-theme` del {'<html>'}.
-      </Nota>
-      <Nota>
-        El icono que se ve es el de DESTINO: en oscuro el sol, en claro la luna.
-        Los dos están en el DOM siempre y el que sobra lo esconde la variante
-        `light:`, que es lo que evita que el servidor y el cliente discrepen.
-      </Nota>
-      <Nota>
-        El nombre accesible es «Cambiar de tema» y no cambia con el modo. Decir
-        «cambiar a claro» sería más informativo y sería falso la mitad de las
-        veces: el HTML lo fija el servidor, que no sabe qué eligió quien lee.
-      </Nota>
+      </Row>
+      <Note>
+        In Storybook the theme is driven by the toolbar, so pressing here changes
+        it and the selector above stays where it was. In a real project there are
+        not two sources: `data-theme` on the {'<html>'} decides.
+      </Note>
+      <Note>
+        The icon you see is the TARGET one: the sun in dark, the moon in light.
+        Both are always in the DOM and the spare one is hidden by the `light:`
+        variant, which is what stops the server and the client from disagreeing.
+      </Note>
+      <Note>
+        The accessible name is «Cambiar de tema» and it does not change with the
+        mode. Saying «switch to light» would be more informative and would be false
+        half the time: the HTML is fixed by the server, which does not know what the
+        reader chose.
+      </Note>
     </div>
   ),
 };
@@ -48,44 +49,45 @@ export const Focus: Story = {
   render: (args) => <ThemeToggle {...args} />,
 };
 
-export const Variantes: Story = {
+export const Variants: Story = {
   render: () => (
     <div>
-      <Bloque titulo="secondary · el defecto">
+      <Block title="secondary · the default">
         <ThemeToggle />
-      </Bloque>
-      <Bloque titulo="tertiary · para una cabecera sin cajas">
+      </Block>
+      <Block title="tertiary · for a header with no boxes">
         <ThemeToggle variant="tertiary" />
-      </Bloque>
-      <Nota>
-        Hereda las variantes de `Button` porque es un botón, no una pieza nueva.
-        `conversion` no está pensado para esto: se gasta una vez por pantalla y
-        no es en el control de tema.
-      </Nota>
+      </Block>
+      <Note>
+        It inherits `Button`'s variants because it is a button, not a new piece.
+        `conversion` is not meant for this: it gets spent once per screen, and not
+        on the theme control.
+      </Note>
     </div>
   ),
 };
 
-export const ElScript: Story = {
-  name: 'El script del <head>',
+export const TheScript: Story = {
+  name: 'The <head> script',
   render: () => (
     <div className="gap-step-md flex flex-col">
-      <Nota>
-        Lo difícil no es el botón: es que la primera pintura salga ya con el tema
-        correcto. Esto va INLINE en el {'<head>'}, antes de las hojas de estilo, y
-        se importa de `@eduardoalvarez/arrecife/tema`, que no trae React.
-      </Nota>
+      <Note>
+        The hard part is not the button: it is that the first paint already comes
+        out in the right theme. This goes INLINE in the {'<head>'}, before the
+        stylesheets, and it is imported from `@eduardoalvarez/arrecife/theme`, which
+        brings no React.
+      </Note>
       <pre
         data-theme="dark"
         className="rounded-card bg-brand-hull p-step-md text-chip text-text-primary overflow-x-auto font-mono"
       >
-        {scriptTema}
+        {themeScript}
       </pre>
-      <Nota>
-        La última línea es la que se olvidaba en los dos proyectos: las
-        transiciones de vista de Astro reemplazan el {'<html>'} entero, así que sin
-        `astro:after-swap` el tema se pierde al navegar.
-      </Nota>
+      <Note>
+        The last line is the one both projects kept forgetting: Astro's view
+        transitions replace the whole {'<html>'}, so without `astro:after-swap` the
+        theme is lost on navigation.
+      </Note>
     </div>
   ),
 };

@@ -1,22 +1,22 @@
 /**
- * El check que faltaba: ningún token de Arrecife pisa un nombre de Tailwind.
+ * The check that was missing: no Arrecife token stomps on a Tailwind name.
  *
- * En Tailwind v4 el nombre de la custom property ES la API. `--spacing-*` no
- * alimenta solo `p-*`, `m-*` y `gap-*`: también resuelve `w-*`, `h-*`,
- * `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `basis-*` y `size-*`, y ahí GANA a
- * la escala `--container-*`. Los escalones de `spacing` se llamaban `xs, sm, md,
- * lg, xl` —los mismos nombres que `--container-*`— así que todo proyecto que
- * importara `theme.css` se quedaba con `max-w-sm` en 12px en vez de en 384px.
+ * In Tailwind v4 the custom property name IS the API. `--spacing-*` does not
+ * only feed `p-*`, `m-*` and `gap-*`: it also resolves `w-*`, `h-*`, `max-w-*`,
+ * `min-w-*`, `max-h-*`, `min-h-*`, `basis-*` and `size-*`, and there it BEATS
+ * the `--container-*` scale. The `spacing` steps used to be called `xs, sm, md,
+ * lg, xl` — the same names as `--container-*` — so every project importing
+ * `theme.css` ended up with `max-w-sm` at 12px instead of 384px.
  *
- * Nada lo detectó: ni el build, ni los tipos, ni Storybook, ni la suite de axe.
- * La librería no usa `max-w-sm` por dentro, así que el fallo solo existía en los
- * proyectos que la consumen y no dejaba ni un error en consola. Se descubrió en
- * producción, con el párrafo de un hero a una palabra por línea.
+ * Nothing caught it: not the build, not the types, not Storybook, not the axe
+ * suite. The library does not use `max-w-sm` internally, so the failure only
+ * existed in the projects consuming it and left no console error behind. It was
+ * found in production, with a hero paragraph running one word per line.
  *
- * Este script lo convierte en un fallo de build. Los nombres reservados NO están
- * escritos aquí a mano: se leen del `theme.css` de la versión de Tailwind que
- * hay instalada, así que si Tailwind estrena un escalón, el check se entera al
- * actualizar la dependencia y no seis meses después.
+ * This script turns that into a build failure. The reserved names are NOT
+ * written here by hand: they are read from the `theme.css` of the installed
+ * Tailwind version, so if Tailwind introduces a new step the check finds out
+ * when the dependency is updated and not six months later.
  */
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -28,140 +28,142 @@ import { themeCss } from './build-tokens.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
 
-/* ------------------------------------------- los nombres que reserva Tailwind */
+/* ------------------------------------------------ the names Tailwind reserves */
 
-const temaTailwind = await readFile(require.resolve('tailwindcss/theme.css'), 'utf8');
+const tailwindTheme = await readFile(require.resolve('tailwindcss/theme.css'), 'utf8');
 
-/** `--spacing-step-md: 16px` → `['spacing', 'step-md']`. Ignora `--text-h1--line-height`. */
-const DECLARACION = /^\s*--([a-z]+)-([a-z0-9][a-z0-9-]*?):/gim;
+/** `--spacing-step-md: 16px` → `['spacing', 'step-md']`. Ignores `--text-h1--line-height`. */
+const DECLARATION = /^\s*--([a-z]+)-([a-z0-9][a-z0-9-]*?):/gim;
 
-/** Los nombres que Tailwind ya define en cada espacio, leídos de su theme.css. */
-function nombresPorEspacio(css) {
-  const mapa = new Map();
-  for (const [, espacio, nombre] of css.matchAll(DECLARACION)) {
-    if (nombre.includes('--')) continue; // modificadores: --text-h1--line-height
-    if (!mapa.has(espacio)) mapa.set(espacio, new Set());
-    mapa.get(espacio).add(nombre);
+/** The names Tailwind already defines per namespace, read from its theme.css. */
+function namesByNamespace(css) {
+  const map = new Map();
+  for (const [, namespace, name] of css.matchAll(DECLARATION)) {
+    if (name.includes('--')) continue; // modifiers: --text-h1--line-height
+    if (!map.has(namespace)) map.set(namespace, new Set());
+    map.get(namespace).add(name);
   }
-  return mapa;
+  return map;
 }
 
-const deTailwind = nombresPorEspacio(temaTailwind);
-const nombresDe = (espacio) => deTailwind.get(espacio) ?? new Set();
+const fromTailwind = namesByNamespace(tailwindTheme);
+const namesOf = (namespace) => fromTailwind.get(namespace) ?? new Set();
 
 /**
- * Qué nombres no puede usar cada espacio nuestro, y por qué.
+ * Which names each of our namespaces cannot use, and why.
  *
- * `spacing` es el caso raro y es EL caso: además de su propio espacio, se come
- * la escala `--container-*` en todas las utilidades de ancho y alto. Por eso
- * mira las dos listas.
+ * `spacing` is the odd one and it is THE one: on top of its own namespace, it
+ * swallows the `--container-*` scale across every width and height utility.
+ * That is why it looks at both lists.
  */
-const RESERVADOS = [
+const RESERVED = [
   {
-    espacio: 'spacing',
-    prohibidos: () => new Set([...nombresDe('spacing'), ...nombresDe('container')]),
-    porque:
-      'las utilidades de ancho y alto (max-w-*, w-*, h-*, basis-*, size-*) resuelven ' +
-      '--spacing-* ANTES que --container-*, así que este nombre se come el escalón de Tailwind',
+    namespace: 'spacing',
+    forbidden: () => new Set([...namesOf('spacing'), ...namesOf('container')]),
+    because:
+      'the width and height utilities (max-w-*, w-*, h-*, basis-*, size-*) resolve ' +
+      '--spacing-* BEFORE --container-*, so this name swallows the Tailwind step',
   },
   {
-    espacio: 'text',
-    prohibidos: () => nombresDe('text'),
-    porque: 'text-* dejaría de dar el tamaño de Tailwind',
+    namespace: 'text',
+    forbidden: () => namesOf('text'),
+    because: 'text-* would stop giving the Tailwind size',
   },
   {
-    espacio: 'radius',
-    prohibidos: () => nombresDe('radius'),
-    porque: 'rounded-* dejaría de dar el radio de Tailwind',
+    namespace: 'radius',
+    forbidden: () => namesOf('radius'),
+    because: 'rounded-* would stop giving the Tailwind radius',
   },
   {
-    espacio: 'container',
-    prohibidos: () => nombresDe('container'),
-    porque: 'max-w-* dejaría de dar el ancho de Tailwind',
+    namespace: 'container',
+    forbidden: () => namesOf('container'),
+    because: 'max-w-* would stop giving the Tailwind width',
   },
   {
-    espacio: 'font',
-    prohibidos: () => nombresDe('font'),
-    porque: 'font-* dejaría de dar la familia de Tailwind',
+    namespace: 'font',
+    forbidden: () => namesOf('font'),
+    because: 'font-* would stop giving the Tailwind family',
   },
   {
-    espacio: 'shadow',
-    prohibidos: () => nombresDe('shadow'),
-    porque: 'shadow-* dejaría de dar la sombra de Tailwind',
+    namespace: 'shadow',
+    forbidden: () => namesOf('shadow'),
+    because: 'shadow-* would stop giving the Tailwind shadow',
   },
   {
-    espacio: 'ease',
-    prohibidos: () => nombresDe('ease'),
-    porque: 'ease-* dejaría de dar la curva de Tailwind',
+    namespace: 'ease',
+    forbidden: () => namesOf('ease'),
+    because: 'ease-* would stop giving the Tailwind easing curve',
   },
   {
-    espacio: 'color',
-    prohibidos: () => nombresDe('color'),
-    porque: 'bg-*, text-* y border-* dejarían de dar el color de Tailwind',
+    namespace: 'color',
+    forbidden: () => namesOf('color'),
+    because: 'bg-*, text-* and border-* would stop giving the Tailwind color',
   },
 ];
 
 /**
- * Un escalón numérico en `--spacing-*` es igual de venenoso y no sale del
- * theme.css de Tailwind: `--spacing: 0.25rem` genera `p-1`…`p-96` por cálculo,
- * así que un `--spacing-4` nuestro pisaría `p-4` sin aparecer en ninguna lista.
+ * A numeric step in `--spacing-*` is just as poisonous and does not come out of
+ * Tailwind's theme.css: `--spacing: 0.25rem` generates `p-1`…`p-96` by
+ * calculation, so a `--spacing-4` of ours would stomp `p-4` without appearing in
+ * any list.
  */
-const NUMERICO = /^\d+(\.\d+)?$/;
+const NUMERIC = /^\d+(\.\d+)?$/;
 
 /**
- * Los pisotones DELIBERADOS. Van aquí con su motivo, y aquí se discuten.
+ * The DELIBERATE collisions. They go here with their reason, and here is where
+ * they get argued.
  *
- * `font-sans` y `font-mono` se pisan a propósito: el sistema tiene sus familias
- * y `font-sans` tiene que dar Geist, no la pila del sistema. Es el sentido de
- * importar los tokens.
+ * `font-sans` and `font-mono` are stomped on purpose: the system has its own
+ * families and `font-sans` has to give Geist, not the system stack. That is the
+ * whole point of importing the tokens.
  */
-const DELIBERADOS = new Map([
-  ['--font-sans', 'la familia del sistema es Geist, no la pila por defecto'],
-  ['--font-mono', 'la familia mono del sistema es JetBrains Mono'],
+const DELIBERATE = new Map([
+  ['--font-sans', "the system's family is Geist, not the default stack"],
+  ['--font-mono', "the system's mono family is JetBrains Mono"],
 ]);
 
-/* ------------------------------------------------- lo que emitimos nosotros */
+/* ------------------------------------------------------- what we emit ourselves */
 
-const fallos = [];
+const failures = [];
 
-for (const [, espacio, nombre] of themeCss.matchAll(DECLARACION)) {
-  if (nombre.includes('--')) continue;
-  const propiedad = `--${espacio}-${nombre}`;
-  if (DELIBERADOS.has(propiedad)) continue;
+for (const [, namespace, name] of themeCss.matchAll(DECLARATION)) {
+  if (name.includes('--')) continue;
+  const property = `--${namespace}-${name}`;
+  if (DELIBERATE.has(property)) continue;
 
-  const regla = RESERVADOS.find((r) => r.espacio === espacio);
-  if (regla && regla.prohibidos().has(nombre)) {
-    fallos.push({ propiedad, porque: regla.porque });
+  const rule = RESERVED.find((r) => r.namespace === namespace);
+  if (rule && rule.forbidden().has(name)) {
+    failures.push({ property, because: rule.because });
     continue;
   }
 
-  if (espacio === 'spacing' && NUMERICO.test(nombre)) {
-    fallos.push({
-      propiedad,
-      porque: 'un nombre numérico en --spacing-* pisa la escala p-1…p-96 de Tailwind',
+  if (namespace === 'spacing' && NUMERIC.test(name)) {
+    failures.push({
+      property,
+      because: 'a numeric name in --spacing-* stomps the Tailwind p-1…p-96 scale',
     });
   }
 }
 
-if (fallos.length > 0) {
+if (failures.length > 0) {
   console.error(
-    'Un token de Arrecife pisa un nombre de Tailwind. Un proyecto que importe\n' +
-      'theme.css perderá esa utilidad sin recibir ningún aviso:\n',
+    'An Arrecife token stomps a Tailwind name. A project importing theme.css\n' +
+      'will lose that utility without any warning:\n',
   );
-  for (const { propiedad, porque } of fallos) {
-    console.error(`  ${propiedad}`);
-    console.error(`    ${porque}\n`);
+  for (const { property, because } of failures) {
+    console.error(`  ${property}`);
+    console.error(`    ${because}\n`);
   }
   console.error(
-    'Se arregla renombrando el token en src/tokens/tokens.ts con un grupo propio\n' +
-      '(`stepMd` → --spacing-step-md), como ya hacen `spacing.step*` y `control`.\n' +
-      'Redeclarar el token de Tailwind NO funciona: el nuestro gana la resolución.',
+    'The fix is renaming the token in src/tokens/tokens.ts under its own group\n' +
+      '(`stepMd` → --spacing-step-md), the way `spacing.step*` and `control` already do.\n' +
+      'Redeclaring the Tailwind token does NOT work: ours wins resolution.',
   );
   process.exit(1);
 }
 
-const emitidos = [...themeCss.matchAll(DECLARACION)].filter(([, , n]) => !n.includes('--'));
+const emitted = [...themeCss.matchAll(DECLARATION)].filter(([, , n]) => !n.includes('--'));
 console.log(
-  `arrecife · ${emitidos.length} tokens, ninguno pisa un nombre de Tailwind ` +
+  `arrecife · ${emitted.length} tokens, none stomping a Tailwind name ` +
     `(${relative(root, require.resolve('tailwindcss/theme.css')).replace(/^.*node_modules\//, '')})`,
 );

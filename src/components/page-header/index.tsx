@@ -5,25 +5,25 @@ import { cn } from '../../lib/cn.ts';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * Una sola cabecera en dos escalas, no dos componentes.
+ * One header at two scales, not two components.
  *
- * El hero del portafolio y el de cursos resultaron ser el mismo esqueleto —
- * eyebrow en acento, titular, párrafo acotado — con distinto tamaño. Separarlos
- * en `Hero` y `PageHeader` habría duplicado la misma regla en dos sitios y
- * habría dejado la puerta abierta a que se separaran con el tiempo.
+ * The portfolio's hero and the courses one turned out to be the same skeleton —
+ * eyebrow in accent, headline, clamped paragraph — at different sizes. Splitting
+ * them into `Hero` and `PageHeader` would have duplicated the same rule in two
+ * places and left the door open for them to drift apart over time.
  *
- * `display` para portadas, `page` para cabeceras de sección.
+ * `display` for covers, `page` for section headers.
  *
- * No recibe cara de la mascota, ni en una escala ni en la otra: las caras van en
- * estados vacíos, confirmaciones, errores, progreso de curso y celebración.
+ * It takes no mascot face, at either scale: faces go in empty states,
+ * confirmations, errors, course progress and celebration.
  *
- * Renderiza un `<header>`, y va DENTRO de `<main>`. Un `<header>` que cuelga
- * directamente del `<body>` se convierte en landmark `banner`, y entonces
- * compite con la cabecera del sitio: dos banners en una página es un fallo de
- * accesibilidad. Dentro de `<main>` no es landmark y sí es la cabecera del
- * contenido, que es lo que este componente es.
+ * It renders a `<header>`, and it goes INSIDE `<main>`. A `<header>` hanging
+ * directly off `<body>` becomes a `banner` landmark, and then it competes with
+ * the site header: two banners on one page is an accessibility failure. Inside
+ * `<main>` it is not a landmark and it is the content's header, which is what
+ * this component is.
  */
-const cabecera = cva('gap-step-sm flex flex-col', {
+const header = cva('gap-step-sm flex flex-col', {
   variants: {
     size: {
       display: 'py-section',
@@ -34,17 +34,17 @@ const cabecera = cva('gap-step-sm flex flex-col', {
 });
 
 export type PageHeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'title'> &
-  VariantProps<typeof cabecera> & {
+  VariantProps<typeof header> & {
     title: ReactNode;
-    /** Mono, versalitas, en acento. Es la sección a la que pertenece la página. */
+    /** Mono, small caps, in accent. It is the section the page belongs to. */
     eyebrow?: ReactNode | undefined;
     description?: ReactNode | undefined;
     /**
-     * Ranura para las llamadas a la acción. Si aquí va un botón de conversión,
-     * es el único de la pantalla.
+     * Slot for the calls to action. If a conversion button goes here, it is the
+     * only one on the screen.
      */
     action?: ReactNode | undefined;
-    /** Nivel del titular. `h1` salvo que la página ya tenga uno. */
+    /** The headline's level. `h1` unless the page already has one. */
     as?: 'h1' | 'h2' | undefined;
   };
 
@@ -59,7 +59,7 @@ export function PageHeader({
   ...props
 }: PageHeaderProps) {
   return (
-    <header className={cn(cabecera({ size }), className)} {...props}>
+    <header className={cn(header({ size }), className)} {...props}>
       {eyebrow ? (
         <Text variant="eyebrow" tone="accent" as="p">
           {eyebrow}

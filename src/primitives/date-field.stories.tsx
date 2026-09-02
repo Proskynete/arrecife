@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota, Pila } from '../../stories/utils.tsx';
+import { Note, Stack } from '../../stories/utils.tsx';
 import { DateField } from './date-field.tsx';
 import { Label } from './label.tsx';
 
 const meta = {
-  title: 'Primitivos/DateField',
+  title: 'Primitives/DateField',
   component: DateField,
   args: { defaultValue: '2026-03-14' },
 } satisfies Meta<typeof DateField>;
@@ -13,43 +13,43 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const campo = (args: Parameters<NonNullable<Story['render']>>[0], etiqueta = 'Publicar el') => (
-  <Pila>
+const field = (args: Parameters<NonNullable<Story['render']>>[0], label = 'Publicar el artículo') => (
+  <Stack>
     <div className="gap-step-xs flex flex-col">
-      <Label htmlFor="fecha">{etiqueta}</Label>
-      <DateField id="fecha" {...args} />
+      <Label htmlFor="date">{label}</Label>
+      <DateField id="date" {...args} />
     </div>
-  </Pila>
+  </Stack>
 );
 
-export const Default: Story = { render: (args) => campo(args) };
+export const Default: Story = { render: (args) => field(args) };
 
-export const ConHora: Story = {
-  name: 'Con hora',
+export const WithTime: Story = {
+  name: 'With time',
   args: { withTime: true, defaultValue: '2026-03-14T09:30' },
-  render: (args) => campo(args, 'Publicar el'),
+  render: (args) => field(args, 'Publicar el artículo'),
 };
 
-export const Invalido: Story = {
-  name: 'Inválido',
+export const Invalid: Story = {
+  name: 'Invalid',
   args: { invalid: true },
-  render: (args) => campo(args),
+  render: (args) => field(args),
 };
 
-export const Deshabilitado: Story = { args: { disabled: true }, render: (args) => campo(args) };
+export const Disabled: Story = { args: { disabled: true }, render: (args) => field(args) };
 
-export const PorQueNativo: Story = {
-  name: 'Por qué el control nativo',
+export const WhyNative: Story = {
+  name: 'Why the native control',
   render: (args) => (
     <>
-      {campo(args)}
-      <Nota>
-        Trae gratis el teclado del sistema, el formato según el idioma del usuario
-        y el soporte de lector de pantalla. Para elegir una fecha dentro de un
-        formulario es mejor que cualquier calendario a medida, y no arrastra
-        dependencias. Cuando hace falta un calendario mensual navegable —el
-        planificador de contenido— ahí está `Calendar`.
-      </Nota>
+      {field(args)}
+      <Note>
+        It brings the system keyboard, the format matching the user's language and
+        screen-reader support for free. For picking a date inside a form it beats
+        any bespoke calendar, and it drags in no dependencies. When a navigable
+        month calendar is needed — the content planner — that is what `Calendar` is
+        for.
+      </Note>
     </>
   ),
 };

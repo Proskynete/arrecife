@@ -11,35 +11,35 @@ import {
   TableRow,
 } from './table.tsx';
 
-const meta = { title: 'Primitivos/Table', component: Table } satisfies Meta<typeof Table>;
+const meta = { title: 'Primitives/Table', component: Table } satisfies Meta<typeof Table>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const FILAS = [
-  { charla: 'Escalar sin romper el equipo', evento: 'JSConf', anio: '2025', estado: 'publicada' },
-  { charla: 'Deuda técnica con nombre y apellido', evento: 'NerdearLA', anio: '2024', estado: 'publicada' },
-  { charla: 'Arquitecturas que sobreviven', evento: 'Interno', anio: '2024', estado: 'borrador' },
+const ROWS = [
+  { charla: 'Escalar sin romper el equipo', event: 'JSConf', anio: '2025', state: 'publicada' },
+  { charla: 'Deuda técnica con nombre y apellido', event: 'NerdearLA', anio: '2024', state: 'publicada' },
+  { charla: 'Arquitecturas que sobreviven', event: 'Interno', anio: '2024', state: 'borrador' },
 ];
 
-const tabla = (seleccionada?: string) => (
+const table = (seleccionada?: string) => (
   <Table>
-    <TableCaption>Charlas de los últimos dos años</TableCaption>
+    <TableCaption>Charlas de los últimos two años</TableCaption>
     <TableHeader>
       <TableRow>
         <TableHead>Charla</TableHead>
         <TableHead>Evento</TableHead>
         <TableHead>Año</TableHead>
-        <TableHead>Estado</TableHead>
+        <TableHead>Status</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
-      {FILAS.map((f) => (
+      {ROWS.map((f) => (
         <TableRow key={f.charla} data-state={f.charla === seleccionada ? 'selected' : undefined}>
           <TableCell className="text-text-primary">{f.charla}</TableCell>
-          <TableCell>{f.evento}</TableCell>
+          <TableCell>{f.event}</TableCell>
           <TableCell className="font-mono">{f.anio}</TableCell>
           <TableCell>
-            <Badge variant={f.estado === 'publicada' ? 'success' : 'neutral'}>{f.estado}</Badge>
+            <Badge variant={f.state === 'publicada' ? 'success' : 'neutral'}>{f.state}</Badge>
           </TableCell>
         </TableRow>
       ))}
@@ -47,6 +47,6 @@ const tabla = (seleccionada?: string) => (
   </Table>
 );
 
-export const Default: Story = { render: () => tabla() };
-export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: () => tabla() };
-export const Seleccionada: Story = { render: () => tabla('Deuda técnica con nombre y apellido') };
+export const Default: Story = { render: () => table() };
+export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: () => table() };
+export const Selected: Story = { render: () => table('Deuda técnica con nombre y apellido') };

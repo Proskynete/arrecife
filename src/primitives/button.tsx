@@ -6,28 +6,28 @@ import { cn } from '../lib/cn.ts';
 import { Spinner } from '../lib/glyphs.tsx';
 
 /**
- * Las CUATRO variantes del sistema, y solo esas cuatro.
+ * The system's FOUR variants, and only those four.
  *
- * Regla de marca 2, como código y no como documentación: en modo claro el botón
- * primario no puede ser bioluz ni arena, así que pasa a casco sólido. No hay un
- * hex literal en ningún lado — `brand.hull` es un token, y el hover reusa
- * `textSecondary` en vez de inventar un `hullHover`.
+ * Brand rule 2, as code rather than as documentation: in light mode the primary
+ * button cannot be biolume or sand, so it switches to solid hull. There is no
+ * literal hex anywhere — `brand.hull` is a token, and the hover reuses
+ * `textSecondary` instead of inventing a `hullHover`.
  *
- * Regla de marca 3: `conversion` va UNA sola vez por pantalla. Está documentado
- * en la story y no se fuerza en runtime: dos botones de conversión en una misma
- * página son un problema de diseño, no un error que deba tirar el render.
+ * Brand rule 3: `conversion` appears ONCE per screen. That is documented in the
+ * story and not enforced at runtime: two conversion buttons on one page are a
+ * design problem, not an error that should take the render down.
  *
- * `secondary` NUNCA se rellena el fondo. Es borde y texto: en reposo, hairline
- * de hover y espuma; en hover, los dos pasan a bioluz. Un secundario relleno es
- * un primario mal teñido, y era lo que hacía este archivo.
+ * `secondary` is NEVER filled. It is border and text: at rest, hover hairline
+ * and foam; on hover, both move to biolume. A filled secondary is a badly tinted
+ * primary, and that is what this file used to do.
  *
- * `tertiary` es la estética CLI del sistema: mono, formato `./acción →`, sin
- * caja. Aparece en cada tarjeta, así que no es un `ghost` genérico con otro
- * nombre — el formato del texto es parte de la variante.
+ * `tertiary` is the system's CLI aesthetic: mono, `./action →` format, no box.
+ * It shows up on every card, so it is not a generic `ghost` under another name —
+ * the text format is part of the variant.
  *
- * No hay variante de peligro. El error del sistema vive en los avisos y en la
- * validación de campo, no en un botón rojo. Si alguna vez hace falta uno de
- * verdad, entra primero en el documento y luego aquí.
+ * There is no danger variant. The system's error lives in alerts and in field
+ * validation, not in a red button. If a real one is ever needed, it goes into
+ * the document first and in here second.
  */
 const button = cva(
   [
@@ -59,15 +59,15 @@ const button = cva(
         sm: 'h-8 px-control-sm text-label',
         md: 'h-10 px-control-md text-ui',
         lg: 'h-12 px-control-lg text-lead',
-        /** Cuadrado 42×42, sin texto. Lleva `aria-label` obligatorio. */
+        /** A 42×42 square, no text. `aria-label` is mandatory on it. */
         icon: 'size-control-icon p-0',
       },
     },
     compoundVariants: [
       /**
-       * El terciario no tiene caja: ni padding horizontal ni alto de control.
-       * Va aquí y no como `px-0` en la variante para que gane al `px-*` del
-       * tamaño sin depender del orden en que cva concatena las clases.
+       * The tertiary has no box: neither horizontal padding nor control height.
+       * It goes here rather than as `px-0` on the variant so it beats the size's
+       * `px-*` without depending on the order cva concatenates classes in.
        */
       { variant: 'tertiary', size: ['sm', 'md', 'lg'], class: 'h-auto px-0' },
     ],
@@ -77,11 +77,11 @@ const button = cva(
 
 export type ButtonProps = ComponentPropsWithoutRef<'button'> &
   VariantProps<typeof button> & {
-    /** Renderiza el hijo en vez de un `<button>`, para envolver un enlace. */
+    /** Renders the child instead of a `<button>`, to wrap a link. */
     asChild?: boolean;
-    /** Deshabilita y anuncia `aria-busy`. Incompatible con `asChild`. */
+    /** Disables and announces `aria-busy`. Incompatible with `asChild`. */
     loading?: boolean;
-    /** Glifo SVG antes del texto. Se oculta mientras carga. */
+    /** SVG glyph before the text. Hidden while loading. */
     icon?: ReactNode;
   };
 

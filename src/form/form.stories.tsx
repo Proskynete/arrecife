@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../stories/utils.tsx';
+import { Note } from '../../stories/utils.tsx';
 import { Button } from '../primitives/button.tsx';
 import { Input } from '../primitives/input.tsx';
 import { Textarea } from '../primitives/textarea.tsx';
@@ -16,23 +16,23 @@ import {
 } from './index.tsx';
 
 const meta = {
-  title: 'Formularios/Form',
+  title: 'Forms/Form',
   component: FormItem,
 } satisfies Meta<typeof FormItem>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-type Campos = { nombre: string; correo: string; mensaje: string };
+type Fields = { name: string; email: string; message: string };
 
-function Formulario({ conErrores = false }: { conErrores?: boolean }) {
-  const form = useForm<Campos>({
-    defaultValues: { nombre: '', correo: '', mensaje: '' },
-    ...(conErrores
+function DemoForm({ withErrors = false }: { withErrors?: boolean }) {
+  const form = useForm<Fields>({
+    defaultValues: { name: '', email: '', message: '' },
+    ...(withErrors
       ? {
           errors: {
-            nombre: { type: 'minLength', message: 'El nombre necesita al menos dos letras.' },
-            correo: { type: 'pattern', message: 'Eso no parece un correo.' },
+            name: { type: 'minLength', message: 'El name necesita al menos dos letras.' },
+            email: { type: 'pattern', message: 'Eso no parece un email.' },
           },
         }
       : {}),
@@ -47,14 +47,14 @@ function Formulario({ conErrores = false }: { conErrores?: boolean }) {
       >
         <FormField
           control={form.control}
-          name="nombre"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre</FormLabel>
               <FormControl>
                 <Input placeholder="Cómo te llamas" {...field} />
               </FormControl>
-              <FormDescription>Es lo que aparece en la respuesta.</FormDescription>
+              <FormDescription>Es lo que aparece en la response.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -62,12 +62,12 @@ function Formulario({ conErrores = false }: { conErrores?: boolean }) {
 
         <FormField
           control={form.control}
-          name="correo"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Correo</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="tu@correo.dev" {...field} />
+                <Input type="email" placeholder="tu@email.dev" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,7 +76,7 @@ function Formulario({ conErrores = false }: { conErrores?: boolean }) {
 
         <FormField
           control={form.control}
-          name="mensaje"
+          name="message"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Mensaje</FormLabel>
@@ -96,40 +96,40 @@ function Formulario({ conErrores = false }: { conErrores?: boolean }) {
   );
 }
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: () => (
     <div>
-      <Formulario />
-      <Nota>
-        El `htmlFor`, el `aria-describedby` y el `aria-invalid` los cablea
-        `FormControl` a partir del contexto. Es lo que se olvidaba al escribir
-        cada campo a mano, y cuando se olvida el fallo es que nadie oye por qué el
-        campo está en rojo.
-      </Nota>
-      <Nota>
-        Vive en `@eduardoalvarez/arrecife/form` y no en la raíz: React Hook Form
-        es dependencia de pares opcional, y los cuatro proyectos que no la usan no
-        deberían tener que instalarla.
-      </Nota>
+      <DemoForm />
+      <Note>
+        The `htmlFor`, the `aria-describedby` and the `aria-invalid` are wired by
+        `FormControl` from context. It is what got forgotten when writing each
+        field by hand, and when it is forgotten the failure is that nobody hears
+        why the field is red.
+      </Note>
+      <Note>
+        It lives at `@eduardoalvarez/arrecife/form` and not at the root: React Hook
+        Form is an optional peer dependency, and the four projects that do not use
+        it should not have to install it.
+      </Note>
     </div>
   ),
 };
 
-export const ConErrores: Story = {
-  name: 'Con errores',
+export const WithErrors: Story = {
+  name: 'With errors',
   render: () => (
     <div>
-      <Formulario conErrores />
-      <Nota>
-        La etiqueta NO se tiñe. El borde del control y el mensaje ya están en
-        `error`: teñir además la etiqueta son tres rojos para un solo fallo, y el
-        sistema deja el color semántico en el borde y en el glifo.
-      </Nota>
-      <Nota>
-        Sin error, `FormMessage` no renderiza nada. Un hueco reservado desplaza el
-        resto del formulario cada vez que el mensaje aparece.
-      </Nota>
+      <DemoForm withErrors />
+      <Note>
+        The label is NOT tinted. The control's border and the message are already
+        in `error`: tinting the label as well is three reds for one failure, and
+        the system keeps the semantic color on the border and the glyph.
+      </Note>
+      <Note>
+        With no error, `FormMessage` renders nothing. A reserved gap shifts the
+        rest of the form every time the message appears.
+      </Note>
     </div>
   ),
 };

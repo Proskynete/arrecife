@@ -1,172 +1,173 @@
 /**
- * Arrecife — fuente única de la identidad visual.
+ * Arrecife — the single source of the visual identity.
  *
- * LA RESTRICCIÓN QUE MANDA SOBRE TODO LO DEMÁS: este archivo no importa nada.
- * Ni React, ni componentes, ni CSS de terceros. Lo consumen los cinco proyectos,
- * un generador de OG con Satori y un sitio Astro que no monta React. Si un token
- * termina dependiendo de un componente, la librería dejó de ser portable.
- * `scripts/check-tokens-purity.mjs` lo verifica en cada build.
+ * THE CONSTRAINT THAT OUTRANKS EVERYTHING ELSE: this file imports nothing. Not
+ * React, not components, not third-party CSS. It is consumed by the five
+ * projects, by an OG generator running on Satori and by an Astro site that
+ * never mounts React. The moment a token depends on a component, the library
+ * has stopped being portable. `scripts/check-tokens-purity.mjs` verifies it on
+ * every build.
  *
- * Los contrastes están MEDIDOS, no estimados. No cambies un hex para que
- * «combine mejor»: #0F8F80 (3.57:1) y #B4632A (3.95:1) ya se corrigieron por no
- * pasar AA sobre papel. Si los ves en algún lado, están mal.
+ * Contrast ratios here are MEASURED, not estimated. Do not nudge a hex so it
+ * «looks better»: #0F8F80 (3.57:1) and #B4632A (3.95:1) were already corrected
+ * for failing AA on paper. If you see them anywhere, they are wrong.
  *
- * Segunda corrección, por la misma razón. El documento medía todo contra
- * `background`, pero `surfaceRaised` es el peor caso en los DOS modos: en claro
- * es más oscuro que el fondo de página, en oscuro es más claro. Es donde viven
- * menús y tabs activos, así que es donde de verdad hay que poder leer.
+ * A second correction, for the same reason. The identity document measured
+ * everything against `background`, but `surfaceRaised` is the worst case in
+ * BOTH modes: in light it is darker than the page, in dark it is lighter. It is
+ * where menus and active tabs live, so it is where reading has to work.
  *
- *   textMuted claro  #6B7480 → #626A75   4.24 → 4.90 sobre background
- *   warning   claro  #9A6A12 → #8D6111   4.23 → 4.88 sobre background
- *   error     oscuro #E05252 → #E15757   4.35 → 4.51 sobre surface
+ *   textMuted light  #6B7480 → #626A75   4.24 → 4.90 over background
+ *   warning   light  #9A6A12 → #8D6111   4.23 → 4.88 over background
+ *   error     dark   #E05252 → #E15757   4.35 → 4.51 over surface
  *
- * Los tres conservan tono y saturación exactos: solo baja o sube la luminosidad
- * entre 1 y 4 puntos. `accent` y `warm` claros se quedan como están: pasan sobre
- * background y sobre surface, y no son color de texto sobre surfaceRaised.
+ * All three keep their exact hue and saturation: only lightness moves, by one
+ * to four points. Light `accent` and `warm` stay as they are — they pass over
+ * background and over surface, and neither is a text color on surfaceRaised.
  */
 
 /* ------------------------------------------------------------------ color */
 
 /**
- * Modo oscuro (primario). Contrastes medidos sobre `background` #091319.
+ * Dark mode (primary). Contrast measured against `background` #091319.
  */
 export const dark = {
-  background: '#091319', //          abismo · fondo de página
-  surface: '#10202B', //             fosa · tarjetas y paneles
-  surfaceRaised: '#17303E', //       corriente · menús, tabs activos
-  border: '#22414F', //              bordes de control
-  hairline: '#1E3441', //            divisiones sutiles
-  hairlineHover: '#2C4D5D', //       hairline en hover de tarjeta
-  textPrimary: '#EDF4F3', //         espuma            16.84:1
-  textSecondary: '#A7BCC4', //       bruma              9.50:1
-  textMuted: '#71919C', //           plancton           5.57:1  nunca bajo 13px
-  accent: '#35D6C0', //              bioluz            10.31:1  interactivo
+  background: '#091319', //          abyss · page background
+  surface: '#10202B', //             trench · cards and panels
+  surfaceRaised: '#17303E', //       current · menus, active tabs
+  border: '#22414F', //              control borders
+  hairline: '#1E3441', //            subtle dividers
+  hairlineHover: '#2C4D5D', //       hairline on card hover
+  textPrimary: '#EDF4F3', //         foam              16.84:1
+  textSecondary: '#A7BCC4', //       haze               9.50:1
+  textMuted: '#71919C', //           plankton           5.57:1  never under 13px
+  accent: '#35D6C0', //              biolume           10.31:1  interactive
   accentHover: '#5FE3D1',
-  accentOn: '#06171A', //            tinta sobre bioluz
-  warm: '#F2A65A', //                arena              9.28:1  humano y conversión
+  accentOn: '#06171A', //            ink over biolume
+  warm: '#F2A65A', //                sand               9.28:1  human and conversion
   warmHover: '#F7BB7D',
-  warmOn: '#2A1605', //              tinta sobre arena
+  warmOn: '#2A1605', //              ink over sand
   success: '#4FB477',
   warning: '#E8A33D',
-  error: '#E15757', //                                 4.51:1 sobre surface
+  error: '#E15757', //                                 4.51:1 over surface
 } as const;
 
 /**
- * Modo claro. Contrastes medidos sobre `background` #F6F2EA.
- * `background` es blanco CÁLIDO: nunca #FFF como fondo de página.
+ * Light mode. Contrast measured against `background` #F6F2EA.
+ * `background` is WARM white: never #FFF as the page background.
  */
 export const light = {
-  background: '#F6F2EA', //          papel
+  background: '#F6F2EA', //          paper
   surface: '#FFFFFF',
   surfaceRaised: '#EFE9DE',
   border: '#E6DFD2',
   hairline: '#EBE6DC',
-  hairlineHover: '#D3C8B2', //       hairline en hover de tarjeta
+  hairlineHover: '#D3C8B2', //       hairline on card hover
   textPrimary: '#0B1524', //                           16.40:1
   textSecondary: '#3D4B58',
-  textMuted: '#626A75', //                             4.53:1 sobre surfaceRaised
-  accent: '#0D7C6F', //              bioluz oscura      4.55:1
+  textMuted: '#626A75', //                             4.53:1 over surfaceRaised
+  accent: '#0D7C6F', //              dark biolume       4.55:1
   accentHover: '#0C7466',
   accentOn: '#FFFFFF',
-  warm: '#A65B27', //                arena oscura       4.54:1
+  warm: '#A65B27', //                dark sand          4.54:1
   warmHover: '#96511F',
   warmOn: '#FFF7EE',
   success: '#0F6B52',
-  warning: '#8D6111', //                               4.51:1 sobre surfaceRaised
+  warning: '#8D6111', //                               4.51:1 over surfaceRaised
   error: '#C0392B',
 } as const;
 
 export const colors = { dark, light } as const;
 
-/** Marca — iguales en los dos modos. */
+/** Brand — identical in both modes. */
 export const brand = {
-  /** Cuerpo de la mascota. 4.22:1 → SOLO relleno, NUNCA texto. */
+  /** The mascot's body. 4.22:1 → FILL ONLY, NEVER text. */
   body: '#3E7CB1',
-  /** Patrón de manchas. */
+  /** Spot pattern. */
   spots: '#C2D7E7',
-  /** Casco · contorno y fondo de bloques de código. */
+  /** Hull · outline, and the background of code blocks. */
   hull: '#0B1524',
 } as const;
 
-/* ------------------------------------------------------------- tipografía */
+/* -------------------------------------------------------------- typography */
 
 export const fonts = {
-  /** SOLO titulares y números grandes. Nunca cuerpo. */
+  /** Headlines and large numbers ONLY. Never body copy. */
   display: '"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif',
-  /** Cuerpo e interfaz. */
+  /** Body and interface. */
   sans: '"Geist", ui-sans-serif, system-ui, sans-serif',
-  /** Código, rutas, etiquetas, metadatos, firma CLI. */
+  /** Code, paths, labels, metadata, the CLI signature. */
   mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
 } as const;
 
 export const typeScale = {
   display: { family: 'display', size: 76, lineHeight: 0.96, weight: 800, tracking: '-0.035em' },
-  /** Métricas grandes. Números, no prosa: interlineado 1 y sin descendentes. */
+  /** Large metrics. Numbers, not prose: line height 1 and no descenders. */
   stat: { family: 'display', size: 46, lineHeight: 1, weight: 800, tracking: '-0.035em' },
   h1: { family: 'display', size: 44, lineHeight: 1.05, weight: 700, tracking: '-0.03em' },
   h2: { family: 'display', size: 30, lineHeight: 1.1, weight: 600, tracking: '-0.02em' },
   h3: { family: 'display', size: 25, lineHeight: 1.15, weight: 600, tracking: '-0.02em' },
   body: { family: 'sans', size: 18, lineHeight: 1.75, weight: 400 },
   /**
-   * 17px. El botón grande y la bajada de las páginas internas.
+   * 17px. The large button, and the deck on interior pages.
    *
-   * Entra como escalón propio porque el documento lo usa DOS veces y en piezas
-   * distintas: «lg 15px 30px r12» con texto de 17, y «h1 44/700 · bajada 17px ·
-   * párrafo de contexto 15px». Un solo uso no habría justificado partir la
-   * distancia entre `ui` (15) y `body` (18); dos sí.
+   * It earns its own step because the identity document uses it TWICE, in two
+   * different pieces: «lg 15/30 r12» with 17px text, and «h1 44/700 · deck 17px
+   * · context paragraph 15px». One use would not have justified splitting the
+   * gap between `ui` (15) and `body` (18); two did.
    */
   lead: { family: 'sans', size: 17, lineHeight: 1.5, weight: 400 },
   ui: { family: 'sans', size: 15, lineHeight: 1.6, weight: 400 },
   label: { family: 'sans', size: 13, lineHeight: 1.5, weight: 500 },
   /**
-   * La escala de las etiquetas de estado: sans 12.5/500, cuadrada.
+   * The status-badge scale: sans 12.5/500, squared off.
    *
-   * Es medio píxel por debajo de `label`, y esta vez el medio píxel sí importa:
-   * una etiqueta de estado va dentro de una tabla o al lado de un título, y a 13
-   * competía con el texto que acompaña. El documento la da en 12.5 y se ve.
+   * That is half a pixel below `label`, and this time the half pixel matters: a
+   * status badge sits inside a table or next to a title, and at 13 it competed
+   * with the text it accompanies. The document specifies 12.5 and it shows.
    */
   tag: { family: 'sans', size: 12.5, lineHeight: 1.4, weight: 500 },
   /**
-   * La escala de categoría y métrica: mono 11.5.
+   * The category and metric scale: mono 11.5.
    *
-   * Rompe el suelo de `limits.minScreenPx`, y es a propósito. Ese suelo protege
-   * al TEXTO —lo que se lee en una frase—, y una píldora de una palabra no es
-   * texto corrido: es una marca. El contraste sigue medido y pasa AA (plancton
-   * 5.57:1 sobre abismo), que es la parte que no se negocia.
+   * It breaks the floor set by `limits.minScreenPx`, deliberately. That floor
+   * protects TEXT — what you read in a sentence — and a one-word pill is not
+   * running text: it is a mark. Contrast is still measured and still passes AA
+   * (plankton 5.57:1 over abyss), which is the part that is not negotiable.
    *
-   * A 13 las tres familias de etiqueta salían del tamaño de un botón pequeño y
-   * pesaban más que el título que acompañan. Ver `docs/decisiones.md`.
+   * At 13 the three badge families grew past the size of a small button and
+   * outweighed the title they accompany. See `docs/decisions.md`.
    */
   chip: { family: 'mono', size: 11.5, lineHeight: 1.4, weight: 400 },
   /**
-   * Mono SIN transformar: fechas, rutas, versiones, nombres de archivo, la firma
-   * del footer y las métricas de etiqueta. Es la mayoría del mono del sistema.
+   * Mono with NO transform: dates, paths, versions, file names, the footer
+   * signature and metric labels. It is most of the mono in the system.
    *
-   * Existe porque `eyebrow` lleva `uppercase` de fábrica y no es una preferencia
-   * que se pueda apagar: es la escala del eyebrow. Un `18 ago 2026` en versalitas
-   * o un `pose-laptop-coffee.png` en mayúsculas están mal, y sin este escalón la
-   * única salida era un `normal-case` en cada sitio de uso.
+   * It exists because `eyebrow` ships `uppercase` and that is not a preference
+   * you can switch off: it IS the eyebrow scale. An `18 Aug 2026` in small caps
+   * or a `pose-laptop-coffee.png` in all caps are wrong, and without this step
+   * the only way out was a `normal-case` at every call site.
    *
-   * El documento dice 12.5. Son 13 por la misma razón por la que `textMuted` se
-   * corrigió: `limits.minScreenPx` es 13 y plancton «nunca bajo 13px». Esta
-   * escala es justo donde se escriben las metas en muted, así que ponerla en
-   * 12.5 habría dejado ilegible su uso más común por medio píxel.
+   * The document says 12.5. This is 13 for the same reason `textMuted` was
+   * corrected: `limits.minScreenPx` is 13 and plankton is «never under 13px».
+   * This scale is exactly where muted metadata gets written, so putting it at
+   * 12.5 would have made its most common use illegible by half a pixel.
    */
   meta: { family: 'mono', size: 13, lineHeight: 1.6, weight: 400 },
   eyebrow: { family: 'mono', size: 12, tracking: '0.12em', transform: 'uppercase' },
 } as const;
 
-/** Límites duros de legibilidad. */
+/** Hard legibility limits. */
 export const limits = {
-  /** Mínimo absoluto en pantalla. */
+  /** Absolute minimum on screen. */
   minScreenPx: 13,
-  /** Mínimo absoluto impreso. */
+  /** Absolute minimum in print. */
   minPrintPt: 12,
-  /** Medida máxima de cuerpo. */
+  /** Maximum body measure. */
   measure: '68ch',
 } as const;
 
-/* --------------------------------------------------------- forma y ritmo */
+/* ---------------------------------------------------------- shape and rhythm */
 
 export const radius = {
   chip: 6,
@@ -177,44 +178,44 @@ export const radius = {
 } as const;
 
 /**
- * Controles, del documento: `sm 8/14 · md 12/22 · lg 15/30 · icono 42×42`.
+ * Controls, from the document: `sm 8/14 · md 12/22 · lg 15/30 · icon 42×42`.
  *
- * Solo el padding horizontal y el cuadrado del botón de icono. El alto sale de
- * la escala tipográfica, y el radio es uno solo para los tres tamaños: ver
- * `docs/decisiones.md`.
+ * Only the horizontal padding and the icon button's square. Height comes from
+ * the type scale, and there is a single radius for all three sizes: see
+ * `docs/decisions.md`.
  *
- * No están en `spacing` porque no son ritmo de página: 14, 22 y 30 no componen
- * con 8/12/16/26/40 y no deben ofrecerse como márgenes.
+ * They are not in `spacing` because they are not page rhythm: 14, 22 and 30 do
+ * not compose with 8/12/16/26/40 and must not be offered as margins.
  */
 export const control = {
   sm: 14,
   md: 22,
   lg: 30,
-  /** Botón de icono: cuadrado, sin texto. */
+  /** Icon button: square, no text. */
   icon: 42,
 } as const;
 
 /**
- * El ritmo de página. Los cinco escalones llevan `step` en el nombre, y no es
- * decoración: es la corrección de un bug que no dio la cara en ningún sitio.
+ * Page rhythm. All five steps carry `step` in the name, and that is not
+ * decoration: it is the fix for a bug that never surfaced anywhere.
  *
- * En Tailwind v4, `--spacing-*` no alimenta solo `p-*`, `m-*` y `gap-*`:
- * también resuelve `w-*`, `h-*`, `max-w-*`, `min-w-*`, `basis-*` y `size-*`, y
- * ahí GANA a la escala `--container-*`. Los escalones se llamaban `xs, sm, md,
- * lg, xl`, que son exactamente los nombres de esa escala, así que cualquier
- * proyecto que importara `theme.css` se quedaba con `max-w-sm` valiendo 12px en
- * vez de 384px. Nada avisaba: ni el build, ni los tipos, ni Storybook, ni la
- * suite —la librería no usa esas utilidades por dentro—. Se descubrió en
- * producción, con el párrafo de un hero a una palabra por línea.
+ * In Tailwind v4, `--spacing-*` does not only feed `p-*`, `m-*` and `gap-*`: it
+ * also resolves `w-*`, `h-*`, `max-w-*`, `min-w-*`, `basis-*` and `size-*`, and
+ * there it BEATS the `--container-*` scale. The steps used to be named `xs, sm,
+ * md, lg, xl`, which are exactly the names of that scale, so any project that
+ * imported `theme.css` ended up with `max-w-sm` worth 12px instead of 384px.
+ * Nothing warned: not the build, not the types, not Storybook, not the suite —
+ * the library does not use those utilities internally. It was found in
+ * production, with a hero paragraph running one word per line.
  *
- * Redeclarar `--container-sm` NO lo arregla: `--spacing-*` gana la resolución.
- * La única salida es que la librería no use esos nombres.
+ * Redeclaring `--container-sm` does NOT fix it: `--spacing-*` wins resolution.
+ * The only way out is for the library not to use those names.
  *
- * El prefijo sigue el patrón que ya tenía `control`: un grupo con nombre propio
- * dentro del espacio `--spacing-*`. `scripts/check-tokens-namespace.mjs` impide
- * la recaída.
+ * The prefix follows the pattern `control` already had: a named group inside
+ * the `--spacing-*` namespace. `scripts/check-tokens-namespace.mjs` prevents
+ * the relapse.
  *
- * `section` no lleva prefijo porque no choca con nada de Tailwind.
+ * `section` carries no prefix because it collides with nothing in Tailwind.
  */
 export const spacing = {
   stepXs: 8,
@@ -226,76 +227,78 @@ export const spacing = {
 } as const;
 
 export const size = {
-  /** Alto de la barra de navegación. */
+  /** Navigation bar height. */
   nav: 64,
-  /** Ancho de columna de lectura. */
+  /** Reading column width. */
   content: 760,
-  /** Ancho máximo de página. */
+  /** Maximum page width. */
   wide: 1180,
 } as const;
 
 /**
- * La paleta del resaltado de sintaxis.
+ * The syntax highlighting palette.
  *
- * Del documento, literal: «keywords arena, strings bioluz, comments plancton,
- * identifiers espuma», sobre casco. CUATRO colores a propósito — el sistema se
- * comunica con color y borde, no con ruido cromático, así que funciones,
- * variables y tipos caen todos en espuma.
+ * Straight from the document: «keywords sand, strings biolume, comments
+ * plankton, identifiers foam», over hull. FOUR colors on purpose — the system
+ * communicates with color and border, not with chromatic noise, so functions,
+ * variables and types all land on foam.
  *
- * El bloque de código es una isla de tema oscuro en los dos modos (ver
- * `CodeBlock`), así que esta paleta NO tiene par claro: siempre va sobre casco.
+ * The code block is an island of dark theme in both modes (see `CodeBlock`), so
+ * this palette has NO light counterpart: it always sits on hull.
  *
- * Contrastes MEDIDOS sobre `brand.hull` #0B1524, todos AA:
+ * Contrast MEASURED over `brand.hull` #0B1524, all AA:
  *
- *   identificador  espuma    16.42:1
- *   literal        bioluz    10.05:1
- *   palabraClave   arena      9.05:1
- *   comentario     plancton   5.43:1
- *   invalido       error      4.97:1
+ *   identifier  foam      16.42:1
+ *   literal     biolume   10.05:1
+ *   keyword     sand       9.05:1
+ *   comment     plankton   5.43:1
+ *   invalid     error      4.97:1
  *
- * `brand.body` (#3E7CB1) NO entra: el sistema lo restringe a relleno, nunca a
- * texto, y aquí mide 4.2:1.
+ * `brand.body` (#3E7CB1) is NOT here: the system restricts it to fill, never
+ * text, and it measures 4.2:1 in this context.
  *
- * Los literales numéricos y booleanos van con las cadenas en bioluz. El
- * documento no los asigna, y agruparlos con las cadenas —los tres son
- * literales— es más coherente que estrenar un quinto color fuera de la paleta.
+ * Numeric and boolean literals ride with strings in biolume. The document does
+ * not assign them, and grouping them with strings — all three are literals — is
+ * more coherent than introducing a fifth color outside the palette.
  */
-export const sintaxis = {
-  /** El casco. Es el fondo del bloque en los dos modos. */
-  fondo: brand.hull,
-  /** Identificadores, funciones, tipos, variables. */
-  identificador: dark.textPrimary,
-  /** Cadenas, números, booleanos, null. */
+export const syntax = {
+  /** The hull. It is the block background in both modes. */
+  background: brand.hull,
+  /** Identifiers, functions, types, variables. */
+  identifier: dark.textPrimary,
+  /** Strings, numbers, booleans, null. */
   literal: dark.accent,
-  /** Palabras clave, control de flujo, `import`, `this`. */
-  palabraClave: dark.warm,
-  /** Comentarios y puntuación. */
-  comentario: dark.textMuted,
+  /** Keywords, control flow, `import`, `this`. */
+  keyword: dark.warm,
+  /** Comments and punctuation. */
+  comment: dark.textMuted,
   /** `markup.deleted`, `invalid`. */
-  invalido: dark.error,
+  invalid: dark.error,
 } as const;
 
 /**
- * La paleta de series de las gráficas. CUATRO, por el mismo motivo que la de
- * sintaxis: el sistema se comunica con color y borde, no con ruido cromático.
+ * The chart series palette. FOUR, for the same reason as the syntax palette:
+ * the system communicates with color and border, not with chromatic noise.
  *
- * Ninguno es un color nuevo. Son cuatro que ya están en la identidad y que se
- * distinguen por TONO, no por luminosidad —turquesa, naranja, azul y gris—,
- * que es la única forma de que sigan siendo cuatro series para quien no
- * distingue rojo y verde. Elegir bioluz y `success` habría dado dos verdes
- * casi idénticos en modo claro.
+ * None of them is a new color. They are four that already exist in the identity
+ * and that are told apart by HUE, not by lightness — teal, orange, blue and
+ * grey — which is the only way they stay four distinct series for someone who
+ * cannot tell socialLink from green. Picking biolume and `success` would have produced
+ * two nearly identical greens in light mode.
  *
- * `brand.body` entra aquí y no en el resaltado por la misma regla vista al
- * derecho: el sistema lo restringe a RELLENO y nunca a texto, y una serie de
- * gráfica es relleno. Es igual en los dos modos porque es color de marca.
+ * `brand.body` belongs here and not in syntax highlighting by the same rule
+ * read the right way round: the system restricts it to FILL and never to text,
+ * and a chart series is fill. It is identical in both modes because it is a
+ * brand color.
  *
- * El umbral que aplica es el de objeto gráfico, 3:1 contra el fondo, no el de
- * texto. Medidos contra `background`, los cuatro lo pasan en los dos modos con
- * margen: el peor es `brand.body` sobre papel, con 3.9:1.
+ * The threshold that applies is the graphical-object one, 3:1 against the
+ * background, not the text one. Measured against `background`, all four clear
+ * it in both modes with room to spare: the worst is `brand.body` over paper, at
+ * 3.9:1.
  *
- * Una quinta serie no se añade inventando un tono. Si una gráfica necesita
- * cinco categorías, o sobran categorías o hace falta agrupar en «otros»: ver
- * `docs/decisiones.md`.
+ * A fifth series is not added by inventing a hue. If a chart needs five
+ * categories, either there are too many categories or they need an «other»
+ * bucket: see `docs/decisions.md`.
  */
 export const series = {
   dark: [dark.accent, dark.warm, brand.body, dark.textMuted],
@@ -303,43 +306,44 @@ export const series = {
 } as const;
 
 /**
- * Los dos únicos bloques con degradado del sistema: el hero y el panel de
- * sección (newsletter). Sin token, los cinco proyectos los escriben a mano
- * distinto, que es exactamente cómo se desincroniza una identidad.
+ * The only two gradient blocks in the system: the hero and the section panel
+ * (newsletter). Without a token, the five projects each write them by hand,
+ * slightly differently, which is exactly how an identity drifts apart.
  *
- * `profundo` es el tercer punto del degradado oscuro. Vive solo aquí dentro: no
- * es superficie ni color de texto, así que no entra en la paleta, y una clave
- * en `dark` sin par en `light` sería un token que miente en modo claro.
+ * `deep` is the third stop of the dark gradient. It lives only in here: it is
+ * neither a surface nor a text color, so it does not belong in the palette, and
+ * a key in `dark` with no counterpart in `light` would be a token that lies in
+ * light mode.
  *
- * El documento solo da los dos degradados oscuros. Los claros se componen de la
- * paleta clara con los mismos ángulos y paradas, para que el hero no se quede
- * plano en modo claro. Está pendiente de ratificar en el documento.
+ * The document only specifies the two dark gradients. The light ones are
+ * composed from the light palette with the same angles and stops, so the hero
+ * does not go flat in light mode. Still pending ratification in the document.
  */
-const profundo = '#0D2129';
+const deep = '#0D2129';
 
 export const gradient = {
   dark: {
-    hero: `linear-gradient(160deg, ${dark.background} 60%, ${profundo} 100%)`,
-    seccion: `linear-gradient(150deg, ${dark.surface} 0%, ${profundo} 100%)`,
-    /** El de la plantilla OG de artículo. 145°, del documento. */
-    og: `linear-gradient(145deg, ${dark.background} 55%, ${profundo} 100%)`,
+    hero: `linear-gradient(160deg, ${dark.background} 60%, ${deep} 100%)`,
+    section: `linear-gradient(150deg, ${dark.surface} 0%, ${deep} 100%)`,
+    /** The one used by the article OG template. 145°, from the document. */
+    og: `linear-gradient(145deg, ${dark.background} 55%, ${deep} 100%)`,
   },
   light: {
     hero: `linear-gradient(160deg, ${light.background} 60%, ${light.surfaceRaised} 100%)`,
-    seccion: `linear-gradient(150deg, ${light.surface} 0%, ${light.surfaceRaised} 100%)`,
+    section: `linear-gradient(150deg, ${light.surface} 0%, ${light.surfaceRaised} 100%)`,
     og: `linear-gradient(145deg, ${light.background} 55%, ${light.surfaceRaised} 100%)`,
   },
 } as const;
 
-/** Un solo nivel. No hay escala de elevación. */
+/** A single level. There is no elevation scale. */
 export const shadow = {
   standard: '0 1px 2px rgba(0, 0, 0, 0.35)',
 } as const;
 
 /**
- * 150ms ease-out — solo color y borde.
- * El sistema no anima posición ni escala: los estados se comunican con borde
- * y color, no con movimiento.
+ * 150ms ease-out — color and border only.
+ * The system animates neither position nor scale: states are communicated with
+ * border and color, not with movement.
  */
 export const motion = {
   duration: '150ms',
@@ -347,25 +351,25 @@ export const motion = {
   properties: 'color, background-color, border-color, fill, stroke',
 } as const;
 
-/* ------------------------------------------------------------ voz y marca */
+/* ------------------------------------------------------------ voice and brand */
 
 export const tagline = {
   /** Hero. */
-  largo: 'Ayudo a equipos de ingeniería a escalar con criterio',
-  /** Header, una línea. */
-  corto: 'Ayudo a equipos a escalar con criterio',
+  long: 'Ayudo a equipos de ingeniería a escalar con criterio',
+  /** Header, one line. */
+  short: 'Ayudo a equipos a escalar con criterio',
   /** LinkedIn. */
   en: 'Helping engineering teams scale with judgment',
 } as const;
 
 /**
- * El wordmark siempre dice «Eduardo Álvarez». La mascota se llama Tiburoncín
- * y nunca aparece escrita dentro del logo.
+ * The wordmark always reads «Eduardo Álvarez». The mascot is called Tiburoncín
+ * and its name never appears inside the logo.
  */
 export const naming = {
   wordmark: 'Eduardo Álvarez',
   mascot: 'Tiburoncín',
-  /** El dominio, para la firma CLI del footer: `$ cd ~/eduardoalvarez.dev/2026`. */
+  /** The domain, for the footer CLI signature: `$ cd ~/eduardoalvarez.dev/2026`. */
   domain: 'eduardoalvarez.dev',
 } as const;
 
@@ -377,8 +381,8 @@ export type TypeScaleToken = keyof typeof typeScale;
 export type RadiusToken = keyof typeof radius;
 export type ControlToken = keyof typeof control;
 export type GradientToken = keyof typeof gradient.dark;
-export type SintaxisToken = keyof typeof sintaxis;
+export type SyntaxToken = keyof typeof syntax;
 export type SpacingToken = keyof typeof spacing;
 export type SizeToken = keyof typeof size;
-/** El índice de una serie de gráfica: 0, 1, 2 o 3. */
+/** The index of a chart series: 0, 1, 2 or 3. */
 export type SeriesToken = 0 | 1 | 2 | 3;

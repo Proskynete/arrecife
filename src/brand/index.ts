@@ -1,4 +1,4 @@
-export * from './catalogo.ts';
-export * from './isotipo.tsx';
+export * from './catalog.ts';
+export * from './isotype.tsx';
 export * from './logo.tsx';
-export * from './mascota.tsx';
+export * from './mascot.tsx';

@@ -10,7 +10,7 @@ import {
 } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Camara } from '../lib/glyphs.tsx';
+import { Camera } from '../lib/glyphs.tsx';
 
 const avatar = cva(
   'relative flex shrink-0 overflow-hidden rounded-pill bg-surface-raised border border-hairline',
@@ -31,9 +31,9 @@ export type AvatarProps = ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> 
   VariantProps<typeof avatar>;
 
 /**
- * Uno solo para todo: la foto del autor y la de cualquier persona del sistema.
- * No hay un `brand/Avatar` aparte — una foto de perfil con la piel de la marca
- * es exactamente esto con un `src` distinto.
+ * One for everything: the author's photo and anyone else's in the system. There
+ * is no separate `brand/Avatar` — a profile photo wearing the brand's skin is
+ * exactly this with a different `src`.
  */
 export function Avatar({ className, size, ...props }: AvatarProps) {
   return <AvatarPrimitive.Root className={cn(avatar({ size }), className)} {...props} />;
@@ -48,7 +48,7 @@ export function AvatarImage({
   );
 }
 
-/** Iniciales mientras la imagen carga, o cuando no hay imagen. */
+/** Initials while the image loads, or when there is no image. */
 export function AvatarFallback({
   className,
   ...props
@@ -67,38 +67,39 @@ export function AvatarFallback({
 
 export type AvatarUploadProps = Omit<ComponentPropsWithoutRef<'div'>, 'onSelect' | 'children'> &
   VariantProps<typeof avatar> & {
-    /** La imagen actual, ya subida. La previsualización local la gana mientras dure. */
+    /** The current image, already uploaded. The local preview beats it while it lasts. */
     src?: string | undefined;
-    /** Iniciales mientras no hay imagen. */
+    /** Initials while there is no image. */
     fallback?: ReactNode;
-    /** Se dispara con el archivo elegido. La subida la hace el proyecto. */
-    onSelectFile?: ((archivo: File) => void) | undefined;
-    /** Qué acepta el diálogo del sistema. */
+    /** Fires with the chosen file. The upload is the project's job. */
+    onSelectFile?: ((file: File) => void) | undefined;
+    /** What the system dialog accepts. */
     accept?: string;
-    /** Nombre accesible del control. Es lo único que lo nombra: no hay texto visible. */
+    /** The control's accessible name. It is the only thing naming it: there is no visible text. */
     label?: string;
     disabled?: boolean | undefined;
   };
 
 /**
- * El avatar que se puede cambiar. `Avatar` muestra; este además deja elegir.
+ * The avatar you can change. `Avatar` displays; this one also lets you pick.
  *
- * Es presentacional, como `NewsletterForm`: emite `onSelectFile` con el `File` y
- * ahí se acaba su trabajo. La subida no entra —cada proyecto tiene su
- * almacenamiento y su endpoint— y un componente que hiciera el `POST` sería
- * infraestructura, que es el tercer criterio de entrada y el que más se salta.
+ * It is presentational, like `NewsletterForm`: it emits `onSelectFile` with the
+ * `File` and its job ends there. The upload does not belong here — every project
+ * has its own storage and its own endpoint — and a component doing the `POST`
+ * would be infrastructure, which is the third entry criterion and the one most
+ * often skipped.
  *
- * La previsualización es LOCAL y no espera a que la subida termine. Es la
- * diferencia entre un control que responde y uno que parece roto: entre elegir
- * el archivo y que el servidor devuelva la URL pueden pasar segundos, y sin
- * previa el avatar se queda con la foto vieja como si no hubiera pasado nada.
- * El `objectURL` se revoca al cambiar y al desmontar; no revocarlo es una fuga
- * de memoria que no da la cara hasta la décima foto.
+ * The preview is LOCAL and does not wait for the upload to finish. It is the
+ * difference between a control that responds and one that looks broken: seconds
+ * can pass between picking the file and the server returning the URL, and with
+ * no preview the avatar keeps the old photo as though nothing had happened. The
+ * `objectURL` is revoked on change and on unmount; not revoking it is a memory
+ * leak that does not show its face until the tenth photo.
  *
- * El control es un `<label>` con un `<input type="file">` oculto dentro, no un
- * `<button>` que dispara un click sintético. El input real trae el diálogo del
- * sistema, el arrastrar-y-soltar del navegador y el foco por teclado; el botón
- * falso hay que reconstruirlo entero y siempre falta algo.
+ * The control is a `<label>` with a hidden `<input type="file">` inside, not a
+ * `<button>` firing a synthetic click. The real input brings the system dialog,
+ * the browser's drag-and-drop and keyboard focus; the fake button has to be
+ * rebuilt from scratch and something is always missing.
  */
 export function AvatarUpload({
   src,
@@ -112,41 +113,41 @@ export function AvatarUpload({
   ...props
 }: AvatarUploadProps) {
   const id = useId();
-  const [previa, setPrevia] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!previa) return;
-    return () => URL.revokeObjectURL(previa);
-  }, [previa]);
+    if (!preview) return;
+    return () => URL.revokeObjectURL(preview);
+  }, [preview]);
 
-  function elegir(evento: ChangeEvent<HTMLInputElement>) {
-    const archivo = evento.target.files?.[0];
-    if (!archivo) return;
+  function pick(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    setPrevia(URL.createObjectURL(archivo));
-    onSelectFile?.(archivo);
+    setPreview(URL.createObjectURL(file));
+    onSelectFile?.(file);
 
-    // Se limpia el valor para que volver a elegir EL MISMO archivo dispare otro
-    // `change`. Sin esto, quien corrige una foto mal recortada y vuelve a elegir
-    // la misma no obtiene ninguna reacción.
-    evento.target.value = '';
+    // The value is cleared so that picking THE SAME file again fires another
+    // `change`. Without this, someone re-picking the same badly cropped photo
+    // after fixing it gets no reaction at all.
+    event.target.value = '';
   }
 
-  const imagen = previa ?? src;
+  const image = preview ?? src;
 
   return (
     <div className={cn('relative inline-flex', className)} {...props}>
       <Avatar size={size}>
-        {imagen ? <AvatarImage src={imagen} alt="" /> : null}
+        {image ? <AvatarImage src={image} alt="" /> : null}
         <AvatarFallback>{fallback}</AvatarFallback>
       </Avatar>
 
       {/*
-        Insignia SIEMPRE visible, en la esquina, y no un velo que aparece al
-        pasar el ratón. El velo es la solución bonita y es de escritorio: en
-        táctil no hay hover, así que el control no existe hasta que alguien
-        adivina que la foto se puede tocar. Una insignia permanente ocupa 24px y
-        se ve en los dos sitios.
+        The badge is ALWAYS visible, in the corner, rather than a scrim that
+        appears on hover. The scrim is the pretty solution and it is a desktop
+        one: there is no hover on touch, so the control does not exist until
+        somebody guesses the photo is tappable. A permanent badge takes 24px and
+        is visible in both places.
       */}
       <label
         htmlFor={id}
@@ -154,20 +155,20 @@ export function AvatarUpload({
           'rounded-pill absolute -right-1 -bottom-1 flex size-6 cursor-pointer items-center justify-center',
           'border-hairline bg-surface-raised text-text-secondary border',
           'transition-standard hover:text-accent hover:border-accent',
-          // El foco vive en el input, que está oculto: sin esto, tabular hasta
-          // el control no se ve por ninguna parte.
+          // Focus lives on the input, which is hidden: without this, tabbing to
+          // the control shows up nowhere.
           'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent',
           disabled && 'pointer-events-none opacity-50',
         )}
       >
-        <Camara aria-hidden="true" />
+        <Camera aria-hidden="true" />
         <span className="sr-only">{label}</span>
         <input
           id={id}
           type="file"
           accept={accept}
           disabled={disabled}
-          onChange={elegir}
+          onChange={pick}
           className="sr-only"
         />
       </label>

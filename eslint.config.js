@@ -4,21 +4,21 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
 
 /**
- * Criterio de aceptación como regla, no como documentación: ningún componente
- * tiene un color hexadecimal literal. Las excepciones documentadas (los tres
- * casos del modo claro invertido en `Button`) se marcan con un
- * `eslint-disable-next-line arrecife/no-hex` explícito y su comentario.
+ * An acceptance criterion as a rule, not as documentation: no component holds a
+ * literal hexadecimal color. The documented exceptions (the three inverted
+ * light-mode cases in `Button`) are marked with an explicit
+ * `eslint-disable-next-line arrecife/no-hex` and its comment.
  */
-const SIN_HEX_LITERAL = {
+const NO_HEX_LITERAL = {
   selector: "Literal[value=/^#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/]",
   message:
-    'Color hexadecimal literal. Usa un token de src/tokens/ o la custom property de theme.css.',
+    'Literal hexadecimal color. Use a token from src/tokens/ or the custom property from theme.css.',
 };
 
-const SIN_HEX_EN_TEMPLATE = {
+const NO_HEX_IN_TEMPLATE = {
   selector: "TemplateElement[value.raw=/#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b/]",
   message:
-    'Color hexadecimal literal. Usa un token de src/tokens/ o la custom property de theme.css.',
+    'Literal hexadecimal color. Use a token from src/tokens/ or the custom property from theme.css.',
 };
 
 export default tseslint.config(
@@ -47,22 +47,22 @@ export default tseslint.config(
     },
   },
 
-  // Cero hex literales en el código fuente...
+  // Zero literal hexes in the source…
   {
     files: ['src/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-syntax': ['error', SIN_HEX_LITERAL, SIN_HEX_EN_TEMPLATE],
+      'no-restricted-syntax': ['error', NO_HEX_LITERAL, NO_HEX_IN_TEMPLATE],
     },
   },
 
-  // ...salvo en la fuente única, que es exactamente donde viven.
+  // …except in the single source, which is exactly where they live.
   {
     files: ['src/tokens/tokens.ts'],
     rules: { 'no-restricted-syntax': 'off' },
   },
 
-  // Los tokens no importan nada de fuera. `check:tokens` lo verifica de verdad;
-  // esto lo dice en el editor, antes de llegar al build.
+  // Tokens import nothing from outside. `check:tokens` verifies it for real;
+  // this says so in the editor, before the build.
   {
     files: ['src/tokens/**/*.ts'],
     rules: {
@@ -71,10 +71,10 @@ export default tseslint.config(
         {
           patterns: [
             {
-              // Cualquier especificador que no empiece por punto es externo.
+              // Any specifier not starting with a dot is external.
               regex: '^[^.]',
               message:
-                'src/tokens/ no importa nada: ni React, ni componentes, ni CSS de terceros.',
+                'src/tokens/ imports nothing: not React, not components, not third-party CSS.',
             },
           ],
         },

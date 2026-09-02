@@ -4,50 +4,49 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { cn } from '../lib/cn.ts';
 
 /**
- * El aviso lleva el color en el fondo, no solo en el borde.
+ * The alert carries its color in the background, not only in the border.
  *
- * La receta del sistema es fondo al 8 % del color semántico y borde al 22 %.
- * Este archivo daba `bg-surface` a las cuatro variantes, así que el tono vivía
- * entero en un borde de 1px: cuatro avisos que se distinguían entre sí por una
- * línea.
+ * The system recipe is the semantic color at 8 % as background and at 22 % as
+ * border. This file gave `bg-surface` to all four variants, so the tone lived
+ * entirely in a 1px border: four alerts told apart by a line.
  *
- * Los cuatro tonos empiezan en ACENTO, que es el informativo del sistema (✦).
- * No hay `neutral`: un aviso sin color es un párrafo.
+ * All four tones start at ACCENT, which is the system's informational one (✦).
+ * There is no `neutral`: an alert without color is a paragraph.
  *
- * MEDIDO en los dos modos, porque el 8 % del documento está calculado sobre
- * abismo y había que comprobar que sobrevive sobre papel. Contraste del tinte
- * contra el fondo de página:
+ * MEASURED in both modes, because the document's 8 % is calculated over abyss
+ * and it had to be checked that it survives over paper. Contrast of the tint
+ * against the page background:
  *
- *              8 % oscuro   8 % claro
- *   accent       1.149        1.106
- *   success      1.116        1.121
- *   warning      1.126        1.109
- *   error        1.067        1.120
+ *              8 % dark    8 % light
+ *   accent       1.149       1.106
+ *   success      1.116       1.121
+ *   warning      1.126       1.109
+ *   error        1.067       1.120
  *
- * El modo claro NO necesita una segunda tabla: aguanta igual o mejor que el
- * oscuro. El único punto flojo del sistema es `error` sobre abismo, 1.067, que
- * es el tinte más tenue de los ocho y se apoya entero en el borde al 22 %.
+ * Light mode needs NO second table: it holds up as well as or better than dark.
+ * The system's only weak point is `error` over abyss, 1.067, the faintest of the
+ * eight tints, which leans entirely on the 22 % border.
  *
- * Hay una SEGUNDA receta, a propósito: el aviso bajo el formulario de
- * newsletter va al 10 % con el borde sólido para leerse bajo el campo. Es
- * `enfasis="fuerte"`, y no se unifica con la sutil porque la diferencia está
- * documentada.
+ * There is a SECOND recipe, deliberately: the alert under the newsletter form
+ * goes to 10 % with a solid border so it reads under the field. That is
+ * `emphasis="strong"`, and it is not merged with the subtle one because the
+ * difference is documented.
  *
- * TERCERA corrección de contraste, en la línea de las tres que ya tenía
- * `tokens.ts`. El título iba en el color semántico, y en modo claro eso no puede
- * pasar AA: los semánticos claros están calibrados para pasar JUSTO sobre papel
- * (4.54–4.88), así que sobre su propio tinte al 8 % caen a 4.11–4.40. No hay
- * alfa que lo arregle — el problema es poner el color encima de sí mismo.
+ * A THIRD contrast correction, in the line of the three `tokens.ts` already
+ * carried. The title used to be in the semantic color, and in light mode that
+ * cannot pass AA: the light semantics are calibrated to pass JUST over paper
+ * (4.54–4.88), so over their own tint at 8 % they fall to 4.11–4.40. No alpha
+ * fixes it — the problem is putting the color on top of itself.
  *
- * El tinte es una SUPERFICIE, así que el texto que lleva encima es un token de
- * texto: `textPrimary` da 14.6–14.9 sobre los cuatro tintes. El color semántico
- * se queda donde no es texto — el borde y el glifo —, que es lo único que el
- * documento pedía de él. El glifo es decorativo y va `aria-hidden`, así que le
- * aplica el umbral de 3:1 y no el de 4.5: su peor caso claro es 4.11.
+ * The tint is a SURFACE, so the text on top of it is a text token:
+ * `textPrimary` gives 14.6–14.9 over all four tints. The semantic color stays
+ * where it is not text — the border and the glyph — which is all the document
+ * ever asked of it. The glyph is decorative and `aria-hidden`, so the 3:1
+ * threshold applies to it rather than 4.5: its worst light case is 4.11.
  *
- * El radio: el documento dice 12, que no es ninguno de los cinco radios del
- * sistema. Usa el de tarjeta antes que estrenar un sexto — ver
- * `docs/decisiones.md`.
+ * The radius: the document says 12, which is none of the system's five radii. It
+ * uses the card radius rather than introducing a sixth — see
+ * `docs/decisions.md`.
  */
 const alert = cva('w-full rounded-card border p-step-md font-sans text-ui', {
   variants: {
@@ -57,26 +56,26 @@ const alert = cva('w-full rounded-card border p-step-md font-sans text-ui', {
       warning: 'text-text-secondary',
       error: 'text-text-secondary',
     },
-    enfasis: {
-      sutil: '',
-      fuerte: '',
+    emphasis: {
+      subtle: '',
+      strong: '',
     },
   },
   compoundVariants: [
-    { variant: 'accent', enfasis: 'sutil', class: 'border-accent/22 bg-accent/8' },
-    { variant: 'success', enfasis: 'sutil', class: 'border-success/22 bg-success/8' },
-    { variant: 'warning', enfasis: 'sutil', class: 'border-warning/22 bg-warning/8' },
-    { variant: 'error', enfasis: 'sutil', class: 'border-error/22 bg-error/8' },
-    { variant: 'accent', enfasis: 'fuerte', class: 'border-accent bg-accent/10' },
-    { variant: 'success', enfasis: 'fuerte', class: 'border-success bg-success/10' },
-    { variant: 'warning', enfasis: 'fuerte', class: 'border-warning bg-warning/10' },
-    { variant: 'error', enfasis: 'fuerte', class: 'border-error bg-error/10' },
+    { variant: 'accent', emphasis: 'subtle', class: 'border-accent/22 bg-accent/8' },
+    { variant: 'success', emphasis: 'subtle', class: 'border-success/22 bg-success/8' },
+    { variant: 'warning', emphasis: 'subtle', class: 'border-warning/22 bg-warning/8' },
+    { variant: 'error', emphasis: 'subtle', class: 'border-error/22 bg-error/8' },
+    { variant: 'accent', emphasis: 'strong', class: 'border-accent bg-accent/10' },
+    { variant: 'success', emphasis: 'strong', class: 'border-success bg-success/10' },
+    { variant: 'warning', emphasis: 'strong', class: 'border-warning bg-warning/10' },
+    { variant: 'error', emphasis: 'strong', class: 'border-error bg-error/10' },
   ],
-  defaultVariants: { variant: 'accent', enfasis: 'sutil' },
+  defaultVariants: { variant: 'accent', emphasis: 'subtle' },
 });
 
-/** Solo para el glifo. El título va en `textPrimary`: ver la nota de arriba. */
-const glifoColor = {
+/** For the glyph only. The title is `textPrimary`: see the note above. */
+const colorGlyph = {
   accent: 'text-accent',
   success: 'text-success',
   warning: 'text-warning',
@@ -84,11 +83,11 @@ const glifoColor = {
 } as const;
 
 /**
- * Glifos mono, nunca emoji. Son caracteres y no SVG porque el documento los
- * pide en la familia mono: son parte de la estética CLI, igual que el `❯` de la
- * barra del bloque de código.
+ * Mono glyphs, never emoji. They are characters and not SVG because the document
+ * asks for them in the mono family: they are part of the CLI aesthetic, same as
+ * the `❯` in the code block's bar.
  */
-const GLIFO = {
+const GLYPH = {
   accent: '✦',
   success: '✓',
   warning: '!',
@@ -99,8 +98,8 @@ export type AlertProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> &
   VariantProps<typeof alert> & {
     title?: ReactNode;
     /**
-     * Sustituye el glifo mono de la variante. Nunca un emoji: si necesitas otra
-     * cosa, es un SVG de `glyphs`.
+     * Replaces the variant's mono glyph. Never an emoji: if you need something
+     * else, it is an SVG from `glyphs`.
      */
     icon?: ReactNode;
   };
@@ -108,26 +107,26 @@ export type AlertProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> &
 export function Alert({
   className,
   variant,
-  enfasis,
+  emphasis,
   title,
   icon,
   children,
   ...props
 }: AlertProps) {
-  const tono = variant ?? 'accent';
+  const tone = variant ?? 'accent';
 
   return (
     <div
-      role={tono === 'error' ? 'alert' : 'status'}
-      className={cn(alert({ variant, enfasis }), className)}
+      role={tone === 'error' ? 'alert' : 'status'}
+      className={cn(alert({ variant, emphasis }), className)}
       {...props}
     >
       <div className="gap-step-sm flex items-start">
         <span
           aria-hidden="true"
-          className={cn('font-mono text-ui leading-normal select-none', glifoColor[tono])}
+          className={cn('font-mono text-ui leading-normal select-none', colorGlyph[tone])}
         >
-          {icon ?? GLIFO[tono]}
+          {icon ?? GLYPH[tone]}
         </span>
 
         <div className="min-w-0 flex-1">

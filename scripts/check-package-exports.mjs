@@ -1,24 +1,24 @@
 /**
- * Lo que se publica es `dist/`, no `src/`.
+ * What gets published is `dist/`, not `src/`.
  *
- * Una subruta mal declarada en `exports` compila igual y no falla hasta que
- * alguien la importa desde otro proyecto — que es el peor momento para
- * enterarse. Este check corre después de `build` y verifica tres cosas:
+ * A badly declared subpath in `exports` compiles just fine and does not fail
+ * until somebody imports it from another project — which is the worst moment to
+ * find out. This check runs after `build` and verifies three things:
  *
- *   1. Cada archivo que `exports` promete existe de verdad en `dist/`.
- *   2. Cada entrada de `files` existe.
- *   3. Las subrutas portables —`./tokens`, `./tema`, `./og`, `./shiki`— no
- *      arrastran React. Es LA restricción de la librería: las consumen un
- *      generador de OG con Satori, un `astro.config.mjs` y un sitio que no monta
- *      React. Si un token termina dependiendo de un componente, dejan de ser
- *      portables.
+ *   1. Every file `exports` promises really exists in `dist/`.
+ *   2. Every entry in `files` exists.
+ *   3. The portable subpaths — `./tokens`, `./theme`, `./og`, `./shiki` — do not
+ *      drag React in. That is THE constraint of the library: they are consumed
+ *      by a Satori OG generator, by an `astro.config.mjs` and by a site that
+ *      never mounts React. The moment a token depends on a component, they stop
+ *      being portable.
  *
- * La tercera se comprueba SIGUIENDO los imports relativos, no leyendo el archivo
- * de entrada y ya. Con `treeshake` activo, tsup parte el código en chunks y cada
- * entrada portable queda en dos líneas que reexportan de `../chunk-XXXX.js`: un
- * grep sobre esas dos líneas no encuentra React ni aunque el chunk lo importe.
- * El check pasaría y la subruta estaría rota, que es el modo de fallar que este
- * repo ya conoce.
+ * The third one is checked by FOLLOWING the relative imports, not by reading the
+ * entry file and stopping there. With `treeshake` on, tsup splits the code into
+ * chunks and each portable entry ends up as two lines re-exporting from
+ * `../chunk-XXXX.js`: a grep over those two lines finds no React even when the
+ * chunk imports it. The check would pass and the subpath would be broken, which
+ * is a way of failing this repo already knows.
  */
 import { access, readFile } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
@@ -27,116 +27,117 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'));
 
-/** Las que no pueden depender de React, con el motivo escrito al lado. */
-const PORTABLES = {
+/** The ones that cannot depend on React, with the reason written beside them. */
+const PORTABLE = {
   './tokens': 'la consumen los cinco proyectos, Satori y un Astro sin React',
-  './tema': 'lo consume un Astro que no monta React, y `scriptTema` va inline en el <head>',
+  './theme': 'lo consume un Astro que no monta React, y `themeScript` va inline en el <head>',
   './og': 'corre en un worker o en un script de build',
   './shiki': 'se consume desde astro.config.mjs',
 };
 
-const fallos = [];
+const failures = [];
 
-/** Recorre el objeto de `exports` y devuelve todas las rutas de archivo. */
-function rutas(valor, subruta, salida = []) {
-  if (typeof valor === 'string') {
-    if (valor.startsWith('./')) salida.push({ subruta, archivo: valor });
-    return salida;
+/** Walks the `exports` object and returns every file path in it. */
+function paths(value, subpath, output = []) {
+  if (typeof value === 'string') {
+    if (value.startsWith('./')) output.push({ subpath, file: value });
+    return output;
   }
-  if (valor && typeof valor === 'object') {
-    for (const anidado of Object.values(valor)) rutas(anidado, subruta, salida);
+  if (value && typeof value === 'object') {
+    for (const nested of Object.values(value)) paths(nested, subpath, output);
   }
-  return salida;
+  return output;
 }
 
-const existe = async (p) => access(resolve(root, p)).then(() => true, () => false);
+const exists = async (p) => access(resolve(root, p)).then(() => true, () => false);
 
-for (const [subruta, valor] of Object.entries(pkg.exports ?? {})) {
-  // Los comodines (`./assets/*`) no se pueden resolver de a uno.
-  if (subruta.includes('*')) continue;
+for (const [subpath, value] of Object.entries(pkg.exports ?? {})) {
+  // Wildcards (`./assets/*`) cannot be resolved one by one.
+  if (subpath.includes('*')) continue;
 
-  for (const { archivo } of rutas(valor, subruta)) {
-    if (!(await existe(archivo))) {
-      fallos.push(`exports["${subruta}"] promete ${archivo} y no existe`);
+  for (const { file } of paths(value, subpath)) {
+    if (!(await exists(file))) {
+      failures.push(`exports["${subpath}"] promete ${file} y no exists`);
     }
   }
 }
 
-for (const entrada of pkg.files ?? []) {
-  if (!(await existe(entrada))) {
-    fallos.push(`files incluye "${entrada}" y no existe`);
+for (const entry of pkg.files ?? []) {
+  if (!(await exists(entry))) {
+    failures.push(`files incluye "${entry}" y no exists`);
   }
 }
 
 /**
- * Todo especificador de módulo del archivo, venga de donde venga: `import x
- * from`, `export … from`, `import "efecto"` y `require()`.
+ * Every module specifier in the file, wherever it comes from: `import x from`,
+ * `export … from`, `import "for-effect"` and `require()`.
  *
- * Se extraen TODOS y se clasifican después, en vez de buscar «react» con un
- * patrón. Un patrón se escribe contra las formas que uno recuerda y se le
- * escapan las otras: la versión anterior de este check buscaba `from "react"` y
- * dejaba pasar `import "react"` a secas, que importa React igual.
+ * They are ALL extracted and classified afterwards, rather than hunting for
+ * «react» with a pattern. A pattern is written against the shapes you happen to
+ * remember and misses the rest: the previous version of this check looked for
+ * `from "react"` and let a bare `import "react"` through, which imports React
+ * just the same.
  */
-const ESPECIFICADORES = /(?:\bfrom\s*|\bimport\s*|\brequire\(\s*)['"]([^'"]+)['"]/g;
+const SPECIFIERS = /(?:\bfrom\s*|\bimport\s*|\brequire\(\s*)['"]([^'"]+)['"]/g;
 
-const esReact = (especificador) =>
-  /^react(-dom)?(\/|$)/.test(especificador);
+const isReact = (specifier) =>
+  /^react(-dom)?(\/|$)/.test(specifier);
 
 /**
- * Los archivos del subárbol de `entrada` que importan React, siguiendo los
- * imports relativos. Devuelve todos los culpables, no el primero: si un chunk
- * compartido se cuela, conviene ver de qué entradas cuelga de una sola pasada.
+ * The files in `entry`'s subtree that import React, following relative imports.
+ * It returns every culprit, not the first one: if a shared chunk slips in, it is
+ * worth seeing which entries hang off it in a single pass.
  */
-async function conReact(entrada) {
-  const vistos = new Set();
-  const culpables = [];
-  const pendientes = [entrada];
+async function withReact(entry) {
+  const seen = new Set();
+  const culprits = [];
+  const pending = [entry];
 
-  while (pendientes.length > 0) {
-    const actual = pendientes.pop();
-    if (vistos.has(actual)) continue;
-    vistos.add(actual);
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (seen.has(current)) continue;
+    seen.add(current);
 
-    if (!(await existe(actual))) continue;
-    const fuente = await readFile(resolve(root, actual), 'utf8');
+    if (!(await exists(current))) continue;
+    const source = await readFile(resolve(root, current), 'utf8');
 
-    for (const [, especificador] of fuente.matchAll(ESPECIFICADORES)) {
-      if (esReact(especificador)) {
-        culpables.push(actual);
-      } else if (especificador.startsWith('.')) {
-        pendientes.push(`./${relative(root, resolve(root, dirname(actual), especificador))}`);
+    for (const [, specifier] of source.matchAll(SPECIFIERS)) {
+      if (isReact(specifier)) {
+        culprits.push(current);
+      } else if (specifier.startsWith('.')) {
+        pending.push(`./${relative(root, resolve(root, dirname(current), specifier))}`);
       }
     }
   }
 
-  return [...new Set(culpables)];
+  return [...new Set(culprits)];
 }
 
-for (const [subruta, motivo] of Object.entries(PORTABLES)) {
-  const declarado = pkg.exports?.[subruta];
-  if (!declarado) {
-    fallos.push(`falta la subruta ${subruta} en exports`);
+for (const [subpath, reason] of Object.entries(PORTABLE)) {
+  const declared = pkg.exports?.[subpath];
+  if (!declared) {
+    failures.push(`missing subpath ${subpath} in exports`);
     continue;
   }
 
-  for (const { archivo } of rutas(declarado, subruta)) {
-    if (!archivo.endsWith('.js') && !archivo.endsWith('.cjs')) continue;
-    if (!(await existe(archivo))) continue;
+  for (const { file } of paths(declared, subpath)) {
+    if (!file.endsWith('.js') && !file.endsWith('.cjs')) continue;
+    if (!(await exists(file))) continue;
 
-    for (const culpable of await conReact(archivo)) {
-      fallos.push(`${subruta} importa React en ${culpable} — ${motivo}`);
+    for (const culprit of await withReact(file)) {
+      failures.push(`${subpath} imports React in ${culprit} — ${reason}`);
     }
   }
 }
 
-if (fallos.length > 0) {
-  console.error('La superficie publicada no cuadra:\n');
-  for (const fallo of fallos) console.error(`  ${fallo}`);
-  console.error('\nCorre `pnpm build` antes, y revisa `exports` en package.json.');
+if (failures.length > 0) {
+  console.error('The published surface does not add up:\n');
+  for (const failure of failures) console.error(`  ${failure}`);
+  console.error('\nRun `pnpm build` first, and review `exports` in package.json.');
   process.exit(1);
 }
 
-const subrutas = Object.keys(pkg.exports ?? {}).length;
+const subpaths = Object.keys(pkg.exports ?? {}).length;
 console.log(
-  `arrecife · ${subrutas} subrutas verificadas · las portables no traen React, chunks incluidos`,
+  `arrecife · ${subpaths} subpaths verified · the portable ones bring no React, chunks included`,
 );

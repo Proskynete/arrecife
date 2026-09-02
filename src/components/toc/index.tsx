@@ -5,42 +5,43 @@ import { cn } from '../../lib/cn.ts';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * «En esta página». El índice del artículo largo.
+ * «En esta página». The long article's table of contents.
  *
- * Es un `<nav>` con nombre accesible propio, no una lista suelta: en una página
- * que ya tiene la barra del sitio y las migas, un tercer grupo de enlaces sin
- * nombre es indistinguible de los otros dos para quien navega por landmarks.
+ * It is a `<nav>` with an accessible name of its own, not a loose list: on a
+ * page that already has the site bar and the breadcrumb, a third group of links
+ * with no name is indistinguishable from the other two for anyone navigating by
+ * landmarks.
  *
- * El activo se marca con `aria-current`, no solo con color — la sección en la
- * que estás no puede comunicarse únicamente con bioluz.
+ * The active entry is marked with `aria-current`, not with color alone — the
+ * section you are in cannot be communicated purely in biolume.
  *
- * Y ese atributo es además EL GANCHO: las clases del activo se aplican con la
- * variante `aria-[current]:`, no con un ternario en el render. La diferencia es
- * la que hay entre servir solo controlado y servir también sin controlar.
+ * And that attribute is also THE HOOK: the active classes are applied with the
+ * `aria-[current]:` variant, not with a ternary in the render. The difference is
+ * the one between serving controlled only and also serving uncontrolled.
  *
- * Un sitio Astro resuelve el scroll-spy con quince líneas de script que ponen
- * `aria-current` en el enlace visible y quitan el del anterior. Con el estado
- * calculado en el render, ese script no podía hacer nada: había que hidratar el
- * índice como isla de React en cada artículo para algo que cuesta cero
- * JavaScript de framework. Ahora el CSS reacciona al atributo y las dos formas
- * de usarlo dan el mismo resultado.
+ * An Astro site solves scroll-spy with fifteen lines of script that set
+ * `aria-current` on the visible link and remove it from the previous one. With
+ * the state computed in the render, that script could do nothing: the table of
+ * contents had to be hydrated as a React island on every article for something
+ * that costs zero framework JavaScript. Now the CSS reacts to the attribute and
+ * both ways of using it give the same result.
  *
- * El gancho es la PRESENCIA del atributo, así que se quita para desmarcar; no
- * se pone `aria-current="false"`.
+ * The hook is the PRESENCE of the attribute, so it is removed to unmark; you do
+ * not set `aria-current="false"`.
  */
-export type Entrada = {
-  /** El ancla, con `#`. */
+export type TocEntry = {
+  /** The anchor, with its `#`. */
   href: string;
   label: ReactNode;
-  /** Sangra la entrada. Solo dos niveles: h2 y h3. */
+  /** Indents the entry. Only two levels: h2 and h3. */
   nested?: boolean | undefined;
 };
 
 export type TableOfContentsProps = Omit<ComponentPropsWithoutRef<'nav'>, 'children'> & {
-  items: readonly Entrada[];
-  /** El título del bloque. */
+  items: readonly TocEntry[];
+  /** The block's title. */
   title?: ReactNode;
-  /** Ancla de la sección visible. */
+  /** The anchor of the visible section. */
   activeHref?: string | undefined;
   linkAsChild?: ((props: { href: string; children: ReactNode }) => ReactNode) | undefined;
 };
@@ -61,28 +62,28 @@ export function TableOfContents({
 
       <ul className="border-hairline gap-step-xs flex flex-col border-l">
         {items.map((item) => {
-          const activo = item.href === activeHref;
-          const clases = cn(
+          const active = item.href === activeHref;
+          const classes = cn(
             'px-step-sm -ml-px block border-l',
             'font-sans text-label transition-standard',
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
             'cursor-pointer',
             item.nested && 'pl-step-lg',
             'border-transparent text-text-secondary hover:text-text-primary',
-            // El hover del activo se declara con las dos variantes juntas para
-            // que gane al `hover:` de arriba por especificidad y no por el orden
-            // en que Tailwind decida emitir las reglas.
+            // The active hover is declared with both variants together so it
+            // beats the `hover:` above by specificity and not by the order
+            // Tailwind happens to emit the rules in.
             'aria-[current]:border-accent aria-[current]:text-accent aria-[current]:hover:text-accent',
           );
 
           return (
             <li key={item.href}>
               {linkAsChild ? (
-                <Slot className={clases} aria-current={activo ? 'location' : undefined}>
+                <Slot className={classes} aria-current={active ? 'location' : undefined}>
                   {linkAsChild({ href: item.href, children: item.label })}
                 </Slot>
               ) : (
-                <a href={item.href} className={clases} aria-current={activo ? 'location' : undefined}>
+                <a href={item.href} className={classes} aria-current={active ? 'location' : undefined}>
                   {item.label}
                 </a>
               )}

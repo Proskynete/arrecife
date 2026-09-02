@@ -20,77 +20,78 @@ import { Label } from '../primitives/label.tsx';
 import { Text } from '../primitives/typography.tsx';
 
 /**
- * La capa que ata los controles a un formulario con validación y mensajes.
+ * The layer that ties the controls to a form with validation and messages.
  *
- * La librería ya traía `Input`, `Label`, `Checkbox`, `RadioGroup`, `Select` y
- * `Textarea`, y ninguno sabía nada del otro: el `htmlFor`, el `aria-describedby`
- * del mensaje de error y el `aria-invalid` había que cablearlos a mano en cada
- * campo de cada proyecto. Eso se olvida, y cuando se olvida el fallo es que un
- * lector de pantalla no anuncia por qué el campo está en rojo.
+ * The library already had `Input`, `Label`, `Checkbox`, `RadioGroup`, `Select`
+ * and `Textarea`, and none of them knew anything about the others: the
+ * `htmlFor`, the error message's `aria-describedby` and the `aria-invalid` had
+ * to be wired by hand on every field of every project. That gets forgotten, and
+ * when it does the failure is that a screen reader never announces why the field
+ * is red.
  *
- * Se publica en `@eduardoalvarez/arrecife/form`, NO en la raíz, y eso es
- * deliberado. React Hook Form es una dependencia de pares opcional: solo uno de
- * los cinco proyectos la usa, y si esto colgara del índice principal, los otros
- * cuatro tendrían que instalarla para que su bundler resolviera un import que
- * nunca ejecutan. Es la misma razón por la que `./og` y `./shiki` viven aparte,
- * mirada desde el otro lado: allí se saca React del camino, aquí se saca RHF.
+ * It is published at `@eduardoalvarez/arrecife/form`, NOT at the root, and that
+ * is deliberate. React Hook Form is an optional peer dependency: only one of the
+ * five projects uses it, and if this hung off the main index the other four
+ * would have to install it just so their bundler could resolve an import they
+ * never execute. It is the same reason `./og` and `./shiki` live apart, seen
+ * from the other side: there React is kept out of the way, here RHF is.
  *
- * La forma es la de shadcn —`FormField` sobre `Controller`, contexto de campo y
- * contexto de item— porque el proyecto que la consume ya está escrito contra
- * ella y reinventarla solo le costaría una migración. Lo que cambia es el
- * vocabulario visual: los ids, la escala y el tono salen del sistema.
+ * The shape is shadcn's — `FormField` on `Controller`, field context and item
+ * context — because the project consuming it is already written against it and
+ * reinventing it would only cost them a migration. What changes is the visual
+ * vocabulary: the ids, the scale and the tone come from the system.
  */
 export const Form = FormProvider;
 
-type CampoContexto = { name: string };
-const Campo = createContext<CampoContexto | null>(null);
+type FieldContext = { name: string };
+const Field = createContext<FieldContext | null>(null);
 
-type ItemContexto = { id: string };
-const Item = createContext<ItemContexto | null>(null);
+type ItemContext = { id: string };
+const Item = createContext<ItemContext | null>(null);
 
 /**
- * Un campo controlado. Envuelve el `Controller` de RHF y además publica el
- * nombre en contexto, que es de donde lo leen la etiqueta y el mensaje sin que
- * haya que repetirlo tres veces.
+ * A controlled field. It wraps RHF's `Controller` and also publishes the name
+ * into context, which is where the label and the message read it from without
+ * having to repeat it three times.
  */
 export function FormField<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(props: ControllerProps<TFieldValues, TName>) {
   return (
-    <Campo.Provider value={{ name: props.name }}>
+    <Field.Provider value={{ name: props.name }}>
       <Controller {...props} />
-    </Campo.Provider>
+    </Field.Provider>
   );
 }
 
 /**
- * Lo que necesita cualquier pieza del campo: el nombre, los tres ids y el estado
- * de validación.
+ * What any piece of the field needs: the name, the three ids and the validation
+ * state.
  *
- * Tira si se usa fuera de un `FormField` o de un `FormItem`, con el mensaje que
- * dice cuál de los dos falta. Devolver algo a medias sería peor: el campo se
- * renderizaría sin `aria-describedby` y nada avisaría.
+ * It throws if used outside a `FormField` or a `FormItem`, with a message saying
+ * which of the two is missing. Returning something half-formed would be worse:
+ * the field would render with no `aria-describedby` and nothing would warn.
  */
 export function useFormField() {
-  const campo = useContext(Campo);
+  const field = useContext(Field);
   const item = useContext(Item);
   const { getFieldState } = useFormContext();
-  const estado = useFormState({ name: campo?.name ?? '' });
+  const state = useFormState({ name: field?.name ?? '' });
 
-  if (!campo) throw new Error('useFormField se usa dentro de un <FormField>.');
-  if (!item) throw new Error('useFormField se usa dentro de un <FormItem>.');
+  if (!field) throw new Error('useFormField must be used inside a <FormField>.');
+  if (!item) throw new Error('useFormField must be used inside a <FormItem>.');
 
   return {
-    name: campo.name,
+    name: field.name,
     id: item.id,
-    idDescripcion: `${item.id}-descripcion`,
-    idMensaje: `${item.id}-mensaje`,
-    ...getFieldState(campo.name, estado),
+    descriptionId: `${item.id}-descripcion`,
+    messageId: `${item.id}-mensaje`,
+    ...getFieldState(field.name, state),
   };
 }
 
-/** La caja del campo: etiqueta, control, ayuda y mensaje, en columna. */
+/** The field's box: label, control, help and message, in a column. */
 export function FormItem({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   const id = useId();
 
@@ -102,11 +103,11 @@ export function FormItem({ className, ...props }: ComponentPropsWithoutRef<'div'
 }
 
 /**
- * La etiqueta NO se tiñe de rojo cuando el campo falla.
+ * The label is NOT tinted red when the field fails.
  *
- * El sistema deja el color semántico en el borde y en el glifo, y el texto en un
- * token de texto: el borde del control ya está en `error` y el mensaje de abajo
- * también, así que teñir además la etiqueta son tres rojos para un solo fallo.
+ * The system keeps the semantic color on the border and on the glyph, and the
+ * text on a text token: the control's border is already in `error` and so is the
+ * message below it, so tinting the label as well is three reds for one failure.
  */
 export function FormLabel({ className, ...props }: ComponentPropsWithoutRef<typeof Label>) {
   const { id } = useFormField();
@@ -114,35 +115,35 @@ export function FormLabel({ className, ...props }: ComponentPropsWithoutRef<type
 }
 
 /**
- * Envuelve al control y le cablea los atributos: el `id` que la etiqueta apunta,
- * el `aria-describedby` con la ayuda y el mensaje, y el `aria-invalid`.
+ * Wraps the control and wires its attributes: the `id` the label points at, the
+ * `aria-describedby` with the help and the message, and the `aria-invalid`.
  *
- * Es un `Slot`, así que el hijo puede ser cualquiera de los controles del
- * sistema —`Input`, `Textarea`, `SelectTrigger`— sin que esto sepa cuál.
+ * It is a `Slot`, so the child can be any of the system's controls — `Input`,
+ * `Textarea`, `SelectTrigger` — without this knowing which.
  */
 export function FormControl({ ...props }: ComponentPropsWithoutRef<typeof Slot>) {
-  const { error, id, idDescripcion, idMensaje } = useFormField();
+  const { error, id, descriptionId, messageId } = useFormField();
 
   return (
     <Slot
       id={id}
-      aria-describedby={error ? `${idDescripcion} ${idMensaje}` : idDescripcion}
+      aria-describedby={error ? `${descriptionId} ${messageId}` : descriptionId}
       aria-invalid={error ? true : undefined}
       {...props}
     />
   );
 }
 
-/** La ayuda del campo. Se anuncia siempre, haya error o no. */
+/** The field's help text. It is always announced, error or not. */
 export function FormDescription({ className, ...props }: ComponentPropsWithoutRef<'p'>) {
-  const { idDescripcion } = useFormField();
+  const { descriptionId } = useFormField();
 
   return (
     <Text
       as="p"
       variant="label"
       tone="muted"
-      id={idDescripcion}
+      id={descriptionId}
       className={cn('font-normal', className)}
       {...props}
     />
@@ -150,29 +151,29 @@ export function FormDescription({ className, ...props }: ComponentPropsWithoutRe
 }
 
 /**
- * El mensaje de validación. Sin error no renderiza nada: un hueco reservado
- * para el fallo desplaza el resto del formulario cada vez que aparece.
+ * The validation message. With no error it renders nothing: a gap reserved for
+ * the failure shifts the rest of the form every time it appears.
  *
- * Toma el texto del error de RHF; `children` sirve para un mensaje que no venga
- * del esquema —el 409 que devuelve el servidor y que ningún validador de
- * cliente puede anticipar—.
+ * It takes its text from RHF's error; `children` is for a message that does not
+ * come from the schema — the 409 the server returns and that no client-side
+ * validator can anticipate.
  */
 export function FormMessage({ className, children, ...props }: ComponentPropsWithoutRef<'p'>) {
-  const { error, idMensaje } = useFormField();
-  const cuerpo = error?.message ? String(error.message) : children;
+  const { error, messageId } = useFormField();
+  const body = error?.message ? String(error.message) : children;
 
-  if (!cuerpo) return null;
+  if (!body) return null;
 
   return (
     <Text
       as="p"
       variant="label"
       tone="error"
-      id={idMensaje}
+      id={messageId}
       className={className}
       {...props}
     >
-      {cuerpo}
+      {body}
     </Text>
   );
 }

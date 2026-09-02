@@ -1,20 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota, Pila } from '../../../stories/utils.tsx';
-import { sintaxis } from '../../tokens/tokens.ts';
+import { Note, Stack } from '../../../stories/utils.tsx';
+import { syntax } from '../../tokens/tokens.ts';
 import { CodeBlock } from './index.tsx';
 
-const EJEMPLO = `import { tokens } from '@eduardoalvarez/arrecife/tokens';
+const EXAMPLE = `import { tokens } from '@eduardoalvarez/arrecife/tokens';
 
 export const og = {
-  fondo: tokens.colors.dark.background,
+  background: tokens.colors.dark.background,
   tinta: tokens.colors.dark.textPrimary,
 };`;
 
 const meta = {
-  title: 'Componentes/CodeBlock',
+  title: 'Components/CodeBlock',
   component: CodeBlock,
-  args: { language: 'ts', children: EJEMPLO, copyText: EJEMPLO },
+  args: { language: 'ts', children: EXAMPLE, copyText: EXAMPLE },
 } satisfies Meta<typeof CodeBlock>;
 
 export default meta;
@@ -22,97 +22,98 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => (
-    <Pila>
+    <Stack>
       <CodeBlock {...args} />
-      <Nota>
-        Cambia el modo en la toolbar: el bloque no cambia. `brand.hull` es el
-        fondo de los bloques de código en los dos temas, así que la raíz declara
-        `data-theme="dark"` y toda la tinta de dentro pasa a la paleta oscura. Es
-        la única isla de tema invertido del sistema.
-      </Nota>
-    </Pila>
+      <Note>
+        Switch the mode in the toolbar: the block does not change. `brand.hull` is
+        the background of code blocks in both themes, so the root declares
+        `data-theme="dark"` and all the ink inside switches to the dark palette. It
+        is the system's only island of inverted theme.
+      </Note>
+    </Stack>
   ),
 };
 
-export const SinCopiar: Story = {
-  name: 'Sin botón de copiar',
+export const NoCopy: Story = {
+  name: 'No copy button',
   args: { copyText: undefined },
   render: (args) => (
-    <Pila>
+    <Stack>
       <CodeBlock {...args} />
-      <Nota>
-        Sin `copyText` no hay botón. Un botón de copiar que no copia es peor que
-        no tenerlo.
-      </Nota>
-    </Pila>
+      <Note>
+        With no `copyText` there is no button. A copy button that does not copy is
+        worse than no button.
+      </Note>
+    </Stack>
   ),
 };
 
-export const SinLenguaje: Story = {
-  name: 'Sin lenguaje',
+export const NoLanguage: Story = {
+  name: 'No language',
   args: { language: undefined },
-  render: (args) => <Pila><CodeBlock {...args} /></Pila>,
+  render: (args) => <Stack><CodeBlock {...args} /></Stack>,
 };
 
 
 /**
  * Andamiaje de la story, no de la librería. En producción el resaltado lo hace
  * Shiki en build con `@eduardoalvarez/arrecife/shiki`; aquí el fragmento va
- * marcado a mano para poder ver la paleta sin traerse el resaltador.
+ * marcado a mano para poder ver la palette sin traerse el resaltador.
  */
 const T = ({ c, children }: { c: string; children: string }) => (
   <span style={{ color: c }}>{children}</span>
 );
 
-export const Resaltado: Story = {
-  name: 'La paleta de sintaxis',
+export const Highlight: Story = {
+  name: 'The syntax palette',
   args: { language: 'ts', copyText: undefined },
   render: (args) => (
-    <Pila>
+    <Stack>
       <CodeBlock {...args}>
-        <T c={sintaxis.comentario}>{'// El tema sale de tokens.sintaxis\n'}</T>
-        <T c={sintaxis.palabraClave}>{'import'}</T>
+        <T c={syntax.comment}>{'// El tema sale de tokens.syntax\n'}</T>
+        <T c={syntax.keyword}>{'import'}</T>
         {' { '}
-        <T c={sintaxis.identificador}>{'arrecife'}</T>
+        <T c={syntax.identifier}>{'arrecife'}</T>
         {' } '}
-        <T c={sintaxis.palabraClave}>{'from'}</T>{' '}
-        <T c={sintaxis.literal}>{"'@eduardoalvarez/arrecife/shiki'"}</T>
-        <T c={sintaxis.comentario}>{';\n\n'}</T>
-        <T c={sintaxis.palabraClave}>{'export const'}</T>{' '}
-        <T c={sintaxis.identificador}>{'markdown'}</T>
-        <T c={sintaxis.comentario}>{' = {\n  '}</T>
-        <T c={sintaxis.identificador}>{'syntaxHighlight'}</T>
-        <T c={sintaxis.comentario}>{': '}</T>
-        <T c={sintaxis.literal}>{"'shiki'"}</T>
-        <T c={sintaxis.comentario}>{',\n  '}</T>
-        <T c={sintaxis.identificador}>{'shikiConfig'}</T>
-        <T c={sintaxis.comentario}>{': { '}</T>
-        <T c={sintaxis.identificador}>{'theme'}</T>
-        <T c={sintaxis.comentario}>{': '}</T>
-        <T c={sintaxis.identificador}>{'arrecife'}</T>
-        <T c={sintaxis.comentario}>{' },\n  '}</T>
-        <T c={sintaxis.identificador}>{'inline'}</T>
-        <T c={sintaxis.comentario}>{': '}</T>
-        <T c={sintaxis.literal}>{'false'}</T>
-        <T c={sintaxis.comentario}>{',\n};'}</T>
+        <T c={syntax.keyword}>{'from'}</T>{' '}
+        <T c={syntax.literal}>{"'@eduardoalvarez/arrecife/shiki'"}</T>
+        <T c={syntax.comment}>{';\n\n'}</T>
+        <T c={syntax.keyword}>{'export const'}</T>{' '}
+        <T c={syntax.identifier}>{'markdown'}</T>
+        <T c={syntax.comment}>{' = {\n  '}</T>
+        <T c={syntax.identifier}>{'syntaxHighlight'}</T>
+        <T c={syntax.comment}>{': '}</T>
+        <T c={syntax.literal}>{"'shiki'"}</T>
+        <T c={syntax.comment}>{',\n  '}</T>
+        <T c={syntax.identifier}>{'shikiConfig'}</T>
+        <T c={syntax.comment}>{': { '}</T>
+        <T c={syntax.identifier}>{'theme'}</T>
+        <T c={syntax.comment}>{': '}</T>
+        <T c={syntax.identifier}>{'arrecife'}</T>
+        <T c={syntax.comment}>{' },\n  '}</T>
+        <T c={syntax.identifier}>{'inline'}</T>
+        <T c={syntax.comment}>{': '}</T>
+        <T c={syntax.literal}>{'false'}</T>
+        <T c={syntax.comment}>{',\n};'}</T>
       </CodeBlock>
-      <Nota>
-        Cuatro colores y nada más: arena las palabras clave, bioluz los literales
-        —cadenas, números y booleanos, que los tres son literales—, plancton los
-        comentarios y la puntuación, y espuma todo lo que se nombra. Funciones,
-        variables y tipos caen los tres en espuma a propósito: el sistema se
-        comunica con color y borde, no con ruido cromático.
-      </Nota>
-      <Nota>
-        Medidos sobre casco, los cinco AA: espuma 16.42, bioluz 10.05, arena
-        9.05, plancton 5.43 e invalidez 4.97. `brand.body` no entra en la paleta
-        — el sistema lo restringe a relleno y aquí mide 4.2.
-      </Nota>
-      <Nota>
-        La librería NO trae Shiki. El tema es un objeto de datos en
-        `@eduardoalvarez/arrecife/shiki`, y el resaltado lo hace cada proyecto en
-        build con su herramienta. Aquí el fragmento va marcado a mano.
-      </Nota>
-    </Pila>
+      <Note>
+        Four colors and nothing else: sand for keywords, biolume for literals —
+        strings, numbers and booleans, all three being literals — plankton for
+        comments and punctuation, and foam for everything that gets named.
+        Functions, variables and types all land on foam on purpose: the system
+        communicates with color and border, not with chromatic noise.
+      </Note>
+      <Note>
+        Measured over hull, all five AA: foam 16.42, biolume 10.05, sand 9.05,
+        plankton 5.43 and invalid 4.97. `brand.body` is not in the palette — the
+        system restricts it to fill and here it measures 4.2.
+      </Note>
+      <Note>
+        The library does NOT ship Shiki. The theme is a data object in
+        `@eduardoalvarez/arrecife/shiki`, and the highlighting is done by each
+        project at build time with its own tool. Here the snippet is marked up by
+        hand.
+      </Note>
+    </Stack>
   ),
 };

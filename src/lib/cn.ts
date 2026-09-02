@@ -4,41 +4,42 @@ import { extendTailwindMerge } from 'tailwind-merge';
 import { control, radius, spacing, typeScale } from '../tokens/tokens.ts';
 
 /**
- * tailwind-merge no conoce la escala de Arrecife, y eso no es cosmético: sin
- * declararla, `text-tag` no parece un tamaño sino un COLOR —`text-` es ambiguo—,
- * así que en `cn('text-tag', 'text-text-primary')` gana el último y el tamaño
- * desaparece. La clase queda escrita en el componente y no llega al DOM.
+ * tailwind-merge does not know the Arrecife scale, and that is not cosmetic:
+ * undeclared, `text-tag` does not look like a size but like a COLOR — `text-` is
+ * ambiguous — so in `cn('text-tag', 'text-text-primary')` the last one wins and
+ * the size disappears. The class stays written in the component and never
+ * reaches the DOM.
  *
- * Esta lista se mantenía a mano «y a propósito». Se desincronizó: `stat`,
- * `meta`, `tag`, `chip` y `lead` entraron en `typeScale` y no aquí, y las cinco
- * se estaban cayendo en cualquier pieza que además pidiera un tono — que son
- * casi todas. Los badges renderizaban a 16px heredados en vez de a 12.5.
+ * This list used to be maintained by hand «on purpose». It drifted: `stat`,
+ * `meta`, `tag`, `chip` and `lead` went into `typeScale` and not in here, and
+ * all five were being dropped by any piece that also asked for a tone — which
+ * is nearly all of them. Badges rendered at an inherited 16px instead of 12.5.
  *
- * Ahora se DERIVA de `tokens.ts`. Añadir un escalón ya no puede olvidarse aquí,
- * porque aquí no hay nada que añadir. La dirección de la dependencia es la de
- * siempre: `lib/` puede importar tokens, los tokens no importan nada.
+ * It is DERIVED from `tokens.ts` now. Adding a step can no longer be forgotten
+ * here, because there is nothing to add here. The dependency direction is the
+ * usual one: `lib/` may import tokens, tokens import nothing.
  */
 
-/** camelCase → kebab-case, igual que en `scripts/build-tokens.mjs`. */
-const kebab = (nombre: string) => nombre.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+/** camelCase → kebab-case, same as in `scripts/build-tokens.mjs`. */
+const kebab = (name: string) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
-const escalas = Object.keys(typeScale);
-const radios = Object.keys(radius);
-/** `spacing.stepMd` se emite como `--spacing-step-md` → `p-step-md`. */
-const espacios = Object.keys(spacing).map(kebab);
-/** `control.md` se emite como `--spacing-control-md` → `px-control-md`. */
-const controles = Object.keys(control).map((nombre) => `control-${kebab(nombre)}`);
+const scales = Object.keys(typeScale);
+const radii = Object.keys(radius);
+/** `spacing.stepMd` is emitted as `--spacing-step-md` → `p-step-md`. */
+const namespaces = Object.keys(spacing).map(kebab);
+/** `control.md` is emitted as `--spacing-control-md` → `px-control-md`. */
+const controls = Object.keys(control).map((name) => `control-${kebab(name)}`);
 
 const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      'font-size': [{ text: escalas }],
-      rounded: [{ rounded: radios }],
-      p: [{ p: espacios }],
-      px: [{ px: [...espacios, ...controles] }],
-      py: [{ py: espacios }],
-      gap: [{ gap: espacios }],
-      size: [{ size: controles }],
+      'font-size': [{ text: scales }],
+      rounded: [{ rounded: radii }],
+      p: [{ p: namespaces }],
+      px: [{ px: [...namespaces, ...controls] }],
+      py: [{ py: namespaces }],
+      gap: [{ gap: namespaces }],
+      size: [{ size: controls }],
     },
   },
 });

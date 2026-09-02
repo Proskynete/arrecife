@@ -3,38 +3,39 @@ import { useEffect, useRef, useState, type ComponentPropsWithoutRef, type RefObj
 import { cn } from '../../lib/cn.ts';
 
 /**
- * Cuánto llevas leído. NO es `Progress` con otro nombre.
+ * How much you have read. It is NOT `Progress` under another name.
  *
- * `Progress` mide una tarea: hay un total conocido, alguien la empezó y va a
- * terminar. Esto mide una POSICIÓN en un documento, que se puede recorrer en
- * los dos sentidos y de la que no hay nada que completar. Por eso no lleva
- * `role="progressbar"` ni valor accesible: va `aria-hidden`.
+ * `Progress` measures a task: there is a known total, somebody started it and it
+ * is going to finish. This measures a POSITION in a document, which can be
+ * travelled in both directions and of which there is nothing to complete. That
+ * is why it carries neither `role="progressbar"` nor an accessible value: it is
+ * `aria-hidden`.
  *
- * Eso último es deliberado y es la decisión que hay que defender. Un lector de
- * pantalla ya sabe dónde está en el documento y anunciarle «37 %» cada vez que
- * se mueve es ruido, no información. La barra es orientación visual, y lo que
- * es solo visual se declara como tal.
+ * That last part is deliberate and it is the decision worth defending. A screen
+ * reader already knows where it is in the document, and announcing «37 %» every
+ * time it moves is noise, not information. The bar is visual orientation, and
+ * what is purely visual is declared as such.
  *
- * El ancho se escribe directamente, sin transición: `transition-standard` solo
- * cubre color y borde, así que la barra sigue al scroll en vez de perseguirlo.
+ * The width is written directly, with no transition: `transition-standard` only
+ * covers color and border, so the bar follows the scroll instead of chasing it.
  *
- * La medición va dentro de `requestAnimationFrame`. Leer `scrollTop` en el
- * manejador de scroll fuerza un reflujo síncrono en cada evento, y en un
- * artículo largo eso se nota en el propio scroll — el efecto contrario al que
- * busca la pieza.
+ * The measurement happens inside `requestAnimationFrame`. Reading `scrollTop` in
+ * the scroll handler forces a synchronous reflow on every event, and in a long
+ * article that shows up in the scroll itself — the opposite of what this piece
+ * is for.
  */
 export type ScrollingProgressBarProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   /**
-   * El elemento que se mide. Sin él, el documento entero.
+   * The element being measured. Without it, the whole document.
    *
-   * Se pasa cuando la barra debe seguir SOLO al artículo: si la página tiene
-   * una cabecera alta y un pie con enlaces, medir el documento marca el 100 %
-   * cuando todavía quedan dos párrafos.
+   * It is passed when the bar should follow ONLY the article: if the page has a
+   * tall header and a footer full of links, measuring the document hits 100 %
+   * while two paragraphs are still left.
    */
   target?: RefObject<HTMLElement | null> | undefined;
-  /** Arena en vez de bioluz, para igualar el progreso de curso. */
+  /** Sand instead of biolume, to match course progress. */
   tone?: 'accent' | 'warm';
-  /** Pega la barra al borde superior de la ventana. */
+  /** Pins the bar to the top edge of the window. */
   sticky?: boolean;
 };
 
@@ -45,48 +46,48 @@ export function ScrollingProgressBar({
   className,
   ...props
 }: ScrollingProgressBarProps) {
-  const [avance, setAvance] = useState(0);
-  const pendiente = useRef(0);
+  const [seek, setAvance] = useState(0);
+  const pendingOne = useRef(0);
 
   useEffect(() => {
-    const medir = () => {
-      pendiente.current = 0;
+    const measure = () => {
+      pendingOne.current = 0;
 
-      const elemento = target?.current;
-      // `getBoundingClientRect` y no `offsetTop`: aquel es relativo al
-      // `offsetParent`, y basta un ancestro posicionado —lo tiene cualquier
-      // maquetación con un `relative` por encima— para que el inicio no sea el
-      // del documento y la barra empiece llena.
-      const inicio = elemento ? elemento.getBoundingClientRect().top + scrollY : 0;
-      const alto = elemento ? elemento.offsetHeight : document.documentElement.scrollHeight;
+      const element = target?.current;
+      // `getBoundingClientRect` and not `offsetTop`: that one is relative to the
+      // `offsetParent`, and a single positioned ancestor — which any layout with
+      // a `relative` above it has — is enough for the start not to be the
+      // document's and for the bar to begin full.
+      const start = element ? element.getBoundingClientRect().top + scrollY : 0;
+      const height = element ? element.offsetHeight : document.documentElement.scrollHeight;
 
-      // Lo recorrible es el contenido menos lo que ya cabe en pantalla. Sin
-      // restar la ventana, el 100 % solo llegaría cuando la última línea toca
-      // el borde superior, y para entonces hace rato que se leyó.
-      const recorrible = alto - innerHeight;
-      if (recorrible <= 0) {
-        // Cabe entero: no hay nada que recorrer. Lleno si ya se pasó de largo.
-        setAvance(scrollY >= inicio ? 100 : 0);
+      // What is walkable is the content minus what already fits on screen.
+      // Without subtracting the viewport, 100 % would only arrive when the last
+      // line touches the top edge, and by then it was read a while ago.
+      const walkable = height - innerHeight;
+      if (walkable <= 0) {
+        // It fits whole: there is nothing to traverse. Full if already past it.
+        setAvance(scrollY >= start ? 100 : 0);
         return;
       }
 
-      const recorrido = scrollY - inicio;
-      setAvance(Math.min(100, Math.max(0, (recorrido / recorrible) * 100)));
+      const walk = scrollY - start;
+      setAvance(Math.min(100, Math.max(0, (walk / walkable) * 100)));
     };
 
-    const alMoverse = () => {
-      if (pendiente.current) return;
-      pendiente.current = requestAnimationFrame(medir);
+    const onMove = () => {
+      if (pendingOne.current) return;
+      pendingOne.current = requestAnimationFrame(measure);
     };
 
-    medir();
-    addEventListener('scroll', alMoverse, { passive: true });
-    addEventListener('resize', alMoverse);
+    measure();
+    addEventListener('scroll', onMove, { passive: true });
+    addEventListener('resize', onMove);
 
     return () => {
-      if (pendiente.current) cancelAnimationFrame(pendiente.current);
-      removeEventListener('scroll', alMoverse);
-      removeEventListener('resize', alMoverse);
+      if (pendingOne.current) cancelAnimationFrame(pendingOne.current);
+      removeEventListener('scroll', onMove);
+      removeEventListener('resize', onMove);
     };
   }, [target]);
 
@@ -102,7 +103,7 @@ export function ScrollingProgressBar({
     >
       <div
         className={cn('h-full', tone === 'warm' ? 'bg-warm' : 'bg-accent')}
-        style={{ width: `${avance}%` }}
+        style={{ width: `${seek}%` }}
       />
     </div>
   );

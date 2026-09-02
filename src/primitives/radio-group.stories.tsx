@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Etiqueta } from '../../stories/utils.tsx';
+import { FieldLabel } from '../../stories/utils.tsx';
 import { RadioGroup, RadioGroupItem } from './radio-group.tsx';
 
 const meta = {
-  title: 'Primitivos/RadioGroup',
+  title: 'Primitives/RadioGroup',
   component: RadioGroup,
   args: { defaultValue: 'mensual' },
 } satisfies Meta<typeof RadioGroup>;
@@ -12,24 +12,24 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const OPCIONES = [
-  { valor: 'mensual', texto: 'Mensual' },
-  { valor: 'anual', texto: 'Anual' },
-  { valor: 'nunca', texto: 'No enviar' },
+const OPTIONS = [
+  { value: 'mensual', text: 'Mensual' },
+  { value: 'anual', text: 'Anual' },
+  { value: 'nunca', text: 'No submit' },
 ];
 
-const grupo = (args: Parameters<NonNullable<Story['render']>>[0]) => (
+const group = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   <RadioGroup {...args}>
-    {OPCIONES.map(({ valor, texto }) => (
-      <div key={valor} className="gap-step-sm flex items-center">
-        <RadioGroupItem value={valor} id={valor} />
-        <Etiqueta htmlFor={valor}>{texto}</Etiqueta>
+    {OPTIONS.map(({ value, text }) => (
+      <div key={value} className="gap-step-sm flex items-center">
+        <RadioGroupItem value={value} id={value} />
+        <FieldLabel htmlFor={value}>{text}</FieldLabel>
       </div>
     ))}
   </RadioGroup>
 );
 
-export const Default: Story = { render: grupo };
-export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: grupo };
-export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: grupo };
-export const Deshabilitado: Story = { args: { disabled: true }, render: grupo };
+export const Default: Story = { render: group };
+export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: group };
+export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: group };
+export const Disabled: Story = { args: { disabled: true }, render: group };

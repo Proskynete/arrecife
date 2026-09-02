@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { userEvent, within } from 'storybook/test';
 
-import { Nota } from '../../stories/utils.tsx';
+import { Note } from '../../stories/utils.tsx';
 import { Button } from './button.tsx';
 import { Input } from './input.tsx';
 import { Label } from './label.tsx';
@@ -18,7 +18,7 @@ import {
 } from './sheet.tsx';
 
 const meta = {
-  title: 'Primitivos/Sheet',
+  title: 'Primitives/Sheet',
   component: Sheet,
   argTypes: {},
 } satisfies Meta<typeof Sheet>;
@@ -26,9 +26,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-type Lado = 'right' | 'left' | 'top' | 'bottom';
+type Side = 'right' | 'left' | 'top' | 'bottom';
 
-const panel = (args: Parameters<NonNullable<Story['render']>>[0], side: Lado = 'right') => (
+const panel = (args: Parameters<NonNullable<Story['render']>>[0], side: Side = 'right') => (
   <Sheet {...args}>
     <SheetTrigger asChild>
       <Button variant="secondary">Editar cupón</Button>
@@ -40,8 +40,8 @@ const panel = (args: Parameters<NonNullable<Story['render']>>[0], side: Lado = '
       </SheetHeader>
       <SheetBody>
         <div className="gap-step-xs flex flex-col">
-          <Label htmlFor="codigo">Código</Label>
-          <Input id="codigo" defaultValue="LANZAMIENTO25" />
+          <Label htmlFor="code">Código</Label>
+          <Input id="code" defaultValue="LANZAMIENTO25" />
         </div>
       </SheetBody>
       <SheetFooter>
@@ -54,9 +54,9 @@ const panel = (args: Parameters<NonNullable<Story['render']>>[0], side: Lado = '
   </Sheet>
 );
 
-export const Cerrado: Story = { render: (args) => panel(args) };
+export const Closed: Story = { render: (args) => panel(args) };
 
-const abierto = {
+const open = {
   parameters: {
     a11y: { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } },
   },
@@ -65,23 +65,23 @@ const abierto = {
   },
 };
 
-export const Derecha: Story = { ...abierto, render: (args) => panel(args, 'right') };
-export const Izquierda: Story = { ...abierto, render: (args) => panel(args, 'left') };
-export const Abajo: Story = { ...abierto, render: (args) => panel(args, 'bottom') };
+export const Right: Story = { ...open, render: (args) => panel(args, 'right') };
+export const Left: Story = { ...open, render: (args) => panel(args, 'left') };
+export const Bottom: Story = { ...open, render: (args) => panel(args, 'bottom') };
 
-export const LaExcepcion: Story = {
-  ...abierto,
-  name: 'La excepción de movimiento',
+export const TheException: Story = {
+  ...open,
+  name: 'The motion exception',
   render: (args) => (
     <>
       {panel(args)}
-      <Nota>
-        Es la segunda y última excepción a «nada de desplazamiento» del sistema, y
-        se aprobó a sabiendas: un panel que entra desde un borde se desliza por
-        definición — quieto sería un modal descentrado. Dura lo mismo y usa la
-        misma curva que cualquier cambio de color, así que no introduce un tiempo
-        nuevo, y va detrás de `motion-safe`.
-      </Nota>
+      <Note>
+        It is the system's second and last exception to «no displacement», and it
+        was approved knowingly: a panel entering from an edge slides by definition
+        — held still it would be an off-centre modal. It lasts the same and uses
+        the same curve as any color change, so it introduces no new timing, and it
+        sits behind `motion-safe`.
+      </Note>
     </>
   ),
 };

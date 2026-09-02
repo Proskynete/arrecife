@@ -1,49 +1,49 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-import { Mascota } from '../../brand/mascota.tsx';
-import type { Pose } from '../../brand/catalogo.ts';
+import { Mascot } from '../../brand/mascot.tsx';
+import type { Pose } from '../../brand/catalog.ts';
 import { cn } from '../../lib/cn.ts';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * UNO por sitio. Es la única pieza del sistema que se gasta como el botón de
- * conversión, y por la misma razón: si hay dos, no hay ninguno.
+ * ONE per site. It is the only piece in the system that is spent like the
+ * conversion button, and for the same reason: if there are two, there are none.
  *
- * Degradado, radio de panel, texto al 62 % del ancho y la pose sangrando por el
- * borde inferior derecho. Eso es la variante `cabecera`, que es el defecto.
+ * Gradient, panel radius, text at 62 % of the width and the pose bleeding off
+ * the bottom-right corner. That is the `header` variant, which is the default.
  *
- * En móvil no hay borde por el que sangrar, así que la pose baja al flujo, bajo
- * los botones. No es un `hidden` en pantalla pequeña: la pose es el 40 % de la
- * personalidad del hero.
+ * On mobile there is no edge to bleed off, so the pose drops into the flow,
+ * below the buttons. It is not a `hidden` on small screens: the pose is 40 % of
+ * the hero's personality.
  *
- * La otra variante es `centrado`, y existe porque la regla de arriba tiene un
- * caso donde no aplica. «Nunca centrada» se escribió contra el hero de una
- * página con más contenido debajo: ahí una mascota centrada bajo el titular es
- * una ilustración de portada, no una cabecera. Pero una página de enlaces es
- * centrada de extremo a extremo y la mascota es el protagonista, no el remate.
- * Ese proyecto se saltaba `Hero` entero por esto, que es peor: una regla
- * declarada y con nombre se discute; una copia del degradado en otro repo se
- * desincroniza. La pose va ARRIBA del titular, no debajo, para que siga sin
- * leerse como la ilustración que cierra un bloque de texto.
+ * The other variant is `centered`, and it exists because the rule above has a
+ * case where it does not apply. «Never centred» was written against the hero of
+ * a page with more content below it: there, a centred mascot under the headline
+ * is a cover illustration, not a header. But a links page is centred end to end
+ * and the mascot is the protagonist, not the flourish. That project skipped
+ * `Hero` entirely over this, which is worse: a declared rule with a name can be
+ * argued with; a copy of the gradient in another repo just drifts. The pose goes
+ * ABOVE the headline, not below it, so it still does not read as the
+ * illustration closing a block of text.
  *
- * El degradado viene de `--gradient-hero`, así que sigue el modo. No hay ángulo
- * escrito a mano en ningún proyecto.
+ * The gradient comes from `--gradient-hero`, so it follows the mode. There is no
+ * hand-written angle in any project.
  */
 export type HeroProps = Omit<ComponentPropsWithoutRef<'section'>, 'title'> & {
   title: ReactNode;
-  /** Mono, versalitas, en acento. */
+  /** Mono, small caps, in accent. */
   eyebrow?: ReactNode;
   description?: ReactNode;
-  /** Los botones. Aquí va el único `conversion` de la pantalla. */
+  /** The buttons. The screen's only `conversion` goes here. */
   action?: ReactNode;
-  /** La pose de Tiburoncín. Sin ella el hero es un panel con texto. */
+  /** Tiburoncín's pose. Without it the hero is a panel with text. */
   pose?: Pose | undefined;
   basePath?: string | undefined;
   /**
-   * `cabecera` sangra la pose por la esquina; `centrado` la pone arriba y
-   * centra el texto, para una página que es solo esto.
+   * `header` bleeds the pose off the corner; `centered` puts it on top and
+   * centres the text, for a page that is only this.
    */
-  variant?: 'cabecera' | 'centrado';
+  variant?: 'header' | 'centered';
 };
 
 export function Hero({
@@ -53,24 +53,24 @@ export function Hero({
   action,
   pose,
   basePath,
-  variant = 'cabecera',
+  variant = 'header',
   className,
   ...props
 }: HeroProps) {
-  const centrado = variant === 'centrado';
+  const centered = variant === 'centered';
 
   return (
     <section
       className={cn(
-        'degradado-hero rounded-panel border-hairline relative overflow-hidden border',
-        // 44 arriba, 40 a los lados y abajo. Del documento.
+        'gradient-hero rounded-panel border-hairline relative overflow-hidden border',
+        // 44 top, 40 on the sides and bottom. From the document.
         'px-step-xl pt-[44px] pb-step-xl',
         className,
       )}
       {...props}
     >
-      {centrado && pose ? (
-        <Mascota
+      {centered && pose ? (
+        <Mascot
           pose={pose}
           basePath={basePath}
           className="mb-step-md mx-auto w-48 md:w-56"
@@ -80,7 +80,7 @@ export function Hero({
       <div
         className={cn(
           'gap-step-md flex flex-col',
-          centrado ? 'items-center text-center' : 'md:max-w-[62%]',
+          centered ? 'items-center text-center' : 'md:max-w-[62%]',
         )}
       >
         {eyebrow ? (
@@ -103,7 +103,7 @@ export function Hero({
           <div
             className={cn(
               'gap-step-sm mt-step-xs flex flex-wrap items-center',
-              centrado && 'justify-center',
+              centered && 'justify-center',
             )}
           >
             {action}
@@ -111,13 +111,13 @@ export function Hero({
         ) : null}
       </div>
 
-      {!centrado && pose ? (
-        <Mascota
+      {!centered && pose ? (
+        <Mascot
           pose={pose}
           basePath={basePath}
           className={cn(
-            // En móvil, en el flujo y bajo los botones. Desde md, sangrando por
-            // la esquina inferior derecha.
+            // On mobile, in the flow and below the buttons. From md up, bleeding
+            // off the bottom-right corner.
             'mt-step-lg mx-auto w-40',
             'md:mt-0 md:absolute md:right-0 md:-bottom-4 md:mx-0 md:w-64',
           )}

@@ -4,26 +4,25 @@ import { cn } from '../lib/cn.ts';
 
 export type DateFieldProps = Omit<ComponentPropsWithoutRef<'input'>, 'type'> & {
   invalid?: boolean | undefined;
-  /** Añade la hora al campo. Es el `datetime-local` nativo. */
+  /** Adds the time to the field. It is the native `datetime-local`. */
   withTime?: boolean | undefined;
 };
 
 /**
- * Un campo de fecha sobre el control nativo, no sobre un calendario propio.
+ * A date field on the native control, not on a calendar of our own.
  *
- * Es una decisión deliberada: `react-day-picker` habría sido la primera
- * dependencia pesada de la librería, con su propio CSS y su propia animación de
- * cambio de mes — que el sistema no permite. El control nativo trae gratis el
- * teclado del sistema operativo, el formato según el idioma del usuario y el
- * soporte de lector de pantalla, que es más de lo que un calendario a medida da
- * sin trabajo.
+ * It is a deliberate decision: `react-day-picker` would have been the library's
+ * first heavy dependency, with its own CSS and its own month-change animation —
+ * which the system does not allow. The native control brings the OS keyboard,
+ * the format matching the user's language and screen-reader support for free,
+ * which is more than a bespoke calendar gives without work.
  *
- * Cubre elegir una fecha dentro de un formulario. Un calendario mensual
- * navegable es otra cosa y vive en el proyecto que lo necesita.
+ * It covers picking a date inside a form. A navigable month calendar is a
+ * different thing and lives in the project that needs it.
  *
- * El icono nativo del selector se tiñe con `color-scheme`, que es lo único que
- * el navegador deja controlar: se ata al modo activo para que no aparezca un
- * cuadradito blanco sobre fondo abismo.
+ * The native picker icon is tinted through `color-scheme`, which is the only
+ * thing the browser lets you control: it is tied to the active mode so no little
+ * white square shows up over abyss.
  */
 export function DateField({
   className,
@@ -45,7 +44,7 @@ export function DateField({
         'focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[invalid]:border-error data-[invalid]:focus-visible:outline-error',
-        // El indicador nativo hereda el esquema del tema activo.
+        // The native indicator inherits the active theme's scheme.
         'scheme-light dark:scheme-dark [&::-webkit-calendar-picker-indicator]:cursor-pointer',
         className,
       )}

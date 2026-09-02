@@ -5,24 +5,25 @@ import { cn } from '../lib/cn.ts';
 import { buttonVariants } from './button.tsx';
 
 /**
- * La confirmación destructiva. NO es un `Dialog` con otro texto, y por eso está
- * en su propio archivo y sobre su propia primitiva de Radix.
+ * The destructive confirmation. It is NOT a `Dialog` with different text, which
+ * is why it lives in its own file and on its own Radix primitive.
  *
- * Tres diferencias, y las tres importan en el momento en que alguien va a
- * borrar un artículo:
+ * Three differences, and all three matter at the moment somebody is about to
+ * delete an article:
  *
- *   1. El rol es `alertdialog`, no `dialog`. Un lector de pantalla lo anuncia
- *      con la descripción incluida, sin esperar a que se navegue hasta ella.
- *   2. El foco inicial va al CANCELAR, no al primer elemento. Quien pulsa Enter
- *      por inercia no borra nada. Radix lo hace solo si el cancelar existe, y
- *      por eso `AlertDialogCancel` no es opcional en la práctica.
- *   3. NO se cierra al pulsar fuera ni tiene aspa. Salir de una confirmación es
- *      una decisión, no un descuido: hay que decir que no.
+ *   1. The role is `alertdialog`, not `dialog`. A screen reader announces it
+ *      with the description included, without waiting for you to navigate to it.
+ *   2. Initial focus goes to CANCEL, not to the first element. Whoever hits
+ *      Enter out of inertia deletes nothing. Radix does this on its own only if
+ *      the cancel exists, which is why `AlertDialogCancel` is not optional in
+ *      practice.
+ *   3. It does NOT close on outside click and has no X. Leaving a confirmation
+ *      is a decision, not a slip: you have to say no.
  *
- * El botón de confirmar NO es rojo. El sistema no tiene variante de peligro
- * —`Button` lo dice explícito— y el error vive en los avisos y en la validación
- * de campo, no en un botón. Lo que comunica la gravedad es el texto: «Borrar el
- * artículo», no «Aceptar».
+ * The confirm button is NOT red. The system has no danger variant — `Button`
+ * says so explicitly — and error lives in alerts and in field validation, not in
+ * a button. What communicates the gravity is the text: «Borrar el artículo», not
+ * «Aceptar».
  */
 export const AlertDialog = AlertDialogPrimitive.Root;
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
@@ -39,7 +40,7 @@ export function AlertDialogOverlay({
   );
 }
 
-/** Sin entrada animada, igual que `Dialog`: aparece donde va a quedarse. */
+/** No entrance animation, same as `Dialog`: it appears where it will stay. */
 export function AlertDialogContent({
   className,
   children,
@@ -69,10 +70,10 @@ export function AlertDialogHeader({ className, ...props }: ComponentPropsWithout
 }
 
 /**
- * Cancelar a la IZQUIERDA de confirmar en escritorio y ABAJO en móvil, que es lo
- * que da `flex-col-reverse`: el orden del DOM pone cancelar primero —es donde va
- * el foco— y en columna el dedo lo encuentra donde toca sin cambiar la
- * tabulación.
+ * Cancel to the LEFT of confirm on desktop and BELOW it on mobile, which is what
+ * `flex-col-reverse` gives: the DOM order puts cancel first — that is where focus
+ * goes — and in a column the thumb finds it where it should be without changing
+ * the tab order.
  */
 export function AlertDialogFooter({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   return (
@@ -96,9 +97,9 @@ export function AlertDialogTitle({
 }
 
 /**
- * Lo que se pierde, dicho entero. Es lo que el rol `alertdialog` hace que se
- * anuncie de entrada, así que aquí no va «esta acción no se puede deshacer»
- * suelto: va qué se borra y qué se lleva por delante.
+ * What is lost, spelled out. The `alertdialog` role makes this get announced up
+ * front, so «this action cannot be undone» does not go here on its own: what
+ * goes here is what gets deleted and what it takes down with it.
  */
 export function AlertDialogDescription({
   className,
@@ -112,7 +113,7 @@ export function AlertDialogDescription({
   );
 }
 
-/** El que se lleva el foco al abrir. */
+/** The one that takes focus on open. */
 export function AlertDialogCancel({
   className,
   ...props

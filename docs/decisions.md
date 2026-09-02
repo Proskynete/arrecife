@@ -635,6 +635,80 @@ that the exception list is now five with two criteria and not one.
 
 ---
 
+## 24 · The composed parts are reached with a slot, not with a selector
+
+**Backlog point 10, and it was the only entry left from the original list.**
+`ArticleCard` receives `tags` as strings and turns them into badges, so a project
+with an E2E suite had no way to reach one: it selected by structure —
+`article > div > span` — or by a style class. The second already broke the blog's
+suite once, because a style class is not a contract; it changes when the style
+changes.
+
+**What stayed:** `tagAsChild`, a slot per part. The library keeps the classes and
+the rule — a tag is a category pill, and that does not become negotiable — and
+hands over the element and its attributes.
+
+    tagAsChild={({ tag }) => <span data-testid={`tag-${tag}`}>{tag}</span>}
+
+**The two alternatives, and why not.** Documenting the DOM shape as a stable
+contract costs no code today and freezes the markup forever: every later refactor
+becomes a breaking change, and nothing verifies the promise — it breaks without a
+single check noticing. Putting `data-*` attributes in the library is cheaper to
+consume and it is test scaffolding shipped in the product: an attribute nobody
+renders for a reason, that cannot be removed once a suite depends on it.
+
+**The shape is not new.** `linkAsChild` already had it in `Breadcrumb` and
+`TableOfContents`, so this is one idiom for «the project supplies the element,
+the library supplies the styling» and not a second one doing the same thing under
+another name. It generalises: the next composed part that needs reaching gets a
+`…AsChild` with the same signature.
+
+**Where it was not needed.** `Nav` and `SidebarNav` already take their items as
+children and export `NavItem` and `SidebarItem`, so the parts were reachable
+already. `CourseCard` takes `meta` and `status` as nodes. `ArticleCard`'s tags
+were the only genuinely closed part, which is why this is one prop and not a
+sweep.
+
+**Action in the document:** none. It is an API decision, not an identity one.
+
+---
+
+## 25 · Projects without React are served by `./variants`
+
+**Backlog point 12** asked for a way out for `links`, which ships no framework
+JavaScript and was replicating `LinkRow` and `Footer` in Astro by copying the
+class vocabulary. Two options were on the table: export the class strings as
+constants, or publish a framework-free subpackage.
+
+**What stayed:** the first one, and only for the classes that carry identity.
+`./variants` publishes `buttonVariants`, `badgeVariants`,
+`categoryBadgeVariants`, `textVariants`, `alertVariants`, `avatarVariants`,
+`CARD`, `CARD_SURFACE` and `CARD_HOVER`, with no React.
+
+**What is deliberately NOT in it:** the layout classes of each component —
+`px-step-md py-step-sm`, `max-w-wide`, `gap-[18px]`. Those are what `links` still
+copies, and copying them is fine. What drifts is identity: color, radius,
+gradient, hover. That is what happened the one time it did drift — the hero
+gradient sat at `55%` and `#e9eeea` against the token's `60%` and `#EFE9DE` — and
+all of it is importable now.
+
+Pulling the layout out too would mean a second list of constants kept in step
+with the component by hand, with nothing verifying they match. That is § 15
+exactly, and § 15 is the entry that says a list maintained by hand against
+another list ends up out of sync.
+
+**Per-component subpaths** — `@eduardoalvarez/arrecife/link-row` and company —
+stay unbuilt. They solve a different problem, the one the backlog measured when
+`ScrollingProgressBar` added 332 KB by being hydrated from the barrel, and
+`./variants` takes most of the urgency out of it: what a project usually wants to
+import on its own are the classes, not the component. If a hydrated island
+actually needs one component and pays for thirty, that is when they earn their
+thirty-odd `tsup` entries.
+
+**Action in the document:** none.
+
+---
+
 ## What was NOT touched
 
 The audit's list still stands: the three contrast corrections (light `textMuted`,

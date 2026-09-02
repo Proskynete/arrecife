@@ -73,3 +73,35 @@ export const AsH2: Story = {
     </div>
   ),
 };
+
+export const TagAnchors: Story = {
+  name: 'Reaching the tags from a test',
+  args: {
+    tags: ['engineering-culture', 'career-strategy'],
+    tagAsChild: ({ tag, children }) => <span data-testid={`tag-${tag}`}>{children}</span>,
+  },
+  render: (args) => (
+    <div className="max-w-content">
+      <ArticleCard {...args} />
+      <Note>
+        The tags were the one composed part a project could not get at: they
+        arrive as strings and the component turns them into badges, so a suite had
+        to select them by structure — `article {'>'} div {'>'} span` — or by a style
+        class. The second already broke the blog's suite once, because a style
+        class is not a contract: it changes when the style changes.
+      </Note>
+      <Note>
+        `tagAsChild` hands over the element and its attributes and nothing else.
+        The classes and the rule stay in the library — a tag is a category pill,
+        and that does not become negotiable. Inspect one: it still carries the
+        pill's classes, plus the `data-testid`.
+      </Note>
+      <Note>
+        It is the shape `linkAsChild` already has in `Breadcrumb` and
+        `TableOfContents`, on purpose: one idiom for «the project supplies the
+        element, the library supplies the styling», rather than a second one that
+        does the same thing under another name.
+      </Note>
+    </div>
+  ),
+};

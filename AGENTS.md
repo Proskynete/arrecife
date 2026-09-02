@@ -189,6 +189,14 @@ Rules of the pattern, all of them with a reason:
   forces you to wrap it in a `div` at the call site.
 - **`asChild`** whenever the component renders a link or a control: it is how the
   framework's `Link` gets plugged in without the library depending on a router.
+- **A composed part that a project might need to reach gets a `…AsChild`.** When
+  a component turns data into markup — `ArticleCard` turning strings into badges
+  — that markup is unreachable from outside, and an E2E suite ends up selecting
+  it by structure or by a style class. Neither is a contract. The slot receives
+  the part's data and returns the element; the library keeps the classes and the
+  rule. `linkAsChild` in `Breadcrumb` and `tagAsChild` in `ArticleCard` are the
+  two precedents, and they have the same signature on purpose. See
+  `docs/decisions.md` § 24.
 - **JSDoc with the why, not the what.** `/** Primary button */` above `Button`
   informs nobody. The whole repo is written this way; keep it that way.
 - **Reuse the primitives.** A component in `components/` that writes its own

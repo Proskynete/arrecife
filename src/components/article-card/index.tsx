@@ -1,8 +1,10 @@
+import { Slot } from '@radix-ui/react-slot';
 import type { ReactNode } from 'react';
 
 import { cn } from '../../lib/cn.ts';
 import { CategoryBadge } from '../../primitives/badge.tsx';
 import { Text } from '../../primitives/typography.tsx';
+import { categoryBadgeVariants } from '../../variants/badge.ts';
 import { CardShell, type CardShellProps } from '../card-base.tsx';
 
 export type ArticleCardProps = Omit<CardShellProps, 'children' | 'title'> & {
@@ -25,6 +27,26 @@ export type ArticleCardProps = Omit<CardShellProps, 'children' | 'title'> & {
    * to skip levels, which is the failure the constant was preventing.
    */
   headingLevel?: 2 | 3;
+  /**
+   * Renders each tag through the child, so an E2E suite can reach it.
+   *
+   * The tags are the one composed part a project could not get at: they arrive
+   * as strings and the component turns them into badges, so a test had to select
+   * them by structure — `article > div > span` — or by a style class. The second
+   * one already broke the blog's suite once, because a style class is not a
+   * contract: it changes when the style changes.
+   *
+   * The library keeps the classes and the rule — a tag is a category pill, and
+   * that does not become negotiable — and hands over only the element and its
+   * attributes:
+   *
+   *     tagAsChild={({ tag }) => <span data-testid={`tag-${tag}`}>{tag}</span>}
+   *
+   * It is the shape `linkAsChild` already has in `Breadcrumb` and
+   * `TableOfContents`, and it is deliberately the same: one idiom for «the
+   * project supplies the element, the library supplies the styling».
+   */
+  tagAsChild?: ((props: { tag: string; children: ReactNode }) => ReactNode) | undefined;
 };
 
 /**
@@ -42,6 +64,7 @@ export function ArticleCard({
   readingMinutes,
   tags,
   headingLevel = 3,
+  tagAsChild,
   className,
   ...props
 }: ArticleCardProps) {
@@ -80,9 +103,15 @@ export function ArticleCard({
 
         {tags && tags.length > 0 ? (
           <div className="gap-step-xs mt-auto flex flex-wrap pt-step-sm">
-            {tags.map((t) => (
-              <CategoryBadge key={t}>{t}</CategoryBadge>
-            ))}
+            {tags.map((t) =>
+              tagAsChild ? (
+                <Slot key={t} className={categoryBadgeVariants({ active: false })}>
+                  {tagAsChild({ tag: t, children: t })}
+                </Slot>
+              ) : (
+                <CategoryBadge key={t}>{t}</CategoryBadge>
+              ),
+            )}
           </div>
         ) : null}
       </article>

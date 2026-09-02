@@ -217,7 +217,12 @@ jobs:
     # no puede decir si el job funciona, y era el único paso del workflow que no
     # se podía probar sin gastar una versión. Lo que cambia en el ensayo es el
     # destino — preview, no producción—, no si corre.
-    if: ${{ needs.publicar.result == 'success' }}
+    #
+    # El `!cancelled()` es la misma trampa que ya rodea `publicar`, una casilla
+    # más abajo: en el ensayo `preparar` se salta, y un «skipped» se propaga por
+    # TODO el grafo aguas abajo, no solo al job que lo necesita directamente. Sin
+    # esto, `publicar` pasaba en verde y este job se saltaba igual.
+    if: ${{ !cancelled() && needs.publicar.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

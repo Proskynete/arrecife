@@ -1,130 +1,149 @@
 # AGENTS.md · Arrecife
 
-Instrucciones para un agente que trabaja **dentro** de este repositorio.
+Instructions for an agent working **inside** this repository.
 
-Si lo que estás haciendo es escribir código en un proyecto que **consume** la
-librería, el documento es `llms.txt`, no este.
+If what you are doing is writing code in a project that **consumes** the library,
+the document is `llms.txt`, not this one.
 
-`CLAUDE.md` es un symlink a este archivo: hay un solo documento y lo leen todos.
+`CLAUDE.md` is a symlink to this file: there is one document and everybody reads
+it.
 
 ---
 
-## Qué es este repo
+## What this repo is
 
-`@eduardoalvarez/arrecife`: la librería de componentes de la identidad visual de
-Eduardo Álvarez. React 19, TypeScript, Tailwind v4, shadcn/ui sobre Radix, tsup,
-Storybook. La consumen cinco proyectos, un generador de Open Graph con Satori y
-un sitio Astro que no monta React.
+`@eduardoalvarez/arrecife`: the component library of Eduardo Álvarez's visual
+identity. React 19, TypeScript, Tailwind v4, shadcn/ui on top of Radix, tsup,
+Storybook. It is consumed by five projects, an Open Graph generator running on
+Satori and an Astro site that mounts no React.
 
-Existe por un motivo concreto: esas piezas se escribían por separado en cada
-proyecto y se desincronizaban. La paleta de resaltado vivió meses con un color
-incorrecto porque el documento de identidad no era `grep`-able desde el código.
-Casi todo lo que sigue es una defensa contra esa clase de fallo.
+It exists for a concrete reason: those pieces were written separately in each
+project and drifted apart. The highlighting palette lived for months with the
+wrong color because the identity document was not greppable from the code.
+Almost everything that follows is a defence against that class of failure.
 
-## La restricción que manda sobre todo lo demás
+The published Storybook is <https://arrecife.eduardoalvarez.dev>.
 
-**`src/tokens/` no importa nada.** Ni React, ni componentes, ni CSS de terceros.
+## The constraint that outranks everything else
 
-Es el único subpaquete que pueden consumir los cinco proyectos, Satori y un Astro
-sin React. Si un token termina dependiendo de un componente, la librería deja de
-ser portable y `./og` y `./shiki` dejan de existir.
+**`src/tokens/` imports nothing.** Not React, not components, not third-party
+CSS.
 
-`src/tema/` vive bajo la misma regla por el mismo motivo: lo consume el `<head>`
-de un Astro que no monta React. No es un token, así que `check:tokens` no lo
-cubre; lo cubre `check:exports`, que sigue los imports del `dist/` publicado.
+It is the only subpackage the five projects, Satori and a React-less Astro can
+all consume. The moment a token ends up depending on a component, the library
+stops being portable and `./og` and `./shiki` stop existing.
 
-No es una recomendación: `pnpm check:tokens` lo verifica en cada build, ESLint lo
-dice en el editor y `check:exports` comprueba que las subrutas portables no
-traen React en el `dist/` publicado.
+`src/theme/` lives under the same rule for the same reason: it is consumed by the
+`<head>` of an Astro that mounts no React. It is not a token, so `check:tokens`
+does not cover it; `check:exports` does, by following the imports of the
+published `dist/`.
 
-## Entorno
+This is not a recommendation: `pnpm check:tokens` verifies it on every build,
+ESLint says so in the editor, and `check:exports` checks that the portable
+subpaths bring no React into the published `dist/`.
+
+## Environment
 
 ```bash
 pnpm install          # pnpm 11.20.0, Node >= 22.18.0
-pnpm storybook        # genera los tokens y levanta Storybook en el 6006
+pnpm storybook        # generates the tokens and serves Storybook on 6006
 ```
 
-**Usa `pnpm`.** El repo tiene `pnpm-workspace.yaml` y `packageManager` fijado;
-`npm install` o `yarn` rompen el lockfile.
+**Use `pnpm`.** The repo has a `pnpm-workspace.yaml` and a pinned
+`packageManager`; `npm install` or `yarn` break the lockfile.
 
-| Comando                                | Qué hace                                            |
-| -------------------------------------- | --------------------------------------------------- |
-| `pnpm build`                           | pureza de tokens → tsup → `theme.css` → `llms.txt`  |
-| `pnpm typecheck`                       | `tsc --noEmit`                                      |
-| `pnpm lint`                            | ESLint, incluido el veto a hex literales            |
-| `pnpm test`                            | regresión de tokens + axe en los **dos** modos      |
-| `pnpm test:unidad`                     | compila Tailwind y comprueba a qué resuelve cada utilidad |
-| `pnpm test:oscuro` / `pnpm test:claro` | axe sobre las stories, un modo cada uno             |
-| `pnpm test:watch`                      | la suite en watch, modo oscuro                      |
-| `pnpm check:tokens`                    | falla si `src/tokens/` importa algo de fuera        |
-| `pnpm check:namespace`                 | falla si un token pisa un nombre de Tailwind        |
-| `pnpm check:exports`                   | verifica que `dist/` tiene lo que `exports` promete, y que las portables no traen React ni por sus chunks |
-| `pnpm check:llms`                      | falla si `llms.txt` no cuadra con los tipos         |
-| `pnpm check:release`                   | valida la configuración de release-please           |
-| `pnpm build:tokens`                    | regenera `dist/tokens/theme.css`                    |
-| `pnpm build:llms`                      | regenera `llms.txt`                                 |
-| `pnpm build-storybook`                 | compila el Storybook en `storybook-static/`         |
+| Command                             | What it does                                              |
+| ----------------------------------- | --------------------------------------------------------- |
+| `pnpm build`                        | token purity → tsup → `theme.css` → `llms.txt`            |
+| `pnpm typecheck`                    | `tsc --noEmit`                                            |
+| `pnpm lint`                         | ESLint, including the ban on literal hexes                |
+| `pnpm test`                         | token regression + axe in **both** modes                  |
+| `pnpm test:unit`                    | compiles Tailwind and checks what each utility resolves to |
+| `pnpm test:dark` / `pnpm test:light`| axe over the stories, one mode each                       |
+| `pnpm test:watch`                   | the suite in watch mode, dark                             |
+| `pnpm check:tokens`                 | fails if `src/tokens/` imports anything from outside      |
+| `pnpm check:namespace`              | fails if a token stomps a Tailwind name                   |
+| `pnpm check:exports`                | verifies `dist/` holds what `exports` promises, and that the portable subpaths bring no React, chunks included |
+| `pnpm check:llms`                   | fails if `llms.txt` does not match the types              |
+| `pnpm check:release`                | validates the release-please configuration                |
+| `pnpm build:tokens`                 | regenerates `dist/tokens/theme.css`                       |
+| `pnpm build:llms`                   | regenerates `llms.txt`                                    |
+| `pnpm build-storybook`              | builds Storybook into `storybook-static/`                 |
 
-Antes de dar por terminado un cambio: `pnpm lint`, `pnpm typecheck` y
-`pnpm test`. La suite corre en un Chromium real y tarda; no la saltes cuando el
-cambio toca color, contraste o marcado.
+Before calling a change done: `pnpm lint`, `pnpm typecheck` and `pnpm test`. The
+suite runs in a real Chromium and takes a while; do not skip it when the change
+touches color, contrast or markup.
 
-## Mapa del repo
+## Repo map
 
 ```
 src/
-  tokens/       tokens.ts es LA fuente. No importa nada. Se publica en ./tokens
-  primitives/   los 31 primitivos sobre shadcn/Radix, con su .stories.tsx al lado
-  components/   las piezas de identidad, una carpeta por componente
-  brand/        logo, isotipo, mascota y el catálogo de PNG
-  tema/         el modo claro/oscuro y `scriptTema`. Sin React. Se publica en ./tema
-  og/           plantillas de Satori. Sin React. Se publica en ./og
-  shiki/        el tema de resaltado. Sin React. Se publica en ./shiki
-  form/         la capa de formulario. Se publica en ./form; pide react-hook-form
-  chart/        el chasis de las gráficas. Se publica en ./chart; pide recharts
-  lib/          cn, los glifos inline y los iconos sociales
-stories/        stories que no son de un componente (tokens, marca, og) y utils
-scripts/        los generadores y los checks
-docs/           los documentos de identidad y la plantilla de llms.txt
+  tokens/       tokens.ts is THE source. It imports nothing. Published at ./tokens
+  primitives/   the 31 primitives on shadcn/Radix, each with its .stories.tsx beside it
+  components/   the identity pieces, one folder per component
+  brand/        logo, isotype, mascot and the PNG catalog
+  theme/        light/dark mode and `themeScript`. No React. Published at ./theme
+  og/           Satori templates. No React. Published at ./og
+  shiki/        the highlighting theme. No React. Published at ./shiki
+  form/         the form layer. Published at ./form; asks for react-hook-form
+  chart/        the chart chassis. Published at ./chart; asks for recharts
+  lib/          cn, the inline glyphs and the social icons
+stories/        stories that do not belong to a component (tokens, brand, og) and utils
+scripts/        the generators and the checks
+docs/           the identity documents and the llms.txt template
 ```
 
-## Archivos generados: no se editan a mano
+## Generated files: not edited by hand
 
-| Archivo                     | Lo genera                                                           | Se verifica con                |
-| --------------------------- | ------------------------------------------------------------------- | ------------------------------ |
-| `dist/tokens/theme.css`     | `scripts/build-tokens.mjs` desde `tokens.ts`                        | se regenera en cada build      |
-| `llms.txt`                  | `scripts/build-llms.mjs` desde los tipos y `docs/llms.plantilla.md` | `pnpm check:llms`              |
-| `CHANGELOG.md`              | release-please desde los commits                                    | —                              |
-| `version` de `package.json` | release-please                                                      | el workflow compara con el tag |
+| File                        | Generated by                                                        | Verified with                 |
+| --------------------------- | ------------------------------------------------------------------- | ----------------------------- |
+| `dist/tokens/theme.css`     | `scripts/build-tokens.mjs` from `tokens.ts`                          | regenerated on every build    |
+| `llms.txt`                  | `scripts/build-llms.mjs` from the types and `docs/llms.template.md`  | `pnpm check:llms`             |
+| `CHANGELOG.md`              | release-please, from the commits                                     | —                             |
+| `package.json`'s `version`  | release-please                                                       | the workflow compares it with the tag |
 
-Si hace falta cambiar la prosa de `llms.txt`, se edita `docs/llms.plantilla.md` y
-se corre `pnpm build:llms`. El inventario de componentes **no** se toca: sale del
-compilador de TypeScript, y esa es toda la gracia.
+If the prose of `llms.txt` needs changing, you edit `docs/llms.template.md` and
+run `pnpm build:llms`. The component inventory is **not** touched: it comes out
+of the TypeScript compiler, and that is the whole point.
 
 ---
 
-## Cómo se crea un componente
+## The language of the code
 
-Un componente es **dos archivos**, siempre:
+**The code is written in English**: identifiers, comments, error messages, logs,
+documentation and commit messages. It was in Spanish until 0.6.0 and the whole
+repo was migrated at once — a repo half in each language is worse than either.
+
+The exception is **user-facing copy**, which stays in Spanish: the taglines in
+`tokens.ts`, the default labels of `NewsletterForm` and `AvatarUpload`, the demo
+content in the stories. All five consuming sites are in Spanish, and translating
+those defaults would change what their users read.
+
+So: `MascotFace`, `themeScript`, `faceList`, `gradient-hero` — but
+`successMessage = 'Ya estás dentro…'`.
+
+## How a component is created
+
+A component is **two files**, always:
 
 ```
-src/components/<nombre-en-kebab>/index.tsx
-src/components/<nombre-en-kebab>/<nombre-en-kebab>.stories.tsx
+src/components/<name-in-kebab>/index.tsx
+src/components/<name-in-kebab>/<name-in-kebab>.stories.tsx
 ```
 
-Los primitivos van planos, sin carpeta: `src/primitives/badge.tsx` y
+Primitives go flat, with no folder: `src/primitives/badge.tsx` and
 `src/primitives/badge.stories.tsx`.
 
-### 1 · Decide si de verdad entra
+### 1 · Decide whether it really gets in
 
-El criterio, y no ha cambiado desde la Fase 3: **codifica una regla de identidad,
-tiene dos o más consumidores, y no arrastra infraestructura del proyecto.**
+The criterion has not changed since Phase 3: **it encodes an identity rule, it
+has two or more consumers, and it drags in no project infrastructure.**
 
-Los tres a la vez. Un componente que hace un `POST` a un endpoint es
-infraestructura: `NewsletterForm` está aquí porque el `POST` se quedó fuera y el
-componente solo recibe `state` y emite `onSubmitEmail`.
+All three at once. A component that does a `POST` to an endpoint is
+infrastructure: `NewsletterForm` is here because the `POST` was left out and the
+component only takes `state` and emits `onSubmitEmail`.
 
-### 2 · El patrón
+### 2 · The pattern
 
 ```tsx
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -133,319 +152,375 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { cn } from '../lib/cn.ts';
 
 /**
- * El porqué del componente. Qué regla del sistema codifica y qué alternativa se
- * descartó. Este bloque lo lee un humano en el repo y un agente en `llms.txt`:
- * el generador lo extrae, así que la primera frase tiene que valerse sola.
+ * Why the component exists. Which rule of the system it encodes and which
+ * alternative was ruled out. This block is read by a human in the repo and by an
+ * agent in `llms.txt`: the generator extracts it, so the first sentence has to
+ * stand on its own.
  */
-const pieza = cva('clases base', {
+const piece = cva('base classes', {
   variants: {
     variant: { … },
   },
   defaultVariants: { variant: 'primary' },
 });
 
-export type PiezaProps = ComponentPropsWithoutRef<'div'> &
-  VariantProps<typeof pieza> & {
-    /** Un prop propio, con su JSDoc de una línea. Sale en la tabla generada. */
+export type PieceProps = ComponentPropsWithoutRef<'div'> &
+  VariantProps<typeof piece> & {
+    /** A prop of its own, with its one-line JSDoc. It shows up in the generated table. */
     icon?: ReactNode;
   };
 
-export function Pieza({ className, variant, icon, ...props }: PiezaProps) {
-  return <div className={cn(pieza({ variant }), className)} {...props} />;
+export function Piece({ className, variant, icon, ...props }: PieceProps) {
+  return <div className={cn(piece({ variant }), className)} {...props} />;
 }
 ```
 
-Reglas del patrón, todas con motivo:
+Rules of the pattern, all of them with a reason:
 
-- **`export function`**, no `const` con arrow ni `forwardRef`. React 19 pasa `ref`
-  como un prop más.
-- **El tipo de props se llama `<Componente>Props` y se exporta.** El generador de
-  `llms.txt` lo busca por ese nombre para la línea `Extiende`, y los proyectos
-  consumidores lo importan.
-- **`className` se acepta y se compone con `cn`**, siempre en último lugar para
-  que el sitio de uso pueda ganar.
-- **`...props` se propaga.** Un componente que se come los atributos del elemento
-  obliga a envolverlo en un `div` en el sitio de uso.
-- **`asChild`** cuando el componente renderiza un enlace o un control: es como se
-  enchufa el `Link` del framework sin que la librería dependa de un enrutador.
-- **JSDoc con el porqué, no con el qué.** `/** Botón primario */` sobre `Button`
-  no informa a nadie. El repo entero está escrito así; mantenlo.
-- **Reutiliza los primitivos.** Un componente de `components/` que escribe sus
-  propias clases de tipografía en vez de usar `Text` está duplicando la escala.
-- **Una dependencia pesada va a su propia subruta**, como dependencia de pares
-  opcional, nunca colgando de la raíz. `./form` pide `react-hook-form` y
-  `./chart` pide `recharts`: si colgaran del índice principal, los cuatro
-  proyectos que no las usan tendrían que instalarlas igualmente para que su
-  bundler resolviera un import que nunca ejecutan. La subruta nueva se declara en
-  `exports`, en `tsup.config.ts` —entrada **y** `external`— y en las `ENTRADAS` y
-  `SECCIONES` de `scripts/build-llms.mjs`, o sus componentes desaparecen del
-  inventario sin que nada avise.
+- **`export function`**, not a `const` with an arrow and not `forwardRef`. React
+  19 passes `ref` as just another prop.
+- **The props type is called `<Component>Props` and is exported.** The `llms.txt`
+  generator looks it up by that name for the `Extends` line, and the consuming
+  projects import it.
+- **`className` is accepted and composed with `cn`**, always last so the call
+  site can win.
+- **`...props` is spread.** A component that swallows the element's attributes
+  forces you to wrap it in a `div` at the call site.
+- **`asChild`** whenever the component renders a link or a control: it is how the
+  framework's `Link` gets plugged in without the library depending on a router.
+- **JSDoc with the why, not the what.** `/** Primary button */` above `Button`
+  informs nobody. The whole repo is written this way; keep it that way.
+- **Reuse the primitives.** A component in `components/` that writes its own
+  typography classes instead of using `Text` is duplicating the scale.
+- **A heavy dependency goes in its own subpath**, as an optional peer dependency,
+  never hanging off the root. `./form` asks for `react-hook-form` and `./chart`
+  asks for `recharts`: if they hung off the main index, the four projects that
+  use neither would have to install them anyway so their bundler could resolve an
+  import they never execute. A new subpath is declared in `exports`, in
+  `tsup.config.ts` — entry **and** `external` — and in the `ENTRIES` and
+  `SECTIONS` of `scripts/build-llms.mjs`, or its components disappear from the
+  inventory with nothing warning about it.
 
-### 3 · Colores, tamaños y espaciados
+### 3 · Colors, sizes and spacing
 
-Todo sale de un token, por su utilidad de Tailwind: `bg-surface-raised`,
-`text-h1`, `rounded-card`, `p-step-lg`, `gap-step-xs`, `h-nav`, `max-w-content`.
+Everything comes from a token, through its Tailwind utility:
+`bg-surface-raised`, `text-h1`, `rounded-card`, `p-step-lg`, `gap-step-xs`,
+`h-nav`, `max-w-content`.
 
-- **El ritmo de página lleva `step`**: `p-step-md`, `gap-step-sm`, `py-step-xl`.
-  No es verbosidad gratuita. `xs, sm, md, lg, xl` son los nombres de la escala
-  `--container-*` de Tailwind, y un `--spacing-md` nuestro se comía `max-w-md` en
-  todos los proyectos consumidores sin dejar rastro. Un `p-md` escrito hoy no
-  falla: cae en la escala numérica y no hace nada. Ver `docs/decisiones.md` § 16.
-- **Cero hex literales.** ESLint lo bloquea en todo `src/**` salvo en
-  `src/tokens/tokens.ts`, que es donde viven.
-- **Nada de valores arbitrarios** tipo `p-[13px]` o `text-[15px]`: si el valor no
-  tiene token, la pregunta es si debería tenerlo, y eso se decide antes.
-- Un token nuevo entra en `tokens.ts`, sale solo en `theme.css` y se usa por su
-  utilidad. No hay paso intermedio. Si su nombre choca con uno de Tailwind,
-  `pnpm check:namespace` lo para: dale un grupo propio, como `step` o `control`.
+- **Page rhythm carries `step`**: `p-step-md`, `gap-step-sm`, `py-step-xl`. It is
+  not gratuitous verbosity. `xs, sm, md, lg, xl` are the names of Tailwind's
+  `--container-*` scale, and a `--spacing-md` of ours was swallowing `max-w-md`
+  in every consuming project with no trace. A `p-md` written today does not fail:
+  it lands on the numeric scale and does nothing. See `docs/decisions.md` § 16.
+- **Zero literal hexes.** ESLint blocks it across all of `src/**` except
+  `src/tokens/tokens.ts`, which is where they live.
+- **No arbitrary values** like `p-[13px]` or `text-[15px]`: if the value has no
+  token, the question is whether it should have one, and that is decided
+  beforehand.
+- A new token goes into `tokens.ts`, comes out on its own in `theme.css` and is
+  used through its utility. There is no intermediate step. If its name collides
+  with a Tailwind one, `pnpm check:namespace` stops you: give it a group of its
+  own, like `step` or `control`.
 
-### 4 · Movimiento
+### 4 · Motion
 
-**Sin animaciones de entrada.** Modales, menús, tooltips y toasts aparecen donde
-van a quedarse. La perilla del `Switch` cambia de posición sin deslizarse.
+**No entrance animations.** Modals, menus, tooltips and toasts appear where they
+will stay. The `Switch` knob changes position without sliding.
 
-La única transición del sistema es `transition-standard`, y por cómo está escrita
-la utilidad **solo puede animar color y borde**.
+The system's only transition is `transition-standard`, and by how the utility is
+written it **can only animate color and border**.
 
-Hay **cuatro excepciones declaradas**, todas envueltas en `motion-safe` y todas
-con el mismo criterio: son realimentación de progreso o de continuidad espacial,
-nunca decoración.
+There are **four declared exceptions**, all wrapped in `motion-safe` and all with
+the same criterion: they are feedback about progress or about spatial continuity,
+never decoration.
 
-| Excepción | Por qué |
+| Exception | Why |
 | --- | --- |
-| Spinner de `Button loading` | Un botón cargando sin movimiento es indistinguible de uno deshabilitado |
-| Panel lateral de `Sheet` | Un panel que entra desde un borde se desliza por definición; quieto es un modal descentrado |
-| Shimmer de `Skeleton` | Un bloque quieto y uno que nunca va a cargar se ven igual |
-| Altura de `Accordion` | No aparece nada: se abre un hueco y lo de abajo se desplaza. Sin transición es un salto y se pierde el sitio en la página |
+| `Button loading` spinner | A loading button with no movement is indistinguishable from a disabled one |
+| `Sheet`'s side panel | A panel entering from an edge slides by definition; held still it is an off-centre modal |
+| `Skeleton`'s shimmer | A block that is still and a block that will never load look the same |
+| `Accordion`'s height | Nothing appears: a gap opens and what is below shifts. With no transition it is a jump and you lose your place on the page |
 
-Una quinta entra por el mismo camino que la cuarta: con el argumento escrito en
-`docs/decisiones.md`, no porque quede mejor. Ver § 20.
+A fifth gets in the same way the fourth did: with the argument written in
+`docs/decisions.md`, not because it looks better. See § 20.
 
-### 5 · Accesibilidad
+### 5 · Accessibility
 
-- `cursor-pointer` explícito en todo lo que se pulsa. Tailwind v4 lo quitó del
-  preflight, así que un `<button>` sin la clase se queda con la flecha del
-  sistema. Dos excepciones deliberadas: `Label`, que apunta a un control pero no
-  es el control, y los ítems de menú de `Select` y `DropdownMenu`, que se quedan
-  en `cursor-default` porque un menú nativo no muestra la manito.
-- Foco visible con `focus-visible:outline-2 outline-offset-2 outline-accent`.
-- Todo control sin texto lleva `aria-label`. `Progress` exige `label` como prop.
-- Sin iconos de librería: los glifos están inline en `src/lib/glyphs.tsx`,
-  heredan `currentColor` y miden 1em.
+- Explicit `cursor-pointer` on everything you press. Tailwind v4 removed it from
+  the preflight, so a `<button>` without the class keeps the system arrow. Two
+  deliberate exceptions: `Label`, which points at a control but is not the
+  control, and the menu items of `Select` and `DropdownMenu`, which stay on
+  `cursor-default` because a native menu does not show the pointing hand.
+- Visible focus with `focus-visible:outline-2 outline-offset-2 outline-accent`.
+- Every control with no text carries an `aria-label`. `Progress` requires `label`
+  as a prop.
+- No icon libraries: the glyphs are inline in `src/lib/glyphs.tsx`, they inherit
+  `currentColor` and they measure 1em.
 
-### 6 · Las stories no son opcionales
+### 6 · The stories are not optional
 
-`pnpm test` monta **cada story** en Chromium y le pasa axe con
-`a11y: { test: 'error' }`, dos veces, una por modo. Una story es a la vez la
-documentación publicada y el test.
+`pnpm test` mounts **every story** in Chromium and runs axe over it with
+`a11y: { test: 'error' }`, twice, once per mode. A story is at once the published
+documentation and the test.
 
-- Una story por estado, no solo el de reposo. El hover y el focus se fuerzan con
-  `parameters: { pseudo: { hover: true } }`, sin pedirle a nadie que pase el
-  ratón por encima.
-- `title: 'Componentes/<Nombre>'` o `'Primitivos/<Nombre>'`.
-- Usa los ayudantes de `stories/utils.tsx`: `Fila`, `Pila`, `Bloque`, `Nota`,
-  `Etiqueta`. `Nota` es donde se escribe qué hay que mirar en esa story.
-- Desactivar una regla de axe necesita motivo escrito al lado, en la story
-  concreta y nunca global. El único precedente es `aria-hidden-focus` en
-  `Select`/`DropdownMenu` abiertos, que es un desacuerdo conocido entre axe y
-  Radix.
+- One story per state, not just the resting one. Hover and focus are forced with
+  `parameters: { pseudo: { hover: true } }`, without asking anybody to move a
+  mouse over it.
+- `title: 'Components/<Name>'` or `'Primitives/<Name>'`.
+- Use the helpers in `stories/utils.tsx`: `Row`, `Stack`, `Block`, `Note`,
+  `FieldLabel`. `Note` is where you write what to look at in that story.
+- Disabling an axe rule needs a reason written beside it, in the specific story
+  and never globally. The only precedent is `aria-hidden-focus` on open
+  `Select`/`DropdownMenu`, which is a known disagreement between axe and Radix.
 
-### 7 · Si tocas un color
+### 7 · If you touch a color
 
-El contraste se **mide**, no se estima, y se anota en el PR. La suite en los dos
-modos es el juez: devolver `light.textMuted` a su valor anterior tira ocho
-stories con «insufficient color contrast of 4.24».
+Contrast is **measured**, not estimated, and it is recorded in the PR. The suite
+in both modes is the judge: putting `light.textMuted` back to its previous value
+takes down eight stories with «insufficient color contrast of 4.24».
 
-Dos trampas ya documentadas, con su tabla en el README:
+Two traps already documented, with their table in the README:
 
-- **`surfaceRaised` es el peor caso en los dos modos**, no `background`. Es donde
-  viven menús y tabs activos. `textMuted` sobre `surfaceRaised` da 4.07 en
-  oscuro: ahí va `textSecondary`.
-- **Un color semántico no es color de texto sobre su propio tinte.** El tinte al
-  8 % es una superficie, así que el texto encima es un token de texto. El color
-  semántico se queda en el borde y en el glifo.
+- **`surfaceRaised` is the worst case in both modes**, not `background`. It is
+  where menus and active tabs live. `textMuted` over `surfaceRaised` gives 4.07
+  in dark: `textSecondary` goes there.
+- **A semantic color is not a text color over its own tint.** The tint at 8 % is
+  a surface, so the text on top of it is a text token. The semantic color stays
+  on the border and on the glyph.
 
-### 8 · Si contradices el documento de identidad
+### 8 · If you contradict the identity document
 
-`docs/design-system.md` y `docs/manual-de-marca.md` son la copia consultable de
-los canvas de Claude Design. Cuando el código y el documento no dicen lo mismo,
-la discrepancia se anota en **`docs/decisiones.md`** con qué había, qué quedó y
-por qué. No se resuelve en silencio ni se deja para después.
+`docs/design-system.md` and `docs/brand-manual.md` are the consultable copy of
+the Claude Design canvases. When the code and the document do not say the same
+thing, the discrepancy is recorded in **`docs/decisions.md`** with what there
+was, what stayed and why. It is not resolved silently and it is not left for
+later.
 
 ---
 
-## Convenciones de código
+## Code conventions
 
-- **El código se escribe en español**: nombres, comentarios, mensajes de error,
-  logs. La API pública en inglés cuando es un nombre de componente o un prop que
-  el ecosistema ya nombra así (`Button`, `variant`, `asChild`, `onSubmitEmail`);
-  lo interno, en español (`Tarjeta`, `Etiqueta`, `plantillaArticulo`, `caras`).
-  Mira un archivo vecino antes de decidir.
-- Comillas simples, punto y coma, 2 espacios, ancho ~90. No hay Prettier: sigue
-  el estilo del archivo que tienes al lado.
-- **Imports con extensión**: `'../lib/cn.ts'`, `'./index.tsx'`. El repo tiene
-  `allowImportingTsExtensions` y lo hace en todas partes.
-- **`import type`** para los tipos. ESLint lo exige
-  (`consistent-type-imports`), y `verbatimModuleSyntax` está activo.
-- **`any` está prohibido** (`no-explicit-any` en `error`).
-- `tsconfig` va en estricto largo: `exactOptionalPropertyTypes`,
-  `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`. Por eso un
-  prop opcional se declara `tags?: readonly string[] | undefined` y no solo con
-  el `?`: con `exactOptionalPropertyTypes`, pasar `undefined` explícito no
-  compila si el tipo no lo admite.
-- Los scripts van en `scripts/*.mjs`, con el porqué en la cabecera y un
-  `console.log` final que empieza por `arrecife · `.
+- **The code is written in English**: identifiers, comments, error messages,
+  logs. User-facing copy stays in Spanish — see «The language of the code» above.
+  Look at a neighbouring file before deciding.
+- Single quotes, semicolons, 2 spaces, ~90 columns. There is no Prettier: follow
+  the style of the file next to you.
+- **Imports carry the extension**: `'../lib/cn.ts'`, `'./index.tsx'`. The repo has
+  `allowImportingTsExtensions` and does it everywhere.
+- **`import type`** for types. ESLint requires it (`consistent-type-imports`), and
+  `verbatimModuleSyntax` is on.
+- **`any` is banned** (`no-explicit-any` set to `error`).
+- `tsconfig` runs strict in the long form: `exactOptionalPropertyTypes`,
+  `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`. That is why
+  an optional prop is declared `tags?: readonly string[] | undefined` and not
+  just with the `?`: with `exactOptionalPropertyTypes`, passing an explicit
+  `undefined` does not compile if the type does not allow it.
+- Scripts go in `scripts/*.mjs`, with the why in the header and a final
+  `console.log` beginning with `arrecife · `.
 
-## Commits, PR y publicación
+## Commits, PRs and publishing
 
-Conventional Commits, en minúscula y sin punto final. El título del PR lo valida
-un workflow.
+Conventional Commits, lowercase and with no trailing period. **In English**, like
+the rest of the repo. The PR title is validated by a workflow.
 
 ```
-feat(components): Hero con el degradado y la pose de la esquina
-fix(badge): separar categoría, estado y métrica
-docs(readme): la tercera corrección de contraste
+feat(components): Hero with the gradient and the corner pose
+fix(badge): separate category, status and metric
+docs(readme): the third contrast correction
 ```
 
-Ámbitos válidos, y la lista es corta a propósito: `tokens`, `primitives`,
-`components`, `brand`, `tema`, `og`, `shiki`, `form`, `chart`, `storybook`,
-`a11y`, `deps`, `deps-dev`, `ci`. **Un cambio de proceso del repo va sin ámbito**
-—`docs:`, `ci:`—: no hay ámbito para «cómo trabajamos», y uno inventado se
-rechaza.
+Valid scopes, and the list is short on purpose: `tokens`, `primitives`,
+`components`, `brand`, `theme`, `og`, `shiki`, `form`, `chart`, `storybook`,
+`a11y`, `deps`, `deps-dev`, `ci`. **A change to the repo's process goes without a
+scope** — `docs:`, `ci:`: there is no scope for «how we work», and an invented one
+is rejected.
 
-La regla que gobierna la lista: **una subruta publicada de `exports` es un
-ámbito.** Es lo que ya hacían `og` y `shiki`, y por eso `tema`, `form` y `chart`
-entraron con ellas en la 0.4.0 en vez de repartirse entre `tokens` y
-`components`. Un ámbito nuevo sin subruta detrás sí hay que discutirlo.
+The rule governing the list: **a published subpath in `exports` is a scope.** It
+is what `og` and `shiki` already did, and it is why `theme`, `form` and `chart`
+joined them in 0.4.0 instead of being split between `tokens` and `components`. A
+new scope with no subpath behind it does have to be discussed.
 
-Cuidado con una trampa: el workflow valida el **título del PR**, no los ámbitos
-de los commits que van dentro. Un `docs(agents):` enterrado en un PR titulado
-`feat(tokens)!:` pasa el lint y llega al CHANGELOG con un ámbito que no existe.
-Ya pasó una vez, en la 0.3.0.
+Careful with one trap: the workflow validates the **PR title**, not the scopes of
+the commits inside it. A `docs(agents):` buried in a PR titled `feat(tokens)!:`
+passes the lint and reaches the CHANGELOG with a scope that does not exist. It
+happened once already, in 0.3.0.
 
-Las ramas siguen el mismo vocabulario que el commit:
-`tipo/descripcion-en-espanol-con-guiones` — `feat/espaciado-con-prefijo-step`,
-`fix/ambito-deps-dev`, `docs/documentos-para-agentes`.
+Branches follow the same vocabulary as the commit:
+`type/description-in-english-with-hyphens` — `feat/spacing-with-step-prefix`,
+`fix/deps-dev-scope`, `docs/documents-for-agents`.
 
-### Cómo se sube la versión
+### One commit is one reviewable unit
 
-**No edites nunca `version` en `package.json` ni `CHANGELOG.md`.** Tampoco
-`.release-please-manifest.json`. Los tres los escribe release-please, y editarlos
-a mano descuadra el manifiesto contra el tag: el workflow de release compara los
-dos y se corta.
+**A PR that touches many files is split into several commits.** Not one commit
+per file and not one giant one: one commit per thing a reviewer can hold in their
+head and accept or reject on its own.
 
-La versión **se pide desde el mensaje del commit**, y es lo único que la decide:
+It is not style. Three concrete things depend on it:
 
-| Lo que escribes en el commit | Lo que sale |
-| ---------------------------- | ----------- |
+- **The review.** A diff of 170 files is not read, it is skimmed. Split into
+  «the code», «the workflows», «the documents», each one gets read.
+- **`git bisect`.** With one commit, bisect points at «everything» and the
+  answer is useless. It is the tool that found the `--spacing-*` clash.
+- **The revert.** Undoing one area is a `git revert` of one commit. Inside a
+  monolithic commit it is surgery.
+
+The split that works in this repo, in this order:
+
+| Commit | What goes in it |
+| --- | --- |
+| the code | `src/`, `stories/`, `scripts/`, the configs, `llms.txt` and its template |
+| the CI | `.github/` — workflows, actions, issue and PR templates |
+| the process documents | `README.md`, `AGENTS.md` |
+| the reference documents | `docs/` |
+| the metadata | `package.json` fields that are not scripts or `exports` |
+
+**Every commit leaves the tree green.** That is the constraint that decides where
+the cut goes, and it is why the first row is one commit and not five: `stories/`
+imports `src/`, and `scripts/build-tokens.mjs` reads `tokens.ts`, so a rename
+that crosses them cannot be half-applied without `pnpm typecheck` or `pnpm build`
+going red. When a change genuinely cannot be split any further, **the commit body
+says why** — otherwise the next reader assumes it was laziness.
+
+Within `src/` the same rule applies as soon as the change is not a cross-cutting
+rename: a new component, its stories and the token it needs are three commits if
+each one stands on its own, and one if they do not.
+
+The types can differ between the commits of one PR — `feat(components)` for the
+code and `ci:` for the workflow — as long as the PR title carries the one that
+decides the version. See the trap two paragraphs above.
+
+### How the version goes up
+
+**Never edit `version` in `package.json` or `CHANGELOG.md` by hand.** Nor
+`.release-please-manifest.json`. All three are written by release-please, and
+editing them by hand puts the manifest out of step with the tag: the release
+workflow compares the two and stops.
+
+The version **is requested from the commit message**, and that is the only thing
+that decides it:
+
+| What you write in the commit | What comes out |
+| ---------------------------- | -------------- |
 | `fix(...)`, `perf(...)`      | patch · `0.3.0` → `0.3.1` |
 | `feat(...)`                  | minor · `0.3.0` → `0.4.0` |
-| `feat(...)!` + footer `BREAKING CHANGE:` | minor · `0.3.0` → `0.4.0` |
-| `docs`, `ci`, `refactor`, `test`, `build` | **patch**, también cortan versión |
-| `chore`, `style`             | nada |
+| `feat(...)!` + `BREAKING CHANGE:` footer | minor · `0.3.0` → `0.4.0` |
+| `docs`, `ci`, `refactor`, `test`, `build` | **patch**, they cut a version too |
+| `chore`, `style`             | nothing |
 
-La cuarta fila sorprende y es la que hay que tener presente. En este repo
-**`docs:` corta una release**: dos commits de documentación seguidos abrieron un
-`chore(main): release 0.3.1`. No es el comportamiento por defecto de
-release-please, sale de nuestro `changelog-sections`: **todo tipo listado ahí sin
-`hidden: true` es releasable**, y ahí están `docs`, `ci`, `refactor`, `test` y
-`build`. Los únicos ocultos, y por tanto los únicos mudos, son `chore` y `style`.
+The fourth row is the surprising one and the one to keep in mind. In this repo
+**`docs:` cuts a release**: two documentation commits in a row opened a
+`chore(main): release 0.3.1`. It is not release-please's default behaviour, it
+comes from our `changelog-sections`: **every type listed there without
+`hidden: true` is releasable**, and `docs`, `ci`, `refactor`, `test` and `build`
+are all there. The only hidden ones, and therefore the only mute ones, are
+`chore` and `style`.
 
-De ahí una distinción que hay que hacer al elegir el tipo:
+Hence a distinction to make when choosing the type:
 
-- **Documentación que se publica** —`README.md`, `llms.txt`, `docs/` que lee un
-  consumidor— va como `docs:`, y que corte un patch está bien: `llms.txt` viaja
-  dentro del tarball, así que el paquete de verdad cambió.
-- **Documentación de proceso del repo** —`AGENTS.md`, notas de workflows— va como
-  `chore:`. No entra en `files`, así que un `docs:` publicaría en npm un paquete
-  idéntico al anterior salvo por el número de versión.
+- **Documentation that gets published** — `README.md`, `llms.txt`, the parts of
+  `docs/` a consumer reads — goes as `docs:`, and cutting a patch is right:
+  `llms.txt` travels inside the tarball, so the package really did change.
+- **Documentation about the repo's process** — `AGENTS.md`, workflow notes — goes
+  as `chore:`. It is not in `files`, so a `docs:` would publish to npm a package
+  identical to the previous one except for the version number.
 
-`release-please-config.json` tiene `bump-minor-pre-major: true`, así que mientras
-estemos en `0.x` **un cambio incompatible sube la minor, no la major**. El `!` y
-el footer siguen siendo obligatorios: no cambian el número, pero son lo que hace
-que el CHANGELOG lo anuncie como ruptura en vez de esconderlo entre novedades.
+`release-please-config.json` has `bump-minor-pre-major: true`, so while we are on
+`0.x` **a breaking change bumps the minor, not the major**. The `!` and the
+footer are still mandatory: they do not change the number, but they are what
+makes the CHANGELOG announce it as a break instead of hiding it among features.
 
-Un cambio incompatible se escribe así:
+A breaking change is written like this:
 
 ```
-feat(tokens)!: el ritmo de página lleva step, para no comerse max-w-*
+feat(tokens)!: page rhythm carries step, so it stops swallowing max-w-*
 
-<el porqué, como en cualquier commit del repo>
+<the why, as in any commit in this repo>
 
-BREAKING CHANGE: `p-md` pasa a ser `p-step-md` y `spacing.md` a `spacing.stepMd`.
-Los valores no cambian. Migración en docs/migracion-0.3.md.
+BREAKING CHANGE: `p-md` becomes `p-step-md` and `spacing.md` becomes
+`spacing.stepMd`. The values do not change. Migration in docs/migration-0.3.md.
 
-<todo lo que quieras: aquí abajo ya no lo lee nadie más que quien abra el commit>
+<anything you like: nobody reads down here except whoever opens the commit>
 ```
 
-**Del footer solo llega al CHANGELOG el PRIMER PÁRRAFO.** Lo que va después de la
-primera línea en blanco se pierde, y se pierde en silencio. Comprobado en la
-0.3.0: el footer llevaba dos tablas y tres avisos, y en el CHANGELOG salió una
-sola frase.
+**Only the FIRST PARAGRAPH of the footer reaches the CHANGELOG.** Whatever comes
+after the first blank line is lost, and it is lost silently. Verified in 0.3.0:
+the footer carried two tables and three warnings, and a single sentence came out
+in the CHANGELOG.
 
-De ahí las dos reglas que importan:
+Hence the two rules that matter:
 
-1. **Ese párrafo tiene que valerse solo**, y se escribe para quien va a migrar, no
-   para quien hizo el cambio. Cabe justo lo esencial: qué se renombra, si los
-   valores cambian, y a dónde ir para el resto. Ni una tabla, ni un ejemplo de
-   código: no van a llegar.
-2. **La migración de verdad va a un documento en `docs/`**, y el párrafo lo
-   enlaza. No es un premio de consolación: el documento existe antes de que se
-   corte la release, se puede enlazar desde el README mientras tanto, y no está
-   limitado a un párrafo. `docs/migracion-0.3.md` es el precedente.
+1. **That paragraph has to stand on its own**, and it is written for whoever is
+   going to migrate, not for whoever made the change. Exactly the essentials fit:
+   what gets renamed, whether the values change, and where to go for the rest.
+   Not one table, not one code example: they are not going to make it.
+2. **The real migration goes in a document in `docs/`**, and the paragraph links
+   it. It is not a consolation prize: the document exists before the release is
+   cut, it can be linked from the README in the meantime, and it is not limited
+   to one paragraph. `docs/migration-0.3.md` is the precedent.
 
-Los `Co-Authored-By:` y demás pies de página van al final del todo, nunca en
-medio del footer.
+`Co-Authored-By:` and other footers go at the very end, never in the middle of
+the footer.
 
-### `main` está protegida
+### `main` is protected
 
-No se empuja a `main`. Ni con `--force`, ni siendo el dueño del repo: el ruleset
-rechaza el push antes de que llegue. Todo entra por PR.
+You do not push to `main`. Not with `--force`, not as the repo's owner: the
+ruleset rejects the push before it lands. Everything goes in through a PR.
 
-- **Los seis checks tienen que estar en verde**: ESLint, `Build · Node 22.x`,
+- **The six checks have to be green**: ESLint, `Build · Node 22.x`,
   `Build · Node 24.x`, `Accesibilidad y contraste`, `Formato de commit
-  convencional` y `Escaneo de seguridad`. Ninguno tiene filtro de `paths`, así
-  que los seis corren en todos los PRs y ninguno se queda sin reportar.
-- **Un PR de fuera necesita la aprobación de @Proskynete**, y solo la suya:
-  `CODEOWNERS` es `* @Proskynete` y la regla exige revisión de code owner, así
-  que la aprobación de cualquier otro no cuenta.
-- **El dueño puede mergear sus propios PRs sin aprobación**, porque GitHub no
-  deja aprobarse a uno mismo y si no se quedaría atascado. El bypass está
-  limitado a `pull_request`: sirve para mergear, **no** para empujar a `main`.
-  No es automático, hay que pedirlo: `gh pr merge <n> --rebase --admin`, o el
-  botón de la interfaz que avisa de que te saltas la regla. Un `gh pr merge` a
-  secas responde «the base branch policy prohibits the merge», y eso **no** es
-  que esté roto: es la regla haciendo su trabajo.
-- **Solo squash y rebase.** El merge commit está desactivado en el repo y el
-  historial es lineal por regla. `main` nunca ha tenido un merge commit.
-- La rama se borra sola al mergear.
+  convencional` and `Escaneo de seguridad`. None of them has a `paths` filter, so
+  all six run on every PR and none is left unreported.
+- **A PR from outside needs @Proskynete's approval**, and only theirs:
+  `CODEOWNERS` is `* @Proskynete` and the rule requires code-owner review, so
+  anybody else's approval does not count.
+- **The owner can merge their own PRs without approval**, because GitHub does not
+  let you approve yourself and otherwise they would be stuck. The bypass is
+  limited to `pull_request`: it is for merging, **not** for pushing to `main`. It
+  is not automatic, it has to be asked for: `gh pr merge <n> --rebase --admin`, or
+  the interface button that warns you are skipping the rule. A plain
+  `gh pr merge` answers «the base branch policy prohibits the merge», and that is
+  **not** something being broken: it is the rule doing its job.
+- **Squash and rebase only.** The merge commit is disabled on the repo and the
+  history is linear by rule. `main` has never had a merge commit.
+- The branch deletes itself on merge.
 
-Si un check se cuelga o no reporta, el dueño puede forzar el merge del PR desde
-la interfaz. Es la única salida, y deja rastro.
+If a check hangs or fails to report, the owner can force the merge from the
+interface. It is the only way out, and it leaves a trace.
 
-**No publiques a npm a mano.** El workflow publica con OIDC y genera procedencia.
+**Do not publish to npm by hand.** The workflow publishes with OIDC and generates
+provenance.
 
-**Ni despliegues el Storybook a mano.** El job `desplegar` de `release.yml` lo
-compila y lo sube a Vercel **después** de que npm publique, y solo entonces: el
-sitio y el paquete tienen que contar la misma versión. Por eso el proyecto de
-Vercel no está conectado a GitHub —la integración de Git construiría en cada
-push a `main`— y por eso el job sube el build ya hecho con `--prebuilt`, sin
-que Vercel ejecute nada. Necesita `VERCEL_TOKEN` como secreto y `VERCEL_ORG_ID`
-y `VERCEL_PROJECT_ID` como variables; si faltan, avisa y no rompe la release.
+**And do not deploy Storybook by hand either.** `release.yml`'s `deploy` job
+builds it and uploads it to Vercel **after** npm publishes, and only then: the
+site and the package have to tell the same version. That is why the Vercel
+project is not connected to GitHub — the Git integration would build on every
+push to `main` — and why the job uploads the already-built output with
+`--prebuilt`, without Vercel executing anything. It needs `VERCEL_TOKEN` as a
+secret and `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` as variables; if they are
+missing, it warns and does not break the release.
 
-## Errores que se cometen en este repo
+## Mistakes that get made in this repo
 
-Por orden de frecuencia real:
+In order of how often they actually happen:
 
-1. Escribir un hex o un valor arbitrario «solo para este caso». ESLint lo para;
-   la solución es un token, no un `eslint-disable`.
-2. Importar algo en `src/tokens/`. Rompe `./og`, `./shiki` y el sitio Astro.
-3. Añadir una animación de entrada porque «queda mejor». No entra.
-4. Añadir `lucide-react` u otra librería de iconos. Se la comen los cinco
-   proyectos; el glifo va inline en `src/lib/glyphs.tsx`.
-5. Cambiar props sin regenerar `llms.txt`. `pnpm check:llms` lo para en CI.
-6. Correr la suite en un solo modo. Un color falla en uno y pasa en el otro.
-7. Añadir una story sin estados: hover y focus se fuerzan, no se confían.
-8. Escribir un componente nuevo que ya existe como primitivo con otro nombre.
-9. Escribir `p-md` o `gap-sm` por costumbre. El escalón es `p-step-md`, y el
-   nombre viejo no da error: no hace nada.
+1. Writing a hex or an arbitrary value «just for this one case». ESLint stops it;
+   the fix is a token, not an `eslint-disable`.
+2. Importing something in `src/tokens/`. It breaks `./og`, `./shiki` and the
+   Astro site.
+3. Adding an entrance animation because «it looks better». It does not get in.
+4. Adding `lucide-react` or another icon library. All five projects pay for it;
+   the glyph goes inline in `src/lib/glyphs.tsx`.
+5. Changing props without regenerating `llms.txt`. `pnpm check:llms` stops it in
+   CI.
+6. Running the suite in one mode only. A color fails in one and passes in the
+   other.
+7. Adding a story with no states: hover and focus are forced, not trusted.
+8. Writing a new component that already exists as a primitive under another name.
+9. Writing `p-md` or `gap-sm` out of habit. The step is `p-step-md`, and the old
+   name raises no error: it does nothing.
+10. Writing an identifier or a comment in Spanish. Since 0.6.0 the code is in
+    English; only user-facing copy stays in Spanish.
+11. Dropping a whole PR into a single commit because «it is all the same
+    change». It happened on the 0.6.0 migration: 171 files in one commit, which
+    is a diff nobody reads and a bisect that points at everything. See «One
+    commit is one reviewable unit».

@@ -1,9 +1,9 @@
 name: "🔦 Lint"
 
 on:
-  # Solo `main` en push. Una rama con PR abierto ya dispara por `pull_request`,
-  # y escuchar los dos eventos hacía correr todo DOS veces por cada empujón:
-  # el doble de minutos para el mismo commit.
+  # `main` only on push. A branch with an open PR already fires through
+  # `pull_request`, and listening to both events ran everything TWICE per push:
+  # double the minutes for the same commit.
   push:
     branches:
       - main
@@ -23,13 +23,13 @@ jobs:
     name: ESLint
     runs-on: ubuntu-latest
     steps:
-      - name: 📚 Clonar el repositorio
+      - name: 📚 Check out the repository
         uses: actions/checkout@v7
 
-      - name: 🟢 Preparar el entorno
+      - name: 🟢 Set up the environment
         uses: ./.github/actions/setup
 
-      # Incluye el veto a hex literales fuera de tokens.ts, que es la regla
-      # que sostiene toda la librería.
-      - name: 🔦 Ejecutar ESLint
+      # Includes the ban on literal hexes outside tokens.ts, which is the rule
+      # the whole library rests on.
+      - name: 🔦 Run ESLint
         run: pnpm lint

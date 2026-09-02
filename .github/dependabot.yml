@@ -14,8 +14,8 @@ updates:
       - "📦 Dependencies"
     open-pull-requests-limit: 10
     groups:
-      # Radix son dieciséis paquetes que suben juntos. En PRs separados es
-      # ruido; agrupados es una sola revisión.
+      # Radix is sixteen packages that go up together. In separate PRs it is
+      # noise; grouped it is a single review.
       radix:
         patterns:
           - "@radix-ui/*"

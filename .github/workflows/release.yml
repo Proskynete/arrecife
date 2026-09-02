@@ -1,9 +1,9 @@
-name: "🏷️ Release y publicación"
+name: "🏷️ Release and publish"
 
-# Un solo archivo a propósito. La publicación de confianza de npm casa el token
-# OIDC contra UN nombre de workflow, y con un workflow reutilizable hay dos
-# candidatos —el que llama y el llamado— sin forma obvia de saber cuál pide
-# npm. Con un archivo, la configuración en npmjs es inequívoca: release.yml.
+# One file on purpose. npm's trusted publishing matches the OIDC token against
+# ONE workflow name, and with a reusable workflow there are two candidates — the
+# caller and the callee — with no obvious way to know which one npm asks for.
+# With one file, the configuration on npmjs is unambiguous: release.yml.
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       dry-run:
-        description: "Ensayo: verifica y empaqueta, pero no publica"
+        description: "Dry run: verify and pack, but do not publish"
         type: boolean
         default: true
 
@@ -24,27 +24,28 @@ permissions:
   contents: read
 
 jobs:
-  # release-please lee los commits convencionales desde el último tag y mantiene
-  # abierto un PR con el bump de versión y el CHANGELOG. Mientras ese PR siga
-  # abierto se actualiza solo con cada merge a main; al mergearlo, corta el tag
-  # y crea el release.
+  # release-please reads the conventional commits since the last tag and keeps a
+  # PR open with the version bump and the CHANGELOG. While that PR stays open it
+  # updates itself on every merge to main; when it is merged, it cuts the tag and
+  # creates the release.
   #
-  # La versión no la decide nadie a mano: la deciden los `feat:` y los `fix:`
-  # que ya se escriben, y que `lint-pr-title` ya obliga a escribir bien.
-  preparar:
-    name: Preparar la versión
+  # Nobody decides the version by hand: it is decided by the `feat:` and `fix:`
+  # commits that already get written, and that `lint-pr-title` already forces to
+  # be written correctly.
+  prepare:
+    name: Prepare the version
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    # Los tres que pide el README de la acción. `issues: write` faltaba: es el
-    # que necesita para mantener sus etiquetas (`autorelease: pending`,
-    # `autorelease: tagged`), que son con las que sabe qué PR de versión está
-    # sin cortar.
+    # The three the action's README asks for. `issues: write` was missing: it is
+    # what it needs to maintain its labels (`autorelease: pending`,
+    # `autorelease: tagged`), which are how it knows which release PR is still
+    # uncut.
     permissions:
       contents: write
       issues: write
       pull-requests: write
     outputs:
-      publicar: ${{ steps.release.outputs.releases_created }}
+      publish: ${{ steps.release.outputs.releases_created }}
       tag: ${{ steps.release.outputs.tag_name }}
     steps:
       - name: 🏷️ release-please
@@ -54,31 +55,31 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  publicar:
-    name: Verificar y publicar
-    needs: preparar
-    # Corre cuando release-please acaba de cortar una versión, o a mano para el
-    # ensayo. En el ensayo `preparar` no corre, así que hay que dejar pasar el
-    # estado «skipped» sin dejar pasar el «failure».
+  publish:
+    name: Verify and publish
+    needs: prepare
+    # Runs when release-please has just cut a version, or by hand for the dry
+    # run. In a dry run `prepare` does not run, so the «skipped» status has to be
+    # let through without letting «failure» through.
     if: >-
       ${{ !cancelled()
-        && needs.preparar.result != 'failure'
+        && needs.prepare.result != 'failure'
         && (github.event_name == 'workflow_dispatch'
-            || needs.preparar.outputs.publicar == 'true') }}
+            || needs.prepare.outputs.publish == 'true') }}
     runs-on: ubuntu-latest
     environment: npm
     permissions:
       contents: read
-      # Lo que hace posible la publicación de confianza: GitHub emite un token
-      # OIDC que prueba «este build salió de este repo y de este workflow», y
-      # npm lo cambia por permiso de publicación. Sin esto no hay ni OIDC ni
-      # procedencia.
+      # What makes trusted publishing possible: GitHub issues an OIDC token
+      # proving «this build came out of this repo and this workflow», and npm
+      # exchanges it for permission to publish. Without this there is neither
+      # OIDC nor provenance.
       id-token: write
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
-      TAG: ${{ needs.preparar.outputs.tag }}
-      # A nivel de job porque el contexto `secrets` no existe dentro de un
-      # `if:`. Es el rodeo estándar para preguntar «¿está puesto?».
+      TAG: ${{ needs.prepare.outputs.tag }}
+      # At job level because the `secrets` context does not exist inside an
+      # `if:`. It is the standard workaround for asking «is it set?».
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     steps:
@@ -90,147 +91,149 @@ jobs:
         with:
           playwright: "true"
 
-      # La publicación de confianza necesita npm 11.5.1 o superior, que es donde
-      # entró el intercambio OIDC. Node 22 trae npm 10, así que no basta con la
-      # versión que venga en el runner.
-      - name: ⬆️ Actualizar npm
+      # Trusted publishing needs npm 11.5.1 or later, which is where the OIDC
+      # exchange landed. Node 22 ships npm 10, so whatever version the runner
+      # brings is not enough.
+      - name: ⬆️ Update npm
         run: |
           npm install -g npm@latest
           echo "npm $(npm --version)"
 
-      # La versión sale de package.json, no del tag. Si no coinciden, el release
-      # apunta a un código que no es el que se publica — y eso no se deshace:
-      # npm no permite reutilizar una versión.
-      - name: 🔖 Comprobar que el tag y la versión coinciden
+      # The version comes from package.json, not from the tag. If they do not
+      # match, the release points at code that is not what gets published — and
+      # that cannot be undone: npm does not allow reusing a version.
+      - name: 🔖 Check that the tag and the version match
         if: env.TAG != ''
         run: |
           version="$(node -p "require('./package.json').version")"
           tag="${TAG#v}"
           echo "package.json $version · tag $tag"
           if [ "$version" != "$tag" ]; then
-            echo "::error::El tag ($tag) no coincide con package.json ($version)."
+            echo "::error::The tag ($tag) does not match package.json ($version)."
             exit 1
           fi
 
-      - name: 🚫 Rechazar la versión de plantilla
+      - name: 🚫 Reject the template version
         run: |
           version="$(node -p "require('./package.json').version")"
           if [ "$version" = "0.0.0" ]; then
-            echo "::error::package.json sigue en 0.0.0. Súbelo antes de publicar."
+            echo "::error::package.json is still on 0.0.0. Bump it before publishing."
             exit 1
           fi
 
       - name: 🔦 ESLint
         run: pnpm lint
 
-      - name: 🧮 Tipos
+      - name: 🧮 Types
         run: pnpm typecheck
 
-      - name: 🏗️ Compilar
+      - name: 🏗️ Build
         run: pnpm build
 
-      - name: 📦 Verificar la superficie publicada
+      - name: 📦 Verify the published surface
         run: pnpm check:exports
 
-      # La suite completa antes de publicar, no solo en el PR. Entre que el PR
-      # pasó y la versión se corta pueden haber entrado otros merges.
-      - name: 🧪 Regresión de tokens contra Tailwind
-        run: pnpm test:unidad
+      # The full suite before publishing, not only on the PR. Other merges may
+      # have landed between the PR passing and the version being cut.
+      - name: 🧪 Token regression against Tailwind
+        run: pnpm test:unit
 
-      - name: 🌑 Suite en modo oscuro
-        run: pnpm test:oscuro
+      - name: 🌑 Suite in dark mode
+        run: pnpm test:dark
 
-      - name: ☀️ Suite en modo claro
-        run: pnpm test:claro
+      - name: ☀️ Suite in light mode
+        run: pnpm test:light
 
-      # `npm pack` respeta `files`, así que esto muestra exactamente lo que va a
-      # viajar. Es el último punto donde se puede ver un archivo de más.
-      - name: 👀 Listar el contenido del tarball
+      # `npm pack` respects `files`, so this shows exactly what is going to
+      # travel. It is the last point where an extra file can be spotted.
+      - name: 👀 List the tarball contents
         run: |
           npm pack --pack-destination /tmp --ignore-scripts >/dev/null
           tarball="$(ls /tmp/*.tgz)"
           {
-            echo "### Contenido de $(basename "$tarball")"
+            echo "### Contents of $(basename "$tarball")"
             echo '```'
             tar -tzf "$tarball" | sed 's|^package/||' | sort
             echo '```'
-            echo "peso: $(du -h "$tarball" | cut -f1)"
+            echo "size: $(du -h "$tarball" | cut -f1)"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # Escalón intermedio, y temporal. La publicación de confianza no se puede
-      # configurar en un paquete que todavía no existe, así que la PRIMERA
-      # versión necesita token. Cuando esté configurada en npmjs, se borra el
-      # secreto y este paso se salta solo: OIDC toma el relevo sin tocar nada.
-      - name: 🔑 Token de npm, si todavía hace falta
+      # An intermediate step, and a temporary one. Trusted publishing cannot be
+      # configured on a package that does not exist yet, so the FIRST version
+      # needs a token. Once it is configured on npmjs, the secret gets deleted
+      # and this step skips itself: OIDC takes over with nothing to touch.
+      - name: 🔑 npm token, if it is still needed
         if: env.DRY_RUN != 'true' && env.NPM_TOKEN != ''
         run: |
-          echo "::warning::Publicando con token. Configura la publicación de confianza y borra el secreto NPM_TOKEN."
+          echo "::warning::Publishing with a token. Configure trusted publishing and delete the NPM_TOKEN secret."
           printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" >> "$HOME/.npmrc"
 
-      # Se publica con el CLI de npm y no con `pnpm publish` a propósito: el
-      # intercambio OIDC lo implementa npm. El paquete no usa el protocolo
-      # `workspace:`, así que npm empaqueta exactamente lo mismo.
+      # It publishes with npm's CLI and not with `pnpm publish` on purpose: the
+      # OIDC exchange is implemented by npm. The package does not use the
+      # `workspace:` protocol, so npm packs exactly the same thing.
       #
-      # `--provenance` firma el paquete con un enlace verificable a este commit
-      # y a este workflow. Con publicación de confianza sale sola, pero dejarlo
-      # explícito hace que también salga durante el escalón del token.
-      - name: 🚀 Publicar
+      # `--provenance` signs the package with a verifiable link to this commit
+      # and this workflow. With trusted publishing it comes out on its own, but
+      # leaving it explicit makes it come out during the token step too.
+      - name: 🚀 Publish
         if: env.DRY_RUN != 'true'
         run: npm publish --access public --provenance
 
-      # `--dry-run` consulta el registro, así que choca con la única cosa que
-      # en un ensayo NO puede estar bien: la versión. `package.json` apunta a
-      # la que ya se publicó salvo en la ventana entre que release-please sube
-      # el número y el workflow publica — o sea, casi nunca. Sin este rodeo el
-      # ensayo está permanentemente en rojo por lo único que no prueba nada, y
-      # de paso se lleva por delante los jobs que dependen de él.
+      # `--dry-run` queries the registry, so it collides with the one thing that
+      # in a dry run CANNOT be right: the version. `package.json` points at the
+      # one already published except in the window between release-please bumping
+      # the number and the workflow publishing — that is, almost never. Without
+      # this workaround the dry run is permanently red over the one thing it does
+      # not prove, and it takes the jobs depending on it down with it.
       #
-      # El resto de fallos siguen fallando: solo se perdona ese mensaje.
-      - name: 🧪 Ensayo, sin publicar
+      # Every other failure still fails: only that message is forgiven.
+      - name: 🧪 Dry run, without publishing
         if: env.DRY_RUN == 'true'
         run: |
-          estado=0
-          salida="$(npm publish --access public --dry-run 2>&1)" || estado=$?
-          echo "$salida"
-          if [ "$estado" -ne 0 ]; then
-            if echo "$salida" | grep -q 'cannot publish over'; then
-              echo "::notice::La versión ya está publicada; en un ensayo es lo esperado."
+          status=0
+          output="$(npm publish --access public --dry-run 2>&1)" || status=$?
+          echo "$output"
+          if [ "$status" -ne 0 ]; then
+            if echo "$output" | grep -q 'cannot publish over'; then
+              echo "::notice::The version is already published; in a dry run that is expected."
             else
-              exit "$estado"
+              exit "$status"
             fi
           fi
-          echo "Ensayo: se verificó todo y NO se publicó." >> "$GITHUB_STEP_SUMMARY"
+          echo "Dry run: everything was verified and NOTHING was published." >> "$GITHUB_STEP_SUMMARY"
 
-  # El Storybook es la documentación publicada de la librería: cada story es a
-  # la vez el ejemplo y el test que lo verifica. Por eso se despliega aquí y no
-  # en `ci.yml` — el sitio y el paquete tienen que contar la MISMA versión. Un
-  # Storybook por delante de npm enseña componentes que nadie puede instalar.
+  # Storybook is the library's published documentation: every story is both the
+  # example and the test that verifies it. That is why it is deployed here and
+  # not in `ci.yml` — the site and the package have to tell the SAME version. A
+  # Storybook ahead of npm shows components nobody can install.
   #
-  # De ahí también que el proyecto de Vercel NO esté conectado a GitHub: con la
-  # integración de Git, Vercel construye por su cuenta en cada push a main y ya
-  # no hay forma de que espere al tag. El único que despliega es este job.
-  desplegar:
-    name: Publicar el Storybook
-    needs: publicar
-    # `publicar` ya filtra por «hay release»: si no se cortó versión, no llega
-    # aquí. El ensayo SÍ pasa, y a propósito: un ensayo que se salta este job
-    # no puede decir si el job funciona, y era el único paso del workflow que no
-    # se podía probar sin gastar una versión. Lo que cambia en el ensayo es el
-    # destino — preview, no producción—, no si corre.
+  # Hence also that the Vercel project is NOT connected to GitHub: with the Git
+  # integration, Vercel builds on its own on every push to main and there is no
+  # way for it to wait for the tag. The only thing that deploys is this job.
+  deploy:
+    name: Publish Storybook
+    needs: publish
+    # `publish` already filters on «there is a release»: if no version was cut,
+    # nothing reaches here. The dry run DOES pass through, on purpose: a dry run
+    # that skips this job cannot tell you whether the job works, and it was the
+    # only step in the workflow that could not be tested without spending a
+    # version. What changes in a dry run is the destination — a preview, not
+    # production — not whether it runs.
     #
-    # El `!cancelled()` es la misma trampa que ya rodea `publicar`, una casilla
-    # más abajo: en el ensayo `preparar` se salta, y un «skipped» se propaga por
-    # TODO el grafo aguas abajo, no solo al job que lo necesita directamente. Sin
-    # esto, `publicar` pasaba en verde y este job se saltaba igual.
-    if: ${{ !cancelled() && needs.publicar.result == 'success' }}
+    # The `!cancelled()` is the same trap that already surrounds `publish`, one
+    # box below: in a dry run `prepare` is skipped, and a «skipped» propagates
+    # through the WHOLE downstream graph, not just to the job that needs it
+    # directly. Without this, `publish` passed green and this job skipped anyway.
+    if: ${{ !cancelled() && needs.publish.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
       DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
-      # Los dos ids NO son secretos: salen de `.vercel/project.json` en
-      # cualquier clon que haga `vercel link`. Van como variables del repo para
-      # que se lean en el log cuando algo no cuadra. El token sí es secreto.
+      # The two ids are NOT secrets: they come out of `.vercel/project.json` in
+      # any clone that runs `vercel link`. They go in as repo variables so they
+      # are readable in the log when something does not add up. The token IS a
+      # secret.
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -238,66 +241,66 @@ jobs:
       - name: 📚 Clonar el repositorio
         uses: actions/checkout@v7
 
-      # Sin Chromium: aquí no corre la suite. Ya corrió entera en `publicar`.
+      # No Chromium: the suite does not run here. It already ran in full in `publish`.
       - name: 🟢 Preparar el entorno
         uses: ./.github/actions/setup
 
-      # Falta de credenciales avisa, no rompe. Para cuando este job corre, npm
-      # YA publicó y el tag YA está cortado: un rojo aquí se leería como «la
-      # release falló», que es justo lo contrario de lo que pasó. El aviso se
-      # queda en el resumen del run hasta que los secretos estén puestos.
-      - name: 🔑 Comprobar las credenciales de Vercel
-        id: credenciales
+      # Missing credentials warn, they do not break. By the time this job runs,
+      # npm HAS published and the tag HAS been cut: a red here would read as «the
+      # release failed», which is the exact opposite of what happened. The
+      # warning stays in the run summary until the secrets are in place.
+      - name: 🔑 Check the Vercel credentials
+        id: credentials
         run: |
           if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
-            echo "::warning::Sin VERCEL_TOKEN o VERCEL_PROJECT_ID: el Storybook no se despliega."
-            echo "⚠️ Storybook NO desplegado: faltan las credenciales de Vercel." >> "$GITHUB_STEP_SUMMARY"
-            echo "listo=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No VERCEL_TOKEN or VERCEL_PROJECT_ID: Storybook is not deployed."
+            echo "⚠️ Storybook NOT deployed: the Vercel credentials are missing." >> "$GITHUB_STEP_SUMMARY"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
           else
-            echo "listo=true" >> "$GITHUB_OUTPUT"
+            echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: 📖 Compilar el Storybook
-        if: steps.credenciales.outputs.listo == 'true'
+      - name: 📖 Build Storybook
+        if: steps.credentials.outputs.ready == 'true'
         run: pnpm build-storybook
 
-      # Se sube ya compilado. Con el Build Output API y `--prebuilt`, Vercel no
-      # ejecuta nada: sirve lo que hay en `.vercel/output/static` tal cual. Así
-      # el Storybook lo compila el mismo Node y el mismo lockfile que acaban de
-      # verificar la librería, y no la detección de framework de Vercel.
-      - name: 📦 Empaquetar con el Build Output API
-        if: steps.credenciales.outputs.listo == 'true'
+      # It is uploaded already built. With the Build Output API and `--prebuilt`,
+      # Vercel executes nothing: it serves what is in `.vercel/output/static` as
+      # is. That way Storybook is built by the same Node and the same lockfile
+      # that just verified the library, and not by Vercel's framework detection.
+      - name: 📦 Pack with the Build Output API
+        if: steps.credentials.outputs.ready == 'true'
         run: |
           mkdir -p .vercel/output/static
           cp -R storybook-static/. .vercel/output/static/
           echo '{"version":3}' > .vercel/output/config.json
 
-      # El CLI va fijado a una major: `latest` en un `npx` de CI es una
-      # dependencia sin lockfile que puede cambiar entre dos releases.
+      # The CLI is pinned to a major: `latest` in a CI `npx` is a dependency with
+      # no lockfile that can change between two releases.
       #
-      # Las dos URLs del resumen no son la misma cosa, y conviene saberlo antes
-      # de pensar que algo se rompió: la del despliegue es única de este run y
-      # está detrás del SSO del equipo —la protección de Vercel es
-      # `all_except_custom_domains`—, así que abrirla desde fuera devuelve un
-      # 302 al login. La pública es el dominio propio.
-      - name: 🚀 Desplegar
-        if: steps.credenciales.outputs.listo == 'true'
+      # The two URLs in the summary are not the same thing, and it is worth
+      # knowing before assuming something broke: the deployment one is unique to
+      # this run and sits behind the team's SSO — Vercel's protection is
+      # `all_except_custom_domains` — so opening it from outside returns a 302 to
+      # the login. The public one is the custom domain.
+      - name: 🚀 Deploy
+        if: steps.credentials.outputs.ready == 'true'
         run: |
           version="$(node -p "require('./package.json').version")"
-          # Sin `--prod` el despliegue es un preview: mismo camino entero, con
-          # las mismas credenciales y el mismo tarball, sin tocar el dominio
-          # público. Es lo que hace verificable el ensayo.
-          destino=""
-          [ "$DRY_RUN" != "true" ] && destino="--prod"
-          url="$(npx --yes vercel@59 deploy --prebuilt $destino --yes --token "$VERCEL_TOKEN")"
+          # Without `--prod` the deployment is a preview: the whole same path,
+          # with the same credentials and the same tarball, without touching the
+          # public domain. It is what makes the dry run verifiable.
+          target=""
+          [ "$DRY_RUN" != "true" ] && target="--prod"
+          url="$(npx --yes vercel@59 deploy --prebuilt $target --yes --token "$VERCEL_TOKEN")"
           {
             if [ "$DRY_RUN" = "true" ]; then
-              echo "### Ensayo del Storybook $version"
+              echo "### Storybook dry run $version"
               echo "- preview: $url"
-              echo "- el dominio público NO se tocó."
+              echo "- the public domain was NOT touched."
             else
               echo "### Storybook $version"
-              echo "- este despliegue (pide sesión del equipo): $url"
-              echo "- público: https://arrecife.eduardoalvarez.dev"
+              echo "- this deployment (asks for a team session): $url"
+              echo "- public: https://arrecife.eduardoalvarez.dev"
             fi
           } >> "$GITHUB_STEP_SUMMARY"

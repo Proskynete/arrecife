@@ -1,9 +1,9 @@
-name: "👾 Integración continua"
+name: "👾 Continuous integration"
 
 on:
-  # Solo `main` en push. Una rama con PR abierto ya dispara por `pull_request`,
-  # y escuchar los dos eventos hacía correr todo DOS veces por cada empujón:
-  # el doble de minutos para el mismo commit.
+  # `main` only on push. A branch with an open PR already fires through
+  # `pull_request`, and listening to both events ran everything TWICE per push:
+  # double the minutes for the same commit.
   push:
     branches:
       - main
@@ -11,8 +11,8 @@ on:
     branches:
       - main
 
-# `head_ref` en un PR y `ref` en main: así un empujón nuevo cancela el anterior
-# de la MISMA rama, que es lo que se quiere, sin cancelar el de otra.
+# `head_ref` on a PR and `ref` on main: that way a new push cancels the previous
+# one on the SAME branch, which is what we want, without cancelling another's.
 concurrency:
   group: ci-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
@@ -22,83 +22,87 @@ permissions:
 
 jobs:
   build:
+    # The job names stay in Spanish: they are the names the `main` branch
+    # ruleset lists as required checks, and renaming them here without renaming
+    # them there blocks every merge until somebody notices.
     name: Build · Node ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        # El suelo de `engines` y el actual. Una librería se rompe por versión
-        # de Node, no por sistema operativo: por eso hay matriz de Node y no de
-        # SO, al revés que en una API con binarios nativos.
+        # The `engines` floor and the current one. A library breaks by Node
+        # version, not by operating system: hence a Node matrix and not an OS
+        # one, the opposite of an API with native binaries.
         node: ["22.x", "24.x"]
     steps:
-      - name: 📚 Clonar el repositorio
+      - name: 📚 Check out the repository
         uses: actions/checkout@v7
 
-      - name: 🟢 Preparar el entorno
+      - name: 🟢 Set up the environment
         uses: ./.github/actions/setup
         with:
           node-version: ${{ matrix.node }}
 
-      - name: 🔒 Verificar la pureza de los tokens
+      - name: 🔒 Verify token purity
         run: pnpm check:tokens
 
-      # El nombre de la custom property ES la API de Tailwind v4. `--spacing-md`
-      # se comía `max-w-md` en los cinco proyectos y no lo detectó nada: la
-      # librería no usa `max-w-*` por dentro, así que el fallo solo existía
-      # aguas abajo y sin un solo error en consola.
-      - name: 🧱 Verificar que ningún token pisa a Tailwind
+      # The custom property's name IS Tailwind v4's API. `--spacing-md` was
+      # swallowing `max-w-md` in all five projects and nothing caught it: the
+      # library does not use `max-w-*` internally, so the failure only existed
+      # downstream and with no console error at all.
+      - name: 🧱 Verify no token stomps Tailwind
         run: pnpm check:namespace
 
-      # release-please ignora en silencio las claves que no conoce, así que una
-      # configuración rota parece correcta hasta que el release no se corta.
-      - name: 🏷️ Validar la configuración de release-please
+      # release-please silently ignores keys it does not know, so a broken
+      # configuration looks correct until the release fails to cut.
+      - name: 🏷️ Validate the release-please configuration
         run: pnpm check:release
 
-      - name: 🧮 Comprobar los tipos
+      - name: 🧮 Check the types
         run: pnpm typecheck
 
-      # `llms.txt` es lo que lee un agente desde un proyecto que instaló la
-      # librería. Se genera de los tipos: si alguien cambia un prop y no lo
-      # regenera, el documento miente y nadie lo nota hasta que el agente
-      # escribe código con una prop que ya no existe.
-      - name: 🤖 Verificar el documento para agentes
+      # `llms.txt` is what an agent reads from a project that installed the
+      # library. It is generated from the types: if somebody changes a prop and
+      # does not regenerate it, the document lies and nobody notices until the
+      # agent writes code with a prop that no longer exists.
+      - name: 🤖 Verify the document for agents
         run: pnpm check:llms
 
-      - name: 🏗️ Compilar
+      - name: 🏗️ Build
         run: pnpm build
 
-      # Que compile no basta: lo que se publica es `dist/`, y una subruta mal
-      # declarada en `exports` no falla hasta que alguien la importa.
-      - name: 📦 Verificar la superficie publicada
+      # Compiling is not enough: what gets published is `dist/`, and a badly
+      # declared subpath in `exports` does not fail until somebody imports it.
+      - name: 📦 Verify the published surface
         run: node scripts/check-package-exports.mjs
 
   test:
+    # Pinned by the ruleset. See the note on `build`.
     name: Accesibilidad y contraste
     runs-on: ubuntu-latest
     steps:
-      - name: 📚 Clonar el repositorio
+      - name: 📚 Check out the repository
         uses: actions/checkout@v7
 
-      - name: 🟢 Preparar el entorno
+      - name: 🟢 Set up the environment
         uses: ./.github/actions/setup
         with:
           playwright: "true"
 
-      - name: 🎨 Generar los tokens
+      - name: 🎨 Generate the tokens
         run: pnpm build:tokens
 
-      # Compila Tailwind de verdad contra `theme.css` y comprueba a qué resuelve
-      # cada utilidad. Es el hueco que dejaba la suite de stories: mide lo que
-      # la librería PUBLICA, no solo lo que la librería usa.
-      - name: 🧪 Regresión de tokens contra Tailwind
-        run: pnpm test:unidad
+      # Compiles Tailwind for real against `theme.css` and checks what each
+      # utility resolves to. It is the gap the story suite left: it measures what
+      # the library PUBLISHES, not only what the library uses.
+      - name: 🧪 Token regression against Tailwind
+        run: pnpm test:unit
 
       # Monta cada story en un Chromium real y le pasa axe. Corre DOS veces,
-      # una por modo: un color solo falla en uno de los dos, así que pasar en
-      # oscuro no prueba nada sobre el claro.
-      - name: 🌑 Suite en modo oscuro
-        run: pnpm test:oscuro
+      # once per mode: a color only fails in one of the two, so passing in dark
+      # proves nothing about light.
+      - name: 🌑 Suite in dark mode
+        run: pnpm test:dark
 
-      - name: ☀️ Suite en modo claro
-        run: pnpm test:claro
+      - name: ☀️ Suite in light mode
+        run: pnpm test:light

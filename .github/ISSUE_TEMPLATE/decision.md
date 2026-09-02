@@ -1,21 +1,21 @@
 ---
-name: Decisión de diseño
-about: El código y el documento no dicen lo mismo, o el documento no lo cubre
-title: "decisión: "
+name: Design decision
+about: The code and the document do not say the same thing, or the document does not cover it
+title: "decision: "
 labels: design-system
 ---
 
-## Qué dice el documento
+## What the document says
 
-<!-- Cita literal y sección. Si no lo cubre, dilo. -->
+<!-- Verbatim quote and section. If it does not cover it, say so. -->
 
-## Qué hace el código hoy
+## What the code does today
 
-## Las salidas
+## The ways out
 
-<!-- Al menos dos, con lo que cuesta cada una. Un token nuevo se paga en los
-     cinco proyectos. -->
+<!-- At least two, with what each one costs. A new token is paid for across all
+     five projects. -->
 
-## Recomendación
+## Recommendation
 
-<!-- Termina en docs/decisiones.md, con su «acción en el documento». -->
+<!-- It ends up in docs/decisions.md, with its «action in the document». -->

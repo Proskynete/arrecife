@@ -37,6 +37,7 @@ const ENTRIES = [
   { subpath: '.', file: 'src/index.ts' },
   { subpath: './tokens', file: 'src/tokens/index.ts' },
   { subpath: './theme', file: 'src/theme/index.ts' },
+  { subpath: './variants', file: 'src/variants/index.ts' },
   { subpath: './brand', file: 'src/brand/index.ts' },
   { subpath: './og', file: 'src/og/index.ts' },
   { subpath: './shiki', file: 'src/shiki/index.ts' },

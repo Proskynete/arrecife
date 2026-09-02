@@ -39,6 +39,7 @@ const ENTRIES = [
   { subpath: './theme', file: 'src/theme/index.ts' },
   { subpath: './variants', file: 'src/variants/index.ts' },
   { subpath: './brand', file: 'src/brand/index.ts' },
+  { subpath: './social', file: 'src/social/index.tsx' },
   { subpath: './og', file: 'src/og/index.ts' },
   { subpath: './shiki', file: 'src/shiki/index.ts' },
   { subpath: './form', file: 'src/form/index.tsx' },
@@ -72,6 +73,12 @@ const SECTIONS = [
     dir: 'src/brand/',
     file: 'src/index.ts',
     entry: '`@eduardoalvarez/arrecife` or `@eduardoalvarez/arrecife/brand`',
+  },
+  {
+    title: 'Social icons',
+    dir: 'src/social/',
+    file: 'src/social/index.tsx',
+    entry: '`@eduardoalvarez/arrecife/social` · or grouped as `social` from the root',
   },
   {
     title: 'Forms',

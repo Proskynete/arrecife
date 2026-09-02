@@ -60,14 +60,14 @@ for (const [subpath, value] of Object.entries(pkg.exports ?? {})) {
 
   for (const { file } of paths(value, subpath)) {
     if (!(await exists(file))) {
-      failures.push(`exports["${subpath}"] promete ${file} y no exists`);
+      failures.push(`exports["${subpath}"] promises ${file} and it does not exist`);
     }
   }
 }
 
 for (const entry of pkg.files ?? []) {
   if (!(await exists(entry))) {
-    failures.push(`files incluye "${entry}" y no exists`);
+    failures.push(`files includes "${entry}" and it does not exist`);
   }
 }
 
@@ -143,11 +143,21 @@ for (const [subpath, reason] of Object.entries(PORTABLE)) {
  * `buttonVariants` drags a client boundary in for a function that returns a
  * string, which is the cost `./variants` exists to avoid.
  *
+ * The second direction is checked against EVERY subpath and not only against the
+ * portable ones, which is the newer half. `./social` is neither: it renders
+ * React, so it can never be portable, and it must not be a client entry either —
+ * the whole reason it exists is that a Next Server Component can render an icon
+ * without opening a boundary for two `<svg>`. Listed only in `PORTABLE`, the
+ * check had nothing to say about it, and adding it to `CLIENT_ENTRIES` by
+ * mistake would have quietly undone the fix. Now the rule is the one the
+ * docstring already claimed: the directive is on `CLIENT_ENTRIES` and nowhere
+ * else.
+ *
  * The directive is stamped by `scripts/add-use-client.mjs`, and it is checked
  * here rather than trusted because tsup's own `banner` already dropped it once
  * without the build going red.
  */
-const directiva = /^\s*(['"])use client\1;?/;
+const directive = /^\s*(['"])use client\1;?/;
 
 for (const entry of CLIENT_ENTRIES) {
   if (!(await exists(entry))) {
@@ -155,23 +165,31 @@ for (const entry of CLIENT_ENTRIES) {
     continue;
   }
   const source = await readFile(resolve(root, entry), 'utf8');
-  if (!directiva.test(source)) {
+  if (!directive.test(source)) {
     failures.push(
       `${entry} has no "use client" — Next cannot import the library without it`,
     );
   }
 }
 
-for (const subpath of Object.keys(PORTABLE)) {
-  for (const { file } of paths(pkg.exports?.[subpath] ?? {}, subpath)) {
+const client = new Set(CLIENT_ENTRIES.map((entry) => `./${entry}`));
+
+for (const [subpath, value] of Object.entries(pkg.exports ?? {})) {
+  if (subpath.includes('*')) continue;
+
+  for (const { file } of paths(value, subpath)) {
     if (!file.endsWith('.js') && !file.endsWith('.cjs')) continue;
+    if (client.has(file)) continue;
     if (!(await exists(file))) continue;
+
     const source = await readFile(resolve(root, file), 'utf8');
-    if (directiva.test(source)) {
-      failures.push(
-        `${file} carries "use client" and it is portable — it would drag a client boundary in`,
-      );
-    }
+    if (!directive.test(source)) continue;
+
+    failures.push(
+      PORTABLE[subpath]
+        ? `${file} carries "use client" and it is portable — it would drag a client boundary in`
+        : `${file} carries "use client" and it is not a client entry — a Server Component importing ${subpath} would open a boundary it does not need`,
+    );
   }
 }
 

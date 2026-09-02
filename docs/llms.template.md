@@ -116,6 +116,7 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/og` | **no** | — | The Open Graph templates for Satori |
 | `@eduardoalvarez/arrecife/shiki` | **no** | — | The syntax highlighting theme |
 | `@eduardoalvarez/arrecife/brand` | yes | — | Logo, isotype and mascot as components |
+| `@eduardoalvarez/arrecife/social` | yes, on the server only | — | The nine social icons, loose. No `"use client"` |
 | `@eduardoalvarez/arrecife/form` | yes | `react-hook-form` | The form layer: labels, errors and `aria-*` |
 | `@eduardoalvarez/arrecife/chart` | yes | `recharts` | The chart chassis and the series palette |
 | `@eduardoalvarez/arrecife/assets/*` | — | — | The brand PNGs |
@@ -132,7 +133,7 @@ resolve an import they never execute.
 ### Next, Server Components and `"use client"`
 
 The root, `./brand`, `./form` and `./chart` ship `"use client"` in the published
-`dist/`. They render React and their Radix primitives call `createContext` at
+`dist/`, and they are the only four. They render React and their Radix primitives call `createContext` at
 module scope, so without the directive a Next project with the App Router cannot
 import them at all: it fails at build time with
 `TypeError: (0 , r.createContext) is not a function`.
@@ -145,7 +146,11 @@ needed it.
 
 The five portable subpaths do NOT carry the directive, and that is the half that
 matters in a Server Component: `./tokens`, `./theme`, `./variants`, `./og` and
-`./shiki` stay on the server. If all you need are classes — for a `<div>`, an
+`./shiki` stay on the server. Neither does `./social`, which is a third case: it
+renders React — it is nine `<svg>` — so it can never be portable, but it holds no
+state and nothing about it needs a client boundary. It is the only way to put a
+social icon in a Server Component, and § «The social icons come from `./social`»
+below says why the grouped form cannot do it. If all you need are classes — for a `<div>`, an
 `<a>` or an Astro island you do not want to hydrate — import them from
 `./variants` and nothing crosses to the client:
 
@@ -202,21 +207,33 @@ It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
 
-### The social icons are namespaced
+### The social icons come from `./social`
 
 ```tsx
-// ❌ does not exist
+// ❌ does not exist: the root publishes them grouped, not loose
 import { GitHub } from '@eduardoalvarez/arrecife';
 
-// ✅
+// ✅ the normal form
+import { GitHub } from '@eduardoalvarez/arrecife/social';
+
+// ✅ for iterating the catalogue
 import { social } from '@eduardoalvarez/arrecife';
 <social.GitHub />
 ```
 
 All nine: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
-`Email`, `Newsletter`. They live under a namespace because one of them is called
-`X`, and loose it collides. `Newsletter` is the bell: a way to follow, like
-`Rss`, named for what it means.
+`Email`, `Newsletter`. `Newsletter` is the bell: a way to follow, like `Rss`,
+named for what it means.
+
+**In a Server Component the subpath is mandatory, not preferred.** The root
+carries `"use client"`, and a client reference crosses the boundary per EXPORT —
+the properties of a plain object are not exports, so `social.LinkedIn` is
+`undefined` on the server and `undefined` as an element type kills the build at
+prerender. `./social` carries no directive: it renders on the server and ships no
+client JS. Use `social` only when mapping a list of names onto icons.
+
+The root keeps the group because one of them is called `X`, and loose at the root
+it collides. In the subpath, alias it: `import { X as XIcon }`.
 
 The internal glyphs — `Close`, `ChevronDown`, `Sun` — are **not exported** and
 are not going to be: they are the primitives' minimum set. A component that needs

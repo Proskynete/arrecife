@@ -236,7 +236,7 @@ function Volume({
           '[accent-color:var(--color-accent)]',
           width,
         )}
-        aria-label="Volume"
+        aria-label="Volumen"
       />
     </div>
   );

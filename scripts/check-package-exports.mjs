@@ -24,15 +24,18 @@ import { access, readFile } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { CLIENT_ENTRIES } from './add-use-client.mjs';
+
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'));
 
 /** The ones that cannot depend on React, with the reason written beside them. */
 const PORTABLE = {
-  './tokens': 'la consumen los cinco proyectos, Satori y un Astro sin React',
-  './theme': 'lo consume un Astro que no monta React, y `themeScript` va inline en el <head>',
-  './og': 'corre en un worker o en un script de build',
-  './shiki': 'se consume desde astro.config.mjs',
+  './tokens': 'all five projects, Satori and a React-less Astro consume it',
+  './theme': 'an Astro that mounts no React consumes it, and `themeScript` goes inline in the <head>',
+  './variants': 'it is the class vocabulary for a project that mounts no React, and for a server component',
+  './og': 'it runs in a worker or in a build script',
+  './shiki': 'it is consumed from astro.config.mjs',
 };
 
 const failures = [];
@@ -130,6 +133,48 @@ for (const [subpath, reason] of Object.entries(PORTABLE)) {
   }
 }
 
+/**
+ * The fourth thing: `"use client"` is where it should be, and only there.
+ *
+ * It is checked in both directions because both of them broke something real.
+ * Missing from a client entry, Next cannot import the library at all — a
+ * `createContext is not a function` at build time, and it blocked `cursos` for a
+ * version. Present on a portable entry, a Server Component importing
+ * `buttonVariants` drags a client boundary in for a function that returns a
+ * string, which is the cost `./variants` exists to avoid.
+ *
+ * The directive is stamped by `scripts/add-use-client.mjs`, and it is checked
+ * here rather than trusted because tsup's own `banner` already dropped it once
+ * without the build going red.
+ */
+const directiva = /^\s*(['"])use client\1;?/;
+
+for (const entry of CLIENT_ENTRIES) {
+  if (!(await exists(entry))) {
+    failures.push(`${entry} does not exist — did the build run?`);
+    continue;
+  }
+  const source = await readFile(resolve(root, entry), 'utf8');
+  if (!directiva.test(source)) {
+    failures.push(
+      `${entry} has no "use client" — Next cannot import the library without it`,
+    );
+  }
+}
+
+for (const subpath of Object.keys(PORTABLE)) {
+  for (const { file } of paths(pkg.exports?.[subpath] ?? {}, subpath)) {
+    if (!file.endsWith('.js') && !file.endsWith('.cjs')) continue;
+    if (!(await exists(file))) continue;
+    const source = await readFile(resolve(root, file), 'utf8');
+    if (directiva.test(source)) {
+      failures.push(
+        `${file} carries "use client" and it is portable — it would drag a client boundary in`,
+      );
+    }
+  }
+}
+
 if (failures.length > 0) {
   console.error('The published surface does not add up:\n');
   for (const failure of failures) console.error(`  ${failure}`);
@@ -139,5 +184,6 @@ if (failures.length > 0) {
 
 const subpaths = Object.keys(pkg.exports ?? {}).length;
 console.log(
-  `arrecife · ${subpaths} subpaths verified · the portable ones bring no React, chunks included`,
+  `arrecife · ${subpaths} subpaths verified · the portable ones bring no React, ` +
+    `and "use client" is on the ${CLIENT_ENTRIES.length / 2} entries that render it`,
 );

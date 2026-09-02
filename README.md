@@ -275,32 +275,42 @@ Verified by packing the library with `pnpm pack` and installing it in a separate
 project: the types resolve from `dist/`, `./tokens` loads without dragging React
 in and `./tokens/theme.css` resolves by subpath.
 
-### The social icons are namespaced
-
-It is the first thing anyone consuming the library trips over, because the
-natural form does not work:
+### The social icons come from `./social`
 
 ```tsx
-// ❌ does not exist
+// ❌ does not exist: the root publishes them grouped, not loose
 import { GitHub, LinkedIn } from '@eduardoalvarez/arrecife';
 
-// ✅
-import { social } from '@eduardoalvarez/arrecife';
+// ✅ the normal form
+import { GitHub, LinkedIn } from '@eduardoalvarez/arrecife/social';
 
+// ✅ for iterating the catalogue
+import { social } from '@eduardoalvarez/arrecife';
 <social.GitHub />
-<social.LinkedIn />
 ```
 
 All nine are `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
-`Email` and `Newsletter`. They live under a namespace for a concrete reason:
-**one of them is called `X`**.
+`Email` and `Newsletter`.
+
+**The two forms are not taste, and in Next they are not interchangeable.** The
+root carries `"use client"`, and what crosses into a Server Component is a client
+reference **per export** — the properties of a plain object are not exports. So
+from a Server Component `social.LinkedIn` is `undefined`, and `undefined` as an
+element type kills the build at prerender. `./social` carries no directive: the
+icon renders on the server, ships no client JS, and pulls 5.6 KB instead of the
+root's 116 KB. Reach for the subpath by default; reach for `social` when you are
+mapping a list of link names onto icons.
+
+The namespace stays because **one of them is called `X`**. An `export const X` at
+the root of a component library collides with anything — a generic's type
+variable, an `import { X }` from somewhere else — and the failure shows up far
+from here. In the subpath you asked for icons, so the collision is yours to
+resolve and it takes one word: `import { X as XIcon }`.
 
 `Newsletter` is the bell, and it is named for what it means and not for what it
 draws — same as everything else in the system. It plays `Rss`'s role: a way to
 follow, not a social network. That is what keeps it inside this catalogue and
-keeps the catalogue from turning into an icon library. An `export const X` at the root of a component library collides
-with anything — a generic's type variable, an `import { X }` from somewhere else
-— and the failure shows up far from here.
+keeps the catalogue from turning into an icon library.
 
 **The internal glyphs are NOT exported.** `Close`, `ChevronDown`, `Copy`, `Sun`
 and company are the minimum set the primitives need and they stay inside.
@@ -325,13 +335,20 @@ Marking them client would be a lie with a cost: a Server Component importing
 `buttonVariants`, a function that returns a string, would pull a client boundary
 in with it.
 
+`./social` is the third case, and it is why the check stopped looking only at the
+portable ones. It renders React — it is nine `<svg>` — so it can never be
+portable, and it holds no state, so it must not be a client entry either. Listed
+in neither set, nothing would have noticed it being marked client by mistake, and
+that mistake undoes the only reason the subpath exists. See `docs/decisions.md`
+§ 26.
+
 It is stamped by `scripts/add-use-client.mjs` after tsup, and not by tsup's
 `banner`. That was tried first: esbuild writes the directive and the bundling
 pass strips it back out with a `Module level directives cause errors when
 bundled` warning. The build stayed green and the published package was broken for
 Next — the worst way to fail, because the failure surfaces in somebody else's
 project. `check:exports` now verifies it in both directions: present on the four
-client entries, absent from the portable ones.
+client entries, absent from every other subpath.
 
 It is inert outside Next. In Astro and in plain Vite it is a string literal at
 the top of a module; Rollup may warn and nothing else happens. One `dist` serves

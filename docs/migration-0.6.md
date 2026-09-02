@@ -323,6 +323,7 @@ project:
 | `cursos` | The `"use client"` adapters around `Button` and `Badge`, and the 272 KB with them |
 | `links` | The copied class vocabulary in `LinkRow.astro` and `Footer.astro`, and `scripts/check-replica-drift.mjs` with it |
 | `eduardoalvarez.dev` | `public/theme.js`, the hand-drawn bell, and the four `NewsletterForm` workarounds |
+| `blog-content-manager` | `src/components/ui/brand-icons.tsx`, the `"use client"` wrapper around two `<svg>` |
 
 The four workarounds, specifically:
 
@@ -355,6 +356,22 @@ And the bell:
 + // <social.Newsletter />
 ```
 
+And `brand-icons.tsx`, which existed only because a namespace cannot cross the
+RSC boundary — the wrapper is what put the property access back on the client
+side. `./social` removes the need for it:
+
+```diff
+- 'use client';
+- import { social } from '@eduardoalvarez/arrecife';
+- export const LinkedIn = (p) => <social.LinkedIn {...p} />;
+- export const Instagram = (p) => <social.Instagram {...p} />;
++ // Nothing. Import them where they are used:
++ import { LinkedIn, Instagram } from '@eduardoalvarez/arrecife/social';
+```
+
+Two `<svg>` stop being client components, and the Server Component that renders
+them stops dying at prerender.
+
 ---
 
 ### What is new and breaks nothing
@@ -376,6 +393,13 @@ And the bell:
 - **`TalkCard`'s `resources`**, **`NewsletterForm`'s `aside`**,
   **`resetOnSuccess`**, **`onFieldChange`** and **`fieldErrors`**.
 - **`social.Newsletter`**, the bell.
+- **`./social`**, the nine icons loose and with no `"use client"`. `import
+  { LinkedIn } from '@eduardoalvarez/arrecife/social'` is the form to reach for
+  from now on, and from a Server Component it is the only one that works — the
+  grouped `social` from the root resolves to `undefined` there, because a client
+  reference crosses the boundary per export and the properties of a plain object
+  are not exports. The root keeps the group, unchanged, for iterating the
+  catalogue. See [`decisions.md`](decisions.md) § 26.
 - **The footer's caret**, which blinks. It arrives on its own — there is no prop
   and nothing to turn on. Behind `motion-safe`, so a reader who asked for less
   motion sees it solid.

@@ -36,6 +36,7 @@ jobs:
             components
             brand
             theme
+            variants
             og
             shiki
             form

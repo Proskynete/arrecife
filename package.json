@@ -34,6 +34,11 @@
       "require": "./dist/tokens/index.cjs"
     },
     "./tokens/theme.css": "./dist/tokens/theme.css",
+    "./variants": {
+      "types": "./dist/variants/index.d.ts",
+      "import": "./dist/variants/index.js",
+      "require": "./dist/variants/index.cjs"
+    },
     "./theme": {
       "types": "./dist/theme/index.d.ts",
       "import": "./dist/theme/index.js",

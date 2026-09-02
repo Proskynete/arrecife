@@ -2,7 +2,17 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Note } from '../../../stories/utils.tsx';
 import { Logo } from '../../brand/logo.tsx';
-import { Email, Discord, GitHub, Instagram, LinkedIn, Rss, X, YouTube } from '../../lib/social.tsx';
+import {
+  Email,
+  Discord,
+  GitHub,
+  Instagram,
+  LinkedIn,
+  Newsletter,
+  Rss,
+  X,
+  YouTube,
+} from '../../lib/social.tsx';
 import { Footer, FooterLink } from './index.tsx';
 
 const meta = {
@@ -15,8 +25,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Los ocho del sistema. `aria-label` es obligatorio en el kind `SocialLink`: son iconos
- * sin text visible, así que no se puede construir uno sin name accesible.
+ * The system's nine. `aria-label` is mandatory in the `SocialLink` type: they are
+ * icons with no visible text, so one cannot be built without an accessible name.
  */
 const SOCIAL = [
   { label: 'GitHub', href: 'https://github.com/Proskynete', icon: <GitHub /> },
@@ -27,6 +37,7 @@ const SOCIAL = [
   { label: 'YouTube', href: 'https://youtube.com', icon: <YouTube /> },
   { label: 'RSS', href: '/rss.xml', icon: <Rss /> },
   { label: 'Escríbeme', href: 'mailto:soy@eduardoalvarez.dev', icon: <Email /> },
+  { label: 'Newsletter', href: '/newsletter', icon: <Newsletter /> },
 ] as const;
 
 export const Basic: Story = {
@@ -43,10 +54,10 @@ export const Basic: Story = {
           with no name cannot be built.
         </Note>
         <Note>
-          The six brands are SOLID and the two functional ones — RSS and email —
-          use a 1.6 stroke. It is a drawing rule, not a styling one: the GitHub logo
-          does not exist in outline, and a functional symbol in this system is drawn
-          with a line.
+          The six brands are SOLID and the three functional ones — RSS, email and
+          the newsletter bell — use a 1.6 stroke. It is a drawing rule, not a
+          styling one: the GitHub logo does not exist in outline, and a functional
+          symbol in this system is drawn with a line.
         </Note>
         <Note>
           They live in `lib/social.tsx` and not in `glyphs.tsx`. That one is the
@@ -63,7 +74,7 @@ export const Basic: Story = {
 };
 
 export const Icons: Story = {
-  name: 'The eight icons',
+  name: 'The nine icons',
   render: () => (
     <div className="p-step-lg gap-step-lg flex flex-wrap items-center text-[28px]">
       {SOCIAL.map((r) => (

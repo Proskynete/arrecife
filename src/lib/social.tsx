@@ -1,5 +1,5 @@
 /**
- * The footer's eight icons, and the footer's only.
+ * The footer's nine icons, and the footer's only.
  *
  * They live apart from `glyphs.tsx` on purpose: that one is the minimum set the
  * primitives need and it does not grow; this is a third-party inventory that
@@ -111,5 +111,22 @@ export const Email = (props: IconProps) => (
   <Functional {...props}>
     <rect x="2.75" y="4.75" width="18.5" height="14.5" rx="2" />
     <path d="m3.5 7.5 7.4 5.2a2 2 0 0 0 2.2 0l7.4-5.2" />
+  </Functional>
+);
+
+/**
+ * The newsletter. It plays the same role as `Rss` — a way to follow, not a
+ * social network — which is why it belongs in this catalogue and does not open
+ * the door to an icon library.
+ *
+ * It is named for what it means and not for what it draws, like everything else
+ * in the system: it is a bell, and it is called `Newsletter`. `eduardoalvarez.dev`
+ * had it drawn in the project, following the contract by hand so it would not
+ * clash while it waited.
+ */
+export const Newsletter = (props: IconProps) => (
+  <Functional {...props}>
+    <path d="M18 8.5a6 6 0 1 0-12 0c0 5-2 6.5-2 6.5h16s-2-1.5-2-6.5" />
+    <path d="M13.7 19a2 2 0 0 1-3.4 0" />
   </Functional>
 );

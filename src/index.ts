@@ -13,8 +13,8 @@ export * from './components/index.ts';
 export * from './brand/index.ts';
 export { cn } from './lib/cn.ts';
 /**
- * The eight social icons are exported as a group, NOT loose, and there is a
- * concrete reason: one of them is called `X`. An `export const X` at the root of
+ * The social icons are exported as a group, NOT loose, and there is a concrete
+ * reason: one of them is called `X`. An `export const X` at the root of
  * a component library is a collision waiting to happen — with a generic's type
  * variable, with an `import { X }` of anything else, with JSX itself.
  *

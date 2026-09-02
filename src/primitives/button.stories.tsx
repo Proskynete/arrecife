@@ -200,3 +200,111 @@ export const BrandRules: Story = {
     </>
   ),
 };
+
+export const Destructive: Story = {
+  name: 'The two danger variants',
+  render: () => (
+    <>
+      <Block title="destructive · irreversible only">
+        <Row>
+          <Button variant="destructive">Eliminar cuenta</Button>
+          <Button variant="destructiveOutline">Revocar acceso</Button>
+          <Button variant="destructive" disabled>
+            Eliminar cuenta
+          </Button>
+          <Button variant="destructiveOutline" disabled>
+            Revocar acceso
+          </Button>
+        </Row>
+        <Note>
+          Only for what cannot be undone. Never for «cancel» on a form — that is
+          `secondary`, and putting a destructive next to it is how the word stops
+          being what carries the weight.
+        </Note>
+      </Block>
+
+      <Block title="the rule it does not break">
+        <Row>
+          <Button variant="destructive">Eliminar curso</Button>
+          <Button variant="secondary">Cancelar</Button>
+        </Row>
+        <Note>
+          Inside an `AlertDialog` the confirm button is still NOT red: there a
+          title explains what is about to happen, focus starts on cancel and
+          clicking outside does not close it. The context does the work.
+        </Note>
+        <Note>
+          It stops working in a table row. `cursos` has eight of these in row
+          actions and toolbars, next to «Editar» and «Duplicar»: rendered as
+          `secondary`, «Eliminar curso» looked exactly like «Cancelar» and only
+          the word separated them. See `docs/decisions.md` § 21.
+        </Note>
+      </Block>
+
+      <Block title="the outline one fills on hover">
+        <Row>
+          <Button variant="destructiveOutline">Revocar acceso</Button>
+        </Row>
+        <Note>
+          That IS an exception to «secondary is never filled», declared rather
+          than discovered. A destructive that looks identical to a secondary until
+          you read it is the problem the variant exists to fix; at rest it is
+          still only border and text.
+        </Note>
+        <Note>
+          Measured, in both modes: the ink gives 6.53:1 over the fill and 7.92:1
+          over the hover in dark, 5.11 and 6.61 in light. The border and text of
+          the outline give 6.71 over abyss, 5.94 over surface and 4.91 over
+          surfaceRaised, so it reads as text on all three.
+        </Note>
+      </Block>
+    </>
+  ),
+};
+
+export const DestructiveHover: Story = {
+  name: 'The two danger variants · hover',
+  parameters: { pseudo: { hover: true } },
+  render: () => (
+    <Row>
+      <Button variant="destructive">Eliminar cuenta</Button>
+      <Button variant="destructiveOutline">Revocar acceso</Button>
+    </Row>
+  ),
+};
+
+export const DenseIcons: Story = {
+  name: 'icon-sm · a table row',
+  render: () => (
+    <>
+      <Row>
+        <Button size="icon" variant="secondary" aria-label="Cerrar">
+          <Close />
+        </Button>
+        <Button size="icon-sm" variant="secondary" aria-label="Cerrar">
+          <Close />
+        </Button>
+        <Button size="sm" variant="secondary">
+          Editar
+        </Button>
+        <Button size="icon-sm" variant="destructiveOutline" aria-label="Eliminar el curso">
+          <Close />
+        </Button>
+      </Row>
+      <Note>
+        42 is the right measure for a control you hit with a thumb, and the four
+        reading sites are where that fits. `cursos` is the odd one out: three
+        actions per table row, and at 42 the row grows with them.
+      </Note>
+      <Note>
+        It is 32 and not 28 because 32 is `sm`'s height — a dense icon button
+        lines up with a small text button, so a toolbar mixing the two stays on
+        one baseline. 28 would have been a fifth height that matches nothing.
+      </Note>
+      <Note>
+        It does not replace `icon`. A page's primary action stays at 42; this is
+        for a row. And it still needs `aria-label`: it carries no text.
+      </Note>
+    </>
+  ),
+};

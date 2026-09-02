@@ -1,5 +1,50 @@
 # Changelog
 
+## [0.6.0](https://github.com/Proskynete/arrecife/compare/v0.5.1...v0.6.0) (2026-09-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **theme:** `themeScript` is a function, not a string. `set:html={themeScript}` becomes `set:html={themeScript()}`. TypeScript catches it at the call site in both consumers — `set:html` and `__html` both expect a string — so it cannot fail silently. `preferredTheme()` and `watchTheme(fn)` are unchanged when called with no options.
+* **components:** `TalkCardProps` is now a union. Code that spreads a props object typed as `TalkCardProps` and then adds `href` conditionally will need to narrow it. Passing only `href`, as every call site does today, is unchanged.
+* the root, `./brand`, `./form` and `./chart` now ship `"use client"`. A Next project should remove its own `"use client"` adapters around them; keeping them still works but keeps paying for the client chunk. A Server Component that only needs classes imports them from `@eduardoalvarez/arrecife/variants`, which carries no directive.
+* the whole public API is now in English. `./tema` becomes `./theme`, `scriptTema` becomes `themeScript`, `Red` becomes `SocialLink`, the `degradado-hero` utility becomes `gradient-hero`, `Hero`'s `variant="cabecera"` becomes `variant="header"`, and the `localStorage` key moves from `arrecife-tema` to `arrecife-theme`. No value, size or contrast ratio changes. The full rename table and the migration steps are in docs/migration-0.6.md.
+
+### 🚀 Novedades
+
+* "use client" in the published dist ([6f7414d](https://github.com/Proskynete/arrecife/commit/6f7414d953b7fd9953fe05cee770eeb8e945cfed))
+* **brand:** the newsletter bell joins social ([4e24b7a](https://github.com/Proskynete/arrecife/commit/4e24b7a3f9af1896761fc93862b62ec1256786f2))
+* **components:** ArticleCard's tags are reachable with a slot ([5c0ad42](https://github.com/Proskynete/arrecife/commit/5c0ad422c149329a8b47ba484dedea391cab4419))
+* **components:** TalkCard gains a slot for the talk's resources ([7a63cc3](https://github.com/Proskynete/arrecife/commit/7a63cc320886eef90d005cce7964720df4100d4a))
+* **components:** the footer's CLI signature ends in a blinking caret ([4538f5d](https://github.com/Proskynete/arrecife/commit/4538f5d59c9a3fa49790b6656d1e6f6b0e7df842))
+* **components:** the four NewsletterForm props the blog was faking ([5ed44af](https://github.com/Proskynete/arrecife/commit/5ed44af9c182826b8c8314bd86a976097818bf77))
+* the public API and the source in English ([e43a180](https://github.com/Proskynete/arrecife/commit/e43a180f45b119ae8b7dd95fccf9958dffef6966))
+* **theme:** themeScript takes the mode the site already decided ([19b2ac3](https://github.com/Proskynete/arrecife/commit/19b2ac3edd557bd17d7e6e0bcf32c3018d413013))
+* **tokens:** the danger palette, and the two variants it pays for ([8eaa409](https://github.com/Proskynete/arrecife/commit/8eaa4096d34860c1e673088d7d3d44cce9177cfa))
+* **variants:** publish it as ./variants, a subpath with no React ([0c0bd15](https://github.com/Proskynete/arrecife/commit/0c0bd157ac2296fa265976cf075407c1ec321d82))
+* **variants:** the class vocabulary moves out of the components ([e144db2](https://github.com/Proskynete/arrecife/commit/e144db281d6f88fa23df37bb49e7d09f718e056f))
+
+
+### 📚 Documentación
+
+* README and AGENTS in English, with the two new rules ([be4f487](https://github.com/Proskynete/arrecife/commit/be4f48745e8c8e1f5cbe13add688fa6e7491a668))
+* state the danger rule as it is now, everywhere it was stated ([43121cb](https://github.com/Proskynete/arrecife/commit/43121cbbbd02a4397f33edc73d99ac45738326de))
+* the client boundary and the new subpath ([2d67b78](https://github.com/Proskynete/arrecife/commit/2d67b78630e4e1fca4cc4b2817c19c7ff3a1cfee))
+* the migration guide for 0.6 ([47c6ae0](https://github.com/Proskynete/arrecife/commit/47c6ae0b7c981d75c938e120109b001e8d4da8a0))
+* the migration guide for 0.7 ([2d74a07](https://github.com/Proskynete/arrecife/commit/2d74a07d0189ffd220d9d50e75fbf5181df89daa))
+* the reference documents in English ([2053ad1](https://github.com/Proskynete/arrecife/commit/2053ad1310ad110590e3dd3e178c228aa13b9f3d))
+* this is one release, not two ([5121481](https://github.com/Proskynete/arrecife/commit/51214813eeb48ca2e1d56917a3606c9a4960d880))
+
+
+### 🚀 CI/CD
+
+* dos cosas que salieron al configurar el proyecto de Vercel ([6c40940](https://github.com/Proskynete/arrecife/commit/6c409403bc4b1483065c36c715ceb22de7512700))
+* el «skipped» de preparar se propagaba hasta el despliegue ([f4db0fb](https://github.com/Proskynete/arrecife/commit/f4db0fbd62addbca403eb50d616c34d227f06aa6))
+* el ensayo no puede fallar por la única cosa que no prueba ([06b85f3](https://github.com/Proskynete/arrecife/commit/06b85f34a6cc126cd159ad0f5b1ddb4bbea52df2))
+* el ensayo también despliega, a un preview ([fb8c603](https://github.com/Proskynete/arrecife/commit/fb8c6032614372c388489c1e7a376b01d84f0658))
+* el Storybook se despliega a Vercel al cortar versión ([94167a9](https://github.com/Proskynete/arrecife/commit/94167a938dbbe844af1a247077f67d348f1075d0))
+* workflows, templates and the setup action in English ([321db58](https://github.com/Proskynete/arrecife/commit/321db585debe60cb5c9c663bc9586a1bc7a59ab7))
+
 ## [0.5.1](https://github.com/Proskynete/arrecife/compare/v0.5.0...v0.5.1) (2026-08-31)
 
 

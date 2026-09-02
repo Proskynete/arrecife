@@ -86,6 +86,12 @@ the sheet in `src/styles/` it goes up two levels and not one. The blog's E2E
 tests caught it, not the build, and until 0.3.0 this was only written in
 `llms.txt` — the file an agent reads and a person does not.
 
+> **Coming from 0.6.x.** Three things break, and all three break loudly:
+> `themeScript` is a function, the root ships `"use client"`, and
+> `TalkCardProps` is a union. The migration — including what each project can
+> now **delete** — is in
+> [`docs/migration-0.7.md`](docs/migration-0.7.md).
+
 > **Coming from 0.5.x or earlier.** The whole public API moved to English in
 > 0.6.0: `./tema` is now `./theme`, `scriptTema` is `themeScript`, `Red` is
 > `SocialLink`, the `degradado-hero` utility is `gradient-hero`, and `Hero`'s

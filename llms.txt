@@ -1267,16 +1267,18 @@ A large metric: the number in the `stat` scale and its name underneath.
 
 Source: `src/components/talk-card/index.tsx`
 
-- Extends: `Omit<CardShellProps, 'children' \| 'title'>`
+A talk has more than one destination, and that is what shapes this type.
+
+- Extends: `\| (Omit<CardShellProps, 'children' \| 'title'> & TalkContent & { /** The card is the link. Do not pass resources with this. */ resources?: never; }) \| (Omit<ComponentPropsWithoutRef<'article'>, 'title'> & TalkContent & { /** * Slides, repo, recording. They are the links, so the card stops being * one. */ resources: ReactNode; })`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
-| `asChild` | `boolean \| undefined` |  |  | Renders the child instead of an `<a>`. It is how Next's or Astro's `Link` plugs in without the library depending on any router. |
 | `date` | `ReactNode` |  |  |  |
 | `dateTime` | `string` |  |  |  |
 | `description` | `ReactNode` |  |  | What the talk was about. Clamped to two lines, same as `ArticleCard`'s `excerpt`, so the grid does not fall out of line. |
 | `event` | `ReactNode` | yes |  | Where it was given: the conference, the meetup, the team. |
 | `location` | `ReactNode` |  |  |  |
+| `resources` | `ReactNode` |  |  | The card is the link. Do not pass resources with this. Slides, repo, recording. They are the links, so the card stops being one. |
 | `status` | `ReactNode` |  |  | Short status label: «con vídeo», «próxima», «solo audio». |
 | `title` | `ReactNode` | yes |  |  |
 

@@ -59,8 +59,11 @@ export const Open: Story = {
         confirmation is a decision: you have to say no.
       </Note>
       <Note>
-        The confirm button is NOT red — the system has no danger variant. What
-        communicates the gravity is the text: it says what it does, not «Aceptar».
+        The confirm button is NOT red, and since 0.7.0 that is a choice rather
+        than the absence of an option: `Button` has `destructive` and this does
+        not use it. Everything above already carries the gravity, and a red button
+        on top of it is shouting. What communicates it is the text: it says what
+        it does, not «Aceptar». See `docs/decisions.md` § 21.
       </Note>
     </>
   ),

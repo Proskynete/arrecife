@@ -49,9 +49,10 @@ export const Variants: Story = {
         be remembered.
       </Note>
       <Note>
-        There is no danger variant. The system's error lives in alerts and in
-        field validation, not in a red button: a destructive one goes into the
-        document first and in here second.
+        Six with the two danger ones, which arrived in 0.7.0 the way the rule that
+        kept them out said they would: into the document first and in here
+        second. They are listed apart because they are not interchangeable with
+        these four — see the «two danger variants» story.
       </Note>
     </>
   ),

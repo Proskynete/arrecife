@@ -167,18 +167,22 @@ absolute size.
 
 ---
 
-## 8 · There is no danger button — superseded by § 21
+## 8 · There was no danger button · REVERSED in § 21
 
-None of the document's 987 lines shows a destructive one, and the system's error
-lives in the alerts and in field validation. The `danger` variant that was in the
-code was deleted.
+> **This rule no longer holds.** `Button` has `destructive` and
+> `destructiveOutline` since 0.7.0. The entry stays because the file's contract
+> is that a reversal comes with a new argument and not by forgetting — the new
+> argument is in § 21. What survives of this one is the half that was right:
+> inside an `AlertDialog` the confirm button is still not red.
 
-If the blog admin needs a real destructive button, it goes into the document
-**first** and in here second.
+What it said, and why it said it: none of the document's 987 lines shows a
+destructive button, and the system's error lives in the alerts and in field
+validation. The `danger` variant that was in the code was deleted, and the exit
+was written into the entry — «if the blog admin needs a real destructive button,
+it goes into the document **first** and in here second».
 
-**It did.** The palette was decided and the variant came back in 0.7.0. What
-survives of this entry is the half that was right: inside an `AlertDialog` the
-confirm button is still not red. See § 21.
+That is exactly the road it came back by. The palette was decided outside the
+code, and then the variant was written.
 
 ---
 

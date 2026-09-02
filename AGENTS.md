@@ -63,6 +63,7 @@ pnpm storybook        # genera los tokens y levanta Storybook en el 6006
 | `pnpm check:release`                   | valida la configuración de release-please           |
 | `pnpm build:tokens`                    | regenera `dist/tokens/theme.css`                    |
 | `pnpm build:llms`                      | regenera `llms.txt`                                 |
+| `pnpm build-storybook`                 | compila el Storybook en `storybook-static/`         |
 
 Antes de dar por terminado un cambio: `pnpm lint`, `pnpm typecheck` y
 `pnpm test`. La suite corre en un Chromium real y tarda; no la saltes cuando el
@@ -423,6 +424,14 @@ Si un check se cuelga o no reporta, el dueño puede forzar el merge del PR desde
 la interfaz. Es la única salida, y deja rastro.
 
 **No publiques a npm a mano.** El workflow publica con OIDC y genera procedencia.
+
+**Ni despliegues el Storybook a mano.** El job `desplegar` de `release.yml` lo
+compila y lo sube a Vercel **después** de que npm publique, y solo entonces: el
+sitio y el paquete tienen que contar la misma versión. Por eso el proyecto de
+Vercel no está conectado a GitHub —la integración de Git construiría en cada
+push a `main`— y por eso el job sube el build ya hecho con `--prebuilt`, sin
+que Vercel ejecute nada. Necesita `VERCEL_TOKEN` como secreto y `VERCEL_ORG_ID`
+y `VERCEL_PROJECT_ID` como variables; si faltan, avisa y no rompe la release.
 
 ## Errores que se cometen en este repo
 

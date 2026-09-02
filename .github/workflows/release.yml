@@ -183,3 +183,79 @@ jobs:
         run: |
           npm publish --access public --dry-run
           echo "Ensayo: se verificó todo y NO se publicó." >> "$GITHUB_STEP_SUMMARY"
+
+  # El Storybook es la documentación publicada de la librería: cada story es a
+  # la vez el ejemplo y el test que lo verifica. Por eso se despliega aquí y no
+  # en `ci.yml` — el sitio y el paquete tienen que contar la MISMA versión. Un
+  # Storybook por delante de npm enseña componentes que nadie puede instalar.
+  #
+  # De ahí también que el proyecto de Vercel NO esté conectado a GitHub: con la
+  # integración de Git, Vercel construye por su cuenta en cada push a main y ya
+  # no hay forma de que espere al tag. El único que despliega es este job.
+  desplegar:
+    name: Publicar el Storybook
+    needs: publicar
+    # `publicar` ya filtra por «hay release»: si no se cortó versión, no llega
+    # aquí. Lo único que queda por descartar es el ensayo, que verifica todo y
+    # no publica — así que tampoco despliega.
+    if: >-
+      ${{ needs.publicar.result == 'success'
+        && !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      # Los dos ids NO son secretos: salen de `.vercel/project.json` en
+      # cualquier clon que haga `vercel link`. Van como variables del repo para
+      # que se lean en el log cuando algo no cuadra. El token sí es secreto.
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - name: 📚 Clonar el repositorio
+        uses: actions/checkout@v7
+
+      # Sin Chromium: aquí no corre la suite. Ya corrió entera en `publicar`.
+      - name: 🟢 Preparar el entorno
+        uses: ./.github/actions/setup
+
+      # Falta de credenciales avisa, no rompe. Para cuando este job corre, npm
+      # YA publicó y el tag YA está cortado: un rojo aquí se leería como «la
+      # release falló», que es justo lo contrario de lo que pasó. El aviso se
+      # queda en el resumen del run hasta que los secretos estén puestos.
+      - name: 🔑 Comprobar las credenciales de Vercel
+        id: credenciales
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::warning::Sin VERCEL_TOKEN o VERCEL_PROJECT_ID: el Storybook no se despliega."
+            echo "⚠️ Storybook NO desplegado: faltan las credenciales de Vercel." >> "$GITHUB_STEP_SUMMARY"
+            echo "listo=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "listo=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 📖 Compilar el Storybook
+        if: steps.credenciales.outputs.listo == 'true'
+        run: pnpm build-storybook
+
+      # Se sube ya compilado. Con el Build Output API y `--prebuilt`, Vercel no
+      # ejecuta nada: sirve lo que hay en `.vercel/output/static` tal cual. Así
+      # el Storybook lo compila el mismo Node y el mismo lockfile que acaban de
+      # verificar la librería, y no la detección de framework de Vercel.
+      - name: 📦 Empaquetar con el Build Output API
+        if: steps.credenciales.outputs.listo == 'true'
+        run: |
+          mkdir -p .vercel/output/static
+          cp -R storybook-static/. .vercel/output/static/
+          echo '{"version":3}' > .vercel/output/config.json
+
+      # El CLI va fijado a una major: `latest` en un `npx` de CI es una
+      # dependencia sin lockfile que puede cambiar entre dos releases.
+      - name: 🚀 Desplegar a producción
+        if: steps.credenciales.outputs.listo == 'true'
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          url="$(npx --yes vercel@59 deploy --prebuilt --prod --yes --token "$VERCEL_TOKEN")"
+          echo "### Storybook $version" >> "$GITHUB_STEP_SUMMARY"
+          echo "- despliegue: $url" >> "$GITHUB_STEP_SUMMARY"
+          echo "- producción: https://arrecife.eduardoalvarez.dev" >> "$GITHUB_STEP_SUMMARY"

@@ -63,6 +63,23 @@ export function Footer({
         ${' '}
       </span>
       cd ~/{naming.domain}/{year}
+      {/*
+        The caret. It is what says the signature is a prompt and not a decorative
+        string: a terminal whose caret does not blink is a terminal that has
+        hung, and a still block reads as a typo.
+
+        It is the fifth declared motion exception and the only one that is not
+        feedback about progress — see `docs/decisions.md` § 23. `motion-safe`
+        leaves it solid for whoever asked for less motion, which is a caret at
+        rest and not a missing one.
+
+        `aria-hidden` for the same reason as the `$`: it is the prompt, not the
+        text. A screen reader announces the path and stops there.
+      */}
+      <span
+        aria-hidden="true"
+        className="bg-accent motion-safe:caret ml-[0.2em] inline-block h-[1em] w-[0.5em] translate-y-[0.15em]"
+      />
     </Text>
   );
 

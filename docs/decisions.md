@@ -588,6 +588,49 @@ note that it is for dense UI and not a replacement for `icon`.
 
 ---
 
+## 23 · The footer's caret blinks
+
+**System rule:** «no entrance animations», and the four exceptions are all
+feedback about PROGRESS or about spatial continuity. This one is neither, so it
+needs a different argument or it does not get in.
+
+**What stayed:** the CLI signature — `$ cd ~/eduardoalvarez.dev/2026` — ends in a
+block caret that blinks, behind `motion-safe`.
+
+The argument is legibility, not decoration. The signature is a prompt: that is
+the whole point of it being mono, of the `$` being in accent, and of it sitting
+in a footer instead of a `<p>` saying «© 2026». A prompt whose caret does not
+blink is a terminal that has hung, and a still block at the end of a line reads
+as a stray character — several people asked whether it was a typo on the site it
+comes from.
+
+So the criterion the other four share splits in two, and this one lands on the
+other half: **it is not decoration, it is what makes the piece legible as what it
+is.** The spinner says «this is loading» rather than «this is disabled»; the
+caret says «this is a prompt» rather than «this is a string with a smudge».
+
+`step-end` and not a fade, and this part is not a detail: a real caret is on or
+off. Easing it turns a terminal into a pulsing dot, which is the decoration the
+rule exists to keep out. 1.06s is the cadence of a VT100, and of the site this
+comes from.
+
+Behind `motion-safe`, where it stays solid. That is a caret at rest and not a
+missing one — unlike the skeleton, which loses information when its shimmer goes,
+this loses none.
+
+It is `aria-hidden`, for the same reason as the `$`: it is the prompt, not the
+text. A screen reader announces the path and stops.
+
+With this there are **five** declared exceptions: the button spinner, the side
+panel, the skeleton shimmer, the accordion height and the footer caret. Four are
+feedback about progress or continuity; the fifth is legibility. A sixth needs to
+land on one of those two, written down, before it exists.
+
+**Action in the document:** add the caret to the footer's specification, and note
+that the exception list is now five with two criteria and not one.
+
+---
+
 ## What was NOT touched
 
 The audit's list still stands: the three contrast corrections (light `textMuted`,

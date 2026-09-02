@@ -208,6 +208,29 @@ ${gradientsBlock('light')}
   animation: arrecife-shimmer 1.4s linear infinite;
 }
 
+/* --- the fifth exception: the caret of the CLI signature --------------------
+   A terminal prompt with a caret that does not blink is a terminal that has
+   hung. The caret is the one piece of the footer that says the signature is a
+   prompt and not a decorative string, and a still block reads as a typo.
+
+   step-end and not a fade: a real caret is on or off, and easing it turns a
+   terminal into a pulsing dot. 1.06s is the cadence of a VT100 and of the site
+   this comes from.
+
+   It is the only exception that is not feedback about progress, and it earns its
+   place on the other half of the criterion the other four share: it is not
+   decoration, it is what makes the piece legible as what it is. Behind
+   motion-safe, where the caret stays solid — which is a caret at rest, not a
+   missing one. See docs/decisions.md § 23. */
+@keyframes arrecife-caret {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@utility caret {
+  animation: arrecife-caret 1.06s step-end infinite;
+}
+
 /* --- the accordion exception -----------------------------------------------
    The fourth one and, like the other three, it is not «it looks better»: a
    disclosure that reveals content with no transition makes everything below it

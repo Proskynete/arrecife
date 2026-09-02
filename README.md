@@ -478,6 +478,11 @@ Para probar sin gastar una versión: *Actions → Release y publicación → Run
 workflow* con el ensayo activado. Hace todo menos publicar, no necesita token, y
 el resumen del run lista qué archivos viajarían y cuánto pesa el tarball.
 
+El ensayo **sí despliega el Storybook**, a un preview de Vercel y no al dominio
+público. Es a propósito: un ensayo que se salta un job no puede decir si ese job
+funciona, y el despliegue era el único paso del workflow que no se podía probar
+sin gastar una versión.
+
 ### El Storybook se despliega con la versión
 
 El Storybook publicado es la documentación de la librería: cada story es a la

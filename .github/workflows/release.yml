@@ -196,15 +196,16 @@ jobs:
     name: Publicar el Storybook
     needs: publicar
     # `publicar` ya filtra por «hay release»: si no se cortó versión, no llega
-    # aquí. Lo único que queda por descartar es el ensayo, que verifica todo y
-    # no publica — así que tampoco despliega.
-    if: >-
-      ${{ needs.publicar.result == 'success'
-        && !(github.event_name == 'workflow_dispatch' && inputs.dry-run) }}
+    # aquí. El ensayo SÍ pasa, y a propósito: un ensayo que se salta este job
+    # no puede decir si el job funciona, y era el único paso del workflow que no
+    # se podía probar sin gastar una versión. Lo que cambia en el ensayo es el
+    # destino — preview, no producción—, no si corre.
+    if: ${{ needs.publicar.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
       # Los dos ids NO son secretos: salen de `.vercel/project.json` en
       # cualquier clon que haga `vercel link`. Van como variables del repo para
       # que se lean en el log cuando algo no cuadra. El token sí es secreto.
@@ -257,13 +258,24 @@ jobs:
       # está detrás del SSO del equipo —la protección de Vercel es
       # `all_except_custom_domains`—, así que abrirla desde fuera devuelve un
       # 302 al login. La pública es el dominio propio.
-      - name: 🚀 Desplegar a producción
+      - name: 🚀 Desplegar
         if: steps.credenciales.outputs.listo == 'true'
         run: |
           version="$(node -p "require('./package.json').version")"
-          url="$(npx --yes vercel@59 deploy --prebuilt --prod --yes --token "$VERCEL_TOKEN")"
+          # Sin `--prod` el despliegue es un preview: mismo camino entero, con
+          # las mismas credenciales y el mismo tarball, sin tocar el dominio
+          # público. Es lo que hace verificable el ensayo.
+          destino=""
+          [ "$DRY_RUN" != "true" ] && destino="--prod"
+          url="$(npx --yes vercel@59 deploy --prebuilt $destino --yes --token "$VERCEL_TOKEN")"
           {
-            echo "### Storybook $version"
-            echo "- este despliegue (pide sesión del equipo): $url"
-            echo "- público: https://arrecife.eduardoalvarez.dev"
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "### Ensayo del Storybook $version"
+              echo "- preview: $url"
+              echo "- el dominio público NO se tocó."
+            else
+              echo "### Storybook $version"
+              echo "- este despliegue (pide sesión del equipo): $url"
+              echo "- público: https://arrecife.eduardoalvarez.dev"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"

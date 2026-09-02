@@ -12,7 +12,7 @@ import {
   Rss,
   X,
   YouTube,
-} from '../../lib/social.tsx';
+} from '../../social/index.tsx';
 import { Footer, FooterLink } from './index.tsx';
 
 const meta = {
@@ -60,8 +60,8 @@ export const Basic: Story = {
           symbol in this system is drawn with a line.
         </Note>
         <Note>
-          They live in `lib/social.tsx` and not in `glyphs.tsx`. That one is the
-          minimum set the primitives need and it does not grow; this is a
+          They live in `social/index.tsx` and not in `lib/glyphs.tsx`. That one
+          is the minimum set the primitives need and it does not grow; this is a
           third-party inventory that will change when the social links change.
         </Note>
         <Note>

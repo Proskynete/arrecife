@@ -20,6 +20,7 @@ export default defineConfig({
     'theme/index': 'src/theme/index.ts',
     'variants/index': 'src/variants/index.ts',
     'brand/index': 'src/brand/index.ts',
+    'social/index': 'src/social/index.tsx',
     'og/index': 'src/og/index.ts',
     'shiki/index': 'src/shiki/index.ts',
     'form/index': 'src/form/index.tsx',

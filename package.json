@@ -49,6 +49,11 @@
       "import": "./dist/brand/index.js",
       "require": "./dist/brand/index.cjs"
     },
+    "./social": {
+      "types": "./dist/social/index.d.ts",
+      "import": "./dist/social/index.js",
+      "require": "./dist/social/index.cjs"
+    },
     "./og": {
       "types": "./dist/og/index.d.ts",
       "import": "./dist/og/index.js",

@@ -124,6 +124,25 @@ those defaults would change what their users read.
 So: `MascotFace`, `themeScript`, `faceList`, `gradient-hero` — but
 `successMessage = 'Ya estás dentro…'`.
 
+**An `aria-label` is user-facing copy, and it is the most user-facing string
+there is**: it is what a screen reader says out loud. This is the half the 0.6.0
+sweep got wrong, and it is worth spelling out because the mistake does not look
+like one — `aria-label` reads as markup, so it gets swept along with the
+identifiers. Eight strings went over: `Pagination`'s next link ended up saying
+«Siguiente» on screen and announcing «Página next», which is also WCAG 2.5.3
+Label in Name; `AudioPlayer`'s slider announced «Volume» surrounded by
+«Silenciar» and «Progreso del audio»; `NewsletterForm`'s field label became
+«Email electrónico», which is «correo electrónico» with half the phrase swapped;
+`EventCalendar` ended with `./borrar` and `./cancel` in the same row.
+
+**Nothing catches this.** `pnpm test` runs axe over every story, and axe checks
+that a control HAS an accessible name, not which language it is in.
+`label-content-name-mismatch` — the rule that would have caught the pagination
+one — is not among the rules it runs. So the test for whether a string may be
+translated is read, not run: **if a reader of a consuming site can see it or hear
+it, it stays in Spanish.** Identifiers, comments, JSDoc, story names and the
+`Note` blocks are documentation and go in English.
+
 ## How a component is created
 
 A component is **two files**, always:
@@ -554,7 +573,10 @@ In order of how often they actually happen:
    name raises no error: it does nothing.
 10. Writing an identifier or a comment in Spanish. Since 0.6.0 the code is in
     English; only user-facing copy stays in Spanish.
-11. Dropping a whole PR into a single commit because «it is all the same
+11. Translating user-facing copy into English while doing that. It is the same
+    mistake from the other side and it happened eight times in 0.6.0, `aria-label`
+    included. Nothing in CI catches it — see «The language of the code».
+12. Dropping a whole PR into a single commit because «it is all the same
     change». It happened on the 0.6.0 migration: 171 files in one commit, which
     is a diff nobody reads and a bisect that points at everything. See «One
     commit is one reviewable unit».

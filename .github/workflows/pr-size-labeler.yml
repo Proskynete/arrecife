@@ -1,4 +1,4 @@
-name: "📏 Tamaño del PR"
+name: "📏 PR size"
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   size-label:
-    name: Etiquetar por tamaño
+    name: Label by size
     runs-on: ubuntu-latest
     steps:
       - name: 📊 Etiquetar
@@ -28,6 +28,6 @@ jobs:
           xl_label: "🤯 size/xl"
           fail_if_xl: "false"
           message_if_xl: >
-            ⚠️ Este PR pasa de 1000 líneas. Comprueba que no esté resolviendo
-            varias cosas a la vez y considera partirlo.
+            ⚠️ This PR is over 1000 lines. Check that it is not solving several
+            things at once, and consider splitting it.
           files_to_ignore: "pnpm-lock.yaml *.lock docs/* CHANGELOG.md"

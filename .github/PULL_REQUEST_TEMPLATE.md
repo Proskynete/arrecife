@@ -1,23 +1,23 @@
-## Qué cambia
+## What changes
 
-<!-- Una o dos frases. Qué se ve distinto después de esto. -->
+<!-- One or two sentences. What looks different after this. -->
 
-## Por qué
+## Why
 
-<!-- El motivo, no el cambio. Si viene del Design System o del Manual de marca,
-     cita la sección; si contradice al documento, dilo aquí y anótalo en
-     docs/decisiones.md. -->
+<!-- The reason, not the change. If it comes from the Design System or the Brand
+     Manual, cite the section; if it contradicts the document, say so here and
+     record it in docs/decisions.md. -->
 
-## Comprobaciones
+## Checks
 
-- [ ] `pnpm lint` y `pnpm typecheck` pasan
-- [ ] `pnpm test` pasa en los **dos** modos (un color solo falla en uno)
-- [ ] Las stories cubren los estados nuevos, no solo el de reposo
-- [ ] Si toca color: el contraste está **medido**, no estimado, y anotado
-- [ ] Si toca `tokens.ts`: `pnpm check:tokens` sigue en verde
-- [ ] Si contradice al documento: está en `docs/decisiones.md` con su motivo
+- [ ] `pnpm lint` and `pnpm typecheck` pass
+- [ ] `pnpm test` passes in **both** modes (a color only fails in one)
+- [ ] The stories cover the new states, not just the resting one
+- [ ] If it touches color: the contrast is **measured**, not estimated, and recorded
+- [ ] If it touches `tokens.ts`: `pnpm check:tokens` is still green
+- [ ] If it contradicts the document: it is in `docs/decisions.md` with its reason
 
-## Capturas
+## Screenshots
 
-<!-- En los dos modos si el cambio es visual. El switch está en la toolbar de
-     Storybook. -->
+<!-- In both modes if the change is visual. The switch is in the Storybook
+     toolbar. -->

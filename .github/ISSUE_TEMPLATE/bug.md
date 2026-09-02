@@ -1,23 +1,23 @@
 ---
-name: Error
-about: Algo no se comporta como el Design System dice
+name: Bug
+about: Something does not behave the way the Design System says
 title: "fix: "
 labels: bug
 ---
 
-## Qué pasa
+## What happens
 
-## Qué debería pasar
+## What should happen
 
-<!-- Si el Design System o el Manual de marca lo especifican, cita la sección.
-     Si el documento no lo dice, es una decisión y no un error: usa la otra
-     plantilla. -->
+<!-- If the Design System or the Brand Manual specify it, cite the section. If
+     the document does not say, it is a decision and not a bug: use the other
+     template. -->
 
-## Cómo reproducirlo
+## How to reproduce it
 
 1.
 2.
 
-**Componente**:
-**Modo**: oscuro / claro / los dos
-**Versión de arrecife**:
+**Component**:
+**Mode**: dark / light / both
+**arrecife version**:

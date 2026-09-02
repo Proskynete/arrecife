@@ -1,4 +1,4 @@
-name: "🛡️ Revisión de dependencias"
+name: "🛡️ Dependency review"
 
 on:
   pull_request:
@@ -10,14 +10,15 @@ permissions:
 
 jobs:
   dependency-review:
+    # Pinned by the `main` branch ruleset as a required check.
     name: Escaneo de seguridad
     runs-on: ubuntu-latest
     steps:
-      - name: 📚 Clonar el repositorio
+      - name: 📚 Check out the repository
         uses: actions/checkout@v7
 
-      # Una librería publicada arrastra sus dependencias a los cinco proyectos,
-      # así que una vulnerabilidad aquí se multiplica por cinco.
+      # A published library drags its dependencies into all five projects, so a
+      # vulnerability here is multiplied by five.
       - name: 🔍 Revisar las dependencias
         uses: actions/dependency-review-action@v5
         with:

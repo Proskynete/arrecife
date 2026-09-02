@@ -1,10 +1,10 @@
 /**
- * La restricción que manda sobre todo lo demás, como check y no como comentario:
- * `src/tokens/` no importa nada fuera de `src/tokens/`.
+ * The constraint that outranks everything else, as a check rather than a
+ * comment: `src/tokens/` imports nothing from outside `src/tokens/`.
  *
- * Es el único subpaquete que consumen los cinco proyectos, el generador de OG
- * con Satori y un sitio Astro que no monta React. Si un token termina
- * dependiendo de un componente, la librería dejó de ser portable.
+ * It is the only subpackage consumed by all five projects, by the Satori OG
+ * generator and by an Astro site that never mounts React. The moment a token
+ * depends on a component, the library has stopped being portable.
  */
 import { readdir, readFile } from 'node:fs/promises';
 import { resolve, dirname, relative } from 'node:path';
@@ -13,37 +13,37 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dir = resolve(root, 'src/tokens');
 
-const ESPECIFICADOR = /(?:^|\n)\s*(?:import|export)\b[^\n;]*?\bfrom\s*['"]([^'"]+)['"]/g;
-const IMPORT_DINAMICO = /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+const SPECIFIER = /(?:^|\n)\s*(?:import|export)\b[^\n;]*?\bfrom\s*['"]([^'"]+)['"]/g;
+const DYNAMIC_IMPORT = /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
 const REQUIRE = /\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
 
-const fallos = [];
+const failures = [];
 
-for (const archivo of await readdir(dir, { recursive: true })) {
-  if (!/\.(ts|tsx|mts|cts|js|mjs)$/.test(archivo)) continue;
-  const ruta = resolve(dir, archivo);
-  const fuente = await readFile(ruta, 'utf8');
+for (const file of await readdir(dir, { recursive: true })) {
+  if (!/\.(ts|tsx|mts|cts|js|mjs)$/.test(file)) continue;
+  const path = resolve(dir, file);
+  const source = await readFile(path, 'utf8');
 
-  for (const patron of [ESPECIFICADOR, IMPORT_DINAMICO, REQUIRE]) {
-    patron.lastIndex = 0;
+  for (const pattern of [SPECIFIER, DYNAMIC_IMPORT, REQUIRE]) {
+    pattern.lastIndex = 0;
     let m;
-    while ((m = patron.exec(fuente)) !== null) {
-      const especificador = m[1];
-      if (especificador.startsWith('.')) {
-        // Relativo: solo vale si no se sale de src/tokens/.
-        const destino = resolve(dirname(ruta), especificador);
-        if (!relative(dir, destino).startsWith('..')) continue;
+    while ((m = pattern.exec(source)) !== null) {
+      const specifier = m[1];
+      if (specifier.startsWith('.')) {
+        // Relative: only allowed if it does not escape src/tokens/.
+        const target = resolve(dirname(path), specifier);
+        if (!relative(dir, target).startsWith('..')) continue;
       }
-      fallos.push(`${relative(root, ruta)} → ${especificador}`);
+      failures.push(`${relative(root, path)} → ${specifier}`);
     }
   }
 }
 
-if (fallos.length > 0) {
-  console.error('src/tokens/ importó algo de fuera. La librería dejó de ser portable:\n');
-  for (const fallo of fallos) console.error(`  ${fallo}`);
-  console.error('\nLos tokens no dependen de React, de componentes ni de CSS de terceros.');
+if (failures.length > 0) {
+  console.error('src/tokens/ imported something from outside. The library is no longer portable:\n');
+  for (const failure of failures) console.error(`  ${failure}`);
+  console.error('\nTokens depend on neither React, nor components, nor third-party CSS.');
   process.exit(1);
 }
 
-console.log('arrecife · src/tokens/ limpio: cero dependencias externas');
+console.log('arrecife · src/tokens/ clean: zero external dependencies');

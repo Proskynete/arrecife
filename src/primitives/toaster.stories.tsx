@@ -1,24 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Fila, Nota } from '../../stories/utils.tsx';
+import { Row, Note } from '../../stories/utils.tsx';
 import { Button } from './button.tsx';
 import { ToastAction } from './toast.tsx';
 import { Toaster, toast } from './toaster.tsx';
 
 const meta = {
-  title: 'Primitivos/Toaster',
+  title: 'Primitives/Toaster',
   component: Toaster,
 } satisfies Meta<typeof Toaster>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: (args) => (
     <div>
-      <Fila>
-        <Button variant="secondary" onClick={() => toast('Borrador guardado')}>
+      <Row>
+        <Button variant="secondary" onClick={() => toast('Borrador stored')}>
           Neutral
         </Button>
         <Button
@@ -41,33 +41,35 @@ export const Basico: Story = {
         <Button variant="tertiary" onClick={() => toast.dismiss()}>
           ./cerrar todos →
         </Button>
-      </Fila>
+      </Row>
 
-      <Nota>
-        Se llama desde donde haga falta: `toast('Guardado')`. El estado vive en el
-        módulo y no en un contexto, que es lo que permite dispararlo desde el
-        `catch` de un `fetch` sin subir un `useState` hasta el proveedor.
-      </Nota>
-      <Nota>
-        No hay `toast.promise` ni posiciones configurables. Están las tres formas
-        que los proyectos usan —neutral, éxito, error—, `dismiss`, y nada más:
-        cada añadido es superficie pública que hay que mantener.
-      </Nota>
-      <Nota>
-        El aviso aparece donde va a quedarse. `sonner` los desliza y los apila con
-        perspectiva; aquí no, por lo mismo que no se animan modales ni menús.
-      </Nota>
+      <Note>
+        It is called from wherever it is needed: `toast('Guardado')`. The state
+        lives in the module and not in a context, which is what lets it be fired
+        from a `fetch`'s `catch` without lifting a `useState` up to the provider.
+      </Note>
+      <Note>
+        There is no `toast.promise` and there are no configurable positions. What
+        is here are the three shapes the projects use — neutral, success, error —
+        plus `dismiss`, and nothing else: every addition is public surface to
+        maintain.
+      </Note>
+      <Note>
+        The notice appears where it will stay. `sonner` slides them and stacks them
+        with perspective; not here, for the same reason modals and menus are not
+        animated.
+      </Note>
 
       <Toaster {...args} />
     </div>
   ),
 };
 
-export const ConAccion: Story = {
-  name: 'Con acción',
+export const WithAction: Story = {
+  name: 'With action',
   render: (args) => (
     <div>
-      <Fila>
+      <Row>
         <Button
           variant="secondary"
           onClick={() =>
@@ -82,36 +84,37 @@ export const ConAccion: Story = {
         >
           Borrar con deshacer
         </Button>
-      </Fila>
-      <Nota>
-        `altText` es obligatorio en `ToastAction` y no es decorativo: es lo que se
-        anuncia cuando el aviso caduca antes de que dé tiempo a pulsarlo.
-      </Nota>
+      </Row>
+      <Note>
+        `altText` is mandatory on `ToastAction` and it is not decorative: it is
+        what gets announced when the notice expires before there is time to press
+        it.
+      </Note>
       <Toaster {...args} />
     </div>
   ),
 };
 
-export const Variantes: Story = {
-  name: 'Las tres formas, abiertas',
+export const Variants: Story = {
+  name: 'The three shapes, open',
   render: (args) => (
     <div>
-      <Nota>
-        Las tres que existen: neutral, éxito y error. No hay más, y no hay
-        `toast.promise` ni posiciones configurables — cada añadido es superficie
-        pública que hay que mantener.
-      </Nota>
-      <Nota>
-        Desde la 0.5.0 esta es la ÚNICA forma de mostrar un aviso. `Toast`,
-        `ToastProvider` y `ToastViewport` dejaron de ser públicos: no tenían un
-        caso de uso propio, y dos formas de mostrar lo mismo obligan a elegir en
-        cada sitio sin criterio que lo resuelva.
-      </Nota>
+      <Note>
+        The three that exist: neutral, success and error. There are no more, and
+        there is no `toast.promise` and no configurable positions — every addition
+        is public surface to maintain.
+      </Note>
+      <Note>
+        Since 0.5.0 this is the ONLY way to show a notice. `Toast`,
+        `ToastProvider` and `ToastViewport` stopped being public: they had no use
+        case of their own, and two ways of showing the same thing force a choice at
+        every site with no criterion to settle it.
+      </Note>
       <Toaster {...args} />
     </div>
   ),
   play: async () => {
-    toast('Borrador guardado');
+    toast('Borrador stored');
     toast.success('Artículo publicado', { description: 'Ya está en el feed.' });
     toast.error('No se pudo guardar', { title: 'Error del servidor' });
   },

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { userEvent, within } from 'storybook/test';
 
-import { Pila } from '../../stories/utils.tsx';
+import { Stack } from '../../stories/utils.tsx';
 import {
   Select,
   SelectContent,
@@ -13,19 +13,19 @@ import {
   SelectValue,
 } from './select.tsx';
 
-const meta = { title: 'Primitivos/Select', component: Select } satisfies Meta<typeof Select>;
+const meta = { title: 'Primitives/Select', component: Select } satisfies Meta<typeof Select>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const control = (args: Parameters<NonNullable<Story['render']>>[0], disabled = false) => (
-  <Pila>
+  <Stack>
     <div className="gap-step-xs flex flex-col">
       <span id="velocidad-etiqueta" className="text-label font-sans text-text-secondary">
         Velocidad
       </span>
       <Select {...args}>
         <SelectTrigger disabled={disabled} aria-labelledby="velocidad-etiqueta">
-          <SelectValue placeholder="Elige una velocidad" />
+          <SelectValue placeholder="Elige una speed" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -41,7 +41,7 @@ const control = (args: Parameters<NonNullable<Story['render']>>[0], disabled = f
         </SelectContent>
       </Select>
     </div>
-  </Pila>
+  </Stack>
 );
 
 export const Default: Story = { render: (args) => control(args) };
@@ -49,17 +49,17 @@ export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: (
 export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: (args) => control(args) };
 /**
  * Se abre pulsando, no montando `open`: así el test de accesibilidad mide el
- * estado real, con el foco ya movido dentro del portal.
+ * state real, con el foco ya movido dentro del portal.
  */
 /**
  * Radix marca `aria-hidden` todo lo que queda fuera del portal, y el disparador
  * se queda dentro de esa región siendo focusable. axe lo reporta, pero el foco
  * está atrapado en el portal por el `FocusScope` de Radix, así que en la práctica
  * no se puede tabular hasta él. Es un desacuerdo conocido entre axe y Radix, no
- * algo que introduzca Arrecife: se desactiva esta regla y solo esta, aquí y no
- * en el resto de la librería.
+ * algo que introduzca Arrecife: se desactiva esta rule y solo esta, aquí y no
+ * en el rest de la librería.
  */
-export const Abierto: Story = {
+export const Open: Story = {
   parameters: {
     a11y: { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } },
   },
@@ -69,4 +69,4 @@ export const Abierto: Story = {
     await userEvent.click(within(canvasElement).getByRole('combobox'));
   },
 };
-export const Deshabilitado: Story = { render: (args) => control(args, true) };
+export const Disabled: Story = { render: (args) => control(args, true) };

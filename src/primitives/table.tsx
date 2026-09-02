@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
 
-/** El contenedor scrollea en horizontal: la página nunca lo hace. */
+/** The container scrolls horizontally: the page never does. */
 export function Table({ className, ...props }: ComponentPropsWithoutRef<'table'>) {
   return (
     <div className="w-full overflow-x-auto">

@@ -1,33 +1,33 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Etiqueta, Pila } from '../../stories/utils.tsx';
+import { FieldLabel, Stack } from '../../stories/utils.tsx';
 import { Input } from './input.tsx';
 
 const meta = {
-  title: 'Primitivos/Input',
+  title: 'Primitives/Input',
   component: Input,
-  args: { placeholder: 'nombre@dominio.dev' },
+  args: { placeholder: 'name@dominio.dev' },
 } satisfies Meta<typeof Input>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const conEtiqueta = (args: Parameters<NonNullable<Story['render']>>[0]) => (
-  <Pila>
+const withLabel = (args: Parameters<NonNullable<Story['render']>>[0]) => (
+  <Stack>
     <div className="gap-step-xs flex flex-col">
-      <Etiqueta htmlFor="correo">Correo</Etiqueta>
-      <Input id="correo" {...args} />
+      <FieldLabel htmlFor="email">Email</FieldLabel>
+      <Input id="email" {...args} />
     </div>
-  </Pila>
+  </Stack>
 );
 
-export const Default: Story = { render: conEtiqueta };
-export const ConValor: Story = { args: { defaultValue: 'soy@eduardoalvarez.dev' }, render: conEtiqueta };
-export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: conEtiqueta };
-export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: conEtiqueta };
-export const Invalido: Story = {
-  name: 'Inválido',
+export const Default: Story = { render: withLabel };
+export const WithValue: Story = { args: { defaultValue: 'soy@eduardoalvarez.dev' }, render: withLabel };
+export const Hover: Story = { parameters: { pseudo: { hover: true } }, render: withLabel };
+export const Focus: Story = { parameters: { pseudo: { focusVisible: true } }, render: withLabel };
+export const Invalid: Story = {
+  name: 'Invalid',
   args: { invalid: true, defaultValue: 'no-es-un-correo' },
-  render: conEtiqueta,
+  render: withLabel,
 };
-export const Deshabilitado: Story = { args: { disabled: true }, render: conEtiqueta };
+export const Disabled: Story = { args: { disabled: true }, render: withLabel };

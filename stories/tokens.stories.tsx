@@ -16,58 +16,58 @@ import {
 } from '../src/tokens/index.ts';
 import type { ColorMode } from '../src/tokens/index.ts';
 
-/** camelCase → kebab-case, igual que en `scripts/build-tokens.mjs`. */
-const kebab = (nombre: string) => nombre.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+/** camelCase → kebab-case, same as in `scripts/build-tokens.mjs`. */
+const kebab = (name: string) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
-/* ------------------------------------------------------- contraste medido */
+/* ----------------------------------------------------- measured contrast */
 
-/** Canal sRGB linealizado, WCAG 2.1. */
-function canal(v: number): number {
+/** Linearised sRGB channel, WCAG 2.1. */
+function channel(v: number): number {
   const s = v / 255;
   return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
 }
 
-function luminancia(hex: string): number {
+function luminance(hex: string): number {
   const n = parseInt(hex.slice(1), 16);
   return (
-    0.2126 * canal((n >> 16) & 255) +
-    0.7152 * canal((n >> 8) & 255) +
-    0.0722 * canal(n & 255)
+    0.2126 * channel((n >> 16) & 255) +
+    0.7152 * channel((n >> 8) & 255) +
+    0.0722 * channel(n & 255)
   );
 }
 
-/** Razón de contraste WCAG entre dos colores. Esta es la prueba, no el ojo. */
-function contraste(a: string, b: string): number {
-  const [x, y] = [luminancia(a), luminancia(b)].sort((p, q) => q - p) as [number, number];
+/** WCAG contrast ratio between two colors. This is the proof, not the eye. */
+function contrast(a: string, b: string): number {
+  const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p) as [number, number];
   return (x + 0.05) / (y + 0.05);
 }
 
 const format = (n: number) => `${n.toFixed(2)}:1`;
 
-/* ----------------------------------------- el modo activo desde la toolbar */
+/* --------------------------------------- the active mode, from the toolbar */
 
-/** Lee el data-theme que pone el switch de la toolbar. */
-function useModo(): ColorMode {
-  const [modo, setModo] = useState<ColorMode>('dark');
+/** Reads the data-theme the toolbar switch sets. */
+function useMode(): ColorMode {
+  const [mode, setMode] = useState<ColorMode>('dark');
 
   useEffect(() => {
-    const raiz = document.documentElement;
-    const leer = () => setModo(raiz.dataset['theme'] === 'light' ? 'light' : 'dark');
-    leer();
-    const observer = new MutationObserver(leer);
-    observer.observe(raiz, { attributes: true, attributeFilter: ['data-theme'] });
+    const root = document.documentElement;
+    const read = () => setMode(root.dataset['theme'] === 'light' ? 'light' : 'dark');
+    read();
+    const observer = new MutationObserver(read);
+    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
     return () => observer.disconnect();
   }, []);
 
-  return modo;
+  return mode;
 }
 
-/* -------------------------------------------------------------- andamiaje */
+/* ------------------------------------------------------------ scaffolding */
 
-function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mb-section">
-      <h2 className="text-h2 font-display text-text-primary mb-step-md">{titulo}</h2>
+      <h2 className="text-h2 font-display text-text-primary mb-step-md">{title}</h2>
       {children}
     </section>
   );
@@ -79,88 +79,88 @@ function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-function Pagina({ titulo, children }: { titulo: string; children: ReactNode }) {
+function Page({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="bg-background text-text-primary font-sans min-h-screen px-step-xl py-step-xl">
       <div className="max-w-wide mx-auto">
         <Eyebrow>arrecife · tokens</Eyebrow>
-        <h1 className="text-h1 font-display text-text-primary mb-step-xl">{titulo}</h1>
+        <h1 className="text-h1 font-display text-text-primary mb-step-xl">{title}</h1>
         {children}
       </div>
     </div>
   );
 }
 
-/* ---------------------------------------------------------------- paleta */
+/* ---------------------------------------------------------------- palette */
 
-type Clave = keyof typeof colors.dark;
+type Key = keyof typeof colors.dark;
 
 /**
- * Cada grupo se mide como lo que es. Un fondo no se mide contra sí mismo: se
- * mide el texto que va a ir encima. Un borde no es texto: le basta 3:1 de AA
- * para componentes no textuales.
+ * Each group is measured as what it is. A background is not measured against
+ * itself: what is measured is the text going on top of it. A border is not text:
+ * 3:1 is AA enough for non-text components.
  */
-type Medicion = 'fondo' | 'ui' | 'texto';
+type Measurement = 'background' | 'ui' | 'text';
 
-type Grupo = {
-  titulo: string;
-  medicion: Medicion;
-  nota?: string;
-  claves: readonly Clave[];
+type Group = {
+  title: string;
+  measurement: Measurement;
+  note?: string;
+  keys: readonly Key[];
 };
 
-const GRUPOS: readonly Grupo[] = [
+const GROUPS: readonly Group[] = [
   {
-    titulo: 'Fondos',
-    medicion: 'fondo',
-    nota: 'Se mide textPrimary encima, que es lo que de verdad hay que poder leer.',
-    claves: ['background', 'surface', 'surfaceRaised'],
+    title: 'Backgrounds',
+    measurement: 'background',
+    note: 'textPrimary is measured on top, which is what actually has to be readable.',
+    keys: ['background', 'surface', 'surfaceRaised'],
   },
   {
-    titulo: 'Bordes',
-    medicion: 'ui',
-    nota: 'No son texto: el mínimo AA de componentes no textuales es 3:1.',
-    claves: ['border', 'hairline'],
+    title: 'Borders',
+    measurement: 'ui',
+    note: 'They are not text: the AA minimum for non-text components is 3:1.',
+    keys: ['border', 'hairline'],
   },
   {
-    titulo: 'Texto',
-    medicion: 'texto',
-    nota: 'textMuted nunca por debajo de 13px.',
-    claves: ['textPrimary', 'textSecondary', 'textMuted'],
+    title: 'Text',
+    measurement: 'text',
+    note: 'textMuted never below 13px.',
+    keys: ['textPrimary', 'textSecondary', 'textMuted'],
   },
-  { titulo: 'Interactivo', medicion: 'texto', claves: ['accent', 'accentHover', 'accentOn'] },
+  { title: 'Interactive', measurement: 'text', keys: ['accent', 'accentHover', 'accentOn'] },
   {
-    titulo: 'Conversión',
-    medicion: 'texto',
-    nota: 'Una sola vez por pantalla.',
-    claves: ['warm', 'warmHover', 'warmOn'],
+    title: 'Conversion',
+    measurement: 'text',
+    note: 'Once per screen.',
+    keys: ['warm', 'warmHover', 'warmOn'],
   },
-  { titulo: 'Estado', medicion: 'texto', claves: ['success', 'warning', 'error'] },
+  { title: 'Status', measurement: 'text', keys: ['success', 'warning', 'error'] },
 ];
 
-/** Los tokens que son tinta sobre otro color, no sobre el fondo de página. */
-const SOBRE: Partial<Record<Clave, Clave>> = {
+/** The tokens that are ink over another color, not over the page background. */
+const OVER: Partial<Record<Key, Key>> = {
   accentOn: 'accent',
   warmOn: 'warm',
 };
 
-function Muestra({
-  nombre,
+function Sample({
+  name,
   hex,
   contra,
-  etiqueta,
-  minimo,
-  advertencia,
+  label,
+  min,
+  warning,
 }: {
-  nombre: string;
+  name: string;
   hex: string;
   contra: string;
-  etiqueta: string;
-  minimo: number;
-  advertencia?: string;
+  label: string;
+  min: number;
+  warning?: string;
 }) {
-  const razon = contraste(hex, contra);
-  const pasa = razon >= minimo;
+  const ratio = contrast(hex, contra);
+  const passes = ratio >= min;
 
   return (
     <div className="border-hairline rounded-card border p-step-md">
@@ -168,112 +168,112 @@ function Muestra({
         className="rounded-chip mb-step-sm h-12 w-full border"
         style={{ backgroundColor: hex, borderColor: 'var(--color-hairline)' }}
       />
-      <p className="text-label font-sans text-text-primary">{nombre}</p>
+      <p className="text-label font-sans text-text-primary">{name}</p>
       <p className="text-eyebrow font-mono text-text-muted uppercase">{hex}</p>
       <p className="text-label font-mono mt-step-sm text-text-secondary">
-        {format(razon)} <span className={pasa ? 'text-success' : 'text-error'}>
-          {pasa ? 'AA' : `bajo ${minimo}:1`}
+        {format(ratio)} <span className={passes ? 'text-success' : 'text-error'}>
+          {passes ? 'AA' : `under ${min}:1`}
         </span>
       </p>
-      <p className="text-eyebrow font-mono text-text-muted mt-step-xs uppercase">{etiqueta}</p>
-      {advertencia ? (
-        <p className="text-label font-sans text-warning mt-step-xs">{advertencia}</p>
+      <p className="text-eyebrow font-mono text-text-muted mt-step-xs uppercase">{label}</p>
+      {warning ? (
+        <p className="text-label font-sans text-warning mt-step-xs">{warning}</p>
       ) : null}
     </div>
   );
 }
 
-function Paleta() {
-  const modo = useModo();
-  const paleta = colors[modo];
+function Palette() {
+  const mode = useMode();
+  const palette = colors[mode];
 
   return (
-    <Pagina titulo={`Paleta · modo ${modo === 'dark' ? 'oscuro' : 'claro'}`}>
+    <Page title={`Palette · ${mode} mode`}>
       <p className="text-body font-sans text-text-secondary max-w-measure mb-step-xl">
-        Los contrastes están medidos, no estimados. Cada razón de esta página se
-        calcula en tiempo de render desde <code className="font-mono">tokens.ts</code>: si
-        alguien cambia un hex, el número cambia aquí antes de llegar a producción.
-        Cambia el modo en la toolbar y todo se recalcula.
+        The contrast ratios are measured, not estimated. Every ratio on this page is
+        computed at render time from <code className="font-mono">tokens.ts</code>: if
+        somebody changes a hex, the number changes here before it reaches
+        production. Switch the mode in the toolbar and everything recalculates.
       </p>
 
-      {GRUPOS.map((grupo) => (
-        <Seccion key={grupo.titulo} titulo={grupo.titulo}>
-          {grupo.nota ? (
-            <p className="text-ui font-sans text-text-muted mb-step-md max-w-measure">{grupo.nota}</p>
+      {GROUPS.map((group) => (
+        <Section key={group.title} title={group.title}>
+          {group.note ? (
+            <p className="text-ui font-sans text-text-muted mb-step-md max-w-measure">{group.note}</p>
           ) : null}
           <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
-            {grupo.claves.map((clave) => {
-              if (grupo.medicion === 'fondo') {
+            {group.keys.map((key) => {
+              if (group.measurement === 'background') {
                 return (
-                  <Muestra
-                    key={clave}
-                    nombre={clave}
-                    hex={paleta[clave]}
-                    contra={paleta.textPrimary}
-                    etiqueta="textPrimary encima"
-                    minimo={4.5}
+                  <Sample
+                    key={key}
+                    name={key}
+                    hex={palette[key]}
+                    contra={palette.textPrimary}
+                    label="textPrimary on top"
+                    min={4.5}
                   />
                 );
               }
 
-              const par = SOBRE[clave];
+              const pair = OVER[key];
               return (
-                <Muestra
-                  key={clave}
-                  nombre={clave}
-                  hex={paleta[clave]}
-                  contra={par ? paleta[par] : paleta.background}
-                  etiqueta={`sobre ${par ?? 'background'}`}
-                  minimo={grupo.medicion === 'ui' ? 3 : 4.5}
+                <Sample
+                  key={key}
+                  name={key}
+                  hex={palette[key]}
+                  contra={pair ? palette[pair] : palette.background}
+                  label={`over ${pair ?? 'background'}`}
+                  min={group.measurement === 'ui' ? 3 : 4.5}
                 />
               );
             })}
           </div>
-        </Seccion>
+        </Section>
       ))}
 
-      <Seccion titulo="Marca">
+      <Section title="Brand">
         <p className="text-ui font-sans text-text-muted mb-step-md max-w-measure">
-          Iguales en los dos modos. Son relleno de ilustración, no paleta de interfaz.
+          Identical in both modes. They are illustration fill, not an interface palette.
         </p>
         <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
-          <Muestra
-            nombre="brand.body"
+          <Sample
+            name="brand.body"
             hex={brand.body}
-            contra={paleta.background}
-            etiqueta="sobre background"
-            minimo={3}
-            advertencia="Solo relleno. Nunca texto."
+            contra={palette.background}
+            label="over background"
+            min={3}
+            warning="Fill only. Never text."
           />
-          <Muestra
-            nombre="brand.spots"
+          <Sample
+            name="brand.spots"
             hex={brand.spots}
-            contra={paleta.background}
-            etiqueta="sobre background"
-            minimo={3}
+            contra={palette.background}
+            label="over background"
+            min={3}
           />
-          <Muestra
-            nombre="brand.hull"
+          <Sample
+            name="brand.hull"
             hex={brand.hull}
-            contra={paleta.surface}
-            etiqueta="sobre surface"
-            minimo={3}
+            contra={palette.surface}
+            label="over surface"
+            min={3}
           />
         </div>
-      </Seccion>
-    </Pagina>
+      </Section>
+    </Page>
   );
 }
 
-/* -------------------------------------------------- escala tipográfica */
+/* ------------------------------------------------------------ type scale */
 
-const FAMILIA: Record<string, string> = {
+const FAMILY: Record<string, string> = {
   display: 'font-display',
   sans: 'font-sans',
   mono: 'font-mono',
 };
 
-const TAMANO: Record<keyof typeof typeScale, string> = {
+const SIZE: Record<keyof typeof typeScale, string> = {
   display: 'text-display',
   stat: 'text-stat',
   h1: 'text-h1',
@@ -289,7 +289,7 @@ const TAMANO: Record<keyof typeof typeScale, string> = {
   eyebrow: 'text-eyebrow uppercase',
 };
 
-const EJEMPLO: Record<keyof typeof typeScale, string> = {
+const EXAMPLE: Record<keyof typeof typeScale, string> = {
   display: 'Escalar con criterio',
   stat: '46',
   h1: 'Ayudo a equipos de ingeniería a escalar con criterio',
@@ -297,112 +297,113 @@ const EJEMPLO: Record<keyof typeof typeScale, string> = {
   h3: 'Decisiones documentadas, no heredadas',
   body: 'El sistema no anima posición ni escala. Los estados se comunican con borde y color, no con movimiento, porque el movimiento es caro de leer y barato de abusar.',
   lead: 'Bajada de página interna, diecisiete píxeles',
-  ui: 'Etiqueta de interfaz, quince píxeles',
-  label: 'Etiqueta mínima, trece píxeles',
+  ui: 'Label de interfaz, quince píxeles',
+  label: 'Label mínima, trece píxeles',
   tag: 'Publicado',
   meta: '18 ago 2026 · 8 min · v5.0.1',
   chip: 'engineering-culture',
   eyebrow: 'sección',
 };
 
-function Tipografia() {
+function Typography() {
   return (
-    <Pagina titulo="Escala tipográfica">
+    <Page title="Type scale">
       <p className="text-body font-sans text-text-secondary max-w-measure mb-step-xl">
-        Display solo para titulares y números grandes, nunca cuerpo. Mínimos
-        absolutos: {limits.minScreenPx}px en pantalla, {limits.minPrintPt}pt impreso.
-        Medida máxima de cuerpo: {limits.measure}.
+        Display for headlines and large numbers only, never body. Absolute minimums:
+        {' '}{limits.minScreenPx}px on screen, {limits.minPrintPt}pt in print. Maximum
+        body measure: {limits.measure}.
       </p>
 
-      {(Object.keys(typeScale) as (keyof typeof typeScale)[]).map((clave) => {
-        const escala = typeScale[clave];
-        const detalles = [
-          `${escala.size}px`,
-          'lineHeight' in escala ? `/ ${escala.lineHeight}` : null,
-          'weight' in escala ? `/ ${escala.weight}` : null,
-          'tracking' in escala ? `/ ${escala.tracking}` : null,
-          fonts[escala.family as keyof typeof fonts].split(',')[0],
+      {(Object.keys(typeScale) as (keyof typeof typeScale)[]).map((key) => {
+        const scale = typeScale[key];
+        const details = [
+          `${scale.size}px`,
+          'lineHeight' in scale ? `/ ${scale.lineHeight}` : null,
+          'weight' in scale ? `/ ${scale.weight}` : null,
+          'tracking' in scale ? `/ ${scale.tracking}` : null,
+          fonts[scale.family as keyof typeof fonts].split(',')[0],
         ]
           .filter(Boolean)
           .join('  ');
 
         return (
-          <div key={clave} className="border-hairline py-step-lg border-b last:border-b-0">
+          <div key={key} className="border-hairline py-step-lg border-b last:border-b-0">
             <div className="gap-step-sm mb-step-sm flex flex-wrap items-baseline">
-              <span className="text-eyebrow font-mono text-accent uppercase">{clave}</span>
-              <span className="text-label font-mono text-text-muted">{detalles}</span>
+              <span className="text-eyebrow font-mono text-accent uppercase">{key}</span>
+              <span className="text-label font-mono text-text-muted">{details}</span>
             </div>
             <p
-              className={`${TAMANO[clave]} ${FAMILIA[escala.family]} text-text-primary max-w-measure`}
+              className={`${SIZE[key]} ${FAMILY[scale.family]} text-text-primary max-w-measure`}
             >
-              {EJEMPLO[clave]}
+              {EXAMPLE[key]}
             </p>
           </div>
         );
       })}
-    </Pagina>
+    </Page>
   );
 }
 
-/* ------------------------------------------------------- forma y ritmo */
+/* -------------------------------------------------------- shape and rhythm */
 
-function FormaYRitmo() {
+function ShapeAndRhythm() {
   return (
-    <Pagina titulo="Forma y ritmo">
-      <Seccion titulo="Radio">
+    <Page title="Shape and rhythm">
+      <Section title="Radius">
         <div className="gap-step-md flex flex-wrap">
-          {(Object.keys(radius) as (keyof typeof radius)[]).map((clave) => (
-            <div key={clave}>
+          {(Object.keys(radius) as (keyof typeof radius)[]).map((key) => (
+            <div key={key}>
               <div
                 className="bg-surface-raised border-border h-24 w-24 border"
-                style={{ borderRadius: `var(--radius-${clave})` }}
+                style={{ borderRadius: `var(--radius-${key})` }}
               />
               <p className="text-label font-mono text-text-secondary mt-step-xs">
-                {clave} · {radius[clave]}
+                {key} · {radius[key]}
               </p>
             </div>
           ))}
         </div>
-      </Seccion>
+      </Section>
 
-      <Seccion titulo="Espaciado">
+      <Section title="Spacing">
         <p className="text-ui font-sans text-text-muted mb-step-md max-w-measure">
-          Los cinco escalones llevan <code className="font-mono">step</code> en el nombre
-          porque <code className="font-mono">xs</code>…<code className="font-mono">xl</code>{' '}
-          son los de la escala <code className="font-mono">--container-*</code> de Tailwind,
-          y <code className="font-mono">--spacing-*</code> se la comía: un proyecto que
-          importara los tokens se quedaba con <code className="font-mono">max-w-sm</code> en
-          12px. Ver <code className="font-mono">tokens.ts</code>.
+          All five steps carry <code className="font-mono">step</code> in the name
+          because <code className="font-mono">xs</code>…<code className="font-mono">xl</code>{' '}
+          are the names of Tailwind's <code className="font-mono">--container-*</code>{' '}
+          scale, and <code className="font-mono">--spacing-*</code> was swallowing it: a
+          project importing the tokens ended up with{' '}
+          <code className="font-mono">max-w-sm</code> at 12px. See{' '}
+          <code className="font-mono">tokens.ts</code>.
         </p>
         <div className="gap-step-sm flex flex-col">
-          {(Object.keys(spacing) as (keyof typeof spacing)[]).map((clave) => (
-            <div key={clave} className="gap-step-md flex items-center">
+          {(Object.keys(spacing) as (keyof typeof spacing)[]).map((key) => (
+            <div key={key} className="gap-step-md flex items-center">
               <span className="text-label font-mono text-text-muted w-56">
-                --spacing-{kebab(clave)} · {spacing[clave]}
+                --spacing-{kebab(key)} · {spacing[key]}
               </span>
               <span
                 className="bg-accent rounded-chip h-3"
-                style={{ width: `var(--spacing-${kebab(clave)})` }}
+                style={{ width: `var(--spacing-${kebab(key)})` }}
               />
             </div>
           ))}
         </div>
-      </Seccion>
+      </Section>
 
-      <Seccion titulo="Medidas">
+      <Section title="Measurements">
         <div className="gap-step-sm flex flex-col">
-          {(Object.keys(size) as (keyof typeof size)[]).map((clave) => (
-            <p key={clave} className="text-label font-mono text-text-secondary">
-              {clave} · {size[clave]}px
+          {(Object.keys(size) as (keyof typeof size)[]).map((key) => (
+            <p key={key} className="text-label font-mono text-text-secondary">
+              {key} · {size[key]}px
             </p>
           ))}
           <p className="text-label font-mono text-text-secondary">
             measure · {limits.measure}
           </p>
         </div>
-      </Seccion>
+      </Section>
 
-      <Seccion titulo="Sombra y movimiento">
+      <Section title="Shadow and motion">
         <div className="gap-step-lg flex flex-wrap items-start">
           <div className="bg-surface border-hairline rounded-card shadow-standard p-step-lg border">
             <p className="text-label font-mono text-text-secondary">shadow.standard</p>
@@ -414,24 +415,24 @@ function FormaYRitmo() {
               {motion.duration} {motion.easing}
             </p>
             <p className="text-ui font-sans text-text-secondary max-w-measure mt-step-sm">
-              Solo color y borde. Nada de escala ni desplazamiento.
+              Color and border only. No scale, no displacement.
             </p>
           </div>
         </div>
-      </Seccion>
-    </Pagina>
+      </Section>
+    </Page>
   );
 }
 
 /* ------------------------------------------------------------- stories */
 
 const meta = {
-  title: 'Tokens/Sistema',
+  title: 'Tokens/System',
   parameters: { layout: 'fullscreen' },
 } satisfies Meta;
 
 export default meta;
 
-export const Paleta_: StoryObj = { name: 'Paleta', render: () => <Paleta /> };
-export const Tipografia_: StoryObj = { name: 'Tipografía', render: () => <Tipografia /> };
-export const Forma_: StoryObj = { name: 'Forma y ritmo', render: () => <FormaYRitmo /> };
+export const Palette_: StoryObj = { name: 'Palette', render: () => <Palette /> };
+export const Typography_: StoryObj = { name: 'Typography', render: () => <Typography /> };
+export const Shape_: StoryObj = { name: 'Shape and rhythm', render: () => <ShapeAndRhythm /> };

@@ -1,41 +1,43 @@
 import { useSyncExternalStore, type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../../lib/cn.ts';
-import { Luna, Sol } from '../../lib/glyphs.tsx';
+import { Moon, Sun } from '../../lib/glyphs.tsx';
 import { Button, type ButtonProps } from '../../primitives/button.tsx';
-import { alternarTema, escucharTema, temaActual, type Tema } from '../../tema/index.ts';
+import { toggleTheme, watchTheme, currentTheme, type Theme } from '../../theme/index.ts';
 
 /**
- * El control que faltaba. La librería definía todo el sistema de temas y no
- * exponía lo que lo cambia, así que dos proyectos lo reimplementaban.
+ * The control that was missing. The library defined the whole theming system and
+ * exposed nothing that changes it, so two projects were reimplementing it.
  *
- * Lo difícil no es el botón: es que la primera pintura no parpadee y que la
- * elección sobreviva a la navegación. Eso vive en `@eduardoalvarez/arrecife/tema`,
- * que no importa React —lo consume un Astro que no monta ninguno— y de ahí sale
- * `scriptTema`, que va inline en el `<head>`. Sin ese script, este botón
- * funciona y aun así se ve el fogonazo en cada carga.
+ * The hard part is not the button: it is that the first paint does not flash and
+ * that the choice survives navigation. That lives in
+ * `@eduardoalvarez/arrecife/theme`, which does not import React — an Astro that
+ * mounts none consumes it — and out of it comes `themeScript`, which goes inline
+ * in the `<head>`. Without that script this button works and you still get the
+ * flash on every load.
  *
- * Los DOS iconos se renderizan siempre y el que sobra lo esconde el CSS con la
- * variante `light:`. No es una optimización: es lo que evita que el servidor y
- * el cliente discrepen. El servidor no sabe qué tema eligió quien va a leer, así
- * que cualquier icono que elija en el HTML tiene la mitad de probabilidades de
- * ser el equivocado, y corregirlo al hidratar es el parpadeo otra vez.
+ * BOTH icons are always rendered and CSS hides the spare one with the `light:`
+ * variant. It is not an optimisation: it is what stops the server and the client
+ * from disagreeing. The server does not know which theme the reader chose, so
+ * whichever icon it picks in the HTML has a fifty-fifty chance of being wrong,
+ * and correcting it on hydration is the flash all over again.
  *
- * El nombre accesible NO dice a qué modo se va. Sería más informativo y sería
- * una mentira la mitad del tiempo por lo mismo de arriba: el HTML del servidor
- * lo fija antes de saber el tema. «Cambiar de tema» es cierto siempre.
+ * The accessible name does NOT say which mode you are going to. That would be
+ * more informative and would be a lie half the time, for the same reason as
+ * above: the server's HTML fixes it before the theme is known. «Cambiar de
+ * tema» is always true.
  */
 export type ThemeToggleProps = Omit<ComponentPropsWithoutRef<'button'>, 'onClick'> & {
-  /** Nombre accesible. El botón no tiene texto visible, así que es lo único que lo nombra. */
+  /** Accessible name. The button has no visible text, so it is the only thing naming it. */
   label?: string;
-  /** Se dispara con el tema que quedó puesto, por si el proyecto quiere anotarlo. */
-  onThemeChange?: ((tema: Tema) => void) | undefined;
+  /** Fires with whichever theme ended up set, in case the project wants to record it. */
+  onThemeChange?: ((theme: Theme) => void) | undefined;
   variant?: ButtonProps['variant'];
   size?: ButtonProps['size'];
 };
 
 export function ThemeToggle({
-  label = 'Cambiar de tema',
+  label = 'Cambiar de theme',
   onThemeChange,
   variant = 'secondary',
   size = 'icon',
@@ -48,40 +50,40 @@ export function ThemeToggle({
       variant={variant}
       size={size}
       aria-label={label}
-      // 19px, el mismo tamaño de icono que los enlaces del footer.
+      // 19px, the same icon size as the footer links.
       className={cn('[&_svg]:size-[19px]', className)}
-      onClick={() => onThemeChange?.(alternarTema())}
+      onClick={() => onThemeChange?.(toggleTheme())}
       {...props}
     >
-      {/* El de destino, no el del estado actual: se pulsa para ir al otro. */}
-      <Sol className="light:hidden" />
-      <Luna className="hidden light:block" />
+      {/* The target one, not the current state: you press it to go to the other. */}
+      <Sun className="light:hidden" />
+      <Moon className="hidden light:block" />
     </Button>
   );
 }
 
 /**
- * El tema puesto ahora mismo, para un proyecto que necesite ramificar en React
- * —un logo distinto por modo, una imagen que no tiene versión clara—.
+ * The theme set right now, for a project that needs to branch in React — a
+ * different logo per mode, an image with no light version.
  *
- * Es `useSyncExternalStore` y no un `useState` con un efecto detrás porque el
- * tema es exactamente eso: un estado que vive fuera de React, en un atributo del
- * `<html>` que puede cambiar sin que React se entere. Escribirlo con un efecto
- * que llama a `setState` en el montaje es el patrón que dispara un render en
- * cascada y que la regla `set-state-in-effect` señala con razón.
+ * It is `useSyncExternalStore` and not a `useState` with an effect behind it
+ * because the theme is exactly that: state living outside React, in an attribute
+ * on `<html>` that can change without React finding out. Writing it as an effect
+ * calling `setState` on mount is the pattern that triggers a cascading render
+ * and that the `set-state-in-effect` rule rightly flags.
  *
- * `getServerSnapshot` devuelve `'dark'` porque en el servidor no hay `document`.
- * El primer render del cliente coincide con el del servidor y el valor real
- * entra después, que es la misma discrepancia de hidratación que `ThemeToggle`
- * evita renderizando los dos iconos.
+ * `getServerSnapshot` returns `'dark'` because there is no `document` on the
+ * server. The client's first render matches the server's and the real value
+ * arrives afterwards, which is the same hydration mismatch `ThemeToggle` avoids
+ * by rendering both icons.
  *
- * De ahí la regla de uso: si lo que ramifica es SOLO estilo, esto no hace falta
- * y la variante `light:` es mejor — no re-renderiza nada. Esto es para cuando
- * cambia el contenido.
+ * Hence the usage rule: if what branches is ONLY style, this is not needed and
+ * the `light:` variant is better — it re-renders nothing. This is for when the
+ * content changes.
  */
-export function useTema(): Tema {
-  return useSyncExternalStore(suscribirse, temaActual, servidor);
+export function useTheme(): Theme {
+  return useSyncExternalStore(subscribe, currentTheme, server);
 }
 
-const suscribirse = (avisar: () => void) => escucharTema(() => avisar());
-const servidor = (): Tema => 'dark';
+const subscribe = (warn: () => void) => watchTheme(() => warn());
+const server = (): Theme => 'dark';

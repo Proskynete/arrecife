@@ -1,8 +1,8 @@
 /**
- * Punto de entrada de `@eduardoalvarez/arrecife/og`.
+ * The entry point of `@eduardoalvarez/arrecife/og`.
  *
- * Se publica aparte a propósito: un generador de OG corre en un worker o en un
- * script de build, y no debe arrastrar React ni un solo componente. Es
- * exactamente el caso que justifica la pureza de `src/tokens/`.
+ * It is published separately on purpose: an OG generator runs in a worker or in
+ * a build script, and must not drag in React or a single component. It is
+ * exactly the case that justifies the purity of `src/tokens/`.
  */
-export * from './plantillas.ts';
+export * from './templates.ts';

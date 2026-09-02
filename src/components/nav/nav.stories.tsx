@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { Logo } from '../../brand/logo.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { Text } from '../../primitives/typography.tsx';
@@ -8,7 +8,7 @@ import { ThemeToggle } from '../theme-toggle/index.tsx';
 import { Nav, NavItem } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/Nav',
+  title: 'Components/Nav',
   component: Nav,
   parameters: { layout: 'fullscreen' },
 } satisfies Meta<typeof Nav>;
@@ -16,17 +16,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const SECCIONES = ['artículos', 'cursos', 'charlas', 'sobre-mí'] as const;
+const SECTIONS = ['artículos', 'cursos', 'charlas', 'sobre-mí'] as const;
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: () => (
     <div className="-m-step-lg">
       <Nav
-        brand={<Logo sobre="oscuro" className="h-7" />}
+        brand={<Logo background="dark" className="h-7" />}
         actions={<Button variant="conversion">Agenda una llamada</Button>}
       >
-        {SECCIONES.map((s) => (
+        {SECTIONS.map((s) => (
           <NavItem key={s} href={`/${s}`} active={s === 'artículos'}>
             {s}
           </NavItem>
@@ -36,7 +36,7 @@ export const Basico: Story = {
       <div className="px-step-md py-section max-w-wide mx-auto">
         <Text variant="body" tone="secondary" measure>
           Baja la página para ver el desenfoque. La barra es abismo al 86 % con
-          14px de desenfoque detrás, y el alfa va sobre el token, así que en modo
+          14px de desenfoque detrás, y el alfa va sobre el token, así que en mode
           claro es papel al 86 % sin tocar una línea.
         </Text>
         <div className="h-[120vh]" />
@@ -45,40 +45,40 @@ export const Basico: Story = {
   ),
 };
 
-export const Formato: Story = {
-  name: 'El ./ lo pone el componente',
+export const Format: Story = {
+  name: 'The ./ is set by the component',
   render: () => (
     <div className="-m-step-lg">
-      <Nav brand={<Logo sobre="oscuro" className="h-7" />}>
-        {SECCIONES.map((s) => (
+      <Nav brand={<Logo background="dark" className="h-7" />}>
+        {SECTIONS.map((s) => (
           <NavItem key={s} href={`/${s}`} active={s === 'cursos'}>
             {s}
           </NavItem>
         ))}
       </Nav>
       <div className="p-step-lg">
-        <Nota>
-          Quien usa el componente escribe `artículos`, no `./artículos`. Es la
-          misma decisión que el botón terciario: el formato es parte de la pieza y
-          no una convención que haya que recordar en cinco proyectos. El `./` va
-          `aria-hidden`, así que un lector de pantalla anuncia «artículos».
-        </Nota>
-        <Nota>
-          El activo es bioluz con subrayado de 1px y `aria-current="page"`. El
-          color no puede ser el único indicador, y el subrayado es lo que lo
-          acompaña.
-        </Nota>
+        <Note>
+          Whoever uses the component writes `artículos`, not `./artículos`. It is
+          the same decision as the tertiary button: the format is part of the piece
+          and not a convention to be remembered across five projects. The `./` is
+          `aria-hidden`, so a screen reader announces «artículos».
+        </Note>
+        <Note>
+          The active one is biolume with a 1px underline and `aria-current="page"`.
+          Color cannot be the only indicator, and the underline is what goes with
+          it.
+        </Note>
       </div>
     </div>
   ),
 };
 
-export const ComoEnElSitio: Story = {
-  name: 'La barra real del sitio',
+export const AsOnTheSite: Story = {
+  name: 'The real site bar',
   render: () => (
     <div className="-m-step-lg">
       <Nav
-        brand={<Logo sobre="oscuro" conLema />}
+        brand={<Logo background="dark" withTagline />}
         actions={
           <>
             <Button variant="tertiary" size="icon" aria-label="Buscar">
@@ -98,25 +98,26 @@ export const ComoEnElSitio: Story = {
       </Nav>
 
       <div className="p-step-lg">
-        <Nota>
-          Los items van a la DERECHA, pegados a las acciones. Con la marca a la
-          izquierda y los items justo detrás, el bloque de navegación queda
-          flotando en medio y el ojo cruza el hueco dos veces.
-        </Nota>
-        <Nota>
-          El `~/` es el prompt y va fuera de los `li`: meterlo dentro lo
-          convertiría en un elemento más de la lista de navegación, y esa lista
-          tiene que tener tantos elementos como secciones.
-        </Nota>
-        <Nota>
-          La sección actual va entre corchetes además de en bioluz y subrayada.
-          El color y el subrayado son la misma señal; los corchetes son cómo una
-          terminal marca la ruta activa y no dependen de distinguir el color.
-        </Nota>
-        <Nota>
-          La marca lleva `conLema`: el lema sale de `tagline.corto` y no se puede
-          pasar por prop, por lo mismo que el wordmark.
-        </Nota>
+        <Note>
+          The items go on the RIGHT, next to the actions. With the brand on the
+          left and the items right behind it, the navigation block floats in the
+          middle and the eye crosses the gap twice.
+        </Note>
+        <Note>
+          The `~/` is the prompt and it sits outside the `li`s: putting it inside
+          would turn it into one more element of the navigation list, and that list
+          has to have exactly as many elements as there are sections.
+        </Note>
+        <Note>
+          The current section goes in brackets as well as in biolume and
+          underlined. The color and the underline are the same signal; brackets are
+          how a terminal marks the active path and they do not depend on telling
+          colors apart.
+        </Note>
+        <Note>
+          The brand carries `withTagline`: the tagline comes from `tagline.short`
+          and cannot be passed as a prop, for the same reason as the wordmark.
+        </Note>
       </div>
     </div>
   ),

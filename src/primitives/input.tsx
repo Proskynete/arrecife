@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { cn } from '../lib/cn.ts';
 
 export type InputProps = ComponentPropsWithoutRef<'input'> & {
-  /** Marca el control como inválido y tiñe el borde. */
+  /** Marks the control as invalid and tints the border. */
   invalid?: boolean;
 };
 

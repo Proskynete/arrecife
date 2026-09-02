@@ -2,18 +2,18 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { userEvent, within } from 'storybook/test';
 
-import { Nota, Pila } from '../../stories/utils.tsx';
+import { Note, Stack } from '../../stories/utils.tsx';
 import { Button } from './button.tsx';
 import { Calendar } from './calendar.tsx';
 import { Popover, PopoverContent, PopoverTrigger } from './popover.tsx';
 
 const meta = {
-  title: 'Primitivos/Calendar',
+  title: 'Primitives/Calendar',
   component: Calendar,
   argTypes: {
     fullWidth: {
       control: 'boolean',
-      description: 'Ocupa todo el ancho del contenedor, repartiendo las celdas a partes iguales.',
+      description: 'Fills the container width, splitting the cells evenly.',
       table: { defaultValue: { summary: 'false' } },
     },
   },
@@ -24,96 +24,96 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Fecha fija: una story no puede depender de hoy o cambia sola cada día. */
-const MES = new Date(2026, 2, 1);
-const DIA = new Date(2026, 2, 14);
+const MONTH = new Date(2026, 2, 1);
+const DAY = new Date(2026, 2, 14);
 
 export const Default: Story = {
   render: () => (
-    <Pila>
-      <Calendar mode="single" selected={DIA} defaultMonth={MES} />
-      <Nota>
-        El cambio de mes no se desliza: `animate` se queda apagado. Los días se
-        marcan con color y borde, como el resto del sistema. El idioma va en
-        español por defecto y se cambia con `locale`.
-      </Nota>
-    </Pila>
+    <Stack>
+      <Calendar mode="single" selected={DAY} defaultMonth={MONTH} />
+      <Note>
+        The month change does not slide: `animate` stays off. Days are marked with
+        color and border, like the rest of the system. The language defaults to
+        Spanish and is changed with `locale`.
+      </Note>
+    </Stack>
   ),
 };
 
-export const Rango: Story = {
+export const Range: Story = {
   render: () => (
-    <Pila>
+    <Stack>
       <Calendar
         mode="range"
-        defaultMonth={MES}
+        defaultMonth={MONTH}
         selected={{ from: new Date(2026, 2, 9), to: new Date(2026, 2, 20) }}
       />
-      <Nota>Extremos en bioluz, el tramo intermedio en `surfaceRaised`.</Nota>
-    </Pila>
+      <Note>The endpoints in biolume, the span between them on `surfaceRaised`.</Note>
+    </Stack>
   ),
 };
 
-export const DosMeses: Story = {
-  name: 'Dos meses',
-  render: () => <Calendar mode="single" numberOfMonths={2} defaultMonth={MES} selected={DIA} />,
+export const TwoMonths: Story = {
+  name: 'Two months',
+  render: () => <Calendar mode="single" numberOfMonths={2} defaultMonth={MONTH} selected={DAY} />,
 };
 
-export const AnchoCompleto: Story = {
-  name: 'Ancho completo',
+export const FullWidth: Story = {
+  name: 'Full width',
   render: () => (
     <div className="gap-step-lg flex flex-col">
       <div className="border-hairline rounded-card p-step-md border">
-        <Calendar fullWidth mode="single" selected={DIA} defaultMonth={MES} />
+        <Calendar fullWidth mode="single" selected={DAY} defaultMonth={MONTH} />
       </div>
-      <Nota>
-        `fullWidth` estira el calendario hasta el ancho de su contenedor y reparte
-        las celdas a partes iguales. Es la vista de mes de un planificador. Sin
-        él, el calendario mide lo que miden sus celdas, que es lo que quieres
-        dentro de un `Popover` — estirarlo ahí dejaría un globo enorme.
-      </Nota>
+      <Note>
+        `fullWidth` stretches the calendar to its container's width and splits the
+        cells evenly. It is a planner's month view. Without it, the calendar
+        measures whatever its cells measure, which is what you want inside a
+        `Popover` — stretching it there would leave a huge bubble.
+      </Note>
     </div>
   ),
 };
 
-export const AnchoCompletoDosMeses: Story = {
-  name: 'Ancho completo, dos meses',
+export const FullWidthTwoMonths: Story = {
+  name: 'Full width, two months',
   render: () => (
     <div className="border-hairline rounded-card p-step-md border">
-      <Calendar fullWidth mode="range" numberOfMonths={2} defaultMonth={MES}
+      <Calendar fullWidth mode="range" numberOfMonths={2} defaultMonth={MONTH}
         selected={{ from: new Date(2026, 2, 9), to: new Date(2026, 3, 2) }} />
     </div>
   ),
 };
 
-function SelectorDeFecha() {
-  const [fecha, setFecha] = useState<Date | undefined>(DIA);
+function DatePicker() {
+  const [date, setDate] = useState<Date | undefined>(DAY);
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="secondary">
-          {fecha ? fecha.toLocaleDateString('es') : 'Elegir fecha'}
+          {date ? date.toLocaleDateString('es') : 'Elegir fecha'}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" aria-label="Elegir fecha" className="w-auto p-step-sm">
-        <Calendar mode="single" selected={fecha} onSelect={setFecha} defaultMonth={MES} />
+      <PopoverContent align="start" aria-label="Elegir date" className="w-auto p-step-sm">
+        <Calendar mode="single" selected={date} onSelect={setDate} defaultMonth={MONTH} />
       </PopoverContent>
     </Popover>
   );
 }
 
-export const DentroDeUnPopover: Story = {
-  name: 'Dentro de un Popover',
+export const InsideAPopover: Story = {
+  name: 'Inside a Popover',
   parameters: {
     a11y: { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } },
   },
   render: () => (
     <>
-      <SelectorDeFecha />
-      <Nota>
-        No hay un componente `DatePicker`: son `Popover` más `Calendar`, y son
-        cinco líneas. Un tercer componente que solo pega dos que ya existen es
-        superficie de API que hay que mantener sin ganar nada.
-      </Nota>
+      <DatePicker />
+      <Note>
+        There is no `DatePicker` component: it is `Popover` plus `Calendar`, and
+        it is five lines. A third component that only glues together two that
+        already exist is API surface to maintain for nothing.
+      </Note>
     </>
   ),
   play: async ({ canvasElement }) => {

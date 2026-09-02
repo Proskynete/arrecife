@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { ArrowUpRight, Check, Ellipsis } from '../../lib/glyphs.tsx';
 import { Stat } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/Stat',
+  title: 'Components/Stat',
   component: Stat,
   args: { value: '12', label: 'aplicaciones' },
 } satisfies Meta<typeof Stat>;
@@ -13,8 +13,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Metricas: Story = {
-  name: 'Métricas de charla',
+export const Metrics: Story = {
+  name: 'Talk metrics',
   render: () => (
     <>
       <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
@@ -22,34 +22,34 @@ export const Metricas: Story = {
         <Stat value="4h 20m" label="duración" />
         <Stat value="0" label="design system" tone="alerta" />
       </div>
-      <Nota>
-        La regla no es de estilo, es de semántica: bioluz para lo neutro y arena
-        SOLO cuando el número es el problema. Un 12 de aplicaciones es un dato; un
-        0 de design systems es el problema del que trata la charla. Por eso `tone`
-        tiene dos valores y no una paleta abierta.
-      </Nota>
+      <Note>
+        The rule is not one of style, it is one of semantics: biolume for the
+        neutral and sand ONLY when the number is the problem. A 12 of applications
+        is a datum; a 0 of design systems is the problem the talk is about. Which
+        is why `tone` has two values and not an open palette.
+      </Note>
     </>
   ),
 };
 
-export const ConProgreso: Story = {
-  name: 'Con progreso',
+export const WithProgress: Story = {
+  name: 'With progress',
   render: () => (
     <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-      <Stat value="38%" label="progreso del curso" progress={38} />
+      <Stat value="38%" label="progress del curso" progress={38} />
     </div>
   ),
 };
 
-export const ConIconoYBajada: Story = {
-  name: 'Con icono y bajada',
+export const WithIconAndDeck: Story = {
+  name: 'With icon and standfirst',
   render: () => (
     <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
       <Stat
         icon={<ArrowUpRight />}
         label="aplicaciones"
         value="12"
-        description="Repartidas en cuatro equipos, ninguno con dueño declarado."
+        description="Repartidas en cuatro equipos, ninguno con dueño declared."
       />
       <Stat
         icon={<Ellipsis />}
@@ -69,26 +69,26 @@ export const ConIconoYBajada: Story = {
   ),
 };
 
-export const OrdenDeLectura: Story = {
-  name: 'Por qué el número va en medio',
+export const ReadingOrder: Story = {
+  name: 'Why the number goes in the middle',
   render: () => (
     <div className="max-w-content">
       <Stat
         icon={<ArrowUpRight />}
         label="aplicaciones"
         value="12"
-        description="Repartidas en cuatro equipos, ninguno con dueño declarado."
+        description="Repartidas en cuatro equipos, ninguno con dueño declared."
       />
-      <Nota>
-        Arriba de qué va, en medio cuánto, abajo el matiz. El número no va al
-        final a propósito: es lo que se viene a leer, y una bajada de dos líneas
-        entre el título y la cifra la entierra.
-      </Nota>
-      <Nota>
-        El icono hereda `currentColor`, así que sigue al tono del título y no hay
-        que teñirlo aparte. Sale de `lib/glyphs.tsx`, que no se publica: el
-        proyecto pasa el suyo.
-      </Nota>
+      <Note>
+        The top says what it is about, the middle how much, the bottom the nuance.
+        The number does not go at the end on purpose: it is what people came to
+        read, and a two-line standfirst between the title and the figure buries it.
+      </Note>
+      <Note>
+        The icon inherits `currentColor`, so it follows the title's tone and does
+        not have to be tinted separately. It comes from `lib/glyphs.tsx`, which is
+        not published: the project passes its own.
+      </Note>
     </div>
   ),
 };

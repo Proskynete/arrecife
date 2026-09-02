@@ -3,23 +3,23 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { cn } from '../lib/cn.ts';
 
 /**
- * Barrido de 1.4s lineal, del documento.
+ * A 1.4s linear sweep, from the document.
  *
- * Es la TERCERA y última excepción a «el sistema no anima», junto al spinner del
- * botón y el panel lateral. Las tres son realimentación de PROGRESO y no de
- * estado, que es el criterio: un bloque quieto y un bloque que nunca va a cargar
- * se ven exactamente igual, y el skeleton existe para decir «esto viene en
- * camino», no «esto está vacío».
+ * It is the THIRD and last exception to «the system does not animate», alongside
+ * the button spinner and the side panel. All three are feedback about PROGRESS
+ * and not about state, which is the criterion: a block that is still and a block
+ * that will never load look exactly the same, and the skeleton exists to say
+ * «this is on its way», not «this is empty».
  *
- * Va detrás de `motion-safe`, así que se apaga solo para quien pidió menos
- * movimiento — y ahí queda el bloque en `surfaceRaised`, que sigue comunicando
- * la forma de lo que va a llegar.
+ * It sits behind `motion-safe`, so it switches itself off for anyone who asked
+ * for less motion — and what is left is the block on `surfaceRaised`, which
+ * still communicates the shape of what is coming.
  *
- * `still` lo apaga a mano, para las tablas largas: veinte filas barriendo a la
- * vez es un estroboscopio, no una carga.
+ * `still` turns it off by hand, for long tables: twenty rows sweeping at once is
+ * a strobe, not a load.
  */
 export type SkeletonProps = ComponentPropsWithoutRef<'div'> & {
-  /** Apaga el barrido. Para listas largas, donde muchas a la vez marean. */
+  /** Turns the sweep off. For long lists, where many at once are dizzying. */
   still?: boolean | undefined;
 };
 

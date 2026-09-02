@@ -1,8 +1,8 @@
 /**
- * Punto de entrada de `@eduardoalvarez/arrecife/shiki`.
+ * The entry point of `@eduardoalvarez/arrecife/shiki`.
  *
- * Igual que `./og`: se publica aparte porque un tema de resaltado se consume
- * desde `astro.config.mjs` o desde un script de build, y no debe arrastrar React
- * ni un solo componente.
+ * Same as `./og`: published separately because a highlighting theme is consumed
+ * from `astro.config.mjs` or from a build script, and must not drag in React or
+ * a single component.
  */
-export * from './tema.ts';
+export * from './theme.ts';

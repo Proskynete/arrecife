@@ -6,8 +6,9 @@ import { cn } from '../lib/cn.ts';
 export type SwitchProps = ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>;
 
 /**
- * La perilla cambia de posición, pero no se anima al hacerlo: la posición es el
- * estado, no una transición. Lo único que transiciona es el color de la vía.
+ * The knob changes position, but is not animated while doing so: the position IS
+ * the state, not a transition. The only thing that transitions is the track's
+ * color.
  */
 export function Switch({ className, ...props }: SwitchProps) {
   return (

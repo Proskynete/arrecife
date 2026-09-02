@@ -14,27 +14,27 @@ import {
 } from '../../lib/glyphs.tsx';
 
 /**
- * Migrado desde `eduardoalvarez.dev/src/components/audio-player/index.tsx`.
+ * Migrated from `eduardoalvarez.dev/src/components/audio-player/index.tsx`.
  *
- * La lógica no se reescribió: los tres modos, el reproductor flotante, los
- * saltos de ±15s, el ciclo de velocidad 1 → 1.25 → 1.5 → 1.75 → 2 y el volumen
- * con mute son los mismos. Lo que cambió es la piel y las dos dependencias que
- * un paquete no puede tener:
+ * The logic was not rewritten: the three modes, the floating player, the ±15s
+ * skips, the 1 → 1.25 → 1.5 → 1.75 → 2 speed cycle and the volume with mute are
+ * the same. What changed is the skin and the two dependencies a package cannot
+ * have:
  *
- * - `Icon` del portafolio → los glifos viven ahora en `src/lib/glyphs.tsx`,
- *   con los mismos trazados.
- * - `trackEvent` de analítica → la prop `onFirstPlay`, que el consumidor
- *   conecta a lo que use. Sigue disparándose una sola vez por carga.
+ * - the portfolio's `Icon` → the glyphs now live in `src/lib/glyphs.tsx`, with
+ *   the same paths.
+ * - analytics' `trackEvent` → the `onFirstPlay` prop, which the consumer wires
+ *   to whatever they use. It still fires exactly once per load.
  *
- * Y tres cosas que el sistema no permite:
+ * And three things the system does not allow:
  *
- * - La onda ya no anima `scaleY`. Las barras siguen ahí y siguen distinguiendo
- *   reproducción de pausa por opacidad, pero no escalan.
- * - El reproductor flotante aparece y desaparece en vez de deslizarse.
- * - La barra de progreso ya no interpola el ancho.
+ * - The waveform no longer animates `scaleY`. The bars are still there and still
+ *   tell playback from pause by opacity, but they do not scale.
+ * - The floating player appears and disappears instead of sliding.
+ * - The progress bar no longer interpolates its width.
  *
- * El giro del spinner de carga se queda, con la misma justificación que en
- * `Button`: es realimentación de progreso, no de estado, y va en `motion-safe`.
+ * The loading spinner's spin stays, with the same justification as in `Button`:
+ * it is feedback about progress, not about state, and it sits in `motion-safe`.
  */
 
 export type AudioPlayerMode = 'full' | 'compact' | 'banner';
@@ -43,14 +43,14 @@ export type AudioPlayerProps = {
   src: string;
   title?: string;
   /**
-   * `full` para páginas de podcast, `compact` para barras laterales y `banner`
-   * para artículos con narración. `compact` y `banner` traen además el
-   * reproductor flotante cuando el estático sale de vista.
+   * `full` for podcast pages, `compact` for sidebars and `banner` for articles
+   * with narration. `compact` and `banner` also bring the floating player when
+   * the static one leaves the viewport.
    */
   mode?: AudioPlayerMode | undefined;
   /**
-   * Se llama una sola vez por carga, la primera vez que el audio arranca.
-   * Aquí es donde el proyecto engancha su analítica; la librería no la trae.
+   * Called once per load, the first time the audio starts.
+   * This is where the project hooks up its analytics; the library ships none.
    */
   onFirstPlay?: ((title?: string) => void) | undefined;
 };
@@ -69,46 +69,45 @@ const RATES = [1, 1.25, 1.5, 1.75, 2];
 /* --------------------------------------------------------------- piezas */
 
 /*
- * Todas viven a nivel de módulo, no dentro de `AudioPlayer`. Un componente
- * declarado dentro del cuerpo de otro cambia de identidad en cada render, y
- * React lo desmonta y lo vuelve a montar: con `timeupdate` disparando cuatro
- * veces por segundo, la barra de progreso perdería el pointer capture a mitad
- * del arrastre y el rango de volumen perdería el foco.
+ * They all live at module level, not inside `AudioPlayer`. A component declared
+ * inside another's body changes identity on every render, and React unmounts and
+ * remounts it: with `timeupdate` firing four times a second, the progress bar
+ * would lose pointer capture mid-drag and the volume range would lose focus.
  */
 
-/** Barras de la onda. Sin animación: la escala está fuera del sistema. */
-function Onda({ grosor, alto, sonando }: { grosor: string; alto: string; sonando: boolean }) {
+/** The waveform's bars. No animation: scale is outside the system. */
+function Wave({ strokeWidth, height, playing }: { strokeWidth: string; height: string; playing: boolean }) {
   return (
-    <div className={cn('flex items-end gap-[2px]', alto)} aria-hidden="true">
+    <div className={cn('flex items-end gap-[2px]', height)} aria-hidden="true">
       {WAVEFORM_HEIGHTS.map((h, i) => (
         <span
           key={i}
-          className={cn('rounded-pill bg-accent transition-standard', grosor)}
-          style={{ height: `${h}%`, opacity: sonando ? 1 : 0.3 + (h / 100) * 0.4 }}
+          className={cn('rounded-pill bg-accent transition-standard', strokeWidth)}
+          style={{ height: `${h}%`, opacity: playing ? 1 : 0.3 + (h / 100) * 0.4 }}
         />
       ))}
     </div>
   );
 }
 
-type PunteroProps = {
+type PointerProps = {
   onPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerMove: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerUp: (e: ReactPointerEvent<HTMLDivElement>) => void;
 };
 
-function BarraProgreso({
-  alto,
-  perilla,
-  progreso,
+function ProgressBar({
+  height,
+  knob,
+  progress,
   redondeada = true,
   tabIndex = 0,
-  ...puntero
-}: PunteroProps & {
-  alto: string;
-  /** Diámetro de la perilla en px. Se usa también para centrarla sobre el punto. */
-  perilla: number;
-  progreso: number;
+  ...pointer
+}: PointerProps & {
+  height: string;
+  /** Knob diameter in px. Also used to centre it over the point. */
+  knob: number;
+  progress: number;
   redondeada?: boolean;
   tabIndex?: number;
 }) {
@@ -116,27 +115,27 @@ function BarraProgreso({
     <div
       className={cn(
         'group bg-surface-raised relative cursor-pointer',
-        alto,
+        height,
         redondeada && 'rounded-pill',
       )}
       role="slider"
       aria-label="Progreso del audio"
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-valuenow={Math.round(progreso)}
+      aria-valuenow={Math.round(progress)}
       tabIndex={tabIndex}
-      {...puntero}
+      {...pointer}
     >
       <div
         className={cn('bg-accent absolute h-full', redondeada && 'rounded-pill')}
-        style={{ width: `${progreso}%` }}
+        style={{ width: `${progress}%` }}
       />
       <div
         className="rounded-pill bg-text-primary absolute top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
         style={{
-          width: perilla,
-          height: perilla,
-          left: `calc(${progreso}% - ${perilla / 2}px)`,
+          width: knob,
+          height: knob,
+          left: `calc(${progress}% - ${knob / 2}px)`,
         }}
       />
     </div>
@@ -146,15 +145,15 @@ function BarraProgreso({
 const CONTROL =
   'rounded-chip transition-standard cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
 
-function BotonSalto({
+function SkipButton({
   segundos,
   className,
-  tamano,
+  size,
   onSaltar,
 }: {
   segundos: number;
   className: string;
-  tamano: string;
+  size: string;
   onSaltar: (s: number) => void;
 }) {
   return (
@@ -164,65 +163,65 @@ function BotonSalto({
       className={cn('text-text-muted hover:text-text-primary', CONTROL, className)}
       aria-label={segundos < 0 ? 'Retroceder 15 segundos' : 'Adelantar 15 segundos'}
     >
-      {segundos < 0 ? <GoBackSeconds className={tamano} /> : <AdvanceSeconds className={tamano} />}
+      {segundos < 0 ? <GoBackSeconds className={size} /> : <AdvanceSeconds className={size} />}
     </button>
   );
 }
 
-function BotonVelocidad({
+function SpeedButton({
   className,
-  velocidad,
-  onCambiar,
+  speed,
+  onChange,
 }: {
   className: string;
-  velocidad: number;
-  onCambiar: () => void;
+  speed: number;
+  onChange: () => void;
 }) {
   return (
     <button
       type="button"
-      onClick={onCambiar}
+      onClick={onChange}
       className={cn(
-        // `textMuted` sobre `surfaceRaised` da 4.07:1 en oscuro y no pasa AA.
-        // El original del portafolio arrastra ese mismo fallo.
+        // `textMuted` over `surfaceRaised` gives 4.07:1 in dark and fails AA.
+        // The portfolio original carries that same failure.
         'text-text-secondary hover:text-text-primary bg-surface-raised',
         CONTROL,
         className,
       )}
       aria-label="Cambiar velocidad de reproducción"
     >
-      {velocidad}x
+      {speed}x
     </button>
   );
 }
 
-function Volumen({
-  tamano,
-  ancho,
+function Volume({
+  size,
+  width,
   silenciado,
   volumen,
-  onSilenciar,
-  onCambiarVolumen,
+  onMute,
+  onVolumeChange,
 }: {
-  tamano: string;
-  ancho: string;
+  size: string;
+  width: string;
   silenciado: boolean;
   volumen: number;
-  onSilenciar: () => void;
-  onCambiarVolumen: (e: ChangeEvent<HTMLInputElement>) => void;
+  onMute: () => void;
+  onVolumeChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className="gap-step-xs hidden items-center sm:flex">
       <button
         type="button"
-        onClick={onSilenciar}
+        onClick={onMute}
         className={cn('text-text-muted hover:text-text-primary p-1', CONTROL)}
         aria-label={silenciado ? 'Activar sonido' : 'Silenciar'}
       >
         {silenciado || volumen === 0 ? (
-          <VolumeMuted className={tamano} />
+          <VolumeMuted className={size} />
         ) : (
-          <VolumeOn className={tamano} />
+          <VolumeOn className={size} />
         )}
       </button>
       <input
@@ -231,57 +230,57 @@ function Volumen({
         max="1"
         step="0.1"
         value={silenciado ? 0 : volumen}
-        onChange={onCambiarVolumen}
+        onChange={onVolumeChange}
         className={cn(
           'bg-surface-raised rounded-pill h-1 cursor-pointer appearance-none',
           '[accent-color:var(--color-accent)]',
-          ancho,
+          width,
         )}
-        aria-label="Volumen"
+        aria-label="Volume"
       />
     </div>
   );
 }
 
-type EstadoPlay = { cargando: boolean; error: boolean; sonando: boolean };
+type PlayState = { cargando: boolean; error: boolean; playing: boolean };
 
-function IconoPlay({ className, cargando, error, sonando }: EstadoPlay & { className: string }) {
-  // El giro se queda, con la misma justificación que en `Button`: es
-  // realimentación de progreso, no de estado, y `motion-safe` lo apaga.
+function PlayIcon({ className, cargando, error, playing }: PlayState & { className: string }) {
+  // The spin stays, with the same justification as in `Button`: it is feedback
+  // about progress, not about state, and `motion-safe` turns it off.
   if (cargando) return <Spinner className={cn('motion-safe:animate-spin', className)} />;
   if (error) return <Retry className={className} />;
-  if (sonando) return <Pause className={className} />;
+  if (playing) return <Pause className={className} />;
   return <Play className={className} />;
 }
 
-function BotonPlay({
+function PlayButton({
   className,
-  tamano,
-  etiqueta,
-  texto,
-  onAlternar,
-  ...estado
-}: EstadoPlay & {
+  size,
+  label,
+  text,
+  onToggle,
+  ...state
+}: PlayState & {
   className: string;
-  tamano: string;
-  etiqueta: string;
-  texto?: string;
-  onAlternar: () => void;
+  size: string;
+  label: string;
+  text?: string;
+  onToggle: () => void;
 }) {
   return (
     <button
       type="button"
-      onClick={onAlternar}
+      onClick={onToggle}
       className={cn(
         'text-accent-on transition-standard cursor-pointer',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-        estado.error ? 'bg-error hover:bg-error/80' : 'bg-accent hover:bg-accent-hover',
+        state.error ? 'bg-error hover:bg-error/80' : 'bg-accent hover:bg-accent-hover',
         className,
       )}
-      aria-label={etiqueta}
+      aria-label={label}
     >
-      <IconoPlay className={tamano} {...estado} />
-      {texto ? <span>{texto}</span> : null}
+      <PlayIcon className={size} {...state} />
+      {text ? <span>{text}</span> : null}
     </button>
   );
 }
@@ -290,7 +289,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
   const audioRef = useRef<HTMLAudioElement>(null);
   const staticRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
-  // Una sola medición de reproducción por carga (no por cada play/pausa).
+  // A single playback measurement per load (not per play/pause).
   const hasTrackedPlay = useRef(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -303,7 +302,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isStaticVisible, setIsStaticVisible] = useState(true);
 
-  const flotante = mode === 'banner' || mode === 'compact';
+  const floating = mode === 'banner' || mode === 'compact';
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -351,9 +350,9 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
     };
   }, []);
 
-  // Detecta cuando el player estático sale de vista (banner y compact).
+  // Detects when the static player leaves the viewport (banner and compact).
   useEffect(() => {
-    if (!flotante || !staticRef.current) return;
+    if (!floating || !staticRef.current) return;
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
@@ -363,7 +362,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
     );
     observer.observe(staticRef.current);
     return () => observer.disconnect();
-  }, [flotante]);
+  }, [floating]);
 
   const togglePlay = useCallback(async () => {
     const audio = audioRef.current;
@@ -462,38 +461,38 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
   );
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-  const etiquetaPlay = hasError ? 'Reintentar' : isPlaying ? 'Pausar' : 'Reproducir';
+  const playLabel = hasError ? 'Reintentar' : isPlaying ? 'Pausar' : 'Reproducir';
 
-  const estadoPlay = { cargando: isLoading, error: hasError, sonando: isPlaying };
-  const puntero = {
+  const playState = { cargando: isLoading, error: hasError, playing: isPlaying };
+  const pointer = {
     onPointerDown: handlePointerDown,
     onPointerMove: handlePointerMove,
     onPointerUp: handlePointerUp,
   };
 
-  /** Reproductor flotante, compartido por los modos banner y compact. */
-  const flotanteJsx = (
+  /** Floating player, shared by the banner and compact modes. */
+  const floatingJsx = (
     <div
       aria-hidden={isStaticVisible}
       className={cn(
         'fixed inset-x-0 bottom-0 z-40 xl:hidden',
-        // Aparece y desaparece: el sistema no anima desplazamiento.
+        // It appears and disappears: the system does not animate displacement.
         isStaticVisible && 'hidden',
       )}
     >
-      <BarraProgreso
-        alto="h-1"
-        perilla={10}
-        progreso={progress}
+      <ProgressBar
+        height="h-1"
+        knob={10}
+        progress={progress}
         redondeada={false}
         tabIndex={-1}
-        {...puntero}
+        {...pointer}
       />
 
       <div className="bg-surface/95 border-accent/25 border-t backdrop-blur-md">
         <div className="gap-step-sm px-step-md flex items-center py-5">
           <div className="gap-step-xs flex shrink-0 items-center">
-            <Onda grosor="w-[2px]" alto="h-4" sonando={isPlaying} />
+            <Wave strokeWidth="w-[2px]" height="h-4" playing={isPlaying} />
             <span className="text-eyebrow font-mono text-accent hidden uppercase sm:block">
               Narración
             </span>
@@ -509,19 +508,19 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
           </div>
 
           <div className="flex shrink-0 items-center gap-1">
-            <BotonSalto segundos={-15} className="p-1.5" tamano="w-5 h-5" onSaltar={skip} />
-            <BotonPlay
+            <SkipButton segundos={-15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
+            <PlayButton
               className="rounded-pill px-step-sm gap-step-xs flex items-center py-1.5"
-              tamano="w-4 h-4"
-              etiqueta={etiquetaPlay}
-              onAlternar={togglePlay}
-              {...estadoPlay}
+              size="w-4 h-4"
+              label={playLabel}
+              onToggle={togglePlay}
+              {...playState}
             />
-            <BotonSalto segundos={15} className="p-1.5" tamano="w-5 h-5" onSaltar={skip} />
-            <BotonVelocidad
+            <SkipButton segundos={15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
+            <SpeedButton
               className="text-label ml-0.5 px-1.5 py-0.5"
-              velocidad={playbackRate}
-              onCambiar={handlePlaybackRateChange}
+              speed={playbackRate}
+              onChange={handlePlaybackRateChange}
             />
           </div>
         </div>
@@ -529,7 +528,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
     </div>
   );
 
-  /* ─── banner · artículos con narración ─────────────────────────────────── */
+  /* ─── banner · articles with narration ─────────────────────────────────── */
   if (mode === 'banner') {
     return (
       <>
@@ -537,7 +536,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
         <div ref={staticRef}>
           <div className="gap-step-sm mb-step-md flex items-center">
-            <Onda grosor="w-[3px]" alto="h-5" sonando={isPlaying} />
+            <Wave strokeWidth="w-[3px]" height="h-5" playing={isPlaying} />
             <span className="text-eyebrow font-mono text-accent uppercase">
               Narración de audio
             </span>
@@ -547,45 +546,45 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
           </div>
 
           <div className="mb-step-md">
-            <BarraProgreso alto="h-1.5" perilla={14} progreso={progress} {...puntero} />
+            <ProgressBar height="h-1.5" knob={14} progress={progress} {...pointer} />
           </div>
 
           <div className="gap-step-sm flex items-center">
-            <BotonSalto segundos={-15} className="p-2" tamano="w-6 h-6" onSaltar={skip} />
-            <BotonPlay
+            <SkipButton segundos={-15} className="p-2" size="w-6 h-6" onSaltar={skip} />
+            <PlayButton
               className="rounded-pill px-step-lg gap-step-xs text-ui flex items-center py-2 font-medium"
-              tamano="w-4 h-4"
-              etiqueta={etiquetaPlay}
-              texto={etiquetaPlay}
-              onAlternar={togglePlay}
-              {...estadoPlay}
+              size="w-4 h-4"
+              label={playLabel}
+              text={playLabel}
+              onToggle={togglePlay}
+              {...playState}
             />
-            <BotonSalto segundos={15} className="p-2" tamano="w-6 h-6" onSaltar={skip} />
+            <SkipButton segundos={15} className="p-2" size="w-6 h-6" onSaltar={skip} />
 
             <div className="gap-step-sm ml-auto flex items-center">
-              <BotonVelocidad
+              <SpeedButton
                 className="text-label px-2 py-1"
-                velocidad={playbackRate}
-                onCambiar={handlePlaybackRateChange}
+                speed={playbackRate}
+                onChange={handlePlaybackRateChange}
               />
-              <Volumen
-                tamano="w-4 h-4"
-                ancho="w-16"
+              <Volume
+                size="w-4 h-4"
+                width="w-16"
                 silenciado={isMuted}
                 volumen={volume}
-                onSilenciar={toggleMute}
-                onCambiarVolumen={handleVolumeChange}
+                onMute={toggleMute}
+                onVolumeChange={handleVolumeChange}
               />
             </div>
           </div>
         </div>
 
-        {flotanteJsx}
+        {floatingJsx}
       </>
     );
   }
 
-  /* ─── compact · barras laterales y usos en línea ───────────────────────── */
+  /* ─── compact · sidebars and inline uses ───────────────────────── */
   if (mode === 'compact') {
     return (
       <>
@@ -593,7 +592,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
         <div ref={staticRef} className="w-full">
           <div className="mb-step-xs">
-            <BarraProgreso alto="h-1.5" perilla={12} progreso={progress} {...puntero} />
+            <ProgressBar height="h-1.5" knob={12} progress={progress} {...pointer} />
           </div>
 
           <div className="text-chip font-mono text-text-muted mb-step-sm flex justify-between">
@@ -603,31 +602,31 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
-              <BotonSalto segundos={-15} className="p-1.5" tamano="w-5 h-5" onSaltar={skip} />
-              <BotonPlay
-                // 34px, del documento. Es tamaño de control, no de escala.
+              <SkipButton segundos={-15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
+              <PlayButton
+                // 34px, from the document. It is control size, not scale size.
                 className="rounded-pill flex size-[34px] items-center justify-center"
-                tamano="w-4 h-4"
-                etiqueta={etiquetaPlay}
-                onAlternar={togglePlay}
-                {...estadoPlay}
+                size="w-4 h-4"
+                label={playLabel}
+                onToggle={togglePlay}
+                {...playState}
               />
-              <BotonSalto segundos={15} className="p-1.5" tamano="w-5 h-5" onSaltar={skip} />
+              <SkipButton segundos={15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
             </div>
-            <BotonVelocidad
+            <SpeedButton
               className="text-label px-1.5 py-0.5"
-              velocidad={playbackRate}
-              onCambiar={handlePlaybackRateChange}
+              speed={playbackRate}
+              onChange={handlePlaybackRateChange}
             />
           </div>
         </div>
 
-        {flotanteJsx}
+        {floatingJsx}
       </>
     );
   }
 
-  /* ─── full · podcasts y páginas dedicadas ──────────────────────────────── */
+  /* ─── full · podcasts and dedicated pages ──────────────────────────────── */
   return (
     <div className="bg-surface rounded-control border-border p-step-md w-full border">
       <audio ref={audioRef} src={src} preload="metadata" />
@@ -637,7 +636,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
       ) : null}
 
       <div className="mb-step-sm">
-        <BarraProgreso alto="h-2" perilla={16} progreso={progress} {...puntero} />
+        <ProgressBar height="h-2" knob={16} progress={progress} {...pointer} />
       </div>
 
       <div className="text-chip font-mono text-text-muted mb-step-sm flex justify-between">
@@ -647,31 +646,31 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
       <div className="flex items-center justify-between">
         <div className="gap-step-xs flex items-center">
-          <BotonSalto segundos={-15} className="p-2" tamano="w-5 h-5" onSaltar={skip} />
-          <BotonPlay
-            // 48px, del documento.
+          <SkipButton segundos={-15} className="p-2" size="w-5 h-5" onSaltar={skip} />
+          <PlayButton
+            // 48px, from the document.
             className="rounded-pill flex size-12 items-center justify-center"
-            tamano="w-6 h-6"
-            etiqueta={etiquetaPlay}
-            onAlternar={togglePlay}
-            {...estadoPlay}
+            size="w-6 h-6"
+            label={playLabel}
+            onToggle={togglePlay}
+            {...playState}
           />
-          <BotonSalto segundos={15} className="p-2" tamano="w-5 h-5" onSaltar={skip} />
+          <SkipButton segundos={15} className="p-2" size="w-5 h-5" onSaltar={skip} />
         </div>
 
         <div className="gap-step-sm flex items-center">
-          <BotonVelocidad
+          <SpeedButton
             className="text-label px-2 py-1"
-            velocidad={playbackRate}
-            onCambiar={handlePlaybackRateChange}
+            speed={playbackRate}
+            onChange={handlePlaybackRateChange}
           />
-          <Volumen
-            tamano="w-5 h-5"
-            ancho="w-20"
+          <Volume
+            size="w-5 h-5"
+            width="w-20"
             silenciado={isMuted}
             volumen={volume}
-            onSilenciar={toggleMute}
-            onCambiarVolumen={handleVolumeChange}
+            onMute={toggleMute}
+            onVolumeChange={handleVolumeChange}
           />
         </div>
       </div>

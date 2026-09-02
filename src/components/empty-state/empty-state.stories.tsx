@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Bloque, Nota, Pila } from '../../../stories/utils.tsx';
+import { Block, Note, Stack } from '../../../stories/utils.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { EmptyState } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/EmptyState',
+  title: 'Components/EmptyState',
   component: EmptyState,
   args: {
-    expresion: 'waiting',
+    expression: 'waiting',
     title: 'Todavía no hay artículos con esta etiqueta',
     description: 'Prueba con otra categoría, o vuelve dentro de un par de semanas.',
   },
@@ -17,109 +17,109 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: (args) => (
     <>
-      <Pila>
+      <Stack>
         <EmptyState {...args} />
-      </Pila>
-      <Nota>
-        `expresion` es obligatoria. No es un descuido de la API: un estado vacío
-        sin cara es la mitad del componente, y hacerla opcional era dejar la regla
-        de la mascota otra vez en manos de quien escribe la vista.
-      </Nota>
+      </Stack>
+      <Note>
+        `expression` is mandatory. It is not an API oversight: an empty state
+        without a face is half the component, and making it optional would put the
+        mascot rule back in the hands of whoever writes the view.
+      </Note>
     </>
   ),
 };
 
-export const ConAccion: Story = {
-  name: 'Con acción',
-  args: { expresion: 'confused' },
+export const WithAction: Story = {
+  name: 'With action',
+  args: { expression: 'confused' },
   render: (args) => (
-    <Pila>
+    <Stack>
       <EmptyState {...args} action={<Button variant="tertiary">./ver_todos →</Button>} />
-    </Pila>
+    </Stack>
   ),
 };
 
-/** Los cuatro del documento, con su copy tal cual. */
-export const DelDocumento: Story = {
-  name: 'Los cuatro del documento',
+/** The document.s four, with their copy verbatim. */
+export const FromTheDocument: Story = {
+  name: 'The document\'s four',
   render: () => (
     <>
       <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
         <EmptyState
-          expresion="confused"
+          expression="confused"
           title="404 · aguas desconocidas"
           description="Nadaste fuera del mapa. Volvamos a la superficie."
         />
         <EmptyState
-          expresion="annoyed"
+          expression="annoyed"
           title="Error del servidor"
           description="Algo se rompió de mi lado. Ya lo estoy mirando."
         />
         <EmptyState
-          expresion="waiting"
+          expression="waiting"
           title="Sin resultados"
           description="No encontré nada con ese término. Prueba con menos palabras."
         />
         <EmptyState
-          expresion="shades"
+          expression="shades"
           title="Módulo completado"
           description="Sigues tú: microfrontends sin dolor."
         />
       </div>
-      <Nota>
-        Las cuatro caras salen del inventario del manual, que asigna una situación
-        a cada una: confusión → 404, molesto → error de servidor, ojos cerrados →
-        sin resultados, lentes de sol → módulo completado. Está como dato en
-        `usoDeCara`, así que la elección no se hace a ojo en cada sitio de uso.
-      </Nota>
+      <Note>
+        The four faces come from the manual's inventory, which assigns a situation
+        to each: confused → 404, annoyed → server error, waiting → no results,
+        shades → module completed. It is data in `faceUsage`, so the choice is not
+        made by eye at every call site.
+      </Note>
     </>
   ),
 };
 
-export const DondeVanLasCaras: Story = {
-  name: 'Dónde van las caras',
+export const WhereFacesGo: Story = {
+  name: 'Where the faces go',
   render: () => (
     <>
-      <Bloque titulo="404">
-        <Pila>
+      <Block title="404">
+        <Stack>
           <EmptyState
-            expresion="annoyed"
-            title="Esta página no existe"
+            expression="annoyed"
+            title="Esta página no exists"
             description="El enlace que seguiste apunta a algo que se movió o que nunca estuvo."
             action={<Button variant="tertiary">./volver_al_inicio →</Button>}
           />
-        </Pila>
-      </Bloque>
+        </Stack>
+      </Block>
 
-      <Bloque titulo="error de servidor">
-        <Pila>
+      <Block title="server error">
+        <Stack>
           <EmptyState
-            expresion="confused"
+            expression="confused"
             title="Algo se rompió de este lado"
             description="No es cosa tuya. Vuelve a intentar en un minuto."
           />
-        </Pila>
-      </Bloque>
+        </Stack>
+      </Block>
 
-      <Bloque titulo="celebración">
-        <Pila>
+      <Block title="celebration">
+        <Stack>
           <EmptyState
-            expresion="hearts"
+            expression="hearts"
             title="Terminaste el curso"
-            description="El certificado te llega por correo en unos minutos."
+            description="El certificado te llega por email en unos minutos."
           />
-        </Pila>
-      </Bloque>
+        </Stack>
+      </Block>
 
-      <Nota>
-        El contrato completo: estados vacíos, 404, error de servidor, progreso de
-        curso, celebración, toast y el «sin spam» del newsletter. En ningún otro
-        lugar — ni hero, ni precios, ni servicios, ni contacto, ni CV.
-      </Nota>
+      <Note>
+        The full contract: empty states, 404, server error, course progress,
+        celebration, toast and the newsletter's «sin spam». Nowhere else — not the
+        hero, not pricing, not services, not contact, not the CV.
+      </Note>
     </>
   ),
 };

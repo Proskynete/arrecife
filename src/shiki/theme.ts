@@ -1,21 +1,22 @@
 /**
- * El tema de resaltado del sistema, generado desde `tokens.sintaxis`.
+ * The system's highlighting theme, generated from `tokens.syntax`.
  *
- * NO trae Shiki como dependencia: es un objeto de datos con la forma que Shiki
- * espera (`ThemeRegistration`). Los tres proyectos que resaltan código ya lo
- * hacen en build con su propia herramienta; lo que les faltaba no era un
- * resaltador, era el tema.
+ * It does NOT pull Shiki in as a dependency: it is a data object shaped the way
+ * Shiki expects (`ThemeRegistration`). The three projects that highlight code
+ * already do it at build time with their own tooling; what they were missing was
+ * not a highlighter, it was the theme.
  *
- * Existía escrito a mano en `eduardoalvarez.dev/src/settings/shiki-reef.ts`, y
- * ahí dentro se había quedado un `#E05252` — justo el hex que `tokens.ts` dice
- * que está mal, corregido a `#E15757` por contraste. Es el caso de libro de por
- * qué la paleta no puede vivir dentro de un proyecto.
+ * It used to exist hand-written in
+ * `eduardoalvarez.dev/src/settings/shiki-reef.ts`, and a `#E05252` had been left
+ * inside it — precisely the hex `tokens.ts` says is wrong, corrected to
+ * `#E15757` for contrast. It is the textbook case for why the palette cannot
+ * live inside a project.
  *
- * Cuatro colores y un rojo de invalidez, todos AA sobre casco. La lista de
- * scopes es TextMate: si un lenguaje nuevo pinta algo raro, se añade el scope
- * aquí y cambia en los tres proyectos a la vez.
+ * Four colors and a red for invalid, all AA over hull. The scope list is
+ * TextMate: if a new language paints something odd, the scope is added here and
+ * it changes in all three projects at once.
  *
- * Uso en Astro:
+ * Usage in Astro:
  *
  *   import { arrecife } from '@eduardoalvarez/arrecife/shiki';
  *
@@ -23,10 +24,10 @@
  *     markdown: { syntaxHighlight: 'shiki', shikiConfig: { theme: arrecife } },
  *   });
  */
-import { sintaxis } from '../tokens/tokens.ts';
+import { syntax } from '../tokens/tokens.ts';
 
-/** La forma que Shiki espera. Se declara aquí para no depender del paquete. */
-export type TemaShiki = {
+/** The shape Shiki expects. Declared here so we need not depend on the package. */
+export type ShikiTheme = {
   name: string;
   type: 'dark' | 'light';
   colors: Record<string, string>;
@@ -36,17 +37,17 @@ export type TemaShiki = {
   }[];
 };
 
-export const arrecife: TemaShiki = {
+export const arrecife: ShikiTheme = {
   name: 'arrecife',
   type: 'dark',
   colors: {
-    'editor.background': sintaxis.fondo,
-    'editor.foreground': sintaxis.identificador,
+    'editor.background': syntax.background,
+    'editor.foreground': syntax.identifier,
   },
   tokenColors: [
     {
       scope: ['comment', 'punctuation.definition.comment', 'string.comment'],
-      settings: { foreground: sintaxis.comentario, fontStyle: 'italic' },
+      settings: { foreground: syntax.comment, fontStyle: 'italic' },
     },
     {
       scope: [
@@ -63,7 +64,7 @@ export const arrecife: TemaShiki = {
         'variable.language.this',
         'variable.language.super',
       ],
-      settings: { foreground: sintaxis.palabraClave },
+      settings: { foreground: syntax.keyword },
     },
     {
       scope: [
@@ -80,7 +81,7 @@ export const arrecife: TemaShiki = {
         'constant.language.undefined',
         'support.constant',
       ],
-      settings: { foreground: sintaxis.literal },
+      settings: { foreground: syntax.literal },
     },
     {
       scope: [
@@ -101,7 +102,7 @@ export const arrecife: TemaShiki = {
         'support.variable.property',
         'entity.other.attribute-name',
       ],
-      settings: { foreground: sintaxis.identificador },
+      settings: { foreground: syntax.identifier },
     },
     {
       scope: [
@@ -111,16 +112,16 @@ export const arrecife: TemaShiki = {
         'punctuation.separator',
         'punctuation.terminator',
       ],
-      settings: { foreground: sintaxis.comentario },
+      settings: { foreground: syntax.comment },
     },
-    { scope: ['markup.inserted'], settings: { foreground: sintaxis.literal } },
+    { scope: ['markup.inserted'], settings: { foreground: syntax.literal } },
     {
       scope: ['markup.deleted', 'invalid', 'invalid.illegal'],
-      settings: { foreground: sintaxis.invalido },
+      settings: { foreground: syntax.invalid },
     },
     {
       scope: ['markup.heading', 'entity.name.section'],
-      settings: { foreground: sintaxis.palabraClave, fontStyle: 'bold' },
+      settings: { foreground: syntax.keyword, fontStyle: 'bold' },
     },
     { scope: ['markup.bold'], settings: { fontStyle: 'bold' } },
     { scope: ['markup.italic'], settings: { fontStyle: 'italic' } },

@@ -8,26 +8,26 @@ import {
 import "./storybook.css";
 
 /**
- * El tema por defecto se puede fijar desde el entorno para correr la suite de
- * accesibilidad en los dos modos: un color solo falla en uno de ellos, así que
- * pasar en oscuro no prueba nada sobre el claro.
+ * The default theme can be pinned from the environment so the accessibility
+ * suite runs in both modes: a color only fails in one of them, so passing in
+ * dark proves nothing about light.
  */
-const temaInicial =
-  import.meta.env["STORYBOOK_THEME"] === "claro" ? "claro" : "oscuro";
+const initialTheme =
+  import.meta.env["STORYBOOK_THEME"] === "light" ? "light" : "dark";
 
 
 const preview: Preview = {
   decorators: [
     /**
-     * Pseudo-estados primero. Se registran por sus decoradores y no con la
-     * clave `addons`: esa existe en el tipo del núcleo de Storybook pero no en
-     * el `Preview` que reexporta `@storybook/react-vite`, así que no compila.
-     * Listarlo en `main.ts` tampoco engancha nada en Storybook 10.
+     * Pseudo-states first. They are registered through their decorators and not
+     * with the `addons` key: that key exists on Storybook's core type but not on
+     * the `Preview` that `@storybook/react-vite` re-exports, so it does not
+     * compile. Listing it in `main.ts` hooks nothing up in Storybook 10 either.
      */
     ...pseudoStates,
 
-    // Todo se monta sobre `background`: si un componente no declara su propio
-    // fondo, se ve exactamente como se va a ver en un proyecto real.
+    // Everything mounts on `background`: if a component declares no background
+    // of its own, it looks exactly as it will look in a real project.
     (Story) => (
       <div className="bg-background text-text-primary font-sans p-step-lg">
         <Story />
@@ -35,26 +35,25 @@ const preview: Preview = {
     ),
 
     /**
-     * El switch de tema vive en la toolbar desde el primer día: es como se
-     * detecta a tiempo que un componente tiene un color literal en vez de un
-     * token.
+     * The theme switch has lived in the toolbar since day one: it is how you
+     * catch in time that a component has a literal color instead of a token.
      */
     withThemeByDataAttribute({
-      themes: { oscuro: "dark", claro: "light" },
-      defaultTheme: temaInicial,
+      themes: { dark: "dark", light: "light" },
+      defaultTheme: initialTheme,
       attributeName: "data-theme",
     }),
   ],
   initialGlobals: {
     ...pseudoStatesGlobals,
   },
-  // Cada componente publica su página de documentación con la tabla de props.
-  // Es lo que va a leer quien lo consuma desde otro proyecto, que no tiene el
-  // código delante.
+  // Every component publishes its documentation page with the props table. It
+  // is what whoever consumes it from another project will read, and they do not
+  // have the code in front of them.
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
-    // El fondo lo manda el token, no el addon de backgrounds.
+    // The background comes from the token, not from the backgrounds addon.
     backgrounds: { disable: true },
     a11y: { test: "error" },
     controls: { matchers: { color: /(background|color)$/i } },

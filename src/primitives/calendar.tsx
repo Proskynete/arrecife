@@ -7,35 +7,32 @@ import { ChevronLeft, ChevronRight } from '../lib/glyphs.tsx';
 
 export type CalendarProps = ComponentProps<typeof DayPicker> & {
   /**
-   * Estira el calendario hasta ocupar todo el ancho de su contenedor, con las
-   * celdas repartiéndoselo a partes iguales.
+   * Stretches the calendar to fill its container's whole width, with the cells
+   * splitting it evenly.
    *
-   * Apagado, el calendario mide lo que miden sus celdas —36 px cada una— y es lo
-   * que quieres dentro de un `Popover`, donde estirarlo dejaría un globo enorme.
-   * Encendido, es la vista de mes de un planificador, que ocupa la página.
+   * Off, the calendar measures whatever its cells measure — 36px each — and that
+   * is what you want inside a `Popover`, where stretching it would leave a huge
+   * bubble. On, it is a planner's month view, which fills the page.
    *
-   * Con varios meses, cada uno se lleva una fracción igual del ancho.
+   * With several months, each takes an equal fraction of the width.
    */
   fullWidth?: boolean | undefined;
 };
-
 /**
- * Calendario mensual navegable, sobre `react-day-picker`.
+ * A navigable month calendar, on top of `react-day-picker`.
  *
- * Es la única dependencia pesada de la librería y entró a sabiendas: el
- * calendario del planificador de contenido no se puede resolver con el control
- * nativo. Para elegir una fecha dentro de un formulario existe `DateField`, que
- * no arrastra nada.
+ * It is the library's only heavy dependency and it was let in knowingly: the
+ * content planner's calendar cannot be solved with the native control. For
+ * picking a date inside a form there is `DateField`, which drags nothing along.
  *
- * `animate` se queda apagado —es su valor por defecto— así que el cambio de mes
- * no se desliza. Los días se marcan con color y borde, como todo lo demás.
+ * `animate` stays off — that is its default — so the month change does not
+ * slide. Days are marked with color and border, like everything else.
  *
- * El idioma va en español por defecto porque los cinco proyectos lo están; se
- * cambia pasando otro `locale` de date-fns.
+ * The language defaults to Spanish because all five projects are; it is changed
+ * by passing another date-fns `locale`.
  *
- * No trae el `style.css` de la librería: todas las clases salen de aquí, así que
- * el consumidor no tiene que importar CSS de terceros ni pelearse con su
- * especificidad.
+ * It does not ship the library's `style.css`: every class comes from here, so
+ * the consumer need not import third-party CSS or fight its specificity.
  */
 export function Calendar({
   className,
@@ -44,13 +41,13 @@ export function Calendar({
   fullWidth = false,
   ...props
 }: CalendarProps) {
-  const dia = [
+  const day = [
     'relative p-0 text-center',
     fullWidth ? 'h-9 flex-1' : 'size-9',
     'text-ui font-sans text-text-primary',
   ].join(' ');
 
-  const botonDia = [
+  const dayButton = [
     fullWidth ? 'h-9 w-full' : 'size-9',
     'rounded-chip inline-flex items-center justify-center',
     'transition-standard cursor-pointer',
@@ -59,7 +56,7 @@ export function Calendar({
     'disabled:pointer-events-none disabled:opacity-50',
   ].join(' ');
 
-  const navegacion = [
+  const navigation = [
     'size-8 rounded-chip inline-flex items-center justify-center',
     'text-text-secondary transition-standard cursor-pointer',
     'hover:bg-surface-raised hover:text-text-primary',
@@ -73,32 +70,32 @@ export function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn('font-sans', className)}
       classNames={{
-        // `relative` obligatorio: la navegación se posiciona en absoluto contra
-        // la raíz, y sin esto se ancla al primer ancestro posicionado —o al
-        // viewport— y las flechas acaban en los bordes de la página.
+        // `relative` is mandatory: the navigation is absolutely positioned
+        // against the root, and without this it anchors to the first positioned
+        // ancestor — or to the viewport — and the arrows end up at the page edges.
         root: cn('relative', fullWidth ? 'w-full' : 'w-fit'),
         months: cn('gap-step-md flex flex-col sm:flex-row', fullWidth && 'w-full'),
         month: cn('gap-step-sm flex flex-col', fullWidth && 'min-w-0 flex-1'),
         month_caption: 'h-8 flex items-center justify-center',
         caption_label: 'text-ui font-sans font-medium text-text-primary capitalize',
         nav: 'absolute inset-x-0 top-0 flex items-center justify-between',
-        button_previous: navegacion,
-        button_next: navegacion,
+        button_previous: navigation,
+        button_next: navigation,
         month_grid: 'w-full border-collapse',
         weekdays: cn('flex', fullWidth && 'w-full'),
-        // `textMuted` no va sobre `surfaceRaised` —4.07:1—, y un calendario dentro de
-        // un Popover vive justo ahí.
+        // `textMuted` does not go over `surfaceRaised` — 4.07:1 — and a calendar
+        // inside a Popover lives exactly there.
         weekday: cn(
           'h-9 text-eyebrow font-mono text-text-secondary uppercase flex items-center justify-center',
           fullWidth ? 'flex-1' : 'w-9',
         ),
         week: 'flex w-full',
-        day: dia,
-        day_button: botonDia,
+        day: day,
+        day_button: dayButton,
         today: 'text-accent font-medium',
-        // Los días de los meses vecinos se atenúan, pero no por debajo de AA:
-        // `textSecondary` al 85 % da 5.09:1 en el peor caso, que es sobre
-        // `surfaceRaised`. Al 75 % ya no pasa en modo claro.
+        // Days from neighbouring months are dimmed, but not below AA:
+        // `textSecondary` at 85 % gives 5.09:1 in the worst case, which is over
+        // `surfaceRaised`. At 75 % it no longer passes in light mode.
         outside: 'text-text-secondary opacity-85',
         disabled: 'opacity-50',
         hidden: 'invisible',

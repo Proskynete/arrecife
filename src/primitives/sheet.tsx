@@ -10,14 +10,14 @@ export const SheetTrigger = DialogPrimitive.Trigger;
 export const SheetClose = DialogPrimitive.Close;
 
 /**
- * La segunda y última excepción a «nada de desplazamiento», aprobada a
- * sabiendas: un panel que entra desde un borde se desliza por definición, y
- * quieto sería un modal descentrado.
+ * The second and last exception to «no displacement», approved knowingly: a
+ * panel entering from an edge slides by definition, and held still it would be
+ * an off-centre modal.
  *
- * Dura `--duration-standard` con `--ease-standard`, o sea lo mismo y con la
- * misma curva que cualquier cambio de color del sistema, así que no introduce
- * un tiempo nuevo. Va detrás de `motion-safe`: quien pidió menos movimiento lo
- * ve aparecer sin deslizarse.
+ * It lasts `--duration-standard` with `--ease-standard`, that is, the same time
+ * and the same curve as any color change in the system, so it introduces no new
+ * timing. It sits behind `motion-safe`: whoever asked for less motion sees it
+ * appear without sliding.
  */
 const panel = cva(
   [
@@ -29,23 +29,23 @@ const panel = cva(
       side: {
         right: [
           'inset-y-0 right-0 h-full w-3/4 max-w-content border-l',
-          'motion-safe:data-[state=open]:deslizar-entra-derecha',
-          'motion-safe:data-[state=closed]:deslizar-sale-derecha',
+          'motion-safe:data-[state=open]:slide-in-right',
+          'motion-safe:data-[state=closed]:slide-out-right',
         ],
         left: [
           'inset-y-0 left-0 h-full w-3/4 max-w-content border-r',
-          'motion-safe:data-[state=open]:deslizar-entra-izquierda',
-          'motion-safe:data-[state=closed]:deslizar-sale-izquierda',
+          'motion-safe:data-[state=open]:slide-in-left',
+          'motion-safe:data-[state=closed]:slide-out-left',
         ],
         top: [
           'inset-x-0 top-0 border-b',
-          'motion-safe:data-[state=open]:deslizar-entra-arriba',
-          'motion-safe:data-[state=closed]:deslizar-sale-arriba',
+          'motion-safe:data-[state=open]:slide-in-top',
+          'motion-safe:data-[state=closed]:slide-out-top',
         ],
         bottom: [
           'inset-x-0 bottom-0 border-t',
-          'motion-safe:data-[state=open]:deslizar-entra-abajo',
-          'motion-safe:data-[state=closed]:deslizar-sale-abajo',
+          'motion-safe:data-[state=open]:slide-in-bottom',
+          'motion-safe:data-[state=closed]:slide-out-bottom',
         ],
       },
     },

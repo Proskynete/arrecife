@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { tagline } from '../../tokens/tokens.ts';
 import { Hero } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/Hero',
+  title: 'Components/Hero',
   component: Hero,
   parameters: { layout: 'fullscreen' },
   args: {
     eyebrow: 'consultoría',
-    title: tagline.largo,
+    title: tagline.long,
     description:
       'Trabajo con equipos que crecieron más rápido que su arquitectura. Empiezo por leer el código y termino hablando con quien lo escribió.',
     pose: 'surf',
@@ -21,8 +21,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: (args) => (
     <div className="p-step-lg">
       <Hero
@@ -34,67 +34,67 @@ export const Basico: Story = {
           </>
         }
       />
-      <Nota>
-        UNO por sitio. Es la única pieza que se gasta como el botón de conversión,
-        y por la misma razón: si hay dos, no hay ninguno.
-      </Nota>
-      <Nota>
-        El degradado sale de `--gradient-hero`, así que sigue el modo y no hay un
-        ángulo escrito a mano en ningún proyecto. Cambia el tema en la toolbar: el
-        documento solo daba los valores oscuros, y los claros se componen de la
-        paleta clara con el mismo ángulo y las mismas paradas.
-      </Nota>
-      <Nota>
-        Texto al 62 % del ancho y la pose sangrando por la esquina inferior
-        derecha, nunca centrada. Estrecha la ventana: en móvil no hay borde por el
-        que sangrar, así que la pose baja al flujo bajo los botones en vez de
-        desaparecer.
-      </Nota>
+      <Note>
+        ONE per site. It is the only piece that gets spent like the conversion
+        button, and for the same reason: if there are two, there are none.
+      </Note>
+      <Note>
+        The gradient comes from `--gradient-hero`, so it follows the mode and there
+        is no hand-written angle in any project. Switch the theme in the toolbar:
+        the document only gave the dark values, and the light ones are composed from
+        the light palette with the same angle and the same stops.
+      </Note>
+      <Note>
+        Text at 62 % of the width and the pose bleeding off the bottom-right
+        corner, never centred. Narrow the window: on mobile there is no edge to
+        bleed off, so the pose drops into the flow below the buttons instead of
+        disappearing.
+      </Note>
     </div>
   ),
 };
 
-export const SinPose: Story = {
-  name: 'Sin pose',
+export const NoPose: Story = {
+  name: 'No pose',
   args: { pose: undefined },
   render: (args) => (
     <div className="p-step-lg">
       <Hero {...args} action={<Button variant="conversion">Agenda una llamada</Button>} />
-      <Nota>
-        Válido, pero es un panel con texto. La pose es la mitad de lo que hace que
-        un hero se reconozca como este sitio y no como cualquier otro.
-      </Nota>
+      <Note>
+        Valid, but it is a panel with text. The pose is half of what makes a hero
+        recognisable as this site and not as any other.
+      </Note>
     </div>
   ),
 };
 
-export const Centrado: Story = {
-  name: 'Variante centrada',
-  args: { variant: 'centrado' },
+export const Centered: Story = {
+  name: 'Centred variant',
+  args: { variant: 'centered' },
   render: (args) => (
     <div className="p-step-lg">
       <Hero
         {...args}
         eyebrow="enlaces"
         title="Eduardo Álvarez"
-        description="Todo lo que publico, en un sitio."
+        description="Everything lo que publico, en un sitio."
         action={<Button variant="secondary">Ver el blog</Button>}
       />
-      <Nota>
-        La regla del sistema es que la pose NUNCA va centrada, y sigue siendo
-        cierta para una cabecera con más página debajo: ahí una mascota centrada
-        bajo el titular es una ilustración de portada.
-      </Nota>
-      <Nota>
-        Una página de enlaces es otro caso: es centrada de extremo a extremo y la
-        mascota es el protagonista. Ese proyecto se saltaba `Hero` entero por
-        esto, que es peor — una regla con nombre se discute, una copia del
-        degradado en otro repo se desincroniza.
-      </Nota>
-      <Nota>
-        La pose va ARRIBA del titular, no debajo: así sigue sin leerse como la
-        ilustración que cierra un bloque de texto.
-      </Nota>
+      <Note>
+        The system's rule is that the pose is NEVER centred, and it is still true
+        for a header with more page below it: there, a centred mascot under the
+        headline is a cover illustration.
+      </Note>
+      <Note>
+        A links page is another case: it is centred end to end and the mascot is
+        the protagonist. That project skipped `Hero` entirely over this, which is
+        worse — a rule with a name can be argued with, a copy of the gradient in
+        another repo just drifts.
+      </Note>
+      <Note>
+        The pose goes ABOVE the headline, not below: that way it still does not
+        read as the illustration closing a block of text.
+      </Note>
     </div>
   ),
 };

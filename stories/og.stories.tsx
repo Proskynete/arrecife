@@ -3,50 +3,50 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import {
   OG,
-  plantillaArticulo,
-  plantillaCharla,
-  plantillaCurso,
-  plantillaDefecto,
-  type NodoSatori,
+  articleTemplate,
+  talkTemplate,
+  courseTemplate,
+  defaultTemplate,
+  type SatoriNode,
 } from '../src/og/index.ts';
 import { Text } from '../src/index.ts';
 
 const meta = {
-  title: 'Marca/Plantillas OG',
+  title: 'Brand/OG templates',
   parameters: { layout: 'fullscreen' },
 } satisfies Meta;
 
 export default meta;
 
 /**
- * Andamiaje de la story, no de la librería.
+ * Story scaffolding, not library code.
  *
- * Las plantillas devuelven el árbol que espera Satori — `{ type, props }` —, que
- * es estructuralmente lo mismo que un elemento de React sin su `$$typeof`. Este
- * conversor existe solo para poder verlas en el navegador; en producción el
- * árbol va directo a `satori()` y no pasa por React en ningún momento.
+ * The templates return the tree Satori expects — `{ type, props }` — which is
+ * structurally the same as a React element without its `$$typeof`. This converter
+ * exists only so they can be seen in the browser; in production the tree goes
+ * straight to `satori()` and never passes through React.
  */
-function aReact(nodo: NodoSatori | string | null | undefined | false, clave?: number): ReactNode {
-  if (!nodo) return null;
-  if (typeof nodo === 'string') return nodo;
+function toReact(node: SatoriNode | string | null | undefined | false, key?: number): ReactNode {
+  if (!node) return null;
+  if (typeof node === 'string') return node;
 
-  const { children, ...resto } = nodo.props;
-  const hijos = Array.isArray(children)
-    ? children.map((h, i) => aReact(h as NodoSatori, i))
-    : aReact(children as NodoSatori);
+  const { children, ...rest } = node.props;
+  const kids = Array.isArray(children)
+    ? children.map((child, i) => toReact(child as SatoriNode, i))
+    : toReact(children as SatoriNode);
 
-  return createElement(nodo.type, { ...resto, key: clave }, hijos);
+  return createElement(node.type, { ...rest, key: key }, kids);
 }
 
-function Lienzo({ titulo, nodo }: { titulo: string; nodo: NodoSatori }) {
+function Canvas({ title, node }: { title: string; node: SatoriNode }) {
   return (
     <figure className="mb-section">
       <Text variant="eyebrow" tone="muted" as="figcaption" className="mb-step-sm">
-        {titulo} · {OG.width}×{OG.height}
+        {title} · {OG.width}×{OG.height}
       </Text>
-      {/* Se escala a la mitad para que quepan las cuatro sin desplazarse. El
-          `transform` no cambia el layout, así que el nodo sigue midiendo 1200 y
-          hay que decírselo: sin `width` y `flexShrink: 0` se encoge a la caja. */}
+      {/* Scaled to half so all four fit without scrolling. The `transform` does
+          not change layout, so the node still measures 1200 and it has to be told:
+          without `width` and `flexShrink: 0` it shrinks to the box. */}
       <div
         className="border-hairline overflow-hidden border"
         style={{ width: OG.width / 2, height: OG.height / 2 }}
@@ -61,59 +61,59 @@ function Lienzo({ titulo, nodo }: { titulo: string; nodo: NodoSatori }) {
             display: 'flex',
           }}
         >
-          {aReact(nodo)}
+          {toReact(node)}
         </div>
       </div>
     </figure>
   );
 }
 
-export const Todas: StoryObj = {
-  name: 'Las cuatro',
+export const All: StoryObj = {
+  name: 'All four',
   render: () => (
     <div className="bg-background text-text-primary font-sans px-step-xl py-step-xl min-h-screen">
       <Text as="h1" variant="h2" className="mb-step-sm">
         Plantillas OG
       </Text>
       <Text variant="body" tone="secondary" className="mb-section">
-        Se generan con Satori, así que consumen `tokens` y el catálogo de la
-        marca —dato puro— y no componentes de React. Es exactamente el caso que
-        justifica la pureza de `src/tokens/`: si un token dependiera de un
-        componente, este módulo no podría existir.
+        They are generated with Satori, so they consume `tokens` and the brand
+        catalog — pure data — and not React components. It is exactly the case that
+        justifies the purity of `src/tokens/`: if a token depended on a
+        component, este módulo no podría existir.
       </Text>
       <Text variant="ui" tone="secondary" measure className="mb-section">
-        La retícula es UNA: eyebrow arriba, titular a la izquierda, firma abajo y
-        la mascota anclada a la derecha. Lo único que cambia entre las tres
-        primeras es el fondo y qué pose entra. La de por defecto es la excepción
-        declarada del documento y trae retícula propia.
+        There is ONE grid: eyebrow on top, headline on the left, signature at the
+        bottom and the mascot anchored right. The only things that change between the
+        first three are the background and which pose comes in. The default one is
+        the document's declared exception and brings a grid of its own.
       </Text>
       <Text variant="ui" tone="secondary" measure className="mb-section">
-        La aleta NO es un parámetro: espuma en las tres oscuras, dos azules en la
-        de curso, y la elige el modo de la plantilla. El documento avisa de que es
-        el error más fácil de cometer en un generador «porque el fondo es un
-        parámetro» — aquí no hay forma de pedir la combinación mala.
+        The fin is NOT a parameter: foam in the three dark ones, two blues in the
+        course one, and it is chosen by the template's mode. The document warns that
+        it is the easiest mistake to make in a generator «because the background is a
+        parameter» — here there is no way to ask for the bad combination.
       </Text>
 
-      <Lienzo
-        titulo="artículo · degradado 145°, categoría y lectura en arena, cara a la derecha"
-        nodo={plantillaArticulo({
+      <Canvas
+        title="article · 145° gradient, category and reading time in sand, face on the right"
+        node={articleTemplate({
           title: 'El camino hacia mi primera charla internacional',
           category: 'engineering-culture',
           readingMinutes: 8,
         })}
       />
-      <Lienzo
-        titulo="curso · la única en claro, pose completa a la izquierda"
-        nodo={plantillaCurso({
+      <Canvas
+        title="course · the only light one, full pose on the left"
+        node={courseTemplate({
           title: 'Microfrontends sin dolor',
           modules: 6,
           duration: '4h 20m',
           pose: 'laptop-coffee',
         })}
       />
-      <Lienzo
-        titulo="charla · eyebrow bioluz con evento y año, pose sangrando"
-        nodo={plantillaCharla({
+      <Canvas
+        title="talk · biolume eyebrow with event and year, pose bleeding off"
+        node={talkTemplate({
           title: 'Microfrontends sin dolor',
           event: 'CaribeConf',
           year: 2026,
@@ -121,9 +121,9 @@ export const Todas: StoryObj = {
           location: 'Barranquilla, Colombia · agosto 2026',
         })}
       />
-      <Lienzo
-        titulo="por defecto · retícula propia, aleta con halo y divisor en x=290"
-        nodo={plantillaDefecto()}
+      <Canvas
+        title="default · its own grid, haloed fin and a divider at x=290"
+        node={defaultTemplate()}
       />
     </div>
   ),

@@ -6,44 +6,45 @@ import { Text } from '../../primitives/typography.tsx';
 import { naming } from '../../tokens/tokens.ts';
 
 /**
- * El pie, y la firma CLI del sitio: `$ cd ~/eduardoalvarez.dev/2026`.
+ * The footer, and the site's CLI signature: `$ cd ~/eduardoalvarez.dev/2026`.
  *
- * El dominio sale de `naming.domain` y no de una cadena escrita a mano, por la
- * misma razón que el wordmark: si cambia, cambia en los cinco proyectos a la
- * vez.
+ * The domain comes from `naming.domain` and not from a hand-written string, for
+ * the same reason as the wordmark: if it changes, it changes in all five
+ * projects at once.
  *
- * Los enlaces de redes son iconos SIN texto visible, así que `aria-label` no es
- * una mejora: es lo único que los hace legibles. Por eso es obligatorio en el
- * tipo y no una prop opcional que se olvide.
+ * The social links are icons with NO visible text, so `aria-label` is not an
+ * improvement: it is the only thing that makes them legible. Which is why it is
+ * mandatory in the type and not an optional prop that gets forgotten.
  *
- * La firma va arriba a la derecha, al nivel de la PRIMERA fila que exista, no
- * al final del bloque. Es una decisión de composición y no de estilo: el pie
- * puede llevar marca, enlaces y redes, y colgar la firma de una fila concreta
- * la hunde en cuanto esa fila deja de ser la primera.
+ * The signature sits top right, level with the FIRST row that exists, not at the
+ * end of the block. That is a composition decision and not a styling one: the
+ * footer can carry brand, links and social icons, and hanging the signature off
+ * one specific row sinks it the moment that row stops being the first.
  */
-export type Red = {
-  /** Lo que reemplaza al texto visible. Obligatorio. */
+export type SocialLink = {
+  /** What replaces the visible text. Mandatory. */
   label: string;
   href: string;
   /**
-   * El glifo, a 19px. Las marcas van en SÓLIDO (`fill`) y los iconos
-   * funcionales en trazo de 1.6. Nunca un emoji.
+   * The glyph, at 19px. Brands are SOLID (`fill`) and functional icons use a 1.6
+   * stroke. Never an emoji.
    */
   icon: ReactNode;
 };
 
 export type FooterProps = ComponentPropsWithoutRef<'footer'> & {
-  social?: readonly Red[];
-  /** Año de la firma. */
+  social?: readonly SocialLink[];
+  /** The signature's year. */
   year?: number;
-  /** Enlaces de texto: aviso legal, RSS, mapa del sitio. */
+  /** Text links: legal notice, RSS, sitemap. */
   children?: ReactNode;
   /**
-   * La fila de marca: la aleta y el wordmark, arriba del todo.
+   * The brand row: the fin and the wordmark, at the very top.
    *
-   * Existe porque sin ella acababa metida en `children` con un `w-full` para
-   * que se llevara su propia línea. Funcionaba y era un apaño: la marca no es
-   * un enlace de texto más, y una ranura propia lo dice en el tipo.
+   * It exists because without it that row ended up inside `children` with a
+   * `w-full` so it would take a line of its own. It worked and it was a patch:
+   * the brand is not one more text link, and a slot of its own says so in the
+   * type.
    */
   brand?: ReactNode;
 };
@@ -56,7 +57,7 @@ export function Footer({
   className,
   ...props
 }: FooterProps) {
-  const firma = (
+  const signature = (
     <Text variant="meta" tone="muted" as="p" className="ml-auto shrink-0">
       <span aria-hidden="true" className="text-accent">
         ${' '}
@@ -66,17 +67,18 @@ export function Footer({
   );
 
   /*
-    Las filas del pie, en orden y sin las vacías. Se arman antes de pintar
-    porque la firma va SIEMPRE en la primera que exista, y cuál es la primera
-    depende de qué le pasen: con marca es la marca, sin marca son los enlaces, y
-    con solo redes son los iconos.
+    The footer's rows, in order and without the empty ones. They are assembled
+    before painting because the signature ALWAYS goes in the first one that
+    exists, and which one is first depends on what gets passed: with a brand it
+    is the brand, without one it is the links, and with only social icons it is
+    the icons.
 
-    Es la diferencia entre «la firma va a la derecha» y «la firma va a la
-    derecha del todo». Pegarla a la fila de redes —como estaba— la dejaba en la
-    tercera línea en cuanto el pie tenía marca y enlaces encima, que es
-    exactamente donde no va.
+    It is the difference between «the signature goes on the right» and «the
+    signature goes at the top right». Pinning it to the social row — as it was —
+    left it on the third line the moment the footer had a brand and links above,
+    which is exactly where it does not go.
   */
-  const filas = [
+  const rows = [
     brand ? (
       <div key="marca" className="flex items-center">
         {brand}
@@ -90,20 +92,20 @@ export function Footer({
     ) : null,
 
     social && social.length > 0 ? (
-      // 18px de separación, del documento. No es un escalón de `spacing`:
-      // es el ritmo de una fila de iconos, no el de una página.
-      <ul key="redes" className="flex items-center gap-[18px]">
-        {social.map((red) => (
-          <li key={red.href}>
+      // 18px of separation, from the document. It is not a `spacing` step: it is
+      // the rhythm of a row of icons, not that of a page.
+      <ul key="socialLinks" className="flex items-center gap-[18px]">
+        {social.map((socialLink) => (
+          <li key={socialLink.href}>
             <a
-              href={red.href}
-              aria-label={red.label}
+              href={socialLink.href}
+              aria-label={socialLink.label}
               className={cn(
                 'text-text-muted hover:text-accent transition-standard block cursor-pointer text-[19px]',
                 'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
               )}
             >
-              {red.icon}
+              {socialLink.icon}
             </a>
           </li>
         ))}
@@ -111,24 +113,24 @@ export function Footer({
     ) : null,
   ].filter(Boolean);
 
-  const [primera, ...resto] = filas;
+  const [first, ...rest] = rows;
 
   return (
     <footer className={cn('border-hairline w-full border-t', className)} {...props}>
       <div className="max-w-wide px-step-md py-step-xl gap-step-lg mx-auto flex flex-col">
         {/*
-          `items-center` y no `items-start`: la firma es una línea de 13px y la
-          marca mide 28, así que alinear por arriba la deja flotando alta. En
-          pantalla estrecha `flex-wrap` la baja a su propia línea — ahí no hay
-          ancho para las dos y apretarlas rompería la ruta, que es mono y no se
-          puede truncar sin dejar de leerse.
+          `items-center` and not `items-start`: the signature is a 13px line and
+          the brand measures 28, so aligning to the top leaves it floating high.
+          On a narrow screen `flex-wrap` drops it onto its own line — there is no
+          width for both there, and squeezing them would break the path, which is
+          mono and cannot be truncated without becoming unreadable.
         */}
         <div className="gap-step-md flex flex-wrap items-center">
-          {primera ?? null}
-          {firma}
+          {first ?? null}
+          {signature}
         </div>
 
-        {resto}
+        {rest}
       </div>
     </footer>
   );
@@ -139,9 +141,9 @@ export type FooterLinkProps = ComponentPropsWithoutRef<'a'> & {
 };
 
 export function FooterLink({ asChild = false, className, ...props }: FooterLinkProps) {
-  const Raiz = asChild ? Slot : 'a';
+  const Root = asChild ? Slot : 'a';
   return (
-    <Raiz
+    <Root
       className={cn(
         'font-mono text-meta text-text-secondary hover:text-accent transition-standard cursor-pointer',
         'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',

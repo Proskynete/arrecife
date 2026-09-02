@@ -5,11 +5,11 @@ import { Button } from './button.tsx';
 import { Popover, PopoverContent, PopoverTrigger } from './popover.tsx';
 import { Text } from './typography.tsx';
 
-const meta = { title: 'Primitivos/Popover', component: Popover } satisfies Meta<typeof Popover>;
+const meta = { title: 'Primitives/Popover', component: Popover } satisfies Meta<typeof Popover>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const globo = (args: Parameters<NonNullable<Story['render']>>[0]) => (
+const bubble = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   <Popover {...args}>
     <PopoverTrigger asChild>
       <Button variant="secondary">Cómo se calcula</Button>
@@ -23,16 +23,16 @@ const globo = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   </Popover>
 );
 
-export const Cerrado: Story = { render: globo };
+export const Closed: Story = { render: bubble };
 
-export const Abierto: Story = {
+export const Open: Story = {
   parameters: {
-    // Mismo desacuerdo conocido entre axe y Radix que en Select y DropdownMenu:
-    // el disparador queda dentro de la región marcada aria-hidden aunque el foco
-    // esté atrapado en el portal.
+    // The same known disagreement between axe and Radix as in Select and
+    // DropdownMenu: the trigger ends up inside the region marked aria-hidden even
+    // though focus is trapped in the portal.
     a11y: { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } },
   },
-  render: globo,
+  render: bubble,
   play: async ({ canvasElement }) => {
     await userEvent.click(within(canvasElement).getByRole('button', { name: 'Cómo se calcula' }));
   },

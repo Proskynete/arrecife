@@ -3,37 +3,36 @@ import type { ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
 import { CategoryBadge } from '../../primitives/badge.tsx';
 import { Text } from '../../primitives/typography.tsx';
-import { Tarjeta, type TarjetaProps } from '../card-base.tsx';
+import { CardShell, type CardShellProps } from '../card-base.tsx';
 
-export type ArticleCardProps = Omit<TarjetaProps, 'children' | 'title'> & {
+export type ArticleCardProps = Omit<CardShellProps, 'children' | 'title'> & {
   title: ReactNode;
-  /** Entradilla. Se corta a dos líneas para que la rejilla no se desalinee. */
+  /** Standfirst. Clamped to two lines so the grid does not fall out of line. */
   excerpt?: ReactNode;
-  /** Fecha ya formateada por el proyecto: la librería no impone locale. */
+  /** Date already formatted by the project: the library imposes no locale. */
   date?: ReactNode;
-  /** Valor de `datetime` del `<time>`, en ISO. */
+  /** The `<time>` element's `datetime` value, in ISO. */
   dateTime?: string | undefined;
   readingMinutes?: number | undefined;
   tags?: readonly string[] | undefined;
   /**
-   * Nivel del titular. `h3` por defecto: una tarjeta suelta en una rejilla no
-   * gana el nivel que su posición no le da.
+   * The headline level. `h3` by default: a lone card in a grid does not earn a
+   * level its position does not give it.
    *
-   * Acotado a dos valores a propósito. La página de listado —donde las tarjetas
-   * SÍ son el encabezado principal de la sección— necesita `h2`, y esa
-   * intención se perdía con la constante; abrirlo hasta `h4` o `h5`, en cambio,
-   * es invitar a saltarse niveles, que es el fallo que la constante evitaba.
+   * Restricted to two values on purpose. The listing page — where the cards ARE
+   * the section's main heading — needs `h2`, and that intent was lost with a
+   * constant; opening it up to `h4` or `h5`, on the other hand, is an invitation
+   * to skip levels, which is the failure the constant was preventing.
    */
   headingLevel?: 2 | 3;
 };
 
 /**
- * La línea de metadatos va en `meta` y no en `eyebrow`: `18 ago 2026 · 8 min de
- * lectura` es un dato, no un antetítulo, y en versalitas no era ninguna de las
- * dos cosas.
+ * The metadata line uses `meta` and not `eyebrow`: `18 ago 2026 · 8 min de
+ * lectura` is a datum, not an overline, and in small caps it was neither.
  *
- * Los tags son la familia CATEGORÍA — píldora de arena en minúscula —, no la de
- * estado. Un slug es lo que se lee `engineering-culture`.
+ * The tags are the CATEGORY family — a lowercase sand pill — not the status one.
+ * A slug is something you read as `engineering-culture`.
  */
 export function ArticleCard({
   title,
@@ -47,12 +46,12 @@ export function ArticleCard({
   ...props
 }: ArticleCardProps) {
   const meta = [
-    date ? <time key="fecha" dateTime={dateTime}>{date}</time> : null,
+    date ? <time key="date" dateTime={dateTime}>{date}</time> : null,
     readingMinutes ? <span key="lectura">{readingMinutes} min de lectura</span> : null,
   ].filter(Boolean);
 
   return (
-    <Tarjeta className={cn('p-step-lg', className)} {...props}>
+    <CardShell className={cn('p-step-lg', className)} {...props}>
       <article className="gap-step-sm flex h-full flex-col">
         {meta.length > 0 ? (
           <Text variant="meta" tone="muted" as="p" className="gap-step-xs flex items-center">
@@ -87,6 +86,6 @@ export function ArticleCard({
           </div>
         ) : null}
       </article>
-    </Tarjeta>
+    </CardShell>
   );
 }

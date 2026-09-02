@@ -30,10 +30,10 @@
       "require": "./dist/tokens/index.cjs"
     },
     "./tokens/theme.css": "./dist/tokens/theme.css",
-    "./tema": {
-      "types": "./dist/tema/index.d.ts",
-      "import": "./dist/tema/index.js",
-      "require": "./dist/tema/index.cjs"
+    "./theme": {
+      "types": "./dist/theme/index.d.ts",
+      "import": "./dist/theme/index.js",
+      "require": "./dist/theme/index.cjs"
     },
     "./brand": {
       "types": "./dist/brand/index.d.ts",
@@ -78,14 +78,14 @@
     "check:release": "node scripts/check-release-config.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "pnpm test:unidad && pnpm test:oscuro && pnpm test:claro",
+    "test": "pnpm test:unit && pnpm test:dark && pnpm test:light",
     "test:watch": "vitest --project storybook",
     "storybook": "pnpm build:tokens && storybook dev -p 6006",
     "build-storybook": "pnpm build:tokens && storybook build",
     "prepublishOnly": "pnpm build",
-    "test:unidad": "vitest run --project unidad",
-    "test:oscuro": "vitest run --project storybook",
-    "test:claro": "STORYBOOK_THEME=claro vitest run --project storybook"
+    "test:unit": "vitest run --project unit",
+    "test:dark": "vitest run --project storybook",
+    "test:light": "STORYBOOK_THEME=light vitest run --project storybook"
   },
   "peerDependencies": {
     "react": "^19.0.0",

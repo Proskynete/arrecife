@@ -5,35 +5,35 @@ import { cn } from '../../lib/cn.ts';
 import { Check, Copy } from '../../lib/glyphs.tsx';
 
 /**
- * `brand.hull` es «casco · contorno y fondo de bloques de código», así que un
- * bloque de código es oscuro también en modo claro. Por eso la raíz declara
- * `data-theme="dark"`: todo lo de dentro — tinta, hairline, acento — pasa a la
- * paleta oscura sin importar el tema de la página. Es la única isla de tema
- * invertido del sistema, y es deliberada.
+ * `brand.hull` is «hull · outline and the background of code blocks», so a code
+ * block is dark in light mode too. That is why the root declares
+ * `data-theme="dark"`: everything inside — ink, hairline, accent — switches to
+ * the dark palette regardless of the page's theme. It is the system's only
+ * island of inverted theme, and it is deliberate.
  */
 export type CodeBlockProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
-  /** El código ya resaltado, o texto plano. */
+  /** The already-highlighted code, or flat text. */
   children: ReactNode;
-  /** Etiqueta del lenguaje. Se muestra en la barra superior. */
+  /** The language label. Shown in the top bar. */
   language?: string | undefined;
-  /** Texto que se copia al portapapeles. Sin esto, no se muestra el botón. */
+  /** The text copied to the clipboard. Without it, the button is not shown. */
   copyText?: string | undefined;
 };
 
 export function CodeBlock({ children, language, copyText, className, ...props }: CodeBlockProps) {
   const [copiado, setCopiado] = useState(false);
-  const temporizador = useRef<ReturnType<typeof setTimeout>>(null);
+  const timer = useRef<ReturnType<typeof setTimeout>>(null);
 
-  const copiar = useCallback(async () => {
+  const copy = useCallback(async () => {
     if (!copyText) return;
     try {
       await navigator.clipboard.writeText(copyText);
       setCopiado(true);
-      if (temporizador.current) clearTimeout(temporizador.current);
-      temporizador.current = setTimeout(() => setCopiado(false), 2000);
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCopiado(false), 2000);
     } catch {
-      // Sin permiso de portapapeles no hay nada que hacer: el texto sigue
-      // seleccionable a mano.
+      // With no clipboard permission there is nothing to be done: the text is
+      // still selectable by hand.
     }
   }, [copyText]);
 
@@ -54,7 +54,7 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
         {copyText ? (
           <button
             type="button"
-            onClick={copiar}
+            onClick={copy}
             aria-label={copiado ? 'Código copiado' : 'Copiar código'}
             aria-live="polite"
             className={cn(

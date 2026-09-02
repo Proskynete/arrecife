@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { Text } from '../../primitives/typography.tsx';
 import { ScrollingProgressBar } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/ScrollingProgressBar',
+  title: 'Components/ScrollingProgressBar',
   component: ScrollingProgressBar,
   parameters: { layout: 'fullscreen' },
 } satisfies Meta<typeof ScrollingProgressBar>;
@@ -14,15 +14,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const PARRAFOS = 12;
+const PARAGRAPHS = 12;
 
-function Articulo() {
+function Article() {
   return (
     <div className="gap-step-md max-w-content mx-auto flex flex-col">
       <Text as="h1" variant="h1">
         Escalar con criterio
       </Text>
-      {Array.from({ length: PARRAFOS }, (_, i) => (
+      {Array.from({ length: PARAGRAPHS }, (_, i) => (
         <Text key={i} variant="body">
           Párrafo {i + 1}. Un equipo que crece sin criterio no se rompe por la
           arquitectura: se rompe por las decisiones que nadie escribió y que cada
@@ -34,67 +34,66 @@ function Articulo() {
   );
 }
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: (args) => (
     <div className="-m-step-lg">
       <ScrollingProgressBar {...args} />
       <div className="p-step-lg">
-        <Nota>
-          Va `aria-hidden`. Un lector de pantalla ya sabe dónde está en el
-          documento; anunciarle «37 %» en cada movimiento es ruido. Lo que es
-          solo visual se declara como tal.
-        </Nota>
-        <Nota>
-          El ancho no transiciona: `transition-standard` solo cubre color y
-          borde, así que la barra sigue al scroll en vez de perseguirlo.
-        </Nota>
-        <Articulo />
+        <Note>
+          It is `aria-hidden`. A screen reader already knows where it is in the
+          document; announcing «37 %» on every movement is noise. What is purely
+          visual is declared as such.
+        </Note>
+        <Note>
+          The width does not transition: `transition-standard` only covers color
+          and border, so the bar follows the scroll instead of chasing it.
+        </Note>
+        <Article />
       </div>
     </div>
   ),
 };
 
 /** El caso real: la barra sigue al artículo, no al documento. */
-function ConArticuloAcotado() {
-  const articulo = useRef<HTMLElement>(null);
+function WithScopedArticle() {
+  const article = useRef<HTMLElement>(null);
 
   return (
     <div className="-m-step-lg">
-      <ScrollingProgressBar target={articulo} />
+      <ScrollingProgressBar target={article} />
       <div className="p-step-lg gap-step-xl flex flex-col">
-        <Nota>
-          Con una cabecera alta y un pie con enlaces, medir el documento entero
-          marca el 100 % cuando todavía quedan dos párrafos. `target` acota la
-          medida al artículo.
-        </Nota>
-        <article ref={articulo}>
-          <Articulo />
+        <Note>
+          With a tall header and a footer full of links, measuring the whole
+          document hits 100 % while two paragraphs are still left. `target` scopes
+          the measurement to the article.
+        </Note>
+        <article ref={article}>
+          <Article />
         </article>
-        <Nota>Esto de aquí abajo ya no cuenta para la barra.</Nota>
+        <Note>Everything down here no longer counts towards the bar.</Note>
       </div>
     </div>
   );
 }
 
-export const ConObjetivo: Story = {
-  name: 'Midiendo solo el artículo',
-  render: () => <ConArticuloAcotado />,
+export const WithTarget: Story = {
+  name: 'Measuring the article only',
+  render: () => <WithScopedArticle />,
 };
 
-export const Arena: Story = {
-  name: 'Tono arena',
+export const Sand: Story = {
+  name: 'Sand tone',
   args: { tone: 'warm' },
   render: (args) => (
     <div className="-m-step-lg">
       <ScrollingProgressBar {...args} />
       <div className="p-step-lg">
-        <Nota>
-          Arena para una lección de curso, que es donde el progreso de lectura y
-          el progreso del curso comparten pantalla y conviene que hablen el mismo
-          color.
-        </Nota>
-        <Articulo />
+        <Note>
+          Sand for a course lesson, which is where reading progress and course
+          progress share a screen and had better speak the same color.
+        </Note>
+        <Article />
       </div>
     </div>
   ),

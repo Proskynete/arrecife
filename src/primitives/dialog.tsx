@@ -20,7 +20,7 @@ export function DialogOverlay({
   );
 }
 
-/** Sin entrada animada: no hay escala ni desplazamiento en el sistema. */
+/** No entrance animation: there is no scale or displacement in the system. */
 export function DialogContent({
   className,
   children,

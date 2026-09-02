@@ -1,122 +1,122 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Bloque, Fila, Nota } from '../../stories/utils.tsx';
+import { Block, Row, Note } from '../../stories/utils.tsx';
 import { Badge, CategoryBadge, MetricBadge } from './badge.tsx';
 
-const meta = { title: 'Primitivos/Badge', component: Badge } satisfies Meta<typeof Badge>;
+const meta = { title: 'Primitives/Badge', component: Badge } satisfies Meta<typeof Badge>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const ESTADOS = ['neutral', 'accent', 'warm', 'success', 'warning', 'error'] as const;
+const STATES = ['neutral', 'accent', 'warm', 'success', 'warning', 'error'] as const;
 
-/** Los del documento, con su texto real. */
-const REALES = [
-  { texto: 'Publicado', variant: 'success' },
-  { texto: 'Borrador', variant: 'neutral' },
-  { texto: 'Fallo de build', variant: 'error' },
-  { texto: 'Archivado', variant: 'neutral' },
-  { texto: 'Nuevo', variant: 'accent' },
-  { texto: 'En vivo', variant: 'warm' },
+/** Los del documento, con su text real. */
+const REAL = [
+  { text: 'Publicado', variant: 'success' },
+  { text: 'Borrador', variant: 'neutral' },
+  { text: 'Fallo de build', variant: 'error' },
+  { text: 'Archivado', variant: 'neutral' },
+  { text: 'Nuevo', variant: 'accent' },
+  { text: 'En vivo', variant: 'warm' },
 ] as const;
 
-const CATEGORIAS = ['engineering-culture', 'arquitectura', 'liderazgo', 'carrera'] as const;
+const CATEGORIES = ['engineering-culture', 'arquitectura', 'liderazgo', 'carrera'] as const;
 
-export const Familias: Story = {
-  name: 'Las tres familias',
+export const Families: Story = {
+  name: 'The three families',
   render: () => (
     <>
-      <Bloque titulo="categoría · píldora mono en arena">
-        <Fila>
-          {CATEGORIAS.map((c) => (
+      <Block title="category · mono pill in sand">
+        <Row>
+          {CATEGORIES.map((c) => (
             <CategoryBadge key={c} active={c === 'arquitectura'}>
               {c}
             </CategoryBadge>
           ))}
-        </Fila>
-        <Nota>
-          Son slugs, así que se leen `engineering-culture` en minúscula. La
-          rellena no es decorativa: es el único indicador de filtro activo del
-          listado de artículos, y por eso es la prop `active` y no un `className`
-          en el sitio de uso.
-        </Nota>
-      </Bloque>
+        </Row>
+        <Note>
+          They are slugs, so they read `engineering-culture` in lowercase. The
+          filled one is not decorative: it is the only indicator of the active
+          filter in the article listing, which is why it is the `active` prop and
+          not a `className` at the call site.
+        </Note>
+      </Block>
 
-      <Bloque titulo="estado · cuadrada r6, sans 12.5/500, fondo al 8 %">
-        <Fila>
-          {REALES.map((e) => (
-            <Badge key={e.texto} variant={e.variant}>
-              {e.texto}
+      <Block title="status · square r6, sans 12.5/500, background at 8 %">
+        <Row>
+          {REAL.map((e) => (
+            <Badge key={e.text} variant={e.variant}>
+              {e.text}
             </Badge>
           ))}
-        </Fila>
-        <Nota>
-          Es la receta del aviso en tamaño de palabra: fondo al 8 % del semántico
-          y nada más. Cuadrada de radio `chip`, no píldora — la forma es lo que la
-          separa de una categoría a un metro de distancia.
-        </Nota>
-        <Nota>
-          Sin borde. Lo llevó un tiempo y pesaba: una caja con borde al lado de un
-          título se lee como un control y no como un dato. El texto va en
-          `textPrimary` y no en el color del tono — cambia el modo en la toolbar:
-          en claro los semánticos están calibrados para pasar JUSTO sobre papel,
-          así que sobre su propio tinte caen a 4.10–4.40 y no pasan AA.
-        </Nota>
-        <Nota>
-          El tono nunca es el único portador del significado: la etiqueta dice
-          «Publicado» o «Borrador» con todas sus letras.
-        </Nota>
-      </Bloque>
+        </Row>
+        <Note>
+          It is the alert recipe at word size: the semantic color at 8 % as
+          background and nothing else. Square at `chip` radius, not a pill — the
+          shape is what separates it from a category at a metre's distance.
+        </Note>
+        <Note>
+          No border. It had one for a while and it was heavy: a bordered box next
+          to a title reads as a control and not as a datum. The text uses
+          `textPrimary` and not the tone's color — switch the mode in the toolbar:
+          in light the semantics are calibrated to pass JUST over paper, so over
+          their own tint they fall to 4.10–4.40 and fail AA.
+        </Note>
+        <Note>
+          The tone is never the only carrier of meaning: the label spells out
+          «Publicado» or «Borrador» in full.
+        </Note>
+      </Block>
 
-      <Bloque titulo="métrica · mono, sin caja, sin transformar">
-        <Fila>
+      <Block title="metric · mono, no box, no transform">
+        <Row>
           <MetricBadge>8 min de lectura</MetricBadge>
           <MetricBadge>6 módulos</MetricBadge>
           <MetricBadge>pose-laptop-coffee.png</MetricBadge>
           <MetricBadge boxed>v5.0.1</MetricBadge>
-        </Fila>
-        <Nota>
-          Ninguna de las tres va en versalitas. El `uppercase` que tenían todas
-          venía de `text-eyebrow`, que es la escala del antetítulo y no la de las
-          etiquetas: convertía un slug en `ENGINEERING-CULTURE` y un nombre de
-          archivo en uno que no existe.
-        </Nota>
-      </Bloque>
+        </Row>
+        <Note>
+          None of the three is small-capped. The `uppercase` all of them carried
+          came from `text-eyebrow`, which is the overline's scale and not the
+          badges': it turned a slug into `ENGINEERING-CULTURE` and a file name into
+          one that does not exist.
+        </Note>
+      </Block>
     </>
   ),
 };
 
-export const Estado: Story = {
+export const Status: Story = {
   render: () => (
-    <Fila>
-      {ESTADOS.map((v) => (
+    <Row>
+      {STATES.map((v) => (
         <Badge key={v} variant={v}>
           {v}
         </Badge>
       ))}
-    </Fila>
+    </Row>
   ),
 };
 
-export const Categoria: Story = {
-  name: 'Categoría',
+export const Category: Story = {
+  name: 'Category',
   render: () => (
-    <Fila>
-      {CATEGORIAS.map((c) => (
+    <Row>
+      {CATEGORIES.map((c) => (
         <CategoryBadge key={c} active={c === 'arquitectura'}>
           {c}
         </CategoryBadge>
       ))}
-    </Fila>
+    </Row>
   ),
 };
 
-export const Metrica: Story = {
-  name: 'Métrica',
+export const Metric: Story = {
+  name: 'Metric',
   render: () => (
-    <Fila>
+    <Row>
       <MetricBadge>8 min de lectura</MetricBadge>
       <MetricBadge>18 ago 2026</MetricBadge>
       <MetricBadge boxed>v5.0.1</MetricBadge>
-    </Fila>
+    </Row>
   ),
 };

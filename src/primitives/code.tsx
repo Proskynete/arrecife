@@ -3,16 +3,16 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { cn } from '../lib/cn.ts';
 
 /**
- * Código en línea, dentro de prosa.
+ * Inline code, inside prose.
  *
- * Existe porque no existía: cada consumidor escribía `<code className="font-mono">`
- * a mano, y la story de marca lo hacía cuatro veces en un solo párrafo. Un
- * `<code>` suelto hereda el tamaño del párrafo, así que dentro de `body` (18px)
- * se veía un mono de 18px que el documento no tiene en ninguna parte.
+ * It exists because it did not: every consumer wrote `<code className="font-mono">`
+ * by hand, and the brand story did it four times in a single paragraph. A bare
+ * `<code>` inherits the paragraph's size, so inside `body` (18px) you saw an
+ * 18px mono that the document has nowhere.
  *
- * No es `CodeBlock`. El bloque es una isla de tema oscuro sobre casco con barra
- * y botón de copiar; esto es una palabra dentro de una frase, y por eso se queda
- * en la superficie de la página en vez de invertir el tema.
+ * It is not `CodeBlock`. The block is an island of dark theme over hull with a
+ * bar and a copy button; this is one word inside a sentence, which is why it
+ * stays on the page surface instead of inverting the theme.
  */
 export type CodeProps = ComponentPropsWithoutRef<'code'>;
 

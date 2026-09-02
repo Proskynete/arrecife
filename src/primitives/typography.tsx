@@ -5,30 +5,30 @@ import type { ComponentPropsWithoutRef, ElementType } from 'react';
 import { cn } from '../lib/cn.ts';
 
 /**
- * La escala tipográfica como API, no como clases sueltas.
+ * The type scale as an API, not as loose classes.
  *
- * Tres reglas del sistema quedan aquí dentro en vez de en la cabeza de quien
- * escribe la vista:
+ * Four of the system's rules end up in here instead of in the head of whoever
+ * is writing the view:
  *
- * 1. La familia va atada a la escala. Display es «solo titulares y números
- *    grandes, nunca cuerpo», así que no hay forma de pedir cuerpo en display:
- *    no existe una prop `font`.
- * 2. El peso, el interlineado y el tracking vienen del token `--text-*`. No se
- *    exponen: cambiarlos por componente es como se deshace una escala.
- * 3. El cuerpo se corta a 68ch solo. `measure` existe para desactivarlo cuando
- *    el texto va dentro de una celda o una tarjeta estrecha, no como preferencia.
- * 4. Hay DOS escalas mono y no una: `eyebrow` lleva versalitas de fábrica y
- *    `meta` no. Casi todo el mono del sistema —fechas, rutas, versiones, la
- *    firma del footer— es `meta`. Un eyebrow con `normal-case` encima es la
- *    señal de que se eligió la escala equivocada.
+ * 1. The family is bound to the scale. Display is «headlines and large numbers
+ *    only, never body», so there is no way to ask for body in display: no
+ *    `font` prop exists.
+ * 2. Weight, line height and tracking come from the `--text-*` token. They are
+ *    not exposed: changing them per component is how a scale comes undone.
+ * 3. Body clamps to 68ch on its own. `measure` exists to switch that off when
+ *    the text sits inside a cell or a narrow card, not as a preference.
+ * 4. There are TWO mono scales, not one: `eyebrow` ships small caps and `meta`
+ *    does not. Nearly all the mono in the system — dates, paths, versions, the
+ *    footer signature — is `meta`. An eyebrow with `normal-case` on top is the
+ *    sign that the wrong scale was picked.
  *
- * Semántica y estilo son independientes a propósito: `as` elige la etiqueta y
- * `variant` elige la escala. Un `h2` que tiene que verse pequeño es
- * `<Text as="h2" variant="h3">`, no un `h3` que miente sobre la jerarquía.
+ * Semantics and style are independent on purpose: `as` picks the tag and
+ * `variant` picks the scale. An `h2` that has to look small is
+ * `<Text as="h2" variant="h3">`, not an `h3` that lies about the hierarchy.
  */
 
-/** Etiqueta por defecto de cada escala, cuando no se pasa `as`. */
-const ETIQUETA = {
+/** The default tag for each scale, when no `as` is passed. */
+const LABEL = {
   display: 'h1',
   stat: 'p',
   h1: 'h1',
@@ -44,31 +44,31 @@ const ETIQUETA = {
   eyebrow: 'p',
 } as const;
 
-const texto = cva('', {
+const text = cva('', {
   variants: {
     variant: {
       display: 'text-display font-display',
-      // Métricas grandes: 46px de display. Es la única escala pensada para un
-      // número, y por eso el interlineado es 1.
+      // Large metrics: 46px of display. It is the only scale designed for a
+      // number, which is why its line height is 1.
       stat: 'text-stat font-display',
       h1: 'text-h1 font-display',
       h2: 'text-h2 font-display',
       h3: 'text-h3 font-display',
       body: 'text-body font-sans',
-      // 17px: la bajada de las páginas internas y el botón grande.
+      // 17px: the deck on interior pages and the large button.
       lead: 'text-lead font-sans',
       ui: 'text-ui font-sans',
       label: 'text-label font-sans',
-      // Las dos escalas de etiqueta. `tag` es el estado (sans 12.5/500) y `chip`
-      // la categoría y la métrica (mono 11.5). Ninguna transforma el texto.
+      // The two badge scales. `tag` is status (sans 12.5/500) and `chip` is
+      // category and metric (mono 11.5). Neither transforms the text.
       tag: 'text-tag font-sans',
       chip: 'text-chip font-mono',
-      // Mono SIN transformar: fechas, rutas, versiones, nombres de archivo y la
-      // firma del footer. Es el escalón que faltaba, y por el que cada sitio de
-      // uso terminaba escribiendo `variant="eyebrow" className="normal-case"`.
+      // Mono with NO transform: dates, paths, versions, file names and the
+      // footer signature. It is the step that was missing, and the reason every
+      // call site ended up writing `variant="eyebrow" className="normal-case"`.
       meta: 'text-meta font-mono',
-      // `uppercase` no cabe en un token de tamaño: text-transform no es un
-      // modificador de --text-*. Por eso lo pone la variante y no theme.css.
+      // `uppercase` does not fit in a size token: text-transform is not a
+      // modifier of --text-*. Which is why the variant sets it, not theme.css.
       eyebrow: 'text-eyebrow font-mono uppercase',
     },
     tone: {
@@ -85,8 +85,8 @@ const texto = cva('', {
   defaultVariants: { variant: 'body', tone: 'primary' },
 });
 
-/** Etiquetas admitidas. La lista es corta a propósito: no es un `div` con estilo. */
-type Etiqueta =
+/** Allowed tags. The list is short on purpose: this is not a styled `div`. */
+type Label =
   | 'h1'
   | 'h2'
   | 'h3'
@@ -103,14 +103,14 @@ type Etiqueta =
   | 'li';
 
 export type TextProps = Omit<ComponentPropsWithoutRef<'p'>, 'color'> &
-  VariantProps<typeof texto> & {
-    /** Etiqueta HTML. Por defecto, la que corresponde a la escala. */
-    as?: Etiqueta;
-    /** Renderiza el hijo en vez de crear un elemento, para envolver un enlace. */
+  VariantProps<typeof text> & {
+    /** HTML tag. Defaults to whichever one matches the scale. */
+    as?: Label;
+    /** Renders the child instead of creating an element, to wrap a link. */
     asChild?: boolean;
     /**
-     * Corta la línea a 68ch. Activo por defecto en `body`, que es la única
-     * escala pensada para leerse en párrafos largos.
+     * Clamps the line to 68ch. On by default for `body`, the only scale meant
+     * to be read in long paragraphs.
      */
     measure?: boolean;
   };
@@ -125,25 +125,25 @@ export function Text({
   children,
   ...props
 }: TextProps) {
-  const escala = variant ?? 'body';
-  const limitar = measure ?? escala === 'body';
-  const clases = cn(texto({ variant, tone }), limitar && 'max-w-measure', className);
+  const scale = variant ?? 'body';
+  const clamp = measure ?? scale === 'body';
+  const classes = cn(text({ variant, tone }), clamp && 'max-w-measure', className);
 
   if (asChild) {
     return (
-      <Slot className={clases} {...props}>
+      <Slot className={classes} {...props}>
         {children}
       </Slot>
     );
   }
 
-  const Etiqueta = (as ?? ETIQUETA[escala]) as ElementType;
+  const Label = (as ?? LABEL[scale]) as ElementType;
 
   return (
-    <Etiqueta className={clases} {...props}>
+    <Label className={classes} {...props}>
       {children}
-    </Etiqueta>
+    </Label>
   );
 }
 
-export { texto as textVariants };
+export { text as textVariants };

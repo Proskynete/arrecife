@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Bloque, Nota, Pila } from '../../stories/utils.tsx';
+import { Block, Note, Stack } from '../../stories/utils.tsx';
 import { Alert } from './alert.tsx';
 
-const meta = { title: 'Primitivos/Alert', component: Alert } satisfies Meta<typeof Alert>;
+const meta = { title: 'Primitives/Alert', component: Alert } satisfies Meta<typeof Alert>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Variantes: Story = {
+export const Variants: Story = {
   render: () => (
     <>
-      <Pila>
-        <Alert variant="accent" title="Borrador guardado">
+      <Stack>
+        <Alert variant="accent" title="Borrador stored">
           Se guarda solo cada treinta segundos mientras escribes.
         </Alert>
         <Alert variant="success" title="Curso publicado">
@@ -23,87 +23,87 @@ export const Variantes: Story = {
         <Alert variant="error" title="No se pudo publicar">
           El slug ya existe en otro artículo. Cámbialo y vuelve a intentar.
         </Alert>
-      </Pila>
-      <Nota>
-        Fondo al 8 % del color semántico y borde al 22 %. El tono no puede vivir
-        entero en un borde de 1px: cuatro avisos distinguidos por una línea son
-        cuatro avisos que se confunden. El primero es ACENTO (✦), que es el
-        informativo del sistema — no hay variante neutral, porque un aviso sin
-        color es un párrafo.
-      </Nota>
-      <Nota>
-        Los glifos son caracteres mono, nunca emoji: `✦ ✓ ! ✕`. Es la misma
-        estética CLI del `❯` de la barra del bloque de código.
-      </Nota>
-      <Nota>
-        El título va en `textPrimary` y no en el color del tono. En modo claro los
-        semánticos están calibrados para pasar JUSTO sobre papel, así que sobre su
-        propio tinte al 8 % caen a 4.11–4.40 y no pasan AA. El tinte es una
-        superficie: encima va un token de texto, y el color semántico se queda en
-        el borde y en el glifo, que es lo único que el documento pedía de él.
-      </Nota>
+      </Stack>
+      <Note>
+        The semantic color at 8 % as background and at 22 % as border. The tone
+        cannot live entirely in a 1px border: four alerts told apart by a line are
+        four alerts that get confused. The first is ACCENT (✦), the system's
+        informational one — there is no neutral variant, because an alert without
+        color is a paragraph.
+      </Note>
+      <Note>
+        The glyphs are mono characters, never emoji: `✦ ✓ ! ✕`. It is the same CLI
+        aesthetic as the `❯` in the code block's bar.
+      </Note>
+      <Note>
+        The title uses `textPrimary` and not the tone's color. In light mode the
+        semantics are calibrated to pass JUST over paper, so over their own tint at
+        8 % they fall to 4.11–4.40 and fail AA. The tint is a surface: what goes on
+        top of it is a text token, and the semantic color stays on the border and
+        the glyph, which is all the document ever asked of it.
+      </Note>
     </>
   ),
 };
 
-export const ModoClaro: Story = {
-  name: 'La verificación en modo claro',
+export const LightMode: Story = {
+  name: 'The light-mode check',
   render: () => (
     <>
-      <Pila>
+      <Stack>
         <Alert variant="accent" title="El 8 % está calculado sobre abismo" />
         <Alert variant="success" title="Sobre papel aguanta igual" />
-        <Alert variant="warning" title="Cambia el modo en la toolbar" />
+        <Alert variant="warning" title="Cambia el modo en la barra de herramientas" />
         <Alert variant="error" title="Este es el tinte más flojo de los ocho" />
-      </Pila>
-      <Nota>
-        Medido, no estimado. Contraste del tinte contra el fondo de página:
-        acento 1.149 oscuro / 1.106 claro, éxito 1.116 / 1.121, aviso 1.126 /
+      </Stack>
+      <Note>
+        Measured, not estimated. Contrast of the tint against the page background:
+        accent 1.149 dark / 1.106 light, success 1.116 / 1.121, warning 1.126 /
         1.109, error 1.067 / 1.120.
-      </Nota>
-      <Nota>
-        El modo claro NO necesita una segunda tabla — aguanta igual o mejor que el
-        oscuro. El punto flojo del sistema es `error` sobre abismo, 1.067, que se
-        apoya entero en el borde al 22 %.
-      </Nota>
+      </Note>
+      <Note>
+        Light mode needs NO second table — it holds up as well as or better than
+        dark. The system's weak point is `error` over abyss, 1.067, which leans
+        entirely on the 22 % border.
+      </Note>
     </>
   ),
 };
 
-export const Enfasis: Story = {
-  name: 'Las dos recetas',
+export const Emphasis: Story = {
+  name: 'The two recipes',
   render: () => (
     <>
-      <Bloque titulo="sutil · 8 % de fondo, 22 % de borde">
-        <Pila>
+      <Block title="subtle · 8 % background, 22 % border">
+        <Stack>
           <Alert variant="success" title="Ya estás dentro">
-            Te llega un correo cada dos semanas. Nada más.
+            Te llega un email cada dos semanas. Nada más.
           </Alert>
-        </Pila>
-      </Bloque>
+        </Stack>
+      </Block>
 
-      <Bloque titulo="fuerte · 10 % de fondo, borde sólido">
-        <Pila>
-          <Alert variant="error" enfasis="fuerte" title="Ese correo no es válido">
+      <Block title="strong · 10 % background, solid border">
+        <Stack>
+          <Alert variant="error" emphasis="strong" title="Ese email no es válido">
             Revisa que tenga arroba y dominio.
           </Alert>
-        </Pila>
-      </Bloque>
+        </Stack>
+      </Block>
 
-      <Nota>
-        La segunda receta es a propósito y está documentada: el aviso del
-        formulario de newsletter va bajo el campo, así que necesita separarse del
-        borde del input que tiene justo encima. No se unifican.
-      </Nota>
+      <Note>
+        The second recipe is deliberate and documented: the newsletter form's
+        notice goes under the field, so it needs to separate itself from the border
+        of the input right above it. They are not merged.
+      </Note>
     </>
   ),
 };
 
-export const SoloTitulo: Story = {
-  name: 'Solo título',
+export const TitleOnly: Story = {
+  name: 'Title only',
   render: () => (
-    <Pila>
+    <Stack>
       <Alert variant="success" title="Guardado" />
-    </Pila>
+    </Stack>
   ),
 };

@@ -5,19 +5,21 @@ import { cn } from '../../lib/cn.ts';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * La barra lateral del admin del blog.
+ * The blog admin's sidebar.
  *
- * El `▸` lo pone el componente, igual que el `./` de `NavItem` y el `~` del
- * breadcrumb: es la misma estética CLI y la misma decisión — el formato es parte
- * de la pieza, no una convención que haya que recordar. Va `aria-hidden`.
+ * The `▸` is put there by the component, same as `NavItem`'s `./` and the
+ * breadcrumb's `~`: it is the same CLI aesthetic and the same decision — the
+ * format is part of the piece, not a convention to be remembered. It is
+ * `aria-hidden`.
  *
- * El pie lleva la versión y la rama (`v5.0.1 · main`) en la escala `meta`. No es
- * decoración: en un admin es lo primero que se pregunta cuando algo se ve raro.
+ * The footer carries the version and the branch (`v5.0.1 · main`) in the `meta`
+ * scale. It is not decoration: in an admin it is the first thing anyone asks
+ * when something looks off.
  */
 export type SidebarItemProps = ComponentPropsWithoutRef<'a'> & {
   active?: boolean | undefined;
   asChild?: boolean | undefined;
-  /** Contador a la derecha: borradores pendientes, media sin usar. */
+  /** Counter on the right: pending drafts, unused media. */
   badge?: ReactNode;
 };
 
@@ -29,21 +31,22 @@ export function SidebarItem({
   children,
   ...props
 }: SidebarItemProps) {
-  const Raiz = asChild ? Slot : 'a';
+  const Root = asChild ? Slot : 'a';
 
   return (
     <li>
-      <Raiz
+      <Root
         aria-current={active ? 'page' : undefined}
         className={cn(
           'rounded-chip px-step-sm gap-step-xs flex cursor-pointer items-center py-1.5',
           'font-mono text-meta transition-standard',
           'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-          // El activo es fondo `surfaceRaised` y tinta primaria, igual que
-          // `TabsTrigger`. NO bioluz: `tokens.ts` lo dice explícito — acento
-          // claro pasa sobre background y sobre surface, pero sobre
-          // surfaceRaised mide 4.2 y no es color de texto ahí. El acento se
-          // queda en el `▸`, que es decorativo y le aplica el umbral de 3:1.
+          // The active item is `surfaceRaised` with primary ink, same as
+          // `TabsTrigger`. NOT biolume: `tokens.ts` says so explicitly — light
+          // accent passes over background and over surface, but over
+          // surfaceRaised it measures 4.2 and is not a text color there. The
+          // accent stays on the `▸`, which is decorative and gets the 3:1
+          // threshold.
           active
             ? 'bg-surface-raised text-text-primary'
             : 'text-text-secondary hover:text-text-primary hover:bg-surface-raised',
@@ -56,15 +59,15 @@ export function SidebarItem({
         </span>
         <span className="min-w-0 flex-1 truncate">{children}</span>
         {badge ? <span className="text-text-muted shrink-0">{badge}</span> : null}
-      </Raiz>
+      </Root>
     </li>
   );
 }
 
 export type SidebarNavProps = ComponentPropsWithoutRef<'nav'> & {
-  /** Encabezado del panel. */
+  /** The panel's heading. */
   title?: ReactNode;
-  /** Versión y rama, al pie. */
+  /** Version and branch, at the bottom. */
   version?: ReactNode;
   branch?: ReactNode;
 };
@@ -77,7 +80,7 @@ export function SidebarNav({
   className,
   ...props
 }: SidebarNavProps) {
-  const pie = [version, branch].filter(Boolean);
+  const footer = [version, branch].filter(Boolean);
 
   return (
     <nav
@@ -96,9 +99,9 @@ export function SidebarNav({
 
       <ul className="gap-0.5 flex flex-1 flex-col">{children}</ul>
 
-      {pie.length > 0 ? (
+      {footer.length > 0 ? (
         <Text variant="meta" tone="muted" as="p" className="border-hairline px-step-sm pt-step-sm border-t">
-          {pie.map((p, i) => (
+          {footer.map((p, i) => (
             <span key={i}>
               {i > 0 ? <span aria-hidden="true"> · </span> : null}
               {p}

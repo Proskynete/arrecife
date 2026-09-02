@@ -36,7 +36,7 @@ export function SelectTrigger({
   );
 }
 
-/** Sin animación de entrada: el menú aparece, no se despliega. */
+/** No entrance animation: the menu appears, it does not unfold. */
 export function SelectContent({
   className,
   children,

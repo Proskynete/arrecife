@@ -1,23 +1,23 @@
 /**
- * Genera `llms.txt` a partir de `docs/llms.plantilla.md` y de los tipos.
+ * Generates `llms.txt` from `docs/llms.template.md` and from the types.
  *
- * Es el documento que lee un agente —Claude, Codex, Cursor— desde un proyecto
- * que instaló la librería. Ese agente nunca ve este repo: ve
- * `node_modules/@eduardoalvarez/arrecife/`, y por eso `llms.txt` viaja en el
- * tarball. `AGENTS.md` es la otra mitad, para el agente que trabaja aquí dentro.
+ * It is the document an agent — Claude, Codex, Cursor — reads from a project
+ * that installed the library. That agent never sees this repo: it sees
+ * `node_modules/@eduardoalvarez/arrecife/`, which is why `llms.txt` travels in
+ * the tarball. `AGENTS.md` is the other half, for the agent working in here.
  *
- * El inventario NO se escribe a mano. Una tabla de props copiada se desincroniza
- * en dos versiones y nadie lo nota, que es exactamente el fallo que este repo ya
- * arregló una vez con la paleta. La prosa vive en la plantilla; las tablas salen
- * del compilador de TypeScript, así que dicen lo que el código dice.
+ * The inventory is NOT written by hand. A copied prop table drifts within two
+ * versions and nobody notices, which is exactly the failure this repo already
+ * fixed once with the palette. The prose lives in the template; the tables come
+ * out of the TypeScript compiler, so they say what the code says.
  *
- * Solo se listan los props DECLARADOS EN `src/`. Los que un componente hereda de
- * `<button>` o de Radix se resumen en la línea `extiende`: enumerarlos serían mil
- * filas de `onCopyCapture` que el agente ya conoce y que tapan las cinco que
- * importan.
+ * Only props DECLARED IN `src/` are listed. The ones a component inherits from
+ * `<button>` or from Radix are summarised in the `Extends` line: enumerating
+ * them would be a thousand rows of `onCopyCapture` that the agent already knows
+ * and that bury the five that matter.
  *
- *   node scripts/build-llms.mjs            genera llms.txt
- *   node scripts/build-llms.mjs --check    falla si llms.txt está desactualizado
+ *   node scripts/build-llms.mjs            generates llms.txt
+ *   node scripts/build-llms.mjs --check    fails if llms.txt is out of date
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
@@ -26,535 +26,538 @@ import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const COMPROBAR = process.argv.includes('--check');
+const CHECK = process.argv.includes('--check');
 
-const PLANTILLA = resolve(root, 'docs/llms.plantilla.md');
-const DESTINO = resolve(root, 'llms.txt');
-const MARCA = '<!-- INVENTARIO -->';
+const TEMPLATE = resolve(root, 'docs/llms.template.md');
+const TARGET = resolve(root, 'llms.txt');
+const BRAND = '<!-- INVENTORY -->';
 
-/** Los puntos de entrada de `exports`, con la subruta que los publica. */
-const ENTRADAS = [
-  { subruta: '.', archivo: 'src/index.ts' },
-  { subruta: './tokens', archivo: 'src/tokens/index.ts' },
-  { subruta: './tema', archivo: 'src/tema/index.ts' },
-  { subruta: './brand', archivo: 'src/brand/index.ts' },
-  { subruta: './og', archivo: 'src/og/index.ts' },
-  { subruta: './shiki', archivo: 'src/shiki/index.ts' },
-  { subruta: './form', archivo: 'src/form/index.tsx' },
-  { subruta: './chart', archivo: 'src/chart/index.tsx' },
+/** The `exports` entry points, with the subpath that publishes each. */
+const ENTRIES = [
+  { subpath: '.', file: 'src/index.ts' },
+  { subpath: './tokens', file: 'src/tokens/index.ts' },
+  { subpath: './theme', file: 'src/theme/index.ts' },
+  { subpath: './brand', file: 'src/brand/index.ts' },
+  { subpath: './og', file: 'src/og/index.ts' },
+  { subpath: './shiki', file: 'src/shiki/index.ts' },
+  { subpath: './form', file: 'src/form/index.tsx' },
+  { subpath: './chart', file: 'src/chart/index.tsx' },
 ];
 
 /**
- * De qué directorio sale cada sección del inventario, en orden, y por qué
- * entrada se llega a él.
+ * Which directory each inventory section comes from, in order, and through which
+ * entry it is reached.
  *
- * Las tres primeras cuelgan de la raíz. `./form` y `./chart` no: viven en su
- * propia subruta porque cada uno arrastra una dependencia de pares OPCIONAL
- * —React Hook Form y Recharts—, y sin `archivo` propio aquí sus componentes
- * quedarían fuera del inventario sin que nada avisara.
+ * The first three hang off the root. `./form` and `./chart` do not: each lives
+ * in its own subpath because each drags an OPTIONAL peer dependency — React Hook
+ * Form and Recharts — and without their own `file` here their components would
+ * drop out of the inventory with nothing warning about it.
  */
-const SECCIONES = [
+const SECTIONS = [
   {
-    titulo: 'Primitivos',
+    title: 'Primitives',
     dir: 'src/primitives/',
-    archivo: 'src/index.ts',
-    entrada: '`@eduardoalvarez/arrecife`',
+    file: 'src/index.ts',
+    entry: '`@eduardoalvarez/arrecife`',
   },
   {
-    titulo: 'Componentes',
+    title: 'Components',
     dir: 'src/components/',
-    archivo: 'src/index.ts',
-    entrada: '`@eduardoalvarez/arrecife`',
+    file: 'src/index.ts',
+    entry: '`@eduardoalvarez/arrecife`',
   },
   {
-    titulo: 'Marca',
+    title: 'Brand',
     dir: 'src/brand/',
-    archivo: 'src/index.ts',
-    entrada: '`@eduardoalvarez/arrecife` o `@eduardoalvarez/arrecife/brand`',
+    file: 'src/index.ts',
+    entry: '`@eduardoalvarez/arrecife` or `@eduardoalvarez/arrecife/brand`',
   },
   {
-    titulo: 'Formularios',
+    title: 'Forms',
     dir: 'src/form/',
-    archivo: 'src/form/index.tsx',
-    entrada: '`@eduardoalvarez/arrecife/form` · pide `react-hook-form`',
+    file: 'src/form/index.tsx',
+    entry: '`@eduardoalvarez/arrecife/form` · requires `react-hook-form`',
   },
   {
-    titulo: 'Gráficas',
+    title: 'Charts',
     dir: 'src/chart/',
-    archivo: 'src/chart/index.tsx',
-    entrada: '`@eduardoalvarez/arrecife/chart` · pide `recharts`',
+    file: 'src/chart/index.tsx',
+    entry: '`@eduardoalvarez/arrecife/chart` · requires `recharts`',
   },
 ];
 
 const cfg = ts.readConfigFile(resolve(root, 'tsconfig.json'), ts.sys.readFile);
-const opciones = ts.parseJsonConfigFileContent(cfg.config, ts.sys, root).options;
+const options = ts.parseJsonConfigFileContent(cfg.config, ts.sys, root).options;
 const program = ts.createProgram(
-  ENTRADAS.map((e) => resolve(root, e.archivo)),
-  opciones,
+  ENTRIES.map((e) => resolve(root, e.file)),
+  options,
 );
 const checker = program.getTypeChecker();
 
-const ruta = (nodo) => relative(root, nodo.getSourceFile().fileName);
+const path = (node) => relative(root, node.getSourceFile().fileName);
 
-/** Una línea, sin saltos ni dobles espacios: las tablas markdown no los admiten. */
-const plano = (s) => s.replace(/\s+/g, ' ').trim();
+/** One line, no breaks or double spaces: markdown tables do not take them. */
+const flat = (s) => s.replace(/\s+/g, ' ').trim();
 
-/** El primer párrafo del JSDoc. El resto es el porqué, y va en el repo. */
-const primerParrafo = (s) => plano(s.split(/\n\s*\n/)[0] ?? '');
+/** The first paragraph of the JSDoc. The rest is the why, and it stays in the repo. */
+const firstParagraph = (s) => flat(s.split(/\n\s*\n/)[0] ?? '');
 
-const jsdoc = (simbolo) =>
-  ts.displayPartsToString(simbolo.getDocumentationComment(checker));
+const jsdoc = (symbol) =>
+  ts.displayPartsToString(symbol.getDocumentationComment(checker));
 
-/** Escapa lo que rompería una celda: la barra vertical y el salto de línea. */
-const celda = (s) => plano(s).replace(/\|/g, '\\|');
+/** Escapes what would break a cell: the pipe and the line break. */
+const cell = (s) => flat(s).replace(/\|/g, '\\|');
 
-/** A partir de aquí un tipo impreso deja de informar y empieza a estorbar. */
-const LARGO_MAXIMO = 160;
+/** Past this point a printed type stops informing and starts getting in the way. */
+const MAX_LENGTH = 160;
 
 /**
- * `Etiqueta` no le dice nada a un agente; `'h1' | 'h2' | …` sí. Se expande el
- * alias solo cuando la unión es de literales: hacerlo con `ReactNode` imprime
- * media biblioteca de tipos de React.
+ * `Label` tells an agent nothing; `'h1' | 'h2' | …` does. The alias is expanded
+ * only when the union is of literals: doing it for `ReactNode` prints half of
+ * React's type library.
  */
-function tipoLegible(tipo) {
-  const partes = tipo.isUnion() ? tipo.types : [tipo];
-  const utiles = partes.filter(
+function readableKind(kind) {
+  const parts = kind.isUnion() ? kind.types : [kind];
+  const helpers = parts.filter(
     (t) => !(t.flags & (ts.TypeFlags.Undefined | ts.TypeFlags.Null)),
   );
-  if (utiles.length === 0) return checker.typeToString(tipo);
+  if (helpers.length === 0) return checker.typeToString(kind);
 
-  const todosLiterales = utiles.every((t) => t.isStringLiteral() || t.isNumberLiteral());
-  const texto =
-    utiles.length > 1 && !todosLiterales
-      ? // Unión de tipos con nombre: se imprime tal cual la escribió el código.
-        checker.typeToString(tipo, undefined, ts.TypeFormatFlags.NoTruncation)
-      : utiles
+  const allLiterals = helpers.every((t) => t.isStringLiteral() || t.isNumberLiteral());
+  const text =
+    helpers.length > 1 && !allLiterals
+      ? // A union of named types: printed exactly as the code wrote it.
+        checker.typeToString(kind, undefined, ts.TypeFormatFlags.NoTruncation)
+      : helpers
           .map((t) => checker.typeToString(t, undefined, ts.TypeFormatFlags.NoTruncation))
           .join(' | ');
 
-  return compactar(texto, utiles.length === 1 ? utiles[0] : tipo);
+  return compact(text, helpers.length === 1 ? helpers[0] : kind);
 }
 
 /**
- * `tokens` impreso entero son cuatro kilobytes de hexadecimales en una celda de
- * tabla. Lo que un agente necesita de un objeto de tokens son los NOMBRES: los
- * valores ya están en `theme.css`, y ahí sí puede leerlos sin que le tapen el
- * resto del documento.
+ * `tokens` printed whole is four kilobytes of hexadecimals in a table cell. What
+ * an agent needs from a token object are the NAMES: the values are already in
+ * `theme.css`, and there it can read them without burying the rest of the
+ * document.
  */
-function compactar(texto, tipo) {
-  if (texto.length <= LARGO_MAXIMO) return texto;
+function compact(text, kind) {
+  if (text.length <= MAX_LENGTH) return text;
 
-  const propiedades = tipo.getProperties?.() ?? [];
-  if (propiedades.length === 0 || tipo.getCallSignatures?.().length > 0) {
-    return `${texto.slice(0, LARGO_MAXIMO)}…`;
+  const properties = kind.getProperties?.() ?? [];
+  if (properties.length === 0 || kind.getCallSignatures?.().length > 0) {
+    return `${text.slice(0, MAX_LENGTH)}…`;
   }
 
-  const claves = `{ ${propiedades.map((p) => p.getName()).join(', ')} }`;
-  return claves.length <= texto.length ? claves : `${texto.slice(0, LARGO_MAXIMO)}…`;
+  const keys = `{ ${properties.map((p) => p.getName()).join(', ')} }`;
+  return keys.length <= text.length ? keys : `${text.slice(0, MAX_LENGTH)}…`;
 }
 
 /**
- * `defaultVariants` de cada `cva()` del archivo, indexado por el nombre de la
- * variable a la que se asigna. Se ata al componente por la variable que su
- * cuerpo llama —`button({ variant })`— y no por adivinanza: `badge.tsx` declara
- * dos cva y atribuir el defecto equivocado sería peor que no ponerlo.
+ * The `defaultVariants` of every `cva()` in the file, indexed by the name of the
+ * variable it is assigned to. It is tied to the component through the variable
+ * its body calls — `button({ variant })` — and not by guesswork: `badge.tsx`
+ * declares two cvas, and attributing the wrong default would be worse than
+ * printing none.
  */
-function defectosDeCva(archivo) {
-  const porVariable = new Map();
+function cvaDefaults(file) {
+  const byVariable = new Map();
 
-  const visitar = (nodo) => {
+  const visit = (node) => {
     if (
-      ts.isVariableDeclaration(nodo) &&
-      nodo.initializer &&
-      ts.isCallExpression(nodo.initializer) &&
-      nodo.initializer.expression.getText() === 'cva' &&
-      ts.isIdentifier(nodo.name)
+      ts.isVariableDeclaration(node) &&
+      node.initializer &&
+      ts.isCallExpression(node.initializer) &&
+      node.initializer.expression.getText() === 'cva' &&
+      ts.isIdentifier(node.name)
     ) {
       {
-        const config = nodo.initializer.arguments[1];
+        const config = node.initializer.arguments[1];
         const prop =
           config && ts.isObjectLiteralExpression(config)
             ? config.properties.find((p) => p.name?.getText() === 'defaultVariants')
             : undefined;
-        const defectos = new Map();
+        const defaults = new Map();
         if (prop && ts.isPropertyAssignment(prop) && ts.isObjectLiteralExpression(prop.initializer)) {
           for (const d of prop.initializer.properties) {
             if (ts.isPropertyAssignment(d)) {
-              defectos.set(d.name.getText(), d.initializer.getText().replace(/'/g, ''));
+              defaults.set(d.name.getText(), d.initializer.getText().replace(/'/g, ''));
             }
           }
         }
-        // El JSDoc del cva es, en la mayoría de los archivos, la explicación
-        // del componente: el porqué de las variantes está ahí y no sobre la
-        // función. Se guarda para usarlo cuando la función no tiene el suyo.
-        const simbolo = checker.getSymbolAtLocation(nodo.name);
-        porVariable.set(nodo.name.text, {
-          defectos,
-          doc: simbolo ? primerParrafo(jsdoc(simbolo)) : '',
+        // In most files the cva's JSDoc IS the component's explanation: the why
+        // behind the variants lives there and not above the function. It is kept
+        // so it can be used when the function has none of its own.
+        const symbol = checker.getSymbolAtLocation(node.name);
+        byVariable.set(node.name.text, {
+          defaults,
+          doc: symbol ? firstParagraph(jsdoc(symbol)) : '',
         });
       }
     }
-    ts.forEachChild(nodo, visitar);
+    ts.forEachChild(node, visit);
   };
 
-  ts.forEachChild(archivo, visitar);
-  return porVariable;
+  ts.forEachChild(file, visit);
+  return byVariable;
 }
 
-/** Los `= false` del destructuring de props, que es donde vive el otro defecto. */
-function defectosDeFirma(declaracion) {
-  const defectos = new Map();
-  const parametro = declaracion.parameters?.[0];
-  if (!parametro || !ts.isObjectBindingPattern(parametro.name)) return defectos;
+/** The `= false` in the props destructuring, which is where the other default lives. */
+function signatureDefaults(declaration) {
+  const defaults = new Map();
+  const param = declaration.parameters?.[0];
+  if (!param || !ts.isObjectBindingPattern(param.name)) return defaults;
 
-  for (const elemento of parametro.name.elements) {
-    if (elemento.initializer) {
-      const nombre = (elemento.propertyName ?? elemento.name).getText();
-      defectos.set(nombre, elemento.initializer.getText().replace(/'/g, ''));
+  for (const element of param.name.elements) {
+    if (element.initializer) {
+      const name = (element.propertyName ?? element.name).getText();
+      defaults.set(name, element.initializer.getText().replace(/'/g, ''));
     }
   }
-  return defectos;
+  return defaults;
 }
 
-/** El cva que el cuerpo del componente llama de verdad. */
-function cvaDelCuerpo(declaracion, porVariable) {
-  let encontrado = null;
-  const visitar = (nodo) => {
-    if (encontrado) return;
-    if (ts.isIdentifier(nodo) && porVariable.has(nodo.text)) {
-      encontrado = porVariable.get(nodo.text);
+/** The cva the component's body actually calls. */
+function bodyCva(declaration, byVariable) {
+  let found = null;
+  const visit = (node) => {
+    if (found) return;
+    if (ts.isIdentifier(node) && byVariable.has(node.text)) {
+      found = byVariable.get(node.text);
       return;
     }
-    ts.forEachChild(nodo, visitar);
+    ts.forEachChild(node, visit);
   };
-  if (declaracion.body) visitar(declaracion.body);
-  return encontrado ?? { defectos: new Map(), doc: '' };
+  if (declaration.body) visit(declaration.body);
+  return found ?? { defaults: new Map(), doc: '' };
 }
 
-/** El JSDoc del alias `XProps`, la tercera fuente cuando las otras dos callan. */
-function docDeProps(nombre, archivo) {
+/** The JSDoc on the `XProps` alias, the third source when the other two are silent. */
+function propsDoc(name, file) {
   let doc = '';
-  const visitar = (nodo) => {
-    if (ts.isTypeAliasDeclaration(nodo) && nodo.name.text === `${nombre}Props`) {
-      const simbolo = checker.getSymbolAtLocation(nodo.name);
-      if (simbolo) doc = primerParrafo(jsdoc(simbolo));
+  const visit = (node) => {
+    if (ts.isTypeAliasDeclaration(node) && node.name.text === `${name}Props`) {
+      const symbol = checker.getSymbolAtLocation(node.name);
+      if (symbol) doc = firstParagraph(jsdoc(symbol));
     }
-    ts.forEachChild(nodo, visitar);
+    ts.forEachChild(node, visit);
   };
-  ts.forEachChild(archivo, visitar);
+  ts.forEachChild(file, visit);
   return doc;
 }
 
 /**
- * De qué se cuelga el tipo de props, literal del código fuente. Es la línea que
- * le dice al agente que `Button` también acepta `onClick` y `type` sin tener que
- * listar los ciento y pico atributos de `<button>`.
+ * What the props type hangs off, verbatim from the source. It is the line that
+ * tells the agent `Button` also accepts `onClick` and `type` without having to
+ * list the hundred-odd attributes of `<button>`.
  */
-function baseDeProps(nombre, archivo) {
-  let texto = null;
-  const visitar = (nodo) => {
-    if (ts.isTypeAliasDeclaration(nodo) && nodo.name.text === `${nombre}Props`) {
-      texto = nodo.type.getText();
+function propsBase(name, file) {
+  let text = null;
+  const visit = (node) => {
+    if (ts.isTypeAliasDeclaration(node) && node.name.text === `${name}Props`) {
+      text = node.type.getText();
     }
-    ts.forEachChild(nodo, visitar);
+    ts.forEachChild(node, visit);
   };
-  ts.forEachChild(archivo, visitar);
-  if (texto === null) return null;
+  ts.forEachChild(file, visit);
+  if (text === null) return null;
 
-  // Se quita el `& { … }` de los props propios: esos ya salen en la tabla.
-  const base = plano(texto.replace(/&\s*\{[\s\S]*\}\s*$/, '').replace(/&\s*$/, ''));
-  return base.length > 0 && base !== `${nombre}Props` ? base : null;
+  // The `& { … }` of own props is stripped: those already appear in the table.
+  const base = flat(text.replace(/&\s*\{[\s\S]*\}\s*$/, '').replace(/&\s*$/, ''));
+  return base.length > 0 && base !== `${name}Props` ? base : null;
 }
 
-/** Un componente exportado, con lo que hace falta para documentarlo. */
-function leerComponente(simbolo) {
-  const declaracion = simbolo.declarations?.find(
+/** An exported component, with what it takes to document it. */
+function readComponent(symbol) {
+  const declaration = symbol.declarations?.find(
     (d) => ts.isFunctionDeclaration(d) || ts.isVariableDeclaration(d),
   );
-  if (!declaracion) return null;
+  if (!declaration) return null;
 
-  const archivo = declaracion.getSourceFile();
-  const tipo = checker.getTypeOfSymbolAtLocation(simbolo, declaracion);
-  const firma = tipo.getCallSignatures()[0];
-  if (!firma) return null;
+  const file = declaration.getSourceFile();
+  const kind = checker.getTypeOfSymbolAtLocation(symbol, declaration);
+  const signature = kind.getCallSignatures()[0];
+  if (!signature) return null;
 
-  const funcion = ts.isFunctionDeclaration(declaracion) ? declaracion : null;
-  const cva = cvaDelCuerpo(funcion ?? {}, defectosDeCva(archivo));
-  const defectos = new Map([
-    ...cva.defectos,
-    ...(funcion ? defectosDeFirma(funcion) : []),
+  const fn = ts.isFunctionDeclaration(declaration) ? declaration : null;
+  const cva = bodyCva(fn ?? {}, cvaDefaults(file));
+  const defaults = new Map([
+    ...cva.defaults,
+    ...(fn ? signatureDefaults(fn) : []),
   ]);
 
-  // Tres sitios donde puede vivir la explicación, en orden de cercanía al
-  // componente. El código las usa las tres, así que el generador también.
+  // Three places the explanation can live, ordered by closeness to the
+  // component. The code uses all three, so the generator does too.
   const doc =
-    primerParrafo(jsdoc(simbolo)) ||
+    firstParagraph(jsdoc(symbol)) ||
     cva.doc ||
-    docDeProps(simbolo.getName(), archivo);
+    propsDoc(symbol.getName(), file);
 
   const props = [];
-  const parametro = firma.getParameters()[0];
-  if (parametro) {
-    const tipoProps = checker.getTypeOfSymbolAtLocation(
-      parametro,
-      parametro.valueDeclaration ?? declaracion,
+  const param = signature.getParameters()[0];
+  if (param) {
+    const propsType = checker.getTypeOfSymbolAtLocation(
+      param,
+      param.valueDeclaration ?? declaration,
     );
-    for (const prop of tipoProps.getProperties()) {
+    for (const prop of propsType.getProperties()) {
       const d = prop.declarations?.[0];
       if (!d) continue;
-      // El corte: solo lo declarado aquí. Lo heredado va en `extiende`.
+      // The cut: only what is declared here. Inherited props go in `Extends`.
       if (!d.getSourceFile().fileName.startsWith(resolve(root, 'src'))) continue;
 
       props.push({
-        nombre: prop.getName(),
-        tipo: tipoLegible(checker.getTypeOfSymbolAtLocation(prop, d)),
-        opcional: Boolean(prop.flags & ts.SymbolFlags.Optional),
-        defecto: defectos.get(prop.getName()) ?? null,
-        doc: primerParrafo(jsdoc(prop)),
+        name: prop.getName(),
+        kind: readableKind(checker.getTypeOfSymbolAtLocation(prop, d)),
+        optional: Boolean(prop.flags & ts.SymbolFlags.Optional),
+        default: defaults.get(prop.getName()) ?? null,
+        doc: firstParagraph(jsdoc(prop)),
       });
     }
   }
 
   return {
-    nombre: simbolo.getName(),
-    archivo: ruta(declaracion),
+    name: symbol.getName(),
+    file: path(declaration),
     doc,
-    base: baseDeProps(simbolo.getName(), archivo),
-    props: props.sort((a, b) => a.nombre.localeCompare(b.nombre)),
+    base: propsBase(symbol.getName(), file),
+    props: props.sort((a, b) => a.name.localeCompare(b.name)),
   };
 }
 
-/** Todo lo exportado por una entrada, ya clasificado. */
-function leerEntrada(archivoEntrada) {
-  const sf = program.getSourceFile(resolve(root, archivoEntrada));
-  const modulo = checker.getSymbolAtLocation(sf);
-  const componentes = [];
-  const valores = [];
-  const tipos = [];
+/** Everything an entry exports, already classified. */
+function readEntry(entryFile) {
+  const sf = program.getSourceFile(resolve(root, entryFile));
+  const module = checker.getSymbolAtLocation(sf);
+  const components = [];
+  const values = [];
+  const types = [];
 
-  for (const simbolo of checker.getExportsOfModule(modulo)) {
-    const nombre = simbolo.getName();
-    const declaracion = simbolo.declarations?.[0];
-    if (!declaracion) continue;
+  for (const symbol of checker.getExportsOfModule(module)) {
+    const name = symbol.getName();
+    const declaration = symbol.declarations?.[0];
+    if (!declaration) continue;
 
-    if (simbolo.flags & (ts.SymbolFlags.TypeAlias | ts.SymbolFlags.Interface)) {
-      tipos.push(nombre);
+    if (symbol.flags & (ts.SymbolFlags.TypeAlias | ts.SymbolFlags.Interface)) {
+      types.push(name);
       continue;
     }
 
-    const tipo = checker.getTypeOfSymbolAtLocation(simbolo, declaracion);
-    const esFuncion = tipo.getCallSignatures().length > 0;
+    const kind = checker.getTypeOfSymbolAtLocation(symbol, declaration);
+    const isFunction = kind.getCallSignatures().length > 0;
 
-    if (esFuncion && /^[A-Z]/.test(nombre)) {
-      const componente = leerComponente(simbolo);
-      if (componente) componentes.push(componente);
+    if (isFunction && /^[A-Z]/.test(name)) {
+      const component = readComponent(symbol);
+      if (component) components.push(component);
       continue;
     }
 
-    valores.push({
-      nombre,
-      archivo: ruta(declaracion),
-      tipo: esFuncion
-        ? plano(checker.signatureToString(tipo.getCallSignatures()[0]))
-        : plano(tipoLegible(tipo)),
-      doc: primerParrafo(jsdoc(simbolo)),
+    values.push({
+      name,
+      file: path(declaration),
+      kind: isFunction
+        ? flat(checker.signatureToString(kind.getCallSignatures()[0]))
+        : flat(readableKind(kind)),
+      doc: firstParagraph(jsdoc(symbol)),
     });
   }
 
-  return { componentes, valores, tipos };
+  return { components, values, types };
 }
 
-// ---------------------------------------------------------------- emisión ---
+// ---------------------------------------------------------------- emission ---
 
-const lineas = [];
-const escribir = (s = '') => lineas.push(s);
+const lines = [];
+const write = (s = '') => lines.push(s);
 
-/** Cada entrada se lee una sola vez: leerla es compilar el programa entero. */
-const leidas = new Map();
-const entrada = (archivo) => {
-  if (!leidas.has(archivo)) leidas.set(archivo, leerEntrada(archivo));
-  return leidas.get(archivo);
+/** Each entry is read once: reading it means compiling the whole program. */
+const readEntries = new Map();
+const entry = (file) => {
+  if (!readEntries.has(file)) readEntries.set(file, readEntry(file));
+  return readEntries.get(file);
 };
 
-for (const seccion of SECCIONES) {
-  const dir = resolve(root, seccion.dir);
-  const suyos = entrada(seccion.archivo).componentes.filter((c) =>
-    resolve(root, c.archivo).startsWith(dir),
+for (const section of SECTIONS) {
+  const dir = resolve(root, section.dir);
+  const theirs = entry(section.file).components.filter((c) =>
+    resolve(root, c.file).startsWith(dir),
   );
-  if (suyos.length === 0) continue;
+  if (theirs.length === 0) continue;
 
-  escribir(`## ${seccion.titulo}`);
-  escribir();
-  escribir(`Se importan de ${seccion.entrada}. ${suyos.length} exportaciones.`);
-  escribir();
+  write(`## ${section.title}`);
+  write();
+  write(`Imported from ${section.entry}. ${theirs.length} exports.`);
+  write();
 
-  // Agrupados por archivo: `Dialog`, `DialogContent` y `DialogTitle` son una
-  // pieza, y separarlos alfabéticamente los volvería tres cosas sin relación.
-  const porArchivo = new Map();
-  for (const c of suyos) {
-    if (!porArchivo.has(c.archivo)) porArchivo.set(c.archivo, []);
-    porArchivo.get(c.archivo).push(c);
+  // Grouped by file: `Dialog`, `DialogContent` and `DialogTitle` are one piece,
+  // and splitting them alphabetically would turn them into three unrelated things.
+  const byFile = new Map();
+  for (const c of theirs) {
+    if (!byFile.has(c.file)) byFile.set(c.file, []);
+    byFile.get(c.file).push(c);
   }
 
-  for (const [archivo, grupo] of [...porArchivo].sort()) {
-    escribir(`### ${grupo.map((c) => c.nombre).join(', ')}`);
-    escribir();
-    escribir(`Fuente: \`${archivo}\``);
-    escribir();
+  for (const [file, group] of [...byFile].sort()) {
+    write(`### ${group.map((c) => c.name).join(', ')}`);
+    write();
+    write(`Source: \`${file}\``);
+    write();
 
-    for (const c of grupo) {
-      if (grupo.length > 1) escribir(`**${c.nombre}**`);
+    for (const c of group) {
+      if (group.length > 1) write(`**${c.name}**`);
       if (c.doc) {
-        escribir(c.doc);
-        escribir();
+        write(c.doc);
+        write();
       }
-      if (c.base) escribir(`- Extiende: \`${celda(c.base)}\``);
+      if (c.base) write(`- Extends: \`${cell(c.base)}\``);
 
       if (c.props.length === 0) {
-        escribir('- Sin props propios: pasa los del elemento o la primitiva que envuelve.');
-        escribir();
+        write('- No own props: it passes through those of the element or primitive it wraps.');
+        write();
         continue;
       }
 
-      escribir();
-      escribir('| prop | tipo | req. | defecto | qué hace |');
-      escribir('| --- | --- | --- | --- | --- |');
+      write();
+      write('| prop | type | req. | default | what it does |');
+      write('| --- | --- | --- | --- | --- |');
       for (const p of c.props) {
-        escribir(
-          `| \`${p.nombre}\` | \`${celda(p.tipo)}\` | ${p.opcional ? '' : 'sí'} | ${
-            p.defecto ? `\`${celda(p.defecto)}\`` : ''
-          } | ${celda(p.doc)} |`,
+        write(
+          `| \`${p.name}\` | \`${cell(p.kind)}\` | ${p.optional ? '' : 'yes'} | ${
+            p.default ? `\`${cell(p.default)}\`` : ''
+          } | ${cell(p.doc)} |`,
         );
       }
-      escribir();
+      write();
     }
   }
 }
 
-escribir('## Exportaciones que no son componentes');
-escribir();
-escribir(
-  'La raíz reexporta todo lo de `./tokens` y `./brand` por conveniencia. Cada uno',
+write('## Exports that are not components');
+write();
+write(
+  'The root re-exports everything from `./tokens` and `./brand` for convenience.',
 );
-escribir(
-  'aparece una sola vez, en la subruta más específica que lo publica: si el código',
+write(
+  'Each one appears exactly once, under the most specific subpath that publishes',
 );
-escribir(
-  'no monta React, esa subruta es la que hay que importar.',
+write(
+  'it: if the code does not mount React, that subpath is the one to import.',
 );
-escribir();
+write();
 
-// De la más específica a la raíz: así `tokens` sale bajo `./tokens` —que es la
-// que puede consumir Satori— y no bajo la raíz, que arrastra React.
-const yaListado = new Set();
-const ordenadas = [...ENTRADAS].sort((a, b) => b.subruta.length - a.subruta.length);
+// From the most specific to the root: that way `tokens` shows up under
+// `./tokens` — the one Satori can consume — and not under the root, which drags
+// React along.
+const alreadyListed = new Set();
+const sorted = [...ENTRIES].sort((a, b) => b.subpath.length - a.subpath.length);
 
-for (const entrada of ordenadas) {
-  const { valores, tipos } = leerEntrada(entrada.archivo);
-  const propios = valores
-    .filter((v) => !yaListado.has(v.nombre))
-    .sort((a, b) => a.nombre.localeCompare(b.nombre));
-  const tiposPropios = tipos.filter((t) => !yaListado.has(t)).sort();
+for (const entry of sorted) {
+  const { values, types } = readEntry(entry.file);
+  const ownNames = values
+    .filter((v) => !alreadyListed.has(v.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const ownTypes = types.filter((t) => !alreadyListed.has(t)).sort();
 
-  for (const v of propios) yaListado.add(v.nombre);
-  for (const t of tiposPropios) yaListado.add(t);
+  for (const v of ownNames) alreadyListed.add(v.name);
+  for (const t of ownTypes) alreadyListed.add(t);
 
-  if (propios.length === 0 && tiposPropios.length === 0) continue;
+  if (ownNames.length === 0 && ownTypes.length === 0) continue;
 
-  const subruta = entrada.subruta === '.' ? '' : entrada.subruta.slice(1);
-  escribir(`### \`@eduardoalvarez/arrecife${subruta}\``);
-  escribir();
+  const subpath = entry.subpath === '.' ? '' : entry.subpath.slice(1);
+  write(`### \`@eduardoalvarez/arrecife${subpath}\``);
+  write();
 
-  if (propios.length > 0) {
-    escribir('| export | tipo | qué es |');
-    escribir('| --- | --- | --- |');
-    for (const v of propios) {
-      escribir(`| \`${v.nombre}\` | \`${celda(v.tipo)}\` | ${celda(v.doc)} |`);
+  if (ownNames.length > 0) {
+    write('| export | type | what it is |');
+    write('| --- | --- | --- |');
+    for (const v of ownNames) {
+      write(`| \`${v.name}\` | \`${cell(v.kind)}\` | ${cell(v.doc)} |`);
     }
-    escribir();
+    write();
   }
 
-  if (tiposPropios.length > 0) {
-    escribir(
-      `Tipos (${tiposPropios.length}): ${tiposPropios.map((t) => `\`${t}\``).join(', ')}.`,
+  if (ownTypes.length > 0) {
+    write(
+      `Types (${ownTypes.length}): ${ownTypes.map((t) => `\`${t}\``).join(', ')}.`,
     );
-    escribir();
+    write();
   }
 }
 
-const plantilla = await readFile(PLANTILLA, 'utf8');
-if (!plantilla.includes(MARCA)) {
-  console.error(`docs/llms.plantilla.md no tiene la marca ${MARCA}.`);
+const template = await readFile(TEMPLATE, 'utf8');
+if (!template.includes(BRAND)) {
+  console.error(`docs/llms.template.md has no ${BRAND} marker.`);
   process.exit(1);
 }
 
 /**
- * Fuera las rutas absolutas del disco.
+ * Strip absolute disk paths.
  *
- * TypeScript imprime los re-exports de namespace —`export * as social from
- * './lib/social.tsx'`— como `typeof import("<ruta absoluta>")`, así que el
- * archivo salía con la ruta de la máquina donde se generó. Dos problemas, y el
- * segundo es el grave:
+ * TypeScript prints namespace re-exports — `export * as social from
+ * './lib/social.tsx'` — as `typeof import("<absolute path>")`, so the file came
+ * out carrying the path of the machine that generated it. Two problems, and the
+ * second is the serious one:
  *
- *   1. El `--check` no podía pasar nunca fuera de esa máquina. Fallaba en CI y
- *      pasaba en local, que es el peor modo de fallar.
- *   2. `llms.txt` VIAJA EN EL PAQUETE. Publicar la estructura de carpetas de
- *      quien compiló no aporta nada a un agente y no debería salir de aquí.
+ *   1. `--check` could never pass off that machine. It failed in CI and passed
+ *      locally, which is the worst way to fail.
+ *   2. `llms.txt` TRAVELS IN THE PACKAGE. Publishing the folder structure of
+ *      whoever built it gives an agent nothing and should not leave here.
  *
- * Queda la ruta relativa al repo, que es determinista y además es la útil.
+ * What remains is the repo-relative path, which is deterministic and is also the
+ * useful one.
  */
-const sinRutasDelDisco = (texto) => texto.split(`${root}/`).join('').split(root).join('.');
+const withoutDiskPaths = (text) => text.split(`${root}/`).join('').split(root).join('.');
 
-const salida = sinRutasDelDisco(plantilla.replace(MARCA, lineas.join('\n').trimEnd()));
+const output = withoutDiskPaths(template.replace(BRAND, lines.join('\n').trimEnd()));
 
 /**
- * Las primeras diferencias entre lo commiteado y lo generado.
+ * The first differences between what is committed and what was generated.
  *
- * Un check que solo dice «está desactualizado» obliga a regenerar a ciegas para
- * enterarse de qué cambió — y si el que falla es CI y no tu portátil, ni eso
- * sirve. Esto imprime las líneas concretas, que es lo único accionable desde el
- * log de un runner.
+ * A check that only says «out of date» forces a blind regeneration just to find
+ * out what changed — and if the thing failing is CI and not your laptop, not
+ * even that helps. This prints the concrete lines, which is the only actionable
+ * thing from a runner log.
  */
-function primerasDiferencias(esperado, encontrado, cuantas = 12) {
-  const a = esperado.split('\n');
-  const b = encontrado.split('\n');
-  const salida = [];
+function firstDifferences(expected, found, howMany = 12) {
+  const a = expected.split('\n');
+  const b = found.split('\n');
+  const output = [];
 
-  for (let i = 0; i < Math.max(a.length, b.length) && salida.length < cuantas; i += 1) {
+  for (let i = 0; i < Math.max(a.length, b.length) && output.length < howMany; i += 1) {
     if (a[i] === b[i]) continue;
-    salida.push(`  línea ${i + 1}`);
-    salida.push(`    commiteado: ${a[i] === undefined ? '(no existe)' : JSON.stringify(a[i])}`);
-    salida.push(`    generado:   ${b[i] === undefined ? '(no existe)' : JSON.stringify(b[i])}`);
+    output.push(`  line ${i + 1}`);
+    output.push(`    committed: ${a[i] === undefined ? '(does not exist)' : JSON.stringify(a[i])}`);
+    output.push(`    generated: ${b[i] === undefined ? '(does not exist)' : JSON.stringify(b[i])}`);
   }
 
   if (a.length !== b.length) {
-    salida.push(`  total de líneas · commiteado ${a.length} · generado ${b.length}`);
+    output.push(`  total lines · committed ${a.length} · generated ${b.length}`);
   }
 
-  return salida.join('\n');
+  return output.join('\n');
 }
 
-if (COMPROBAR) {
-  const actual = await readFile(DESTINO, 'utf8').catch(() => null);
-  if (actual !== salida) {
+if (CHECK) {
+  const current = await readFile(TARGET, 'utf8').catch(() => null);
+  if (current !== output) {
     console.error(
-      'llms.txt está desactualizado. Se genera desde los tipos y la plantilla:\n\n' +
+      'llms.txt is out of date. It is generated from the types and the template:\n\n' +
         '  pnpm build:llms\n\n' +
-        'Pasa cuando cambia un prop y no se regenera. Es el fallo que el archivo existe para evitar.\n',
+        'This happens when a prop changes and nobody regenerates. It is the failure the file exists to prevent.\n',
     );
-    if (actual !== null) {
-      console.error('Primeras diferencias:\n');
-      console.error(primerasDiferencias(actual, salida));
+    if (current !== null) {
+      console.error('First differences:\n');
+      console.error(firstDifferences(current, output));
     }
     process.exit(1);
   }
-  console.log('arrecife · llms.txt al día con los tipos');
+  console.log('arrecife · llms.txt matches the types');
 } else {
-  await writeFile(DESTINO, salida, 'utf8');
-  const componentes = [...leidas.values()].reduce((n, e) => n + e.componentes.length, 0);
+  await writeFile(TARGET, output, 'utf8');
+  const components = [...readEntries.values()].reduce((n, e) => n + e.components.length, 0);
   console.log(
-    `arrecife · llms.txt → ${relative(root, DESTINO)} (${componentes} componentes, ${
-      salida.split('\n').length
-    } líneas)`,
+    `arrecife · llms.txt → ${relative(root, TARGET)} (${components} components, ${
+      output.split('\n').length
+    } lines)`,
   );
 }

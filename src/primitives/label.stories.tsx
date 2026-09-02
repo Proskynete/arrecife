@@ -1,47 +1,47 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Pila } from '../../stories/utils.tsx';
+import { Stack } from '../../stories/utils.tsx';
 import { Checkbox } from './checkbox.tsx';
 import { Input } from './input.tsx';
 import { Label } from './label.tsx';
 
-const meta = { title: 'Primitivos/Label', component: Label } satisfies Meta<typeof Label>;
+const meta = { title: 'Primitives/Label', component: Label } satisfies Meta<typeof Label>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ConCampo: Story = {
-  name: 'Con campo',
+export const WithField: Story = {
+  name: 'With field',
   render: () => (
-    <Pila>
+    <Stack>
       <div className="gap-step-xs flex flex-col">
-        <Label htmlFor="correo">Correo</Label>
-        <Input id="correo" placeholder="nombre@dominio.dev" />
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" placeholder="name@dominio.dev" />
       </div>
-    </Pila>
+    </Stack>
   ),
 };
 
-export const ConCasilla: Story = {
-  name: 'Con casilla',
+export const WithCheckbox: Story = {
+  name: 'With checkbox',
   render: () => (
-    <Pila>
+    <Stack>
       <div className="gap-step-sm flex items-center">
         <Checkbox id="boletin" className="peer" />
         <Label htmlFor="boletin">Recibir el boletín</Label>
       </div>
-    </Pila>
+    </Stack>
   ),
 };
 
-export const Deshabilitado: Story = {
+export const Disabled: Story = {
   render: () => (
-    <Pila>
+    <Stack>
       <div className="gap-step-xs flex flex-col">
         <Input id="bloqueado" disabled placeholder="No editable" className="peer order-2" />
         <Label htmlFor="bloqueado" className="order-1">
           Se atenúa con el control
         </Label>
       </div>
-    </Pila>
+    </Stack>
   ),
 };

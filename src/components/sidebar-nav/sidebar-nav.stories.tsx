@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { SidebarItem, SidebarNav } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/SidebarNav',
+  title: 'Components/SidebarNav',
   component: SidebarNav,
 } satisfies Meta<typeof SidebarNav>;
 
@@ -12,7 +12,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Admin: Story = {
-  name: 'Admin del blog',
+  name: 'Blog admin',
   render: () => (
     <>
       <div className="h-80 w-56">
@@ -27,15 +27,15 @@ export const Admin: Story = {
           <SidebarItem href="/admin/media">Media</SidebarItem>
         </SidebarNav>
       </div>
-      <Nota>
-        El `▸` lo pone el componente, igual que el `./` de `NavItem` y el `~` del
-        breadcrumb. Misma estética CLI, misma decisión: el formato es parte de la
-        pieza y va `aria-hidden`.
-      </Nota>
-      <Nota>
-        La versión y la rama al pie no son decoración: en un admin es lo primero
-        que se pregunta cuando algo se ve raro.
-      </Nota>
+      <Note>
+        The `▸` is set by the component, same as `NavItem`'s `./` and the
+        breadcrumb's `~`. Same CLI aesthetic, same decision: the format is part of
+        the piece and it is `aria-hidden`.
+      </Note>
+      <Note>
+        The version and branch at the bottom are not decoration: in an admin they
+        are the first thing anyone asks about when something looks off.
+      </Note>
     </>
   ),
 };

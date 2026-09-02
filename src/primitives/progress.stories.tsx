@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Bloque, Nota, Pila } from '../../stories/utils.tsx';
+import { Block, Note, Stack } from '../../stories/utils.tsx';
 import { Progress } from './progress.tsx';
 
 const meta = {
-  title: 'Primitivos/Progress',
+  title: 'Primitives/Progress',
   component: Progress,
   args: { value: 45, label: 'Progreso del curso' },
 } satisfies Meta<typeof Progress>;
@@ -12,28 +12,28 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = { render: (args) => <Pila><Progress {...args} /></Pila> };
+export const Default: Story = { render: (args) => <Stack><Progress {...args} /></Stack> };
 
-export const Escala: Story = {
+export const Scale: Story = {
   render: () => (
-    <Pila>
+    <Stack>
       {[0, 25, 50, 75, 100].map((v) => (
-        <Bloque key={v} titulo={`${v}%`}>
+        <Block key={v} title={`${v}%`}>
           <Progress value={v} label={`Progreso del curso: ${v}%`} />
-        </Bloque>
+        </Block>
       ))}
-    </Pila>
+    </Stack>
   ),
 };
 
-export const Arena: Story = {
+export const Sand: Story = {
   render: (args) => (
-    <Pila>
+    <Stack>
       <Progress {...args} tone="warm" />
-      <Nota>
-        Arena para progreso de curso, que es humano y es conversión. Bioluz para
-        todo lo demás.
-      </Nota>
-    </Pila>
+      <Note>
+        Sand for course progress, which is human and is conversion. Biolume for
+        everything else.
+      </Note>
+    </Stack>
   ),
 };

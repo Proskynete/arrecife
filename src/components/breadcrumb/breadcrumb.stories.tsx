@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Nota } from '../../../stories/utils.tsx';
+import { Note } from '../../../stories/utils.tsx';
 import { Breadcrumb } from './index.tsx';
 
 const meta = {
-  title: 'Componentes/Breadcrumb',
+  title: 'Components/Breadcrumb',
   component: Breadcrumb,
   args: {
     items: [
@@ -17,26 +17,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basico: Story = {
-  name: 'Básico',
+export const Basic: Story = {
+  name: 'Basic',
   render: (args) => (
     <>
       <Breadcrumb {...args} />
-      <Nota>
-        El `~` es el home del sistema de archivos, no un icono de casa: por eso
-        toda la ruta va en mono. Los separadores usan `border`, que es el token
-        más tenue que todavía se lee como línea.
-      </Nota>
-      <Nota>
-        El último tramo es la página actual, así que no es un enlace y lleva
-        `aria-current="page"`. El `~` lleva `aria-label`, que si no un lector de
-        pantalla anuncia una tilde suelta.
-      </Nota>
+      <Note>
+        The `~` is the filesystem's home, not a house icon: which is why the whole
+        path goes in mono. The separators use `border`, the faintest token that
+        still reads as a line.
+      </Note>
+      <Note>
+        The last crumb is the current page, so it is not a link and it carries
+        `aria-current="page"`. The `~` carries an `aria-label`, otherwise a screen
+        reader announces a stray tilde.
+      </Note>
     </>
   ),
 };
 
-export const Profundo: Story = {
+export const Deep: Story = {
   args: {
     items: [
       { label: 'cursos', href: '/cursos' },

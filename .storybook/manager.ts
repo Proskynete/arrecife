@@ -4,17 +4,16 @@ import { create } from 'storybook/theming';
 import { dark, fonts } from '../src/tokens/tokens.ts';
 
 /**
- * El cromado del manager: barra lateral, barra superior y —lo que importaba
- * aquí— el fondo del área de contenido que queda alrededor del iframe de
- * previsualización.
+ * The manager chrome: sidebar, top bar and — the part that mattered here — the
+ * background of the content area surrounding the preview iframe.
  *
- * Ese fondo es el que se veía blanco en las páginas de documentación cuando la
- * ventana es más ancha que los 1200px del contenido: no lo alcanza
- * `storybook.css`, porque esa hoja vive dentro del iframe y esto está fuera.
+ * That background is the one that showed up white on documentation pages when
+ * the window is wider than the 1200px of content: `storybook.css` does not reach
+ * it, because that sheet lives inside the iframe and this is outside it.
  *
- * Va fijo en la paleta oscura: el manager es la aplicación, no el producto, y
- * no cambia con el switch de tema —que es del contenido—. El modo oscuro es el
- * primario del sistema.
+ * It is pinned to the dark palette: the manager is the application, not the
+ * product, and it does not follow the theme switch — which belongs to the
+ * content. Dark is the system's primary mode.
  */
 addons.setConfig({
   theme: create({

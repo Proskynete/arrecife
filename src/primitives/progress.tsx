@@ -5,19 +5,19 @@ import { cn } from '../lib/cn.ts';
 
 export type ProgressProps = ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & {
   /**
-   * Nombre accesible de la barra. Es obligatorio a propósito: una barra de
-   * progreso sin nombre no dice de qué es el progreso, y ninguna otra parte del
-   * componente puede deducirlo.
+   * The bar's accessible name. It is mandatory on purpose: a progress bar with
+   * no name does not say what the progress is about, and no other part of the
+   * component can deduce it.
    */
   label: string;
-  /** Arena en vez de bioluz, para progreso de curso. */
+  /** Sand instead of biolume, for course progress. */
   tone?: 'accent' | 'warm';
 };
 
 /**
- * El ancho del indicador cambia, no se anima: el sistema no anima escala ni
- * desplazamiento. `transition-standard` solo cubre color y borde, así que el
- * salto de ancho es inmediato aunque la clase esté puesta.
+ * The indicator's width changes, it is not animated: the system animates neither
+ * scale nor displacement. `transition-standard` only covers color and border, so
+ * the width jump is immediate even with the class in place.
  */
 export function Progress({ className, value, label, tone = 'accent', ...props }: ProgressProps) {
   return (

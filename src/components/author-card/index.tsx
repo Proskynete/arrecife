@@ -2,38 +2,38 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../../lib/cn.ts';
 import { Avatar, AvatarFallback, AvatarImage } from '../../primitives/avatar.tsx';
-import { SUPERFICIE_TARJETA } from '../../primitives/card.tsx';
+import { CARD_SURFACE } from '../../primitives/card.tsx';
 import { Text } from '../../primitives/typography.tsx';
 
 /**
- * La firma al pie del artículo: avatar 52px, nombre 15/500 y el rol en mono
- * muted. Tres datos, ni uno más.
+ * The byline at the foot of the article: 52px avatar, 15/500 name and the role
+ * in muted mono. Three data points, not one more.
  *
- * NO recibe cara de mascota, y no es un descuido: es la misma regla que
- * `PageHeader`. Una cara aquí sería humor en el sitio donde el lector está
- * decidiendo si el autor sabe de lo que habla — justo lo que el contrato del
- * manual excluye.
+ * It does NOT take a mascot face, and that is not an oversight: it is the same
+ * rule as `PageHeader`. A face here would be humour in the exact place where the
+ * reader is deciding whether the author knows what they are talking about —
+ * precisely what the manual's contract excludes.
  *
- * El avatar del manual es la cabeza dentro de un círculo azul tiburón sólido,
- * nunca la cara expresiva suelta.
+ * The manual's avatar is the head inside a solid shark-blue circle, never the
+ * expressive face on its own.
  */
 export type AuthorCardProps = Omit<ComponentPropsWithoutRef<'div'>, 'role'> & {
   name: string;
-  /** El rol. Va en mono: es un dato, no una frase. */
+  /** The role. It goes in mono: it is a datum, not a sentence. */
   role?: ReactNode;
-  /** URL del avatar. Sin ella se muestran las iniciales. */
+  /** The avatar's URL. Without it the initials are shown. */
   src?: string | undefined;
-  /** Una o dos frases. Se corta a 68ch sola. */
+  /** One or two sentences. It clamps itself to 68ch. */
   bio?: ReactNode;
-  /** Enlaces o botón de contacto. */
+  /** Links or a contact button. */
   action?: ReactNode;
 };
 
-/** 52px, del documento. Es tamaño de retrato, no ritmo de página. */
+/** 52px, from the document. It is portrait size, not page rhythm. */
 const AVATAR = 'size-[52px]';
 
-function iniciales(nombre: string) {
-  return nombre
+function initials(name: string) {
+  return name
     .split(/\s+/)
     .slice(0, 2)
     .map((p) => p[0] ?? '')
@@ -43,10 +43,10 @@ function iniciales(nombre: string) {
 
 export function AuthorCard({ name, role, src, bio, action, className, ...props }: AuthorCardProps) {
   return (
-    <div className={cn(SUPERFICIE_TARJETA, 'p-step-lg gap-step-md flex items-start', className)} {...props}>
+    <div className={cn(CARD_SURFACE, 'p-step-lg gap-step-md flex items-start', className)} {...props}>
       <Avatar className={cn(AVATAR, 'shrink-0')}>
         {src ? <AvatarImage src={src} alt="" /> : null}
-        <AvatarFallback>{iniciales(name)}</AvatarFallback>
+        <AvatarFallback>{initials(name)}</AvatarFallback>
       </Avatar>
 
       <div className="gap-step-xs flex min-w-0 flex-1 flex-col">

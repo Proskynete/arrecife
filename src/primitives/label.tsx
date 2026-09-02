@@ -6,10 +6,10 @@ import { cn } from '../lib/cn.ts';
 export type LabelProps = ComponentPropsWithoutRef<typeof LabelPrimitive.Root>;
 
 /**
- * La escala `label`: 13px, que es el mínimo absoluto en pantalla del sistema.
+ * The `label` scale: 13px, which is the system's absolute minimum on screen.
  *
- * Se atenúa junto al control cuando este está deshabilitado, para que la
- * pareja etiqueta-control se lea siempre como una sola unidad.
+ * It dims together with the control when that control is disabled, so the
+ * label-control pair always reads as a single unit.
  */
 export function Label({ className, ...props }: LabelProps) {
   return (

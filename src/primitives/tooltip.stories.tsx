@@ -3,11 +3,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from './button.tsx';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip.tsx';
 
-const meta = { title: 'Primitivos/Tooltip', component: Tooltip } satisfies Meta<typeof Tooltip>;
+const meta = { title: 'Primitives/Tooltip', component: Tooltip } satisfies Meta<typeof Tooltip>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const pista = (args: Parameters<NonNullable<Story['render']>>[0]) => (
+const track = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   <TooltipProvider>
     <div className="py-step-xl flex justify-center">
       <Tooltip {...args}>
@@ -20,5 +20,5 @@ const pista = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   </TooltipProvider>
 );
 
-export const Cerrado: Story = { render: pista };
-export const Abierto: Story = { args: { open: true }, render: pista };
+export const Closed: Story = { render: track };
+export const Open: Story = { args: { open: true }, render: track };

@@ -73,13 +73,32 @@ export function storedTheme(): Theme | null {
 }
 
 /**
- * The theme that applies: whatever was chosen, and with no choice, whatever the
- * system asks for. With no `prefers-color-scheme` declared, dark, which is
- * primary.
+ * What a site decides when nobody has chosen yet.
+ *
+ * `base` is not «the fallback», it is «this site IS this mode». Passing it stops
+ * the OS from being consulted at all, which is the whole point: the five
+ * projects are dark by decision, and with the OS in charge somebody running
+ * their machine in light mode saw the blog in light — the opposite of what was
+ * agreed.
+ *
+ * Left out, the OS decides and dark is the fallback. That was the only
+ * behaviour until 0.7.0, and it is still the right default for a library: a site
+ * that has not decided should follow the reader.
  */
-export function preferredTheme(): Theme {
+export type ThemeOptions = {
+  /** The mode this site is. Given, `prefers-color-scheme` is not consulted. */
+  base?: Theme | undefined;
+};
+
+/**
+ * The theme that applies: whatever was chosen, and with no choice, `base` if the
+ * site declared one, else whatever the system asks for. With no
+ * `prefers-color-scheme` declared, dark, which is primary.
+ */
+export function preferredTheme({ base }: ThemeOptions = {}): Theme {
   const stored = storedTheme();
   if (stored) return stored;
+  if (base) return base;
   if (typeof matchMedia === 'undefined') return 'dark';
   return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }
@@ -123,7 +142,10 @@ export function toggleTheme(): Theme {
  * `storage`, which is a change made in another one. Without the second, two open
  * tabs sit on different themes until one of them is reloaded.
  */
-export function watchTheme(onChange: (theme: Theme) => void): () => void {
+export function watchTheme(
+  onChange: (theme: Theme) => void,
+  options: ThemeOptions = {},
+): () => void {
   if (typeof window === 'undefined') return () => {};
 
   const own = (event: Event) => {
@@ -133,7 +155,7 @@ export function watchTheme(onChange: (theme: Theme) => void): () => void {
 
   const otherTab = (event: StorageEvent) => {
     if (event.key !== THEME_KEY) return;
-    const theme = isTheme(event.newValue) ? event.newValue : preferredTheme();
+    const theme = isTheme(event.newValue) ? event.newValue : preferredTheme(options);
     applyTheme(theme, false);
     onChange(theme);
   };
@@ -178,8 +200,24 @@ export function watchTheme(onChange: (theme: Theme) => void): () => void {
  * It re-attaches on `astro:after-swap` because Astro's view transitions replace
  * the whole `<html>`: without that line the theme is lost on navigation and the
  * flash returns, this time mid-session.
+ *
+ * `base` is what the five projects were missing. All of them are dark BY
+ * DECISION — `eduardoalvarez.dev`'s own script said so out loud: «dark is the
+ * brand's PRIMARY mode, so it's the default and doesn't follow the OS setting».
+ * With the OS in charge, somebody running their machine in light mode saw the
+ * blog in light, which is the opposite of what was agreed, and there was no way
+ * to say otherwise: the export was a fixed string with no parameter. So those
+ * projects kept their own `public/theme.js` and the library published the hard
+ * part for nobody.
+ *
+ * Called with no options it behaves exactly as it did before: the OS decides and
+ * dark is the fallback. That is still the right default for a library — a site
+ * that has not decided should follow its reader.
+ *
+ *     <script is:inline set:html={themeScript({ base: 'dark' })} />
  */
-export const themeScript: string = [
+export function themeScript({ base }: ThemeOptions = {}): string {
+  return [
   '(function () {',
   '  var KEY = ' + JSON.stringify(THEME_KEY) + ';',
   '  function resolve() {',
@@ -187,7 +225,9 @@ export const themeScript: string = [
   '      var stored = localStorage.getItem(KEY);',
   '      if (stored === "dark" || stored === "light") return stored;',
   '    } catch (e) {}',
-  '    return matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";',
+  base
+    ? '    return ' + JSON.stringify(base) + ';'
+    : '    return matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";',
   '  }',
   '  function apply() {',
   '    var theme = resolve();',
@@ -197,4 +237,5 @@ export const themeScript: string = [
   '  apply();',
   '  document.addEventListener("astro:after-swap", apply);',
   '})();',
-].join('\n');
+  ].join('\n');
+}

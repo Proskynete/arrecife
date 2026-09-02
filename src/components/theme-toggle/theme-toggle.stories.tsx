@@ -81,12 +81,45 @@ export const TheScript: Story = {
         data-theme="dark"
         className="rounded-card bg-brand-hull p-step-md text-chip text-text-primary overflow-x-auto font-mono"
       >
-        {themeScript}
+        {themeScript()}
       </pre>
       <Note>
         The last line is the one both projects kept forgetting: Astro's view
         transitions replace the whole {'<html>'}, so without `astro:after-swap` the
         theme is lost on navigation.
+      </Note>
+    </div>
+  ),
+};
+
+export const BaseMode: Story = {
+  name: 'A site that already decided its mode',
+  render: () => (
+    <div className="gap-step-md flex flex-col">
+      <Note>
+        `themeScript({'{'} base: 'dark' {'}'})`. Compare the `resolve` below with
+        the one above: `matchMedia` is gone. `base` is not «the fallback», it is
+        «this site IS this mode», so the OS is not consulted at all.
+      </Note>
+      <pre
+        data-theme="dark"
+        className="rounded-card bg-brand-hull p-step-md text-chip text-text-primary overflow-x-auto font-mono"
+      >
+        {themeScript({ base: 'dark' })}
+      </pre>
+      <Note>
+        All five projects are dark by decision — the blog's own script said so out
+        loud: «dark is the brand's PRIMARY mode, so it doesn't follow the OS
+        setting». With the OS in charge, a reader whose machine is in light mode
+        saw the blog in light, which is the opposite of what was agreed, and there
+        was no way to say otherwise: the export was a fixed string. So those
+        projects kept their own `public/theme.js` and the library published the
+        hard part for nobody.
+      </Note>
+      <Note>
+        A stored choice still wins over `base`. It sets what happens when nobody
+        has chosen, not what happens instead of choosing — the toggle keeps
+        working.
       </Note>
     </div>
   ),

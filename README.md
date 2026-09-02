@@ -403,6 +403,8 @@ El ciclo, entero, está en `.github/workflows/release.yml`:
 4. Antes de subir nada, el workflow comprueba que el tag y `package.json`
    coinciden, y corre lint, tipos, build, la verificación de `exports` y la
    suite completa en los dos modos.
+5. Con el paquete ya en npm, compila el Storybook y lo despliega a
+   [arrecife.eduardoalvarez.dev](https://arrecife.eduardoalvarez.dev).
 
 `feat:` sube la minor y `fix:` la patch. Mientras la versión sea `0.x`, un
 cambio que rompe sube la **minor** y no la major: eso es lo que significa el
@@ -475,6 +477,43 @@ un paquete que todavía no existe, así que la primera versión necesita token:
 Para probar sin gastar una versión: *Actions → Release y publicación → Run
 workflow* con el ensayo activado. Hace todo menos publicar, no necesita token, y
 el resumen del run lista qué archivos viajarían y cuánto pesa el tarball.
+
+### El Storybook se despliega con la versión
+
+El Storybook publicado es la documentación de la librería: cada story es a la
+vez el ejemplo y el test que lo verifica. Vive en
+[arrecife.eduardoalvarez.dev](https://arrecife.eduardoalvarez.dev) y lo sube el
+job `desplegar` de `release.yml`, **después** de que npm haya publicado.
+
+Ese orden no es un detalle de implementación. El sitio y el paquete tienen que
+contar la misma versión: un Storybook por delante de npm enseña componentes que
+nadie puede instalar todavía, y eso es exactamente el fallo del que existe este
+repo —una fuente de verdad que se desincroniza de otra.
+
+De ahí la decisión que sorprende: **el proyecto de Vercel no está conectado a
+GitHub.** Con la integración de Git, Vercel construye por su cuenta en cada push
+a `main` y no hay forma de pedirle que espere al tag. El único que despliega es
+el workflow, y sube el Storybook **ya compilado**: con el Build Output API y
+`--prebuilt`, Vercel no ejecuta nada, sirve lo que hay en
+`.vercel/output/static`. Así lo compila el mismo Node y el mismo lockfile que
+acaban de verificar la librería.
+
+Se configura una vez, con `vercel link` en un clon local para crear el proyecto
+y sacar los dos ids de `.vercel/project.json`:
+
+| Dónde | Nombre | Qué es |
+| --- | --- | --- |
+| *Secrets* | `VERCEL_TOKEN` | Un token de cuenta de Vercel |
+| *Variables* | `VERCEL_ORG_ID` | El `orgId` de `.vercel/project.json` |
+| *Variables* | `VERCEL_PROJECT_ID` | El `projectId` de `.vercel/project.json` |
+
+Los dos ids van como **variables** y no como secretos a propósito: no lo son
+—salen de cualquier clon que haga `vercel link`— y como variables se leen en el
+log cuando algo no cuadra.
+
+**Si faltan, el job avisa y no rompe.** Para cuando corre, npm ya publicó y el
+tag ya está cortado: un rojo ahí se leería como «la release falló», que es lo
+contrario de lo que pasó. El aviso se queda en el resumen del run.
 
 ## Estado
 

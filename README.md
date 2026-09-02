@@ -284,9 +284,14 @@ import { social } from '@eduardoalvarez/arrecife';
 <social.LinkedIn />
 ```
 
-All eight are `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`
-and `Email`. They live under a namespace for a concrete reason: **one of them is
-called `X`**. An `export const X` at the root of a component library collides
+All nine are `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
+`Email` and `Newsletter`. They live under a namespace for a concrete reason:
+**one of them is called `X`**.
+
+`Newsletter` is the bell, and it is named for what it means and not for what it
+draws — same as everything else in the system. It plays `Rss`'s role: a way to
+follow, not a social network. That is what keeps it inside this catalogue and
+keeps the catalogue from turning into an icon library. An `export const X` at the root of a component library collides
 with anything — a generic's type variable, an `import { X }` from somewhere else
 — and the failure shows up far from here.
 

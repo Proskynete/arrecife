@@ -204,9 +204,10 @@ import { social } from '@eduardoalvarez/arrecife';
 <social.GitHub />
 ```
 
-All eight: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
-`Email`. They live under a namespace because one of them is called `X`, and loose
-it collides.
+All nine: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
+`Email`, `Newsletter`. They live under a namespace because one of them is called
+`X`, and loose it collides. `Newsletter` is the bell: a way to follow, like
+`Rss`, named for what it means.
 
 The internal glyphs — `Close`, `ChevronDown`, `Sun` — are **not exported** and
 are not going to be: they are the primitives' minimum set. A component that needs

@@ -832,6 +832,23 @@ maintain for nothing.
 `role="dialog"` on the content, and a dialog with no accessible name says nothing
 to a screen reader: now it cannot be forgotten because it does not compile.
 
+### The fifth motion exception: the footer's caret
+
+The CLI signature ends in a block caret that blinks, behind `motion-safe`. It is
+the first exception that is not feedback about progress, so it needed a different
+argument.
+
+The signature is a **prompt** — that is why it is mono, why the `$` is in accent
+and why it sits in a footer instead of a `<p>` saying «© 2026». A prompt whose
+caret does not blink is a terminal that has hung, and a still block at the end of
+a line reads as a stray character.
+
+So the criterion splits in two. The first four exceptions are feedback about
+progress or spatial continuity; this one is legibility: it is not decoration, it
+is what makes the piece readable as what it is. `step-end` and not a fade,
+because a real caret is on or off and easing it turns a terminal into a pulsing
+dot. See `docs/decisions.md` § 23.
+
 ### The second motion exception
 
 `Sheet` slides. It is the second and last exception to «no displacement»,

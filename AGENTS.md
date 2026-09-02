@@ -246,9 +246,17 @@ never decoration.
 | `Sheet`'s side panel | A panel entering from an edge slides by definition; held still it is an off-centre modal |
 | `Skeleton`'s shimmer | A block that is still and a block that will never load look the same |
 | `Accordion`'s height | Nothing appears: a gap opens and what is below shifts. With no transition it is a jump and you lose your place on the page |
+| The footer's caret | A prompt whose caret does not blink is a terminal that has hung, and a still block reads as a typo |
 
-A fifth gets in the same way the fourth did: with the argument written in
-`docs/decisions.md`, not because it looks better. See § 20.
+The fifth is the one that splits the criterion in two. The first four are
+feedback about **progress or spatial continuity**; the caret is neither, and it
+gets in on the other half: **it is not decoration, it is what makes the piece
+legible as what it is.** The spinner says «this is loading» rather than «this is
+disabled»; the caret says «this is a prompt» rather than «this is a string with a
+smudge».
+
+A sixth has to land on one of those two, with the argument written in
+`docs/decisions.md`, not because it looks better. See § 20 and § 23.
 
 ### 5 · Accessibility
 

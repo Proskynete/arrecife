@@ -305,6 +305,11 @@ These are the confusions people run into most often when consuming it.
   provider.
 - **It ships no router.** The components with links accept `asChild` to wrap the
   framework's `Link`.
+- **It ships no `data-testid`.** A composed part your test suite has to reach is
+  reached with a slot: `ArticleCard`'s `tagAsChild`, `Breadcrumb`'s and
+  `TableOfContents`'s `linkAsChild`. They hand you the element and its
+  attributes and keep the classes. Do NOT select by structure or by a style
+  class — a style class is not a contract and it changes when the style does.
 - **It does not load fonts.** It declares them by name.
 - **There is no Tailwind v3 preset.**
 
@@ -981,6 +986,7 @@ The metadata line uses `meta` and not `eyebrow`: `18 ago 2026 · 8 min de lectur
 | `excerpt` | `ReactNode` |  |  | Standfirst. Clamped to two lines so the grid does not fall out of line. |
 | `headingLevel` | `2 \| 3` |  | `3` | The headline level. `h3` by default: a lone card in a grid does not earn a level its position does not give it. |
 | `readingMinutes` | `number` |  |  |  |
+| `tagAsChild` | `(props: { tag: string; children: ReactNode; }) => ReactNode` |  |  | Renders each tag through the child, so an E2E suite can reach it. |
 | `tags` | `readonly string[]` |  |  |  |
 | `title` | `ReactNode` | yes |  |  |
 

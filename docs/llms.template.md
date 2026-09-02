@@ -305,6 +305,11 @@ These are the confusions people run into most often when consuming it.
   provider.
 - **It ships no router.** The components with links accept `asChild` to wrap the
   framework's `Link`.
+- **It ships no `data-testid`.** A composed part your test suite has to reach is
+  reached with a slot: `ArticleCard`'s `tagAsChild`, `Breadcrumb`'s and
+  `TableOfContents`'s `linkAsChild`. They hand you the element and its
+  attributes and keep the classes. Do NOT select by structure or by a style
+  class — a style class is not a contract and it changes when the style does.
 - **It does not load fonts.** It declares them by name.
 - **There is no Tailwind v3 preset.**
 

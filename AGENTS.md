@@ -82,13 +82,14 @@ src/
   primitives/   the 31 primitives on shadcn/Radix, each with its .stories.tsx beside it
   components/   the identity pieces, one folder per component
   brand/        logo, isotype, mascot and the PNG catalog
+  social/       the nine social icons. Published at ./social, with no `"use client"`
   theme/        light/dark mode and `themeScript`. No React. Published at ./theme
   variants/     the cva definitions and the class constants. No React. Published at ./variants
   og/           Satori templates. No React. Published at ./og
   shiki/        the highlighting theme. No React. Published at ./shiki
   form/         the form layer. Published at ./form; asks for react-hook-form
   chart/        the chart chassis. Published at ./chart; asks for recharts
-  lib/          cn, the inline glyphs and the social icons
+  lib/          cn and the inline glyphs. `lib/` is what is NOT published
 stories/        stories that do not belong to a component (tokens, brand, og) and utils
 scripts/        the generators and the checks
 docs/           the identity documents and the llms.txt template
@@ -362,15 +363,16 @@ docs(readme): the third contrast correction
 ```
 
 Valid scopes, and the list is short on purpose: `tokens`, `primitives`,
-`components`, `brand`, `theme`, `og`, `shiki`, `form`, `chart`, `storybook`,
-`a11y`, `deps`, `deps-dev`, `ci`. **A change to the repo's process goes without a
-scope** — `docs:`, `ci:`: there is no scope for «how we work», and an invented one
-is rejected.
+`components`, `brand`, `social`, `theme`, `og`, `shiki`, `form`, `chart`,
+`storybook`, `a11y`, `deps`, `deps-dev`, `ci`. **A change to the repo's process
+goes without a scope** — `docs:`, `ci:`: there is no scope for «how we work», and
+an invented one is rejected.
 
 The rule governing the list: **a published subpath in `exports` is a scope.** It
-is what `og` and `shiki` already did, and it is why `theme`, `form` and `chart`
-joined them in 0.4.0 instead of being split between `tokens` and `components`. A
-new scope with no subpath behind it does have to be discussed.
+is what `og` and `shiki` already did, it is why `theme`, `form` and `chart`
+joined them in 0.4.0 instead of being split between `tokens` and `components`,
+and it is why `social` joined in 0.6.0. A new scope with no subpath behind it
+does have to be discussed.
 
 Careful with one trap: the workflow validates the **PR title**, not the scopes of
 the commits inside it. A `docs(agents):` buried in a PR titled `feat(tokens)!:`

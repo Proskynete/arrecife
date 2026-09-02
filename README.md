@@ -483,6 +483,13 @@ público. Es a propósito: un ensayo que se salta un job no puede decir si ese j
 funciona, y el despliegue era el único paso del workflow que no se podía probar
 sin gastar una versión.
 
+Un detalle del ensayo que confunde la primera vez: `npm publish --dry-run`
+consulta el registro, y `package.json` apunta a una versión **ya publicada**
+salvo en la ventana entre que release-please sube el número y el workflow
+publica. Así que el ensayo choca contra `cannot publish over the previously
+published versions` por lo único que no puede estar bien en un ensayo. Ese
+mensaje concreto se perdona con un aviso; cualquier otro fallo sigue fallando.
+
 ### El Storybook se despliega con la versión
 
 El Storybook publicado es la documentación de la librería: cada story es a la

@@ -178,10 +178,27 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: npm publish --access public --provenance
 
+      # `--dry-run` consulta el registro, así que choca con la única cosa que
+      # en un ensayo NO puede estar bien: la versión. `package.json` apunta a
+      # la que ya se publicó salvo en la ventana entre que release-please sube
+      # el número y el workflow publica — o sea, casi nunca. Sin este rodeo el
+      # ensayo está permanentemente en rojo por lo único que no prueba nada, y
+      # de paso se lleva por delante los jobs que dependen de él.
+      #
+      # El resto de fallos siguen fallando: solo se perdona ese mensaje.
       - name: 🧪 Ensayo, sin publicar
         if: env.DRY_RUN == 'true'
         run: |
-          npm publish --access public --dry-run
+          estado=0
+          salida="$(npm publish --access public --dry-run 2>&1)" || estado=$?
+          echo "$salida"
+          if [ "$estado" -ne 0 ]; then
+            if echo "$salida" | grep -q 'cannot publish over'; then
+              echo "::notice::La versión ya está publicada; en un ensayo es lo esperado."
+            else
+              exit "$estado"
+            fi
+          fi
           echo "Ensayo: se verificó todo y NO se publicó." >> "$GITHUB_STEP_SUMMARY"
 
   # El Storybook es la documentación publicada de la librería: cada story es a

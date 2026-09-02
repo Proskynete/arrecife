@@ -37,7 +37,7 @@ export type ThemeToggleProps = Omit<ComponentPropsWithoutRef<'button'>, 'onClick
 };
 
 export function ThemeToggle({
-  label = 'Cambiar de theme',
+  label = 'Cambiar de tema',
   onThemeChange,
   variant = 'secondary',
   size = 'icon',

@@ -77,14 +77,14 @@ export const Emphasis: Story = {
       <Block title="subtle · 8 % background, 22 % border">
         <Stack>
           <Alert variant="success" title="Ya estás dentro">
-            Te llega un email cada dos semanas. Nada más.
+            Te llega un correo cada dos semanas. Nada más.
           </Alert>
         </Stack>
       </Block>
 
       <Block title="strong · 10 % background, solid border">
         <Stack>
-          <Alert variant="error" emphasis="strong" title="Ese email no es válido">
+          <Alert variant="error" emphasis="strong" title="Ese correo no es válido">
             Revisa que tenga arroba y dominio.
           </Alert>
         </Stack>

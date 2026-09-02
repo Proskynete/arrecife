@@ -1,12 +1,16 @@
 {
   "name": "@eduardoalvarez/arrecife",
   "version": "0.5.1",
-  "description": "Librería de componentes de la identidad visual de Eduardo Álvarez",
+  "description": "The component library of Eduardo Álvarez’s visual identity",
   "license": "MIT",
   "author": "Eduardo Esteban Álvarez Castañeda <soy@eduardoalvarez.dev>",
+  "homepage": "https://arrecife.eduardoalvarez.dev",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Proskynete/arrecife.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Proskynete/arrecife/issues"
   },
   "type": "module",
   "sideEffects": [

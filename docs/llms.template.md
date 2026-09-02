@@ -112,6 +112,7 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/tokens` | **no** | — | The `tokens` object in JS. Satori, Astro, scripts |
 | `@eduardoalvarez/arrecife/tokens/theme.css` | — | — | Tailwind v4's `@theme` |
 | `@eduardoalvarez/arrecife/theme` | **no** | — | `themeScript` for the `<head>`, and reading or changing the mode |
+| `@eduardoalvarez/arrecife/variants` | **no** | — | The class vocabulary: `buttonVariants`, `badgeVariants`, `CARD_SURFACE` |
 | `@eduardoalvarez/arrecife/og` | **no** | — | The Open Graph templates for Satori |
 | `@eduardoalvarez/arrecife/shiki` | **no** | — | The syntax highlighting theme |
 | `@eduardoalvarez/arrecife/brand` | yes | — | Logo, isotype and mascot as components |
@@ -127,6 +128,38 @@ it.
 hung off the main index, the projects that draw no charts and use no React Hook
 Form would have to install those dependencies anyway so their bundler could
 resolve an import they never execute.
+
+### Next, Server Components and `"use client"`
+
+The root, `./brand`, `./form` and `./chart` ship `"use client"` in the published
+`dist/`. They render React and their Radix primitives call `createContext` at
+module scope, so without the directive a Next project with the App Router cannot
+import them at all: it fails at build time with
+`TypeError: (0 , r.createContext) is not a function`.
+
+You do not add anything: importing `Button` from a Server Component works, and
+the boundary is already where it belongs. What you should NOT do is wrap the
+import in an adapter of your own marked `"use client"` — that was the workaround
+before 0.7.0 and it pulled 272 KB of client chunk in for components that never
+needed it.
+
+The five portable subpaths do NOT carry the directive, and that is the half that
+matters in a Server Component: `./tokens`, `./theme`, `./variants`, `./og` and
+`./shiki` stay on the server. If all you need are classes — for a `<div>`, an
+`<a>` or an Astro island you do not want to hydrate — import them from
+`./variants` and nothing crosses to the client:
+
+```tsx
+// A Server Component, or an .astro frontmatter. No React reaches the browser.
+import { buttonVariants, CARD_SURFACE } from '@eduardoalvarez/arrecife/variants';
+
+<a className={buttonVariants({ variant: 'tertiary' })} href="/cursos">./ver_cursos →</a>
+<div className={CARD_SURFACE}>…</div>
+```
+
+In Astro and in plain Vite the directive is inert — a string literal at the top
+of a module. Rollup may warn `Module level directives cause errors when bundled`
+and nothing else happens: one `dist` serves the Next projects and the Astro ones.
 
 ```ts
 // Good, in an OG generator or in astro.config.mjs

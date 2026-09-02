@@ -63,7 +63,7 @@ pnpm storybook        # generates the tokens and serves Storybook on 6006
 | `pnpm test:watch`                   | the suite in watch mode, dark                             |
 | `pnpm check:tokens`                 | fails if `src/tokens/` imports anything from outside      |
 | `pnpm check:namespace`              | fails if a token stomps a Tailwind name                   |
-| `pnpm check:exports`                | verifies `dist/` holds what `exports` promises, and that the portable subpaths bring no React, chunks included |
+| `pnpm check:exports`                | verifies `dist/` holds what `exports` promises, that the portable subpaths bring no React, and that `"use client"` is on the client entries and only there |
 | `pnpm check:llms`                   | fails if `llms.txt` does not match the types              |
 | `pnpm check:release`                | validates the release-please configuration                |
 | `pnpm build:tokens`                 | regenerates `dist/tokens/theme.css`                       |
@@ -83,6 +83,7 @@ src/
   components/   the identity pieces, one folder per component
   brand/        logo, isotype, mascot and the PNG catalog
   theme/        light/dark mode and `themeScript`. No React. Published at ./theme
+  variants/     the cva definitions and the class constants. No React. Published at ./variants
   og/           Satori templates. No React. Published at ./og
   shiki/        the highlighting theme. No React. Published at ./shiki
   form/         the form layer. Published at ./form; asks for react-hook-form
@@ -192,6 +193,11 @@ Rules of the pattern, all of them with a reason:
   informs nobody. The whole repo is written this way; keep it that way.
 - **Reuse the primitives.** A component in `components/` that writes its own
   typography classes instead of using `Text` is duplicating the scale.
+- **A cva goes in `src/variants/`, not in the component.** The component imports
+  it and renders markup; the cva returns a string of classes and brings no React,
+  which is what lets `./variants` be portable. If you write a new `cva()` inside
+  a `.tsx`, `check:exports` will not stop you — nothing does — but the next
+  project that only wants the classes pays for React to get them.
 - **A heavy dependency goes in its own subpath**, as an optional peer dependency,
   never hanging off the root. `./form` asks for `react-hook-form` and `./chart`
   asks for `recharts`: if they hung off the main index, the four projects that

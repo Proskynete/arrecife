@@ -288,7 +288,7 @@ export function EventCalendar({
               </Button>
               {editing ? (
                 <Button type="button" variant="tertiary" size="sm" onClick={cancel}>
-                  ./cancel
+                  ./cancelar
                 </Button>
               ) : null}
             </div>

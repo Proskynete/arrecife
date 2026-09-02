@@ -112,6 +112,7 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/tokens` | **no** | — | The `tokens` object in JS. Satori, Astro, scripts |
 | `@eduardoalvarez/arrecife/tokens/theme.css` | — | — | Tailwind v4's `@theme` |
 | `@eduardoalvarez/arrecife/theme` | **no** | — | `themeScript` for the `<head>`, and reading or changing the mode |
+| `@eduardoalvarez/arrecife/variants` | **no** | — | The class vocabulary: `buttonVariants`, `badgeVariants`, `CARD_SURFACE` |
 | `@eduardoalvarez/arrecife/og` | **no** | — | The Open Graph templates for Satori |
 | `@eduardoalvarez/arrecife/shiki` | **no** | — | The syntax highlighting theme |
 | `@eduardoalvarez/arrecife/brand` | yes | — | Logo, isotype and mascot as components |
@@ -127,6 +128,38 @@ it.
 hung off the main index, the projects that draw no charts and use no React Hook
 Form would have to install those dependencies anyway so their bundler could
 resolve an import they never execute.
+
+### Next, Server Components and `"use client"`
+
+The root, `./brand`, `./form` and `./chart` ship `"use client"` in the published
+`dist/`. They render React and their Radix primitives call `createContext` at
+module scope, so without the directive a Next project with the App Router cannot
+import them at all: it fails at build time with
+`TypeError: (0 , r.createContext) is not a function`.
+
+You do not add anything: importing `Button` from a Server Component works, and
+the boundary is already where it belongs. What you should NOT do is wrap the
+import in an adapter of your own marked `"use client"` — that was the workaround
+before 0.7.0 and it pulled 272 KB of client chunk in for components that never
+needed it.
+
+The five portable subpaths do NOT carry the directive, and that is the half that
+matters in a Server Component: `./tokens`, `./theme`, `./variants`, `./og` and
+`./shiki` stay on the server. If all you need are classes — for a `<div>`, an
+`<a>` or an Astro island you do not want to hydrate — import them from
+`./variants` and nothing crosses to the client:
+
+```tsx
+// A Server Component, or an .astro frontmatter. No React reaches the browser.
+import { buttonVariants, CARD_SURFACE } from '@eduardoalvarez/arrecife/variants';
+
+<a className={buttonVariants({ variant: 'tertiary' })} href="/cursos">./ver_cursos →</a>
+<div className={CARD_SURFACE}>…</div>
+```
+
+In Astro and in plain Vite the directive is inert — a string literal at the top
+of a module. Rollup may warn `Module level directives cause errors when bundled`
+and nothing else happens: one `dist` serves the Next projects and the Astro ones.
 
 ```ts
 // Good, in an OG generator or in astro.config.mjs
@@ -392,16 +425,14 @@ The destructive confirmation. It is NOT a `Dialog` with different text, which is
 
 Source: `src/primitives/alert.tsx`
 
-The alert carries its color in the background, not only in the border.
-
 - Extends: `Omit<ComponentPropsWithoutRef<'div'>, 'title'> & VariantProps<typeof alert>`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
-| `emphasis` | `"strong" \| "subtle"` |  | `subtle` |  |
+| `emphasis` | `"subtle" \| "strong"` |  |  |  |
 | `icon` | `ReactNode` |  |  | Replaces the variant's mono glyph. Never an emoji: if you need something else, it is an SVG from `glyphs`. |
 | `title` | `ReactNode` |  |  |  |
-| `variant` | `"accent" \| "success" \| "warning" \| "error"` |  | `accent` |  |
+| `variant` | `"accent" \| "success" \| "warning" \| "error"` |  |  |  |
 
 ### Avatar, AvatarImage, AvatarFallback, AvatarUpload
 
@@ -414,7 +445,7 @@ One for everything: the author's photo and anyone else's in the system. There is
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` |  | `md` |  |
+| `size` | `"sm" \| "md" \| "lg" \| "xl"` |  |  |  |
 
 **AvatarImage**
 - No own props: it passes through those of the element or primitive it wraps.
@@ -444,17 +475,15 @@ The avatar you can change. `Avatar` displays; this one also lets you pick.
 Source: `src/primitives/badge.tsx`
 
 **Badge**
-A signal. Square r6, sans 12.5/500 and the semantic color at 8 % as the background — the alert recipe at word size: a status IS a one-word alert.
+Three badge families, three components. Why there are three shapes and not one is in `variants/badge.ts`, next to the classes that make them.
 
 - Extends: `ComponentPropsWithoutRef<'span'> & VariantProps<typeof badge>`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
-| `variant` | `"accent" \| "success" \| "warning" \| "error" \| "neutral" \| "warm"` |  | `neutral` |  |
+| `variant` | `"neutral" \| "accent" \| "warm" \| "success" \| "warning" \| "error"` |  |  |  |
 
 **CategoryBadge**
-A slug, in sand. Untransformed: slugs already arrive lowercase and forcing it would be the same mistake the `uppercase` was making.
-
 - Extends: `ComponentPropsWithoutRef<'span'>`
 
 | prop | type | req. | default | what it does |
@@ -472,8 +501,6 @@ A slug, in sand. Untransformed: slugs already arrive lowercase and forcing it wo
 
 Source: `src/primitives/button.tsx`
 
-The system's FOUR variants, and only those four.
-
 - Extends: `ComponentPropsWithoutRef<'button'> & VariantProps<typeof button>`
 
 | prop | type | req. | default | what it does |
@@ -481,8 +508,8 @@ The system's FOUR variants, and only those four.
 | `asChild` | `boolean` |  | `false` | Renders the child instead of a `<button>`, to wrap a link. |
 | `icon` | `ReactNode` |  |  | SVG glyph before the text. Hidden while loading. |
 | `loading` | `boolean` |  | `false` | Disables and announces `aria-busy`. Incompatible with `asChild`. |
-| `size` | `"sm" \| "md" \| "lg" \| "icon"` |  | `md` |  |
-| `variant` | `"primary" \| "conversion" \| "secondary" \| "tertiary"` |  | `primary` |  |
+| `size` | `"sm" \| "md" \| "lg" \| "icon"` |  |  |  |
+| `variant` | `"primary" \| "conversion" \| "secondary" \| "tertiary"` |  |  |  |
 
 ### Calendar
 
@@ -914,11 +941,11 @@ Source: `src/primitives/typography.tsx`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
-| `as` | `"h2" \| "h3" \| "li" \| "p" \| "span" \| "caption" \| "dd" \| "dt" \| "em" \| "figcaption" \| "h1" \| "h4" \| "legend" \| "strong"` |  |  | HTML tag. Defaults to whichever one matches the scale. |
+| `as` | `"h1" \| "h2" \| "h3" \| "strong" \| "li" \| "p" \| "span" \| "caption" \| "dd" \| "dt" \| "em" \| "figcaption" \| "h4" \| "legend"` |  |  | HTML tag. Defaults to whichever one matches the scale. |
 | `asChild` | `boolean` |  | `false` | Renders the child instead of creating an element, to wrap a link. |
 | `measure` | `boolean` |  |  | Clamps the line to 68ch. On by default for `body`, the only scale meant to be read in long paragraphs. |
-| `tone` | `"accent" \| "success" \| "warning" \| "error" \| "warm" \| "primary" \| "secondary" \| "muted"` |  | `primary` |  |
-| `variant` | `"display" \| "h2" \| "h3" \| "label" \| "body" \| "h1" \| "meta" \| "stat" \| "lead" \| "ui" \| "tag" \| "chip" \| "eyebrow"` |  | `body` |  |
+| `tone` | `"primary" \| "secondary" \| "accent" \| "warm" \| "success" \| "warning" \| "error" \| "muted"` |  |  |  |
+| `variant` | `"display" \| "stat" \| "h1" \| "h2" \| "h3" \| "body" \| "lead" \| "ui" \| "label" \| "tag" \| "chip" \| "meta" \| "eyebrow"` |  |  |  |
 
 ## Components
 
@@ -1175,7 +1202,7 @@ One header at two scales, not two components.
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
 | `action` | `ReactNode` |  |  | Slot for the calls to action. If a conversion button goes here, it is the only one on the screen. |
-| `as` | `"h2" \| "h1"` |  | `h1` | The headline's level. `h1` unless the page already has one. |
+| `as` | `"h1" \| "h2"` |  | `h1` | The headline's level. `h1` unless the page already has one. |
 | `description` | `ReactNode` |  |  |  |
 | `eyebrow` | `ReactNode` |  |  | Mono, small caps, in accent. It is the section the page belongs to. |
 | `size` | `"display" \| "page"` |  | `page` |  |
@@ -1436,6 +1463,21 @@ The root re-exports everything from `./tokens` and `./brand` for convenience.
 Each one appears exactly once, under the most specific subpath that publishes
 it: if the code does not mount React, that subpath is the one to import.
 
+### `@eduardoalvarez/arrecife/variants`
+
+| export | type | what it is |
+| --- | --- | --- |
+| `alertVariants` | `(props?: (ConfigVariants<{ variant: { accent: string; success: string; warning: string; error: string; }; emphasis: { subtle: string; strong: string; }; }> & ClassProp) \| undefined): string` |  |
+| `avatarVariants` | `(props?: (ConfigVariants<{ size: { sm: string; md: string; lg: string; xl: string; }; }> & ClassProp) \| undefined): string` |  |
+| `badgeVariants` | `(props?: (ConfigVariants<{ variant: { neutral: string; accent: string; warm: string; success: string; warning: string; error: string; }; }> & ClassProp) \| undefined): string` |  |
+| `buttonVariants` | `(props?: (ConfigVariants<{ variant: { primary: string[]; conversion: string; secondary: string[]; tertiary: string[]; }; size: { sm: string; md: string; lg: string; icon: string; }; }> & ClassProp) \| undefined): string` |  |
+| `CARD` | `string[]` |  |
+| `CARD_HOVER` | `"transition-standard hover:border-hairline-hover"` |  |
+| `CARD_SURFACE` | `"rounded-card border-hairline bg-surface border"` |  |
+| `categoryBadgeVariants` | `(props?: (ConfigVariants<{ active: { false: string; true: string; }; }> & ClassProp) \| undefined): string` |  |
+| `metricBadgeVariants` | `string[]` |  |
+| `textVariants` | `(props?: (ConfigVariants<{ variant: { display: string; stat: string; h1: string; h2: string; h3: string; body: string; lead: string; ui: string; label: string; tag: string; chip: string; meta: string; eyebrow: string; }; tone: { ...; }; }> & ClassProp) \| undefined): string` |  |
+
 ### `@eduardoalvarez/arrecife/tokens`
 
 | export | type | what it is |
@@ -1533,16 +1575,8 @@ Types (6): `ArticleData`, `BaseData`, `CourseData`, `DefaultData`, `SatoriNode`,
 
 | export | type | what it is |
 | --- | --- | --- |
-| `alertVariants` | `(props?: (ConfigVariants<{ variant: { accent: string; success: string; warning: string; error: string; }; emphasis: { subtle: string; strong: string; }; }> & ClassProp) \| undefined): string` |  |
-| `avatarVariants` | `(props?: (ConfigVariants<{ size: { sm: string; md: string; lg: string; xl: string; }; }> & ClassProp) \| undefined): string` |  |
-| `badgeVariants` | `(props?: (ConfigVariants<{ variant: { neutral: string; accent: string; warm: string; success: string; warning: string; error: string; }; }> & ClassProp) \| undefined): string` |  |
-| `buttonVariants` | `(props?: (ConfigVariants<{ variant: { primary: string[]; conversion: string; secondary: string[]; tertiary: string[]; }; size: { sm: string; md: string; lg: string; icon: string; }; }> & ClassProp) \| undefined): string` |  |
-| `CARD_HOVER` | `"transition-standard hover:border-hairline-hover"` | The hover from rule 6: the border only. Applied where the card is clickable. |
-| `CARD_SURFACE` | `"rounded-card border-hairline bg-surface border"` | The system's surface container, and the only definition of what a card is: `surface`, `hairline` border, card radius. |
-| `categoryBadgeVariants` | `(props?: (ConfigVariants<{ active: { false: string; true: string; }; }> & ClassProp) \| undefined): string` |  |
 | `cn` | `(...inputs: ClassValue[]): string` |  |
 | `social` | `typeof import("src/lib/social")` |  |
-| `textVariants` | `(props?: (ConfigVariants<{ variant: { display: string; stat: string; h1: string; h2: string; h3: string; body: string; lead: string; ui: string; label: string; tag: string; chip: string; meta: string; eyebrow: string; }; tone: { ...; }; }> & ClassProp) \| undefined): string` |  |
 | `toast` | `(message: ReactNode, options?: ToastOptions \| undefined): string` | Fires a notice. It returns its id, which is what you keep in order to close it by hand — the «guardando…» case that gets replaced when the request finishes. |
 | `useTheme` | `(): Theme` | The theme set right now, for a project that needs to branch in React — a different logo per mode, an image with no light version. |
 

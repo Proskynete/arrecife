@@ -297,6 +297,62 @@ decided not to have, and from there it grows on its own. A project that needs an
 icon passes its own: `Stat` receives `icon`, `Footer` receives each social link's
 `icon`.
 
+### `"use client"` is in the published `dist`
+
+The root, `./brand`, `./form` and `./chart` carry the directive. They render
+React, and their Radix primitives call `createContext` at module scope: without
+it, a Next project with the App Router cannot import the library at all — it
+fails at build time with `TypeError: (0 , r.createContext) is not a function`.
+It blocked `cursos` for a whole version, and the workaround there was a
+`"use client"` in every one of that project's own adapters, including a `Badge`
+that is a `<span>` with no interaction. It cost 272 KB of client chunk.
+
+The five portable subpaths do NOT carry it — `./tokens`, `./theme`,
+`./variants`, `./og` and `./shiki` — and that is the half that matters more.
+Marking them client would be a lie with a cost: a Server Component importing
+`buttonVariants`, a function that returns a string, would pull a client boundary
+in with it.
+
+It is stamped by `scripts/add-use-client.mjs` after tsup, and not by tsup's
+`banner`. That was tried first: esbuild writes the directive and the bundling
+pass strips it back out with a `Module level directives cause errors when
+bundled` warning. The build stayed green and the published package was broken for
+Next — the worst way to fail, because the failure surfaces in somebody else's
+project. `check:exports` now verifies it in both directions: present on the four
+client entries, absent from the portable ones.
+
+It is inert outside Next. In Astro and in plain Vite it is a string literal at
+the top of a module; Rollup may warn and nothing else happens. One `dist` serves
+the Next projects and the Astro ones, which is the constraint that decided the
+shape.
+
+### `./variants` — the class vocabulary without React
+
+```ts
+import { buttonVariants, badgeVariants, CARD_SURFACE }
+  from '@eduardoalvarez/arrecife/variants';
+```
+
+`buttonVariants`, `badgeVariants` and `categoryBadgeVariants` are not
+components: they are functions that return a string of classes. They touch
+neither React nor the DOM. They used to live inside the components, so importing
+one dragged the whole library along, and that had a cost measured in two of the
+five projects.
+
+In `cursos` it forced a `"use client"` on an adapter whose entire content was one
+call to CVA. In `links`, which depends on no React at all, it was not even an
+option: that project copied the class vocabulary by hand into `LinkRow.astro` and
+`Footer.astro`, and the copy had already drifted once — the hero gradient sat at
+`55%` and `#e9eeea` against the token's `60%` and `#EFE9DE`, and nothing compared
+them.
+
+The rule for what belongs in the subpath: if it returns classes, it goes there;
+if it returns markup, it stays in the component. `Button` renders a `<button>`,
+so it stays at the root; `buttonVariants` returns a string, so it is in
+`./variants`. The root re-exports all of it, so an existing
+`import { buttonVariants } from '@eduardoalvarez/arrecife'` keeps working — what
+the subpath buys is not the name, it is not paying for React to get it.
+
 ### The two subpaths that ask for a dependency
 
 `./form` and `./chart` do not hang off the root, and that is deliberate. Each
@@ -316,9 +372,9 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent, seriesColor }
   from '@eduardoalvarez/arrecife/chart';
 ```
 
-`check:exports` verifies that the four portable ones — `./tokens`, `./theme`,
-`./og` and `./shiki` — bring no React into the published `dist/`, **by following
-the relative imports**. Without that the check was worthless: with `treeshake`
+`check:exports` verifies that the five portable ones — `./tokens`, `./theme`,
+`./variants`, `./og` and `./shiki` — bring no React into the published `dist/`,
+**by following the relative imports**. Without that the check was worthless: with `treeshake`
 on, each portable entry ends up as two lines re-exporting from a
 `chunk-XXXX.js`, and a grep over those two lines finds no React even when the
 chunk imports it.

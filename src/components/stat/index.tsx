@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../../lib/cn.ts';
-import { CARD_SURFACE } from '../../primitives/card.tsx';
+import { CARD_SURFACE } from '../../variants/card.ts';
 import { Progress } from '../../primitives/progress.tsx';
 import { Text } from '../../primitives/typography.tsx';
 

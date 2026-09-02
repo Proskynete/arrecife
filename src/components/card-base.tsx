@@ -2,22 +2,12 @@ import { Slot } from '@radix-ui/react-slot';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { CARD_HOVER, CARD_SURFACE } from '../primitives/card.tsx';
+import { CARD } from '../variants/card.ts';
 
 /**
- * The shared shell of the cards. It is not published: it exists so rule 6 lives
- * in exactly one place.
- *
- * «States are communicated with border and color, not with movement. A card's
- * hover changes the border from hairline to hairlineHover and nothing else.» No
- * scale, no elevation, no title displacement.
+ * The shared shell of the cards. The class list lives in `variants/card.ts`,
+ * which brings no React, so `links` can read it instead of copying it.
  */
-export const CARD = [
-  'group block cursor-pointer',
-  CARD_SURFACE,
-  CARD_HOVER,
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-];
 
 export type CardShellProps = ComponentPropsWithoutRef<'a'> & {
   /**

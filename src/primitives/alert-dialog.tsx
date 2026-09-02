@@ -2,7 +2,7 @@ import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { buttonVariants } from './button.tsx';
+import { buttonVariants } from '../variants/button.ts';
 
 /**
  * The destructive confirmation. It is NOT a `Dialog` with different text, which

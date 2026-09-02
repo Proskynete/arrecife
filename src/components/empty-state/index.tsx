@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { MascotFace } from '../../brand/mascot.tsx';
 import type { Face } from '../../brand/catalog.ts';
 import { cn } from '../../lib/cn.ts';
-import { CARD_SURFACE } from '../../primitives/card.tsx';
+import { CARD_SURFACE } from '../../variants/card.ts';
 import { Text } from '../../primitives/typography.tsx';
 
 /**

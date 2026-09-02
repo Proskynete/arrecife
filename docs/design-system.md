@@ -1,12 +1,17 @@
 # Design System · Eduardo Álvarez · v1.0.0
 
-> Extraído de `Design System - Eduardo Alvarez.html` (canvas de Claude Design)
-> el 27 ago 2026. Es el texto y las especificaciones en monoespaciada; las
-> ilustraciones y los SVG no sobreviven a la extracción y aparecen como «SVG».
+> **This file is a verbatim transcription and is deliberately NOT translated.**
 >
-> El canvas sigue siendo la fuente. Esto está en el repo para poder hacer
-> `grep` y para que un desvío como el `#E05252` del tema Shiki no pueda
-> volver a pasar meses sin que nadie lo note.
+> Extracted from `Design System - Eduardo Alvarez.html` (a Claude Design canvas)
+> on 27 Aug 2026. It is the text and the monospaced specifications; the
+> illustrations and SVGs do not survive extraction and show up as «SVG».
+>
+> The canvas is still the source, and the canvas is in Spanish. This copy is in
+> the repo so it can be grepped and so a drift like the Shiki theme's `#E05252`
+> cannot go unnoticed for months again — and that only works while the copy
+> matches the canvas word for word. Translating it would break exactly the
+> property it exists for. The rest of the repo is in English; this file and
+> `brand-manual.md` are the two exceptions, and this is why.
 
 ~/design-system 
 v1.0.0 

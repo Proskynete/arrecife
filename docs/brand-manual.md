@@ -1,7 +1,11 @@
 # Manual de marca · Eduardo Álvarez · v1 · 2026
 
-> Extraído de `Manual de marca - Eduardo Alvarez.html` (canvas de Claude Design)
-> el 27 ago 2026. Mismas condiciones que `design-system.md`.
+> **This file is a verbatim transcription and is deliberately NOT translated.**
+>
+> Extracted from `Manual de marca - Eduardo Alvarez.html` (a Claude Design
+> canvas) on 27 Aug 2026. Same conditions as `design-system.md`: the canvas is
+> the Spanish source and this copy only earns its place while it matches it word
+> for word.
 
 MANUAL DE MARCA · EDUARDO ÁLVAREZ · v1 · 2026 
 eduardoalvarez.dev 

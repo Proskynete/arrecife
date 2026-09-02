@@ -499,7 +499,11 @@ el workflow, y sube el Storybook **ya compilado**: con el Build Output API y
 acaban de verificar la librería.
 
 Se configura una vez, con `vercel link` en un clon local para crear el proyecto
-y sacar los dos ids de `.vercel/project.json`:
+y sacar los dos ids de `.vercel/project.json`. **Cuidado con un paso de más:**
+`vercel link` conecta el repositorio de GitHub al proyecto por su cuenta y sin
+preguntar, que es justo lo que no se quiere. Se deshace con
+`vercel git disconnect`, y conviene comprobarlo antes de dar el proyecto por
+configurado.
 
 | Dónde | Nombre | Qué es |
 | --- | --- | --- |
@@ -510,6 +514,11 @@ y sacar los dos ids de `.vercel/project.json`:
 Los dos ids van como **variables** y no como secretos a propósito: no lo son
 —salen de cualquier clon que haga `vercel link`— y como variables se leen en el
 log cuando algo no cuadra.
+
+La protección de despliegue del equipo es `all_except_custom_domains`: la URL
+única de cada despliegue pide sesión del equipo y devuelve un 302 al login, y
+la que es pública es el dominio propio. No es un fallo de configuración, es el
+ajuste por defecto de Vercel y es el que se quiere.
 
 **Si faltan, el job avisa y no rompe.** Para cuando corre, npm ya publicó y el
 tag ya está cortado: un rojo ahí se leería como «la release falló», que es lo

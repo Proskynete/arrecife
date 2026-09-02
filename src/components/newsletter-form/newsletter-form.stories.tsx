@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Block, Note } from '../../../stories/utils.tsx';
+import { Mascot } from '../../brand/mascot.tsx';
 import { NewsletterForm } from './index.tsx';
 
 const meta = {
@@ -9,7 +11,7 @@ const meta = {
   args: {
     title: 'Un email cada dos semanas',
     description:
-      'Lo que aprendí escalando equipos, escrito en short. Sin resúmenes de noticias y sin lanzamientos.',
+      'Lo que aprendí escalando equipos, escrito en corto. Sin resúmenes de noticias y sin lanzamientos.',
     disclaimer: 'Sin spam. Te das de baja en un clic.',
     expression: 'wink',
   },
@@ -85,4 +87,103 @@ export const WithName: Story = {
       </Note>
     </>
   ),
+};
+
+export const WithAside: Story = {
+  name: 'With the illustration',
+  args: {
+    aside: <Mascot pose="desk" className="mx-auto w-56 md:w-64" />,
+  },
+  render: (args) => (
+    <>
+      <NewsletterForm {...args} />
+      <Note>
+        The pose is a second column INSIDE the panel, not something positioned on
+        top of it. Before this slot the blog placed it absolutely and reserved
+        room with a hand-written `md:pr-[330px]` — a number measured off the
+        image's width, with nothing keeping the two in step.
+      </Note>
+      <Note>
+        It only becomes a column from `md` up. Narrow the window: below that it
+        goes back into the flow, for the same reason `Hero`'s pose does.
+      </Note>
+      <Note>
+        It comes AFTER the form in the DOM, so reading and tab order reach the
+        field first. An illustration ahead of the thing it decorates is one more
+        stop between the reader and the input.
+      </Note>
+    </>
+  ),
+};
+
+export const FieldErrors: Story = {
+  name: 'One message per field',
+  args: {
+    nameField: true,
+    fieldErrors: {
+      name: 'El nombre necesita al menos dos letras.',
+      email: 'Falta el dominio del correo.',
+    },
+  },
+  render: (args) => (
+    <>
+      <NewsletterForm {...args} />
+      <Note>
+        With one bad field the general alert already names it, because the API
+        sends Zod's first message. With two bad at once only one of them was ever
+        seen — this is the case `fieldErrors` exists for.
+      </Note>
+      <Note>
+        Each message is tied to its field with `aria-describedby` and the input is
+        marked `aria-invalid`, so a screen reader hears which field is red and
+        why. The label is NOT tinted: the border and the message are already in
+        `error`, and a third red is the rule from `Form` all over again.
+      </Note>
+      <Note>
+        `errorMessage` still covers what belongs to the form as a whole — the 409,
+        the network failure — and both can show at the same time.
+      </Note>
+    </>
+  ),
+};
+
+export const Behaviour: StoryObj = {
+  name: 'resetOnSuccess and onFieldChange',
+  render: () => {
+    function Demo() {
+      const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+      return (
+        <NewsletterForm
+          title="Un email cada dos semanas"
+          disclaimer="Suscríbete y mira qué pasa con el campo."
+          expression="wink"
+          state={state}
+          onSubmitEmail={() => setState('success')}
+          onFieldChange={() => setState('idle')}
+        />
+      );
+    }
+    return (
+      <>
+        <Demo />
+        <Note>
+          Subscribe: on success the field empties itself. With it still full, the
+          same email invites a second submission. The blog worked around it by
+          finding the `form` with a `ref` on the container and calling `reset()`,
+          because the component exposed no form.
+        </Note>
+        <Note>
+          The reset hangs off `state` and not off the submit: the component does
+          not know whether the request succeeded until the project says so.
+          Emptying on submit would clear the field on the way to a 400, which is
+          the case the notice going BELOW the form exists to protect.
+        </Note>
+        <Note>
+          Type again and the notice goes away: that is `onFieldChange`. Before, the
+          blog hung an `onInput` off the `section` and relied on the event
+          bubbling — which works, and works by an implementation detail.
+        </Note>
+      </>
+    );
+  },
 };

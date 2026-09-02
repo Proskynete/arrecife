@@ -1175,18 +1175,22 @@ Source: `src/components/newsletter-form/index.tsx`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
+| `aside` | `ReactNode` |  |  | The illustration, as a second column inside the panel. |
 | `basePath` | `string` |  |  |  |
 | `description` | `ReactNode` |  |  |  |
 | `disclaimer` | `ReactNode` |  |  | The small print. It is the «sin spam», which is why it accepts a face. |
 | `errorMessage` | `ReactNode` |  | `No se pudo suscribir ese email. Revísalo y vuelve a intentar.` |  |
 | `expression` | `"annoyed" \| "confused" \| "hearts" \| "laughing" \| "shades" \| "waiting" \| "wink"` |  |  |  |
+| `fieldErrors` | `{ name?: ReactNode; email?: ReactNode; }` |  |  | A message under one specific field, instead of the single alert. |
 | `fieldLabel` | `string` |  | `Email electrónico` |  |
 | `nameField` | `boolean` |  | `false` | Adds the name field ahead of the email one. |
 | `nameInputProps` | `Omit<InputProps, "id" \| "disabled" \| "name">` |  |  | Whatever the project needs to hang off the name field: `minLength`, `maxLength`, `pattern`. The library imposes none of the three. |
 | `nameLabel` | `string` |  | `Nombre` |  |
 | `namePlaceholder` | `string` |  | `Cómo te llamas` |  |
+| `onFieldChange` | `(field: "email" \| "name", value: string) => void` |  |  | Fires when either field changes. It is where the project clears its error. |
 | `onSubmitEmail` | `(email: string, name?: string \| undefined) => void` |  |  | Fires with the email already read from the field, and with the name if that field is enabled. |
 | `placeholder` | `string` |  | `tu@email.dev` |  |
+| `resetOnSuccess` | `boolean` |  | `true` | Empties the fields after a successful subscription. On by default. |
 | `state` | `"success" \| "error" \| "idle" \| "sending"` |  | `idle` |  |
 | `submitLabel` | `string` |  | `Suscribirme` |  |
 | `successMessage` | `ReactNode` |  | `Ya estás dentro. Te llega un email cada dos semanas, y nada más.` |  |

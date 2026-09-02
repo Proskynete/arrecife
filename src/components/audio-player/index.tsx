@@ -146,24 +146,24 @@ const CONTROL =
   'rounded-chip transition-standard cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
 
 function SkipButton({
-  segundos,
+  seconds,
   className,
   size,
-  onSaltar,
+  onSkip,
 }: {
-  segundos: number;
+  seconds: number;
   className: string;
   size: string;
-  onSaltar: (s: number) => void;
+  onSkip: (s: number) => void;
 }) {
   return (
     <button
       type="button"
-      onClick={() => onSaltar(segundos)}
+      onClick={() => onSkip(seconds)}
       className={cn('text-text-muted hover:text-text-primary', CONTROL, className)}
-      aria-label={segundos < 0 ? 'Retroceder 15 segundos' : 'Adelantar 15 segundos'}
+      aria-label={seconds < 0 ? 'Retroceder 15 segundos' : 'Adelantar 15 segundos'}
     >
-      {segundos < 0 ? <GoBackSeconds className={size} /> : <AdvanceSeconds className={size} />}
+      {seconds < 0 ? <GoBackSeconds className={size} /> : <AdvanceSeconds className={size} />}
     </button>
   );
 }
@@ -198,15 +198,15 @@ function SpeedButton({
 function Volume({
   size,
   width,
-  silenciado,
-  volumen,
+  muted,
+  volume,
   onMute,
   onVolumeChange,
 }: {
   size: string;
   width: string;
-  silenciado: boolean;
-  volumen: number;
+  muted: boolean;
+  volume: number;
   onMute: () => void;
   onVolumeChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) {
@@ -216,9 +216,9 @@ function Volume({
         type="button"
         onClick={onMute}
         className={cn('text-text-muted hover:text-text-primary p-1', CONTROL)}
-        aria-label={silenciado ? 'Activar sonido' : 'Silenciar'}
+        aria-label={muted ? 'Activar sonido' : 'Silenciar'}
       >
-        {silenciado || volumen === 0 ? (
+        {muted || volume === 0 ? (
           <VolumeMuted className={size} />
         ) : (
           <VolumeOn className={size} />
@@ -229,7 +229,7 @@ function Volume({
         min="0"
         max="1"
         step="0.1"
-        value={silenciado ? 0 : volumen}
+        value={muted ? 0 : volume}
         onChange={onVolumeChange}
         className={cn(
           'bg-surface-raised rounded-pill h-1 cursor-pointer appearance-none',
@@ -242,12 +242,12 @@ function Volume({
   );
 }
 
-type PlayState = { cargando: boolean; error: boolean; playing: boolean };
+type PlayState = { loading: boolean; error: boolean; playing: boolean };
 
-function PlayIcon({ className, cargando, error, playing }: PlayState & { className: string }) {
+function PlayIcon({ className, loading, error, playing }: PlayState & { className: string }) {
   // The spin stays, with the same justification as in `Button`: it is feedback
   // about progress, not about state, and `motion-safe` turns it off.
-  if (cargando) return <Spinner className={cn('motion-safe:animate-spin', className)} />;
+  if (loading) return <Spinner className={cn('motion-safe:animate-spin', className)} />;
   if (error) return <Retry className={className} />;
   if (playing) return <Pause className={className} />;
   return <Play className={className} />;
@@ -463,7 +463,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const playLabel = hasError ? 'Reintentar' : isPlaying ? 'Pausar' : 'Reproducir';
 
-  const playState = { cargando: isLoading, error: hasError, playing: isPlaying };
+  const playState = { loading: isLoading, error: hasError, playing: isPlaying };
   const pointer = {
     onPointerDown: handlePointerDown,
     onPointerMove: handlePointerMove,
@@ -508,7 +508,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
           </div>
 
           <div className="flex shrink-0 items-center gap-1">
-            <SkipButton segundos={-15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
+            <SkipButton seconds={-15} className="p-1.5" size="w-5 h-5" onSkip={skip} />
             <PlayButton
               className="rounded-pill px-step-sm gap-step-xs flex items-center py-1.5"
               size="w-4 h-4"
@@ -516,7 +516,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
               onToggle={togglePlay}
               {...playState}
             />
-            <SkipButton segundos={15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
+            <SkipButton seconds={15} className="p-1.5" size="w-5 h-5" onSkip={skip} />
             <SpeedButton
               className="text-label ml-0.5 px-1.5 py-0.5"
               speed={playbackRate}
@@ -550,7 +550,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
           </div>
 
           <div className="gap-step-sm flex items-center">
-            <SkipButton segundos={-15} className="p-2" size="w-6 h-6" onSaltar={skip} />
+            <SkipButton seconds={-15} className="p-2" size="w-6 h-6" onSkip={skip} />
             <PlayButton
               className="rounded-pill px-step-lg gap-step-xs text-ui flex items-center py-2 font-medium"
               size="w-4 h-4"
@@ -559,7 +559,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
               onToggle={togglePlay}
               {...playState}
             />
-            <SkipButton segundos={15} className="p-2" size="w-6 h-6" onSaltar={skip} />
+            <SkipButton seconds={15} className="p-2" size="w-6 h-6" onSkip={skip} />
 
             <div className="gap-step-sm ml-auto flex items-center">
               <SpeedButton
@@ -570,8 +570,8 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
               <Volume
                 size="w-4 h-4"
                 width="w-16"
-                silenciado={isMuted}
-                volumen={volume}
+                muted={isMuted}
+                volume={volume}
                 onMute={toggleMute}
                 onVolumeChange={handleVolumeChange}
               />
@@ -602,7 +602,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
-              <SkipButton segundos={-15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
+              <SkipButton seconds={-15} className="p-1.5" size="w-5 h-5" onSkip={skip} />
               <PlayButton
                 // 34px, from the document. It is control size, not scale size.
                 className="rounded-pill flex size-[34px] items-center justify-center"
@@ -611,7 +611,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
                 onToggle={togglePlay}
                 {...playState}
               />
-              <SkipButton segundos={15} className="p-1.5" size="w-5 h-5" onSaltar={skip} />
+              <SkipButton seconds={15} className="p-1.5" size="w-5 h-5" onSkip={skip} />
             </div>
             <SpeedButton
               className="text-label px-1.5 py-0.5"
@@ -646,7 +646,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
       <div className="flex items-center justify-between">
         <div className="gap-step-xs flex items-center">
-          <SkipButton segundos={-15} className="p-2" size="w-5 h-5" onSaltar={skip} />
+          <SkipButton seconds={-15} className="p-2" size="w-5 h-5" onSkip={skip} />
           <PlayButton
             // 48px, from the document.
             className="rounded-pill flex size-12 items-center justify-center"
@@ -655,7 +655,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
             onToggle={togglePlay}
             {...playState}
           />
-          <SkipButton segundos={15} className="p-2" size="w-5 h-5" onSaltar={skip} />
+          <SkipButton seconds={15} className="p-2" size="w-5 h-5" onSkip={skip} />
         </div>
 
         <div className="gap-step-sm flex items-center">
@@ -667,8 +667,8 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
           <Volume
             size="w-5 h-5"
             width="w-20"
-            silenciado={isMuted}
-            volumen={volume}
+            muted={isMuted}
+            volume={volume}
             onMute={toggleMute}
             onVolumeChange={handleVolumeChange}
           />

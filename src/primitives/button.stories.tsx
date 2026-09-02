@@ -49,7 +49,7 @@ export const Variants: Story = {
         be remembered.
       </Note>
       <Note>
-        Six with the two danger ones, which arrived in 0.7.0 the way the rule that
+        Six with the two danger ones, which arrived in 0.6.0 the way the rule that
         kept them out said they would: into the document first and in here
         second. They are listed apart because they are not interchangeable with
         these four — see the «two danger variants» story.

@@ -140,7 +140,7 @@ import them at all: it fails at build time with
 You do not add anything: importing `Button` from a Server Component works, and
 the boundary is already where it belongs. What you should NOT do is wrap the
 import in an adapter of your own marked `"use client"` — that was the workaround
-before 0.7.0 and it pulled 272 KB of client chunk in for components that never
+before 0.6.0 and it pulled 272 KB of client chunk in for components that never
 needed it.
 
 The five portable subpaths do NOT carry the directive, and that is the half that

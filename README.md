@@ -86,18 +86,19 @@ the sheet in `src/styles/` it goes up two levels and not one. The blog's E2E
 tests caught it, not the build, and until 0.3.0 this was only written in
 `llms.txt` — the file an agent reads and a person does not.
 
-> **Coming from 0.6.x.** Three things break, and all three break loudly:
-> `themeScript` is a function, the root ships `"use client"`, and
-> `TalkCardProps` is a union. The migration — including what each project can
-> now **delete** — is in
-> [`docs/migration-0.7.md`](docs/migration-0.7.md).
-
-> **Coming from 0.5.x or earlier.** The whole public API moved to English in
-> 0.6.0: `./tema` is now `./theme`, `scriptTema` is `themeScript`, `Red` is
-> `SocialLink`, the `degradado-hero` utility is `gradient-hero`, and `Hero`'s
-> `variant="cabecera"` is `variant="header"`. The full rename table and the
-> migration pattern are in
-> [`docs/migration-0.6.md`](docs/migration-0.6.md).
+> **Coming from 0.5.x.** Two unrelated things landed in 0.6.0, and they ship
+> together because in `0.x` a breaking change bumps the minor.
+>
+> The whole public API moved to English: `./tema` is now `./theme`, `scriptTema`
+> is `themeScript`, `Red` is `SocialLink`, the `degradado-hero` utility is
+> `gradient-hero`, and `Hero`'s `variant="cabecera"` is `variant="header"`.
+>
+> And three things break on the API side: `themeScript` is a function, the root
+> ships `"use client"`, and `TalkCardProps` is a union. All three break loudly —
+> the type checker catches every one at the call site.
+>
+> Both halves, in order, with the full rename table and what each project can now
+> **delete**: [`docs/migration-0.6.md`](docs/migration-0.6.md).
 
 > **Coming from 0.4.0 or earlier.** `Toast`, `ToastProvider`, `ToastViewport`,
 > `ToastTitle` and `ToastDescription` stopped being public API in 0.5.0: you use
@@ -868,7 +869,7 @@ stays on its default, which is off.
 
 ### The danger variant, and where it does not go
 
-`Button` has `destructive` and `destructiveOutline` since 0.7.0. For four
+`Button` has `destructive` and `destructiveOutline` since 0.6.0. For four
 versions it had neither, on an argument that is still half right: inside an
 `AlertDialog` the confirm button is **not** red, because a title explains what is
 about to happen, focus starts on cancel and clicking outside does not close it.
@@ -918,7 +919,7 @@ page's primary action stays at 42. See `docs/decisions.md` § 22.
 <script is:inline set:html={themeScript({ base: 'dark' })} />
 ```
 
-Until 0.7.0 `themeScript` was a fixed string and resolved stored choice →
+Until 0.6.0 `themeScript` was a fixed string and resolved stored choice →
 `prefers-color-scheme` → dark. That is the right default for a library, and it
 was wrong for all five of these projects: they are dark BY DECISION, and
 `eduardoalvarez.dev`'s own script said so out loud — «dark is the brand's PRIMARY

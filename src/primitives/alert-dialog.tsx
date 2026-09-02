@@ -20,7 +20,7 @@ import { buttonVariants } from '../variants/button.ts';
  *   3. It does NOT close on outside click and has no X. Leaving a confirmation
  *      is a decision, not a slip: you have to say no.
  *
- * The confirm button is NOT red, and since 0.7.0 that is a choice and no longer
+ * The confirm button is NOT red, and since 0.6.0 that is a choice and no longer
  * the absence of an option: `Button` has `destructive`, and here it is still not
  * used. Everything above already carries the gravity — a title that says what is
  * about to happen, focus on cancel, no closing by clicking outside — and a red

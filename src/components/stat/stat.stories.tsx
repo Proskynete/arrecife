@@ -20,7 +20,7 @@ export const Metrics: Story = {
       <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
         <Stat value="12" label="aplicaciones" />
         <Stat value="4h 20m" label="duración" />
-        <Stat value="0" label="design system" tone="alerta" />
+        <Stat value="0" label="design system" tone="alert" />
       </div>
       <Note>
         The rule is not one of style, it is one of semantics: biolume for the
@@ -55,7 +55,7 @@ export const WithIconAndDeck: Story = {
         icon={<Ellipsis />}
         label="design systems"
         value="0"
-        tone="alerta"
+        tone="alert"
         description="Cada aplicación resuelve sus botones por su cuenta."
       />
       <Stat

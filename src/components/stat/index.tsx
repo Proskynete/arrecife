@@ -25,8 +25,8 @@ export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   value: ReactNode;
   /** What is being counted. It goes in mono small caps. */
   label: ReactNode;
-  /** `alerta` only when the number IS the problem. */
-  tone?: 'neutral' | 'alerta';
+  /** `alert` only when the number IS the problem. */
+  tone?: 'neutral' | 'alert';
   /** With `progress`, the metric reads as progress and adds the bar. */
   progress?: number | undefined;
   /**
@@ -63,7 +63,7 @@ export function Stat({
         {label}
       </Text>
 
-      <Text variant="stat" as="p" tone={tone === 'alerta' ? 'warm' : 'accent'}>
+      <Text variant="stat" as="p" tone={tone === 'alert' ? 'warm' : 'accent'}>
         {value}
       </Text>
 
@@ -76,7 +76,7 @@ export function Stat({
       {typeof progress === 'number' ? (
         <Progress
           value={progress}
-          tone={tone === 'alerta' ? 'warm' : 'accent'}
+          tone={tone === 'alert' ? 'warm' : 'accent'}
           label={`${label}: ${progress}%`}
           className="mt-step-sm"
         />

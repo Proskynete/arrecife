@@ -1327,7 +1327,7 @@ A large metric: the number in the `stat` scale and its name underneath.
 | `icon` | `ReactNode` |  |  | Glyph beside the title, at 1em. It inherits `currentColor`, so it follows the title's tone and does not have to be tinted separately. |
 | `label` | `ReactNode` | yes |  | What is being counted. It goes in mono small caps. |
 | `progress` | `number` |  |  | With `progress`, the metric reads as progress and adds the bar. |
-| `tone` | `"neutral" \| "alerta"` |  | `neutral` | `alerta` only when the number IS the problem. |
+| `tone` | `"neutral" \| "alert"` |  | `neutral` | `alert` only when the number IS the problem. |
 | `value` | `ReactNode` | yes |  | The number, already formatted. The library imposes no locale. |
 
 ### TalkCard

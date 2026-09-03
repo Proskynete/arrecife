@@ -298,6 +298,16 @@ implementation. See `docs/decisions.md` § 28.
 locale and computes no percentage. `spark` is a `ReactNode` and the library ships
 no sparkline — pass your own, exactly like `icon`.
 
+**Do not colour the number.** A neutral `Stat` renders its value in primary ink,
+and biolume goes on the icon badge and the sparkline instead: three accents in
+one card and the figure stops being the loudest thing in it. `alert` and
+`achievement` DO paint the number sand, which is how «this number is not just a
+number» is said. See `docs/decisions.md` § 31.
+
+**`icon` is a badge in the corner opposite the title**, in a circle tinted at
+10 % of the tone. You pass the glyph; the circle, the tint and the size are the
+component's.
+
 ### The two shapes of `EmptyState`
 
 ```tsx

@@ -298,6 +298,16 @@ implementation. See `docs/decisions.md` § 28.
 locale and computes no percentage. `spark` is a `ReactNode` and the library ships
 no sparkline — pass your own, exactly like `icon`.
 
+**Do not colour the number.** A neutral `Stat` renders its value in primary ink,
+and biolume goes on the icon badge and the sparkline instead: three accents in
+one card and the figure stops being the loudest thing in it. `alert` and
+`achievement` DO paint the number sand, which is how «this number is not just a
+number» is said. See `docs/decisions.md` § 31.
+
+**`icon` is a badge in the corner opposite the title**, in a circle tinted at
+10 % of the tone. You pass the glyph; the circle, the tint and the size are the
+component's.
+
 ### The two shapes of `EmptyState`
 
 ```tsx
@@ -1417,7 +1427,7 @@ A large metric: the number in the `stat` scale and its name underneath.
 | --- | --- | --- | --- | --- |
 | `delta` | `StatDelta` |  |  | How the number moved since last time. |
 | `description` | `ReactNode` |  |  | The standfirst: the nuance the number alone does not give. «12 aplicaciones» does not say whether that is a lot, and this is where that gets said. |
-| `icon` | `ReactNode` |  |  | Glyph beside the title, at 1em. It inherits `currentColor`, so it follows the title's tone and does not have to be tinted separately. |
+| `icon` | `ReactNode` |  |  | Glyph in a tinted circle, in the corner opposite the title. At 1em, and it inherits `currentColor` from the badge, so it takes the tone without being tinted separately. |
 | `label` | `ReactNode` | yes |  | What is being counted. It goes in mono small caps. |
 | `progress` | `number` |  |  | With `progress`, the metric reads as progress and adds the bar. |
 | `spark` | `ReactNode` |  |  | The number's shape over time, under it. A `ReactNode` and not a data prop: a sparkline needs a charting library, and this component lives in the barrel that four projects install. The one project that draws them passes its own, exactly like `icon`. |

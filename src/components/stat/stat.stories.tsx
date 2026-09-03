@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { CurrencyDollar, ShoppingCart, Users } from '@phosphor-icons/react';
+
 import { Block, Note } from '../../../stories/utils.tsx';
 import { ArrowUpRight, Check, Ellipsis } from '../../lib/glyphs.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { Stat } from './index.tsx';
 
 /**
@@ -226,6 +229,100 @@ export const Tones: Story = {
         nearly identical greens, which is the reason the chart palette skips
         `success` too — and the manual already assigns sand to celebration in
         `cursos`.
+      </Note>
+    </>
+  ),
+};
+
+export const Panel: Story = {
+  name: 'The KPI row, as it goes in the panel',
+  render: () => (
+    <>
+      <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+        <Stat
+          icon={<Icon as={CurrencyDollar} />}
+          label="recaudado"
+          value="$1.284.000"
+          delta={{ value: '+$96.000 en 30d', direction: 'up' }}
+          spark={<Spark points={[4, 6, 5, 9, 8, 12, 15]} />}
+        />
+        <Stat
+          icon={<Icon as={ShoppingCart} />}
+          label="ventas"
+          value="248"
+          delta={{ value: '+18 en 30d', direction: 'up' }}
+          spark={<Spark points={[6, 5, 8, 7, 11, 10, 14]} />}
+        />
+        <Stat
+          icon={<Icon as={Users} />}
+          label="alumnos activos"
+          value="1.902"
+          delta={{ value: '−12 en 30d', direction: 'down' }}
+          spark={<Spark points={[15, 14, 16, 12, 11, 9, 8]} />}
+        />
+      </div>
+      <Note>
+        The icon is a badge in the corner opposite the title, not a glyph before
+        it. In a row of ten the eyebrow is a different length in every card, so an
+        inline icon puts the only coloured mark on a different x each time; pinned
+        to the corner it lands on a grid.
+      </Note>
+      <Note>
+        The circle is the tint pattern the system already has: `bg-accent/10` is a
+        SURFACE and the colour stays on the glyph, per `decisions.md` § 4b. A
+        glyph clears the 3:1 graphical threshold, where accent over its own tint
+        would not clear text's 4.5.
+      </Note>
+      <Note>
+        The sparkline is `mt-auto`, so it sits on the bottom edge of the padding
+        box in all three cards even though the second one has a shorter number. In
+        a grid the cards stretch to the tallest, and a line that floats wherever
+        the content ends turns a row into a sawtooth.
+      </Note>
+    </>
+  ),
+};
+
+export const NeutralIsNotBiolume: Story = {
+  name: 'Why a neutral number is ink and not biolume',
+  render: () => (
+    <>
+      <Block title="the number in biolume · three accents in one postcard">
+        <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+          <Stat
+            icon={<Icon as={CurrencyDollar} />}
+            label="recaudado"
+            value={<span className="text-accent">$1.284.000</span>}
+            delta={{ value: '+$96.000 en 30d', direction: 'up' }}
+            spark={<Spark points={[4, 6, 5, 9, 8, 12, 15]} />}
+          />
+        </div>
+      </Block>
+
+      <Block title="the number in ink · the badge and the line carry the tone">
+        <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+          <Stat
+            icon={<Icon as={CurrencyDollar} />}
+            label="recaudado"
+            value="$1.284.000"
+            delta={{ value: '+$96.000 en 30d', direction: 'up' }}
+            spark={<Spark points={[4, 6, 5, 9, 8, 12, 15]} />}
+          />
+        </div>
+      </Block>
+
+      <Note>
+        The document says «biolume para lo neutro». That was written for a card
+        with a number and a label in it. With a biolume badge and a biolume
+        sparkline, a biolume number is the third accent in a card the size of a
+        postcard, and the thing you came to read stops being the loudest thing in
+        it. See `decisions.md` § 31.
+      </Note>
+      <Note>
+        The rule that matters survives untouched: `alert` and `achievement` still
+        paint the NUMBER sand, so sand still means «this number is not just a
+        number». What moved is only the neutral case, which had no meaning to
+        carry.
       </Note>
     </>
   ),

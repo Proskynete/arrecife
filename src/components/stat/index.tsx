@@ -15,8 +15,8 @@ import { Text } from '../../primitives/typography.tsx';
  * about. That is why `tone` is not an open palette — there are two values and
  * they mean different things.
  *
- * The reading order is icon + title, the big number, and the standfirst below.
- * The number goes in the MIDDLE and not at the end on purpose: it is what people
+ * The reading order is title, the big number, and the standfirst below. The
+ * number goes in the MIDDLE and not at the end on purpose: it is what people
  * came to read, and a two-line standfirst between the title and the figure
  * buries it. The top says what it is about, the middle says how much, and the
  * bottom holds the nuance only someone who stops will read.
@@ -24,6 +24,21 @@ import { Text } from '../../primitives/typography.tsx';
  * `delta` and `spark` sit with the number and not with the standfirst, because
  * both are about the number: how it moved and what shape the movement had. The
  * order survives — top what, middle how much, bottom the nuance.
+ *
+ * THE ICON IS A BADGE IN THE OPPOSITE CORNER, not a glyph before the title, and
+ * the tone rides on it rather than on the number. In a panel of ten of these the
+ * eyebrow is the same length in none of them, so an inline icon puts the only
+ * coloured mark on a different x in every card; pinned to the corner it lands on
+ * a grid. The circle is the tint pattern the system already has — `bg-accent/10`
+ * as a surface and the colour on the GLYPH, per `docs/decisions.md` § 4b — and a
+ * glyph clears the 3:1 graphical threshold where text would not clear 4.5.
+ *
+ * WHICH IS WHY A NEUTRAL NUMBER IS PRIMARY INK AND NOT BIOLUME. With a biolume
+ * badge and a biolume sparkline, a biolume number is the third accent in a card
+ * the size of a postcard, and the thing you came to read stops being the loudest
+ * thing in it. `alert` and `achievement` DO still paint the number sand, so the
+ * document's rule survives exactly where it matters: sand when the number is not
+ * just a number. See `docs/decisions.md` § 31.
  */
 export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   /** The number, already formatted. The library imposes no locale. */
@@ -41,8 +56,9 @@ export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   /** With `progress`, the metric reads as progress and adds the bar. */
   progress?: number | undefined;
   /**
-   * Glyph beside the title, at 1em. It inherits `currentColor`, so it follows
-   * the title's tone and does not have to be tinted separately.
+   * Glyph in a tinted circle, in the corner opposite the title. At 1em, and it
+   * inherits `currentColor` from the badge, so it takes the tone without being
+   * tinted separately.
    */
   icon?: ReactNode;
   /**
@@ -99,17 +115,28 @@ export function Stat({
 
   return (
     <div className={cn(CARD_SURFACE, 'p-step-lg gap-step-xs flex flex-col', className)} {...props}>
-      <Text variant="eyebrow" tone="muted" as="p" className="gap-step-xs flex items-center">
+      <div className="gap-step-sm flex items-start justify-between">
+        <Text variant="eyebrow" tone="muted" as="p" className="min-w-0">
+          {label}
+        </Text>
+
         {icon ? (
           // `aria-hidden` is not needed: the system's glyphs already carry it.
-          // What IS needed is that it does not shrink next to a long title,
-          // because a squashed icon reads as a different icon.
-          <span className="shrink-0">{icon}</span>
+          // The circle is a SURFACE — the tint at 10 %, same as an alert's — and
+          // the colour stays on the glyph, which is § 4b and also what keeps it
+          // on the 3:1 graphical threshold instead of text's 4.5.
+          <span
+            className={cn(
+              'size-control-icon-sm text-ui flex shrink-0 items-center justify-center rounded-full',
+              tone === 'neutral' ? 'bg-accent/10 text-accent' : 'bg-warm/10 text-warm',
+            )}
+          >
+            {icon}
+          </span>
         ) : null}
-        {label}
-      </Text>
+      </div>
 
-      <Text variant="stat" as="p" tone={tone === 'neutral' ? 'accent' : 'warm'}>
+      <Text variant="stat" as="p" tone={tone === 'neutral' ? 'primary' : 'warm'}>
         {value}
       </Text>
 
@@ -120,8 +147,6 @@ export function Stat({
           {delta.value}
         </Text>
       ) : null}
-
-      {spark ? <div className="mt-step-xs">{spark}</div> : null}
 
       {description ? (
         <Text variant="ui" tone="secondary" as="p">
@@ -137,6 +162,13 @@ export function Stat({
           className="mt-step-sm"
         />
       ) : null}
+
+      {/*
+        Last, and `mt-auto` pins it to the bottom edge of the padding box. In a
+        grid the cards stretch to the tallest, and a sparkline that floats
+        wherever the standfirst happens to end turns ten of them into a sawtooth.
+      */}
+      {spark ? <div className="mt-auto pt-step-md">{spark}</div> : null}
     </div>
   );
 }

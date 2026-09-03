@@ -65,6 +65,7 @@ pnpm storybook        # generates the tokens and serves Storybook on 6006
 | `pnpm check:namespace`              | fails if a token stomps a Tailwind name                   |
 | `pnpm check:exports`                | verifies `dist/` holds what `exports` promises, that the portable subpaths bring no React, and that `"use client"` is on the client entries and only there |
 | `pnpm check:llms`                   | fails if `llms.txt` does not match the types              |
+| `pnpm check:copy`                   | fails if user-facing copy drifted into English            |
 | `pnpm check:release`                | validates the release-please configuration                |
 | `pnpm build:tokens`                 | regenerates `dist/tokens/theme.css`                       |
 | `pnpm build:llms`                   | regenerates `llms.txt`                                    |
@@ -135,13 +136,28 @@ Label in Name; `AudioPlayer`'s slider announced «Volume» surrounded by
 «Email electrónico», which is «correo electrónico» with half the phrase swapped;
 `EventCalendar` ended with `./borrar` and `./cancel` in the same row.
 
-**Nothing catches this.** `pnpm test` runs axe over every story, and axe checks
-that a control HAS an accessible name, not which language it is in.
-`label-content-name-mismatch` — the rule that would have caught the pagination
-one — is not among the rules it runs. So the test for whether a string may be
-translated is read, not run: **if a reader of a consuming site can see it or hear
-it, it stays in Spanish.** Identifiers, comments, JSDoc, story names and the
-`Note` blocks are documentation and go in English.
+The test for whether a string may be translated: **if a reader of a consuming
+site can see it or hear it, it stays in Spanish.** Identifiers, comments, JSDoc,
+story names and the `Note` blocks are documentation and go in English.
+
+`pnpm check:copy` now enforces the part of that a machine can see, and it runs in
+CI. It has two rules, both deliberately narrow:
+
+- **A Spanish string with an English word inside it.** «Esta página no exists»,
+  «ninguno con dueño declared», «Email electrónico». That mix is the shape the
+  damage takes and it is a mix nobody writes on purpose. Words spelled the same
+  in both languages — `color`, `error`, `no`, `con`, `sin` — are on neither list:
+  a word that belongs to both languages is evidence of neither.
+- **An accessible name that IS an English UI word.** `aria-label="Volume"` has no
+  Spanish left in it for the first rule to notice, so this one matches the whole
+  value against a short closed list — `volume`, `play`, `close`, `next`. None of
+  those words is also Spanish, so «Volumen», «Cerrar» and «Menú» pass untouched.
+
+It caught nineteen of the twenty-one. **The other two it cannot see**: `./cancel`
+next to `./borrar` is English with no Spanish inside it and no `aria-label` around
+it. The check is a net, not a proof — `pnpm test` will not catch this either,
+because axe checks that a control HAS an accessible name, not which language it
+is in.
 
 ## How a component is created
 
@@ -574,8 +590,9 @@ In order of how often they actually happen:
 10. Writing an identifier or a comment in Spanish. Since 0.6.0 the code is in
     English; only user-facing copy stays in Spanish.
 11. Translating user-facing copy into English while doing that. It is the same
-    mistake from the other side and it happened eight times in 0.6.0, `aria-label`
-    included. Nothing in CI catches it — see «The language of the code».
+    mistake from the other side and it happened twenty-one times in 0.6.0,
+    `aria-label` included. `pnpm check:copy` catches most of it now; it does not
+    catch all of it. See «The language of the code».
 12. Dropping a whole PR into a single commit because «it is all the same
     change». It happened on the 0.6.0 migration: 171 files in one commit, which
     is a diff nobody reads and a bisect that points at everything. See «One

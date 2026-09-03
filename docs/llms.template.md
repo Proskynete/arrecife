@@ -207,6 +207,27 @@ It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
 
+### `Stat`'s delta says direction, not judgement
+
+```tsx
+<Stat
+  label="alumnos"
+  value="1.284"
+  delta={{ value: '+12 esta semana', direction: 'up' }}
+/>
+```
+
+`direction` picks the arrow and **never the colour**. «+12 alumnos» and «+12
+errores» point the same way and mean opposite things, so whether a number is good
+news is `tone`'s job and yours: `neutral` for a datum, `alert` when the number IS
+the problem, `achievement` when it is the reward. `alert` and `achievement` paint
+the same sand on purpose — the API is the meaning, the colour is the
+implementation. See `docs/decisions.md` § 28.
+
+`delta.value` arrives already formatted, like `value`: the library imposes no
+locale and computes no percentage. `spark` is a `ReactNode` and the library ships
+no sparkline — pass your own, exactly like `icon`.
+
 ### The two shapes of `EmptyState`
 
 ```tsx

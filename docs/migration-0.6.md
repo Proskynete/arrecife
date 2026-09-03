@@ -443,6 +443,12 @@ them stops dying at prerender.
   `@theme inline { --color-accent: var(--accent); }`, which a shadcn project
   brings with it, repainted 88 classes inside the library's own components grey.
   See [`decisions.md`](decisions.md) § 33.
+- **`SidebarNav` collapses to a rail**, with `collapsed` + `onCollapsedChange`,
+  and takes a `user` slot at the bottom. The backlog had ruled the rail out
+  because the system had no navigation icons and a collapsed rail would have
+  shown each section's initial; that reason is gone. The toggle's chevron comes
+  from the library's own glyphs, so a project that installs no icon set still
+  gets the button. See [`decisions.md`](decisions.md) § 34.
 - **`SidebarGroup`**, plus `icon` on `SidebarItem` and `brand` on `SidebarNav`.
   Eleven flat items is where a sidebar stops being readable, and each group is a
   nested list named by its label so a screen reader gets «lista Ventas, 3

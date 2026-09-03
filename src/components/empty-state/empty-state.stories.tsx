@@ -87,7 +87,7 @@ export const WhereFacesGo: Story = {
       <Block title="404">
         <Stack>
           <EmptyState
-            expression="annoyed"
+            expression="confused"
             title="Esta página no existe"
             description="El enlace que seguiste apunta a algo que se movió o que nunca estuvo."
             action={<Button variant="tertiary">./volver_al_inicio →</Button>}
@@ -98,17 +98,17 @@ export const WhereFacesGo: Story = {
       <Block title="server error">
         <Stack>
           <EmptyState
-            expression="confused"
+            expression="annoyed"
             title="Algo se rompió de este lado"
             description="No es cosa tuya. Vuelve a intentar en un minuto."
           />
         </Stack>
       </Block>
 
-      <Block title="celebration">
+      <Block title="course completed">
         <Stack>
           <EmptyState
-            expression="hearts"
+            expression="shades"
             title="Terminaste el curso"
             description="El certificado te llega por correo en unos minutos."
           />
@@ -119,6 +119,12 @@ export const WhereFacesGo: Story = {
         The full contract: empty states, 404, server error, course progress,
         celebration, toast and the newsletter's «sin spam». Nowhere else — not the
         hero, not pricing, not services, not contact, not the CV.
+      </Note>
+      <Note>
+        The three faces are the ones `faceUsage` assigns — `confused` → 404,
+        `annoyed` → server error, `shades` → module or course completed. This
+        story used to show the first two swapped and `hearts` for the third, which
+        is the choice-by-eye the story above says the data exists to prevent.
       </Note>
     </>
   ),

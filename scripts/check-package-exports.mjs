@@ -72,6 +72,18 @@ for (const entry of pkg.files ?? []) {
 }
 
 /**
+ * `bin` too, and it is checked separately from `exports` because it fails in a
+ * different way: a missing `main` is an import error the moment somebody writes
+ * the import, and a missing `bin` is `npx arrecife` printing «command not found»
+ * to a person who is already looking for something that is silently broken.
+ */
+for (const [name, file] of Object.entries(pkg.bin ?? {})) {
+  if (!(await exists(file))) {
+    failures.push(`bin["${name}"] promises ${file} and it does not exist`);
+  }
+}
+
+/**
  * Every module specifier in the file, wherever it comes from: `import x from`,
  * `export … from`, `import "for-effect"` and `require()`.
  *

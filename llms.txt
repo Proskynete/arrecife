@@ -1323,11 +1323,13 @@ A large metric: the number in the `stat` scale and its name underneath.
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
+| `delta` | `StatDelta` |  |  | How the number moved since last time. |
 | `description` | `ReactNode` |  |  | The standfirst: the nuance the number alone does not give. «12 aplicaciones» does not say whether that is a lot, and this is where that gets said. |
 | `icon` | `ReactNode` |  |  | Glyph beside the title, at 1em. It inherits `currentColor`, so it follows the title's tone and does not have to be tinted separately. |
 | `label` | `ReactNode` | yes |  | What is being counted. It goes in mono small caps. |
 | `progress` | `number` |  |  | With `progress`, the metric reads as progress and adds the bar. |
-| `tone` | `"neutral" \| "alert"` |  | `neutral` | `alert` only when the number IS the problem. |
+| `spark` | `ReactNode` |  |  | The number's shape over time, under it. A `ReactNode` and not a data prop: a sparkline needs a charting library, and this component lives in the barrel that four projects install. The one project that draws them passes its own, exactly like `icon`. |
+| `tone` | `"neutral" \| "alert" \| "achievement"` |  | `neutral` | `alert` ONLY when the number is the problem, and `achievement` when it is the opposite — the diplomas issued, the modules finished. The two paint the same sand today and they are still two names: a system that names by meaning cannot make «this is bad» the only way to say «this stands out». See `docs/decisions.md` § 28. |
 | `value` | `ReactNode` | yes |  | The number, already formatted. The library imposes no locale. |
 
 ### TalkCard
@@ -1691,7 +1693,7 @@ Types (6): `ArticleData`, `BaseData`, `CourseData`, `DefaultData`, `SatoriNode`,
 | `toast` | `(message: ReactNode, options?: ToastOptions \| undefined): string` | Fires a notice. It returns its id, which is what you keep in order to close it by hand — the «guardando…» case that gets replaced when the request finishes. |
 | `useTheme` | `(): Theme` | The theme set right now, for a project that needs to branch in React — a different logo per mode, an image with no light version. |
 
-Types (60): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `SocialLink`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
+Types (61): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `SocialLink`, `StatDelta`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
 
 # Where to look if this is not enough
 

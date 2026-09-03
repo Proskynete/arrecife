@@ -329,13 +329,19 @@ A sixth has to land on one of those two, with the argument written in
 - **The library ships no icons**, and `src/lib/glyphs.tsx` is the minimum set the
   primitives need: inline, inheriting `currentColor`, measuring 1em, and not
   exported. It does not grow.
-  What the library DOES ship is how an icon is drawn. Since 0.6.0
+  What the library DOES ship is how an icon is drawn. Since 0.7.0
   `@phosphor-icons/react` is an optional peer dependency and `./icons` publishes
   `Icon`, which fixes the size at 1em and the weight at `regular` — 16 on a 256
   grid, which is 0.0625em against the document's 0.0667em. A project's icons are
   still the project's; what stopped being the project's is the line weight.
   `glyphs.tsx` itself is the known outlier at 0.109em. See `docs/decisions.md`
   § 29.
+- **An icon is not illustration.** Tiburoncín — the faces, the poses, the fin —
+  is the mascot, it lives in `src/brand/` and the manual doses it by surface: a
+  face only in an empty state, a confirmation, an error, course progress or a
+  celebration. An icon from `./icons` is functional vocabulary and belongs
+  wherever a control needs a label it cannot spell. Neither replaces the other in
+  either direction, and adopting an icon set changed nothing about the first.
 
 ### 6 · The stories are not optional
 
@@ -418,7 +424,7 @@ an invented one is rejected.
 The rule governing the list: **a published subpath in `exports` is a scope.** It
 is what `og` and `shiki` already did, it is why `theme`, `form` and `chart`
 joined them in 0.4.0 instead of being split between `tokens` and `components`,
-and it is why `social` and `icons` joined in 0.6.0. A new scope with no subpath
+and it is why `social` and `icons` joined in 0.7.0. A new scope with no subpath
 behind it does have to be discussed.
 
 Careful with one trap: the workflow validates the **PR title**, not the scopes of
@@ -592,7 +598,7 @@ In order of how often they actually happen:
 4. Putting a new glyph in `src/lib/glyphs.tsx` because a component wants one.
    That file is the primitives' minimum set and it does not grow: a component
    that needs an icon takes it as a prop, and the project draws it with `Icon`
-   from `./icons`. The ban on icon libraries was lifted in 0.6.0 — see
+   from `./icons`. The ban on icon libraries was lifted in 0.7.0 — see
    `docs/decisions.md` § 29 — and what replaced it is narrower, not looser:
    Phosphor is an OPTIONAL peer on its own subpath, so the two projects that use
    no icons still install nothing.

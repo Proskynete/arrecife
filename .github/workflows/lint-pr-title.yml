@@ -30,7 +30,7 @@ jobs:
           # `theme`, `form` and `chart` joined in 0.4.0 by the same criterion as
           # `og` and `shiki`: a published subpath in `exports` is a scope. It is
           # not that the list is opening up, it is that there are three more areas.
-          # `social` joined in 0.6.0 for the same reason, when the nine icons got
+          # `social` joined in 0.7.0 for the same reason, when the nine icons got
           # a subpath of their own so they could cross the RSC boundary, and
           # `icons` with it when the system adopted @phosphor-icons/react as an
           # optional peer on a subpath of its own.

@@ -88,6 +88,7 @@
     "check:tokens": "node scripts/check-tokens-purity.mjs",
     "check:namespace": "node scripts/check-tokens-namespace.mjs",
     "check:llms": "node scripts/build-llms.mjs --check",
+    "check:copy": "node scripts/check-copy-language.mjs",
     "check:exports": "node scripts/check-package-exports.mjs",
     "check:release": "node scripts/check-release-config.mjs",
     "typecheck": "tsc --noEmit",

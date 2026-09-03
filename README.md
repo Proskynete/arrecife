@@ -86,6 +86,49 @@ the sheet in `src/styles/` it goes up two levels and not one. The blog's E2E
 tests caught it, not the build, and until 0.3.0 this was only written in
 `llms.txt` — the file an agent reads and a person does not.
 
+### `npx arrecife` — the two things that fail without saying so
+
+```
+npx arrecife
+```
+
+It reads your stylesheets and checks the two failures that produce no error, both
+of which cost real hours in the migration:
+
+**The missing `@source`**, above. It also works out the path for you, counted
+from the sheet and not from the project root, which is the part that gets written
+wrong.
+
+**A token of yours redefining one of ours.** A project coming from shadcn brings
+`@theme inline { --color-accent: var(--accent); }`, and the two are not the same
+colour: shadcn's `--accent` is the hover **surface**, `#17303E`, and this
+library's is the brand turquoise, `#35D6C0`. The result was **88 classes inside
+the library's own components** painting grey — 28 `text-accent`, 26
+`outline-accent`, 15 `bg-accent`, 12 `border-accent`. Buttons, focus rings and
+badges came out the colour of a surface and it looked as though the migration had
+done nothing.
+
+```
+arrecife · 2 thing(s) that fail without saying so:
+
+  src/styles/globals.css
+    imports @eduardoalvarez/arrecife/tokens/theme.css and has no @source.
+    Every class the components emit is being purged — silently. Add:
+
+      @source "../../node_modules/@eduardoalvarez/arrecife/dist";
+
+  src/styles/globals.css
+    redefines --color-accent, which @eduardoalvarez/arrecife owns.
+      yours:    var(--accent)   ← points at another property, so it wins silently
+      arrecife: #35D6C0
+```
+
+Five names collide with shadcn's — `background`, `border`, `warm`, `warm-hover`
+and `accent`. Four are harmless because both sides happen to agree on the value,
+so the command reports the value on each side and only fails on the ones that
+differ. A collision that agrees is worth knowing about and is not worth failing
+over.
+
 > **Coming from 0.5.x.** Two unrelated things landed in 0.6.0, and they ship
 > together because in `0.x` a breaking change bumps the minor.
 >

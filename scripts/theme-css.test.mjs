@@ -122,6 +122,8 @@ describe('theme.css over Tailwind v4', () => {
       'size-control-icon-sm',
       'h-nav',
       'h-nav-compact',
+      'w-sidebar',
+      'w-sidebar-rail',
       'max-w-content',
       'max-w-measure',
       'rounded-card',
@@ -138,6 +140,10 @@ describe('theme.css over Tailwind v4', () => {
     // because the `size` group is written line by line and the line was missing.
     // `h-nav-compact` then resolved to nothing and the bar silently kept its 64.
     expect(rule(css, 'h-nav-compact')).toBe('height: var(--spacing-nav-compact);');
+    // The collapsible sidebar switches between these two, so a `w-*` that
+    // resolves to nothing is a rail the width of its content.
+    expect(rule(css, 'w-sidebar')).toBe('width: var(--spacing-sidebar);');
+    expect(rule(css, 'w-sidebar-rail')).toBe('width: var(--spacing-sidebar-rail);');
     expect(rule(css, 'max-w-content')).toBe('max-width: var(--container-content);');
     expect(rule(css, 'max-w-measure')).toBe('max-width: var(--container-measure);');
     expect(rule(css, 'rounded-card')).toBe('border-radius: var(--radius-card);');

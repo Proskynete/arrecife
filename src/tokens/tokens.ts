@@ -285,6 +285,19 @@ export const size = {
    * `docs/decisions.md` § 30.
    */
   navCompact: 56,
+  /**
+   * The admin sidebar, and the rail it collapses to.
+   *
+   * They are tokens and not the consumer's `w-*` because a collapsible sidebar
+   * has to know BOTH: the layout beside it reserves one of the two, and two
+   * numbers written by hand in two files drift the first time one of them moves.
+   * A sidebar that never collapses is still just a box the layout sizes.
+   *
+   * 56 is the rail: `navCompact`'s height, so a panel's bar and its rail meet in
+   * a square corner instead of a step.
+   */
+  sidebar: 256,
+  sidebarRail: 56,
   /** Reading column width. */
   content: 760,
   /** Maximum page width. */

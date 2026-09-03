@@ -54,6 +54,11 @@
       "import": "./dist/social/index.js",
       "require": "./dist/social/index.cjs"
     },
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js",
+      "require": "./dist/icons/index.cjs"
+    },
     "./og": {
       "types": "./dist/og/index.d.ts",
       "import": "./dist/og/index.js",
@@ -103,12 +108,16 @@
     "test:light": "STORYBOOK_THEME=light vitest run --project storybook"
   },
   "peerDependencies": {
+    "@phosphor-icons/react": "^2.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.0.0",
     "recharts": "^3.0.0"
   },
   "peerDependenciesMeta": {
+    "@phosphor-icons/react": {
+      "optional": true
+    },
     "react-hook-form": {
       "optional": true
     },
@@ -118,6 +127,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@phosphor-icons/react": "^2.1.10",
     "@storybook/addon-a11y": "^10.5.10",
     "@storybook/addon-docs": "^10.5.10",
     "@storybook/addon-themes": "^10.5.10",

@@ -40,6 +40,7 @@ const ENTRIES = [
   { subpath: './variants', file: 'src/variants/index.ts' },
   { subpath: './brand', file: 'src/brand/index.ts' },
   { subpath: './social', file: 'src/social/index.tsx' },
+  { subpath: './icons', file: 'src/icons/index.tsx' },
   { subpath: './og', file: 'src/og/index.ts' },
   { subpath: './shiki', file: 'src/shiki/index.ts' },
   { subpath: './form', file: 'src/form/index.tsx' },
@@ -79,6 +80,12 @@ const SECTIONS = [
     dir: 'src/social/',
     file: 'src/social/index.tsx',
     entry: '`@eduardoalvarez/arrecife/social` · or grouped as `social` from the root',
+  },
+  {
+    title: 'Icons',
+    dir: 'src/icons/',
+    file: 'src/icons/index.tsx',
+    entry: '`@eduardoalvarez/arrecife/icons` · requires `@phosphor-icons/react`',
   },
   {
     title: 'Forms',

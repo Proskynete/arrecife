@@ -21,6 +21,7 @@ export default defineConfig({
     'variants/index': 'src/variants/index.ts',
     'brand/index': 'src/brand/index.ts',
     'social/index': 'src/social/index.tsx',
+    'icons/index': 'src/icons/index.tsx',
     'og/index': 'src/og/index.ts',
     'shiki/index': 'src/shiki/index.ts',
     'form/index': 'src/form/index.tsx',
@@ -35,9 +36,14 @@ export default defineConfig({
   // to debug the library has all of it in the repo, with its history.
   sourcemap: false,
   target: 'es2022',
-  // The last two are OPTIONAL peer dependencies: only the project importing
-  // `./form` or `./chart` installs them. They are here because in this repo they
-  // are devDependencies — needed to compile and for the stories — and without
-  // this line tsup would bundle them into what gets published.
-  external: ['react', 'react-dom', 'react-hook-form', 'recharts'],
+  // The last three are OPTIONAL peer dependencies: only the project importing
+  // `./icons`, `./form` or `./chart` installs them. They are here because in this
+  // repo they are devDependencies — needed to compile and for the stories — and
+  // without this line tsup would bundle them into what gets published.
+  //
+  // `@phosphor-icons/react` reaches `./icons` as a TYPE only, so nothing of it survives
+  // into `dist/`. It is listed anyway: the day the wrapper needs a value from it,
+  // the line is already right, and a bundled copy of an icon set is not a
+  // mistake you want to find in a tarball.
+  external: ['react', 'react-dom', '@phosphor-icons/react', 'react-hook-form', 'recharts'],
 });

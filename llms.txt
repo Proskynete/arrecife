@@ -41,7 +41,7 @@ Radix, `clsx`, `tailwind-merge`, `class-variance-authority`, `date-fns` and
 `react-day-picker` come as dependencies of the library. You do not need to
 install or declare them.
 
-**It ships no `lucide-react` and no icon library.** The glyphs the components
+**It ships no icon set.** The glyphs the components
 need are inline, inherit `currentColor` and measure 1em.
 
 ## Tailwind configuration
@@ -117,6 +117,7 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/shiki` | **no** | — | The syntax highlighting theme |
 | `@eduardoalvarez/arrecife/brand` | yes | — | Logo, isotype and mascot as components |
 | `@eduardoalvarez/arrecife/social` | yes, on the server only | — | The nine social icons, loose. No `"use client"` |
+| `@eduardoalvarez/arrecife/icons` | yes | `@phosphor-icons/react` | `Icon`, which draws a Phosphor icon at the system's size and weight |
 | `@eduardoalvarez/arrecife/form` | yes | `react-hook-form` | The form layer: labels, errors and `aria-*` |
 | `@eduardoalvarez/arrecife/chart` | yes | `recharts` | The chart chassis and the series palette |
 | `@eduardoalvarez/arrecife/assets/*` | — | — | The brand PNGs |
@@ -125,10 +126,11 @@ Importing the root from a build script to get one token is the mistake the
 subpaths exist to prevent: it drags all of React into a worker that never mounts
 it.
 
-`./form` and `./chart` sit outside the root for the symmetric reason: if they
-hung off the main index, the projects that draw no charts and use no React Hook
-Form would have to install those dependencies anyway so their bundler could
-resolve an import they never execute.
+`./form`, `./chart` and `./icons` sit outside the root for the symmetric reason:
+if they hung off the main index, the projects that draw no charts, use no React
+Hook Form and need no icons would have to install those dependencies anyway so
+their bundler could resolve an import they never execute. Two of the five consume
+zero icons.
 
 ### Next, Server Components and `"use client"`
 
@@ -206,6 +208,46 @@ does not want the OS overruling that.
 It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
+
+### Icons are yours, the way they are drawn is not
+
+The library ships no icon set and `lib/glyphs.tsx` is not exported: it is the
+minimum set the primitives need and it does not grow. What the library does ship
+is the drawing.
+
+```tsx
+import { GraduationCap, Trash } from '@phosphor-icons/react';
+import { Icon } from '@eduardoalvarez/arrecife/icons';
+
+// 1em and weight `regular`, which is the stroke the identity document names
+<Icon as={GraduationCap} />
+
+// Inside a control with no text, the name goes on the CONTROL
+<Button size="icon-sm" variant="secondary" aria-label="Borrar la fila">
+  <Icon as={Trash} />
+</Button>
+
+// Alone and meaning something on its own, it gets a name
+<Icon as={Trophy} label="Curso completado" />
+```
+
+**Do not size them by hand.** `size-4`, `size-3.5`, `size-6` scattered through a
+codebase is what this replaces: at 1em the icon takes the size of the text it
+sits in — 13px beside `text-label`, 15px beside `text-ui` — and nobody picks a
+number. **Do not change the weight either.** Phosphor bakes the weight into the
+path, and `regular` is 16 on a 256 grid = 0.0625em, against the document's 1.6 on
+a 24 grid = 0.0667em. Six per cent apart, which is no pixel on any screen.
+
+`@phosphor-icons/react` is an **optional** peer dependency. If your project uses
+no icons you install nothing; two of the five do exactly that.
+
+**In Next, import from `@phosphor-icons/react/ssr` inside a Server Component.**
+Phosphor's default build reads `IconContext` through `useContext`, and a hook in
+a Server Component throws. It ships no `"use client"` to stop you, so the failure
+arrives at render rather than at build. The `/ssr` entry is the same icons
+without the context read, and `Icon` works with either.
+
+See `docs/decisions.md` § 29.
 
 ### `Stat`'s delta says direction, not judgement
 
@@ -1493,6 +1535,23 @@ The newsletter. It plays the same role as `Rss` — a way to follow, not a socia
 
 - No own props: it passes through those of the element or primitive it wraps.
 
+## Icons
+
+Imported from `@eduardoalvarez/arrecife/icons` · requires `@phosphor-icons/react`. 1 exports.
+
+### Icon
+
+Source: `src/icons/index.tsx`
+
+The system adopts `@phosphor-icons/react`, and this is the whole of what «adopts» means: an optional peer dependency, and one place that fixes what a call site was getting wrong on its own.
+
+- Extends: `Omit<PhosphorIconProps, 'size' \| 'ref'>`
+
+| prop | type | req. | default | what it does |
+| --- | --- | --- | --- | --- |
+| `as` | `Icon` | yes |  | The Phosphor icon itself, passed as a component: `<Icon as={Books} />`. |
+| `label` | `string` |  |  | The accessible name. WITHOUT it the icon is decorative and gets `aria-hidden`, which is the right default: most icons sit beside their own label and announcing them twice is noise. |
+
 ## Forms
 
 Imported from `@eduardoalvarez/arrecife/form` · requires `react-hook-form`. 7 exports.
@@ -1668,6 +1727,14 @@ Types (2): `Theme`, `ThemeOptions`.
 | `poses` | `{ readonly desk: "pose-desk.png"; readonly 'laptop-coffee': "pose-laptop-coffee.png"; readonly peek: "pose-peek.png"; readonly surf: "pose-surf.png"; }` | Full-body poses. |
 
 Types (8): `Background`, `Face`, `Fin`, `IsotypeProps`, `LogoProps`, `MascotFaceProps`, `MascotProps`, `Pose`.
+
+### `@eduardoalvarez/arrecife/icons`
+
+| export | type | what it is |
+| --- | --- | --- |
+| `ICON_WEIGHT` | `"light" \| "fill" \| "thin" \| "regular" \| "bold" \| "duotone"` | Phosphor's own name for the system's line. It is not a default to override lightly. |
+
+Types (1): `IconProps`.
 
 ### `@eduardoalvarez/arrecife/shiki`
 

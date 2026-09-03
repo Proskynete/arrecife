@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
+import { ChevronDown, ChevronUp, Minus } from '../../lib/glyphs.tsx';
 import { cn } from '../../lib/cn.ts';
 import { CARD_SURFACE } from '../../variants/card.ts';
 import { Progress } from '../../primitives/progress.tsx';
@@ -19,14 +20,24 @@ import { Text } from '../../primitives/typography.tsx';
  * came to read, and a two-line standfirst between the title and the figure
  * buries it. The top says what it is about, the middle says how much, and the
  * bottom holds the nuance only someone who stops will read.
+ *
+ * `delta` and `spark` sit with the number and not with the standfirst, because
+ * both are about the number: how it moved and what shape the movement had. The
+ * order survives — top what, middle how much, bottom the nuance.
  */
 export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   /** The number, already formatted. The library imposes no locale. */
   value: ReactNode;
   /** What is being counted. It goes in mono small caps. */
   label: ReactNode;
-  /** `alert` only when the number IS the problem. */
-  tone?: 'neutral' | 'alert';
+  /**
+   * `alert` ONLY when the number is the problem, and `achievement` when it is
+   * the opposite — the diplomas issued, the modules finished. The two paint the
+   * same sand today and they are still two names: a system that names by meaning
+   * cannot make «this is bad» the only way to say «this stands out». See
+   * `docs/decisions.md` § 28.
+   */
+  tone?: 'neutral' | 'alert' | 'achievement';
   /** With `progress`, the metric reads as progress and adds the bar. */
   progress?: number | undefined;
   /**
@@ -39,7 +50,38 @@ export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
    * does not say whether that is a lot, and this is where that gets said.
    */
   description?: ReactNode;
+  /** How the number moved since last time. */
+  delta?: StatDelta | undefined;
+  /**
+   * The number's shape over time, under it. A `ReactNode` and not a data prop:
+   * a sparkline needs a charting library, and this component lives in the barrel
+   * that four projects install. The one project that draws them passes its own,
+   * exactly like `icon`.
+   */
+  spark?: ReactNode;
 };
+
+export type StatDelta = {
+  /**
+   * Already formatted — «+12 esta semana», «↑8 %». The library imposes no
+   * locale, same as `value`.
+   */
+  value: ReactNode;
+  /**
+   * Which way it moved. It picks the GLYPH and never the colour, because a rise
+   * is not automatically good: «+12 alumnos» and «+12 errores» point the same
+   * way and mean opposite things. Whether the number matters is `tone`'s job,
+   * and it is a decision the call site has already made.
+   */
+  direction: 'up' | 'down' | 'flat';
+};
+
+/** The arrow, and the word a screen reader hears in its place. */
+const DELTA = {
+  up: { glyph: ChevronUp, label: 'sube' },
+  down: { glyph: ChevronDown, label: 'baja' },
+  flat: { glyph: Minus, label: 'sin cambio' },
+} as const;
 
 export function Stat({
   value,
@@ -48,9 +90,13 @@ export function Stat({
   progress,
   icon,
   description,
+  delta,
+  spark,
   className,
   ...props
 }: StatProps) {
+  const DeltaGlyph = delta ? DELTA[delta.direction].glyph : null;
+
   return (
     <div className={cn(CARD_SURFACE, 'p-step-lg gap-step-xs flex flex-col', className)} {...props}>
       <Text variant="eyebrow" tone="muted" as="p" className="gap-step-xs flex items-center">
@@ -63,9 +109,19 @@ export function Stat({
         {label}
       </Text>
 
-      <Text variant="stat" as="p" tone={tone === 'alert' ? 'warm' : 'accent'}>
+      <Text variant="stat" as="p" tone={tone === 'neutral' ? 'accent' : 'warm'}>
         {value}
       </Text>
+
+      {delta && DeltaGlyph ? (
+        <Text variant="label" tone="secondary" as="p" className="gap-step-xs flex items-center">
+          <span className="sr-only">{DELTA[delta.direction].label} </span>
+          <DeltaGlyph className="shrink-0" />
+          {delta.value}
+        </Text>
+      ) : null}
+
+      {spark ? <div className="mt-step-xs">{spark}</div> : null}
 
       {description ? (
         <Text variant="ui" tone="secondary" as="p">
@@ -76,7 +132,7 @@ export function Stat({
       {typeof progress === 'number' ? (
         <Progress
           value={progress}
-          tone={tone === 'alert' ? 'warm' : 'accent'}
+          tone={tone === 'neutral' ? 'accent' : 'warm'}
           label={`${label}: ${progress}%`}
           className="mt-step-sm"
         />

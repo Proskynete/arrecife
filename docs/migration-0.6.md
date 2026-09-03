@@ -8,6 +8,11 @@ version and not two.
 
 **Do the rename first.** The second half assumes the English names.
 
+> **Coming from 0.6.0, not to it?** The version after this one is bigger than it
+> looks — a second published subpath, an adopted icon set, three components with
+> new shapes and a command that catches two failures that produce no error. It
+> has its own guide: [`migration-0.7.md`](migration-0.7.md).
+
 ---
 
 ## Part one · the library speaks English
@@ -231,7 +236,7 @@ took under an hour on the largest consumer.
 
 ## Part two · the API changes
 
-### The four breaking changes
+### The three breaking changes
 
 #### 1 · `themeScript` is a function
 
@@ -311,26 +316,6 @@ Only code that spreads a props object typed as `TalkCardProps` and then adds
 `href` conditionally needs narrowing. Every call site that passes `href` and
 nothing else is unchanged.
 
-#### 4 · `Stat`'s `tone="alerta"` is `tone="alert"`
-
-```diff
-- <Stat value="0" label="design systems" tone="alerta" />
-+ <Stat value="0" label="design systems" tone="alert" />
-```
-
-The last public API value still in Spanish, and the only one `llms.txt` was
-publishing — which meant an agent reading the document from a consuming project
-wrote Spanish into a library that had decided it would not have any.
-
-Nothing else moves: same colour, same rule, same `neutral` default. `tsc` points
-at every call site, and there is nowhere for it to hide, because `tone` is not a
-string a project computes.
-
-While you are there, there is now a **third** value and it breaks nothing:
-`tone="achievement"`, for the number that is the opposite of a problem — the
-diplomas issued, the modules finished. It paints the same sand as `alert` on
-purpose; see [`decisions.md`](decisions.md) § 28.
-
 ---
 
 ### What you can delete
@@ -343,7 +328,6 @@ project:
 | `cursos` | The `"use client"` adapters around `Button` and `Badge`, and the 272 KB with them |
 | `links` | The copied class vocabulary in `LinkRow.astro` and `Footer.astro`, and `scripts/check-replica-drift.mjs` with it |
 | `eduardoalvarez.dev` | `public/theme.js`, the hand-drawn bell, and the four `NewsletterForm` workarounds |
-| `blog-content-manager` | `src/components/ui/brand-icons.tsx`, the `"use client"` wrapper around two `<svg>` |
 
 The four workarounds, specifically:
 
@@ -376,22 +360,6 @@ And the bell:
 + // <social.Newsletter />
 ```
 
-And `brand-icons.tsx`, which existed only because a namespace cannot cross the
-RSC boundary — the wrapper is what put the property access back on the client
-side. `./social` removes the need for it:
-
-```diff
-- 'use client';
-- import { social } from '@eduardoalvarez/arrecife';
-- export const LinkedIn = (p) => <social.LinkedIn {...p} />;
-- export const Instagram = (p) => <social.Instagram {...p} />;
-+ // Nothing. Import them where they are used:
-+ import { LinkedIn, Instagram } from '@eduardoalvarez/arrecife/social';
-```
-
-Two `<svg>` stop being client components, and the Server Component that renders
-them stops dying at prerender.
-
 ---
 
 ### What is new and breaks nothing
@@ -413,83 +381,6 @@ them stops dying at prerender.
 - **`TalkCard`'s `resources`**, **`NewsletterForm`'s `aside`**,
   **`resetOnSuccess`**, **`onFieldChange`** and **`fieldErrors`**.
 - **`social.Newsletter`**, the bell.
-- **`Stat`'s `delta` and `spark`**, and the `achievement` tone, which together
-  cover the seven pieces `cursos` was keeping its own KPI card for:
-
-  ```tsx
-  <Stat
-    label="inscripciones"
-    value="312"
-    delta={{ value: '+18 esta semana', direction: 'up' }}
-    spark={<TuSparkline points={…} />}
-  />
-  ```
-
-  `direction` picks the arrow and never the colour — «+12 alumnos» and «+12
-  errores» point the same way and mean opposite things — and `spark` is a
-  `ReactNode` so no charting library reaches the barrel.
-
-  **The card also looks different, and no prop changed.** `icon` is now a badge
-  in the corner opposite the title, in a circle tinted at 10 % of the tone; the
-  sparkline is pinned to the bottom edge so a row of cards shares one baseline;
-  and a NEUTRAL number renders in primary ink instead of biolume, because the
-  badge and the line now carry the tone and three accents in one card is two too
-  many. `alert` and `achievement` still paint the number sand. See
-  [`decisions.md`](decisions.md) § 31.
-- **`npx arrecife`**, and it is worth running once in each project before
-  anything else. It catches the two failures that produce no error: a missing
-  `@source`, which purges every class the components emit, and a `--color-*` of
-  yours silently replacing one of ours. The second is not hypothetical —
-  `@theme inline { --color-accent: var(--accent); }`, which a shadcn project
-  brings with it, repainted 88 classes inside the library's own components grey.
-  See [`decisions.md`](decisions.md) § 33.
-- **`SidebarNav` collapses to a rail**, with `collapsed` + `onCollapsedChange`,
-  and takes a `user` slot at the bottom. The backlog had ruled the rail out
-  because the system had no navigation icons and a collapsed rail would have
-  shown each section's initial; that reason is gone. The toggle's chevron comes
-  from the library's own glyphs, so a project that installs no icon set still
-  gets the button. See [`decisions.md`](decisions.md) § 34.
-- **`SidebarGroup`**, plus `icon` on `SidebarItem` and `brand` on `SidebarNav`.
-  Eleven flat items is where a sidebar stops being readable, and each group is a
-  nested list named by its label so a screen reader gets «lista Ventas, 3
-  elementos» instead of one list of eleven. `icon` **replaces** the `▸` rather
-  than joining it; a sidebar with no icons keeps the prompt, so nothing written
-  before this moves. See [`decisions.md`](decisions.md) § 32.
-- **`Nav size="compact"`**, 56px instead of 64, for a bar that shares the screen
-  with a sidebar. It is a prop and not a class because the height lives on the
-  inner container, so passing `h-14` from outside did nothing — silently. The
-  other two things a header wants were already slots: `brand` takes a `~/cursos`
-  wordmark and `actions` takes a user menu or a «Entrar» button. See
-  [`decisions.md`](decisions.md) § 30.
-- **`./icons` and `Icon`**, which is the system adopting
-  `@phosphor-icons/react` as an **optional** peer dependency. The library still
-  ships no icons; what it now ships is how they are drawn:
-
-  ```diff
-  - <GraduationCap className="size-4" />
-  - <Search className="size-3.5" />
-  + <Icon as={GraduationCap} />
-  + <Icon as={MagnifyingGlass} />
-  ```
-
-  1em instead of five hand-picked sizes, and weight `regular` — which is 16 on
-  Phosphor's 256 grid, or 0.0625em, against the 0.0667em the document names as
-  «trazo 1.6». Six per cent apart, so nothing had to be derived. In a Next Server
-  Component import from `@phosphor-icons/react/ssr`: the default build reads
-  `IconContext` through `useContext` and ships no `"use client"` to stop you. See
-  [`decisions.md`](decisions.md) § 29.
-- **`EmptyState variant="inline"`**, the hole inside a table page or a dashboard
-  widget: no face, no surface, no border. The type does not accept an
-  `expression` there. `page` is the default, so nothing written before this
-  moves. It is what replaces the 19 hand-written empty states in `cursos` and the
-  18 in `blog-content-manager`.
-- **`./social`**, the nine icons loose and with no `"use client"`. `import
-  { LinkedIn } from '@eduardoalvarez/arrecife/social'` is the form to reach for
-  from now on, and from a Server Component it is the only one that works — the
-  grouped `social` from the root resolves to `undefined` there, because a client
-  reference crosses the boundary per export and the properties of a plain object
-  are not exports. The root keeps the group, unchanged, for iterating the
-  catalogue. See [`decisions.md`](decisions.md) § 26.
 - **The footer's caret**, which blinks. It arrives on its own — there is no prop
   and nothing to turn on. Behind `motion-safe`, so a reader who asked for less
   motion sees it solid.

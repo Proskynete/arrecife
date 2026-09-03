@@ -44,6 +44,14 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
+      /**
+       * `const { variant, ...rest } = props` is how a prop is kept OUT of the
+       * spread, and «`...props` is spread» is a rule of this repo's component
+       * pattern: a variant that reaches the DOM is an unknown attribute and a
+       * React warning. Without this the only way to strip one is a cast, which
+       * is worse — it re-adds every prop the signature just took out.
+       */
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     },
   },
 

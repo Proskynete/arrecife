@@ -207,6 +207,28 @@ It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
 
+### The two shapes of `EmptyState`
+
+```tsx
+// The empty state IS the screen: a search with no results, a 404, a section
+// with nothing in it yet. It carries the face, and `expression` is mandatory.
+<EmptyState expression="waiting" title="Sin resultados" description="…" />
+
+// The hole INSIDE something else: a table page, a dashboard widget. No face, no
+// surface, no border — the table or the card already draws the region.
+<EmptyState variant="inline" title="No hay lecciones en esta página" />
+
+// ❌ does not compile: the props are a union, and `inline` has no face
+<EmptyState variant="inline" expression="waiting" title="…" />
+```
+
+`inline` takes an optional `icon` — a `ReactNode` the project passes and sizes,
+at 1em and in `currentColor`, like `Stat`'s. The library ships no icons.
+
+Do not reach for `page` inside a table because the face is «nicer»: an admin
+screen with a dozen empty regions gets a dozen mascots, which is what made every
+consuming project write its own empty state instead of using this one.
+
 ### The social icons come from `./social`
 
 ```tsx
@@ -305,6 +327,11 @@ compiles and looks wrong, or that fails the project's accessibility audit.
 11. **The mascot's faces only appear** in empty states, confirmations, errors,
     course progress and celebration. Never in a hero, pricing, services, contact
     or the CV.
+    **And not in every empty state either**: `EmptyState variant="inline"` is the
+    hole inside a table page or a dashboard widget, and it carries no face — the
+    type does not accept one. `page`, the default, is the one that IS the screen,
+    and there `expression` stays mandatory. A dozen mascots on one admin screen is
+    not the humour contract. See `docs/decisions.md` § 27.
 12. **The fin is not a free parameter**: `foam` on a dark background, `color` on a
     light one. The components already choose it from the background.
 

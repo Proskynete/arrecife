@@ -113,7 +113,15 @@ function shapeBlock() {
   }
   lines.push('');
   // `nav` is a height (h-nav); `content` and `wide` are widths (max-w-content).
+  //
+  // They are listed one by one rather than looped, because the group is not
+  // uniform: two of its members are `--spacing-*` and two are `--container-*`,
+  // and a loop would have to guess which. The cost of that is real and it was
+  // paid once — `navCompact` was added to `tokens.ts` and silently did not come
+  // out here, so `h-nav-compact` resolved to nothing and the bar kept its 64.
+  // Adding a size means adding its line.
   lines.push(`  --spacing-nav: ${px(tokens.size.nav)};`);
+  lines.push(`  --spacing-nav-compact: ${px(tokens.size.navCompact)};`);
   lines.push(`  --container-content: ${px(tokens.size.content)};`);
   lines.push(`  --container-wide: ${px(tokens.size.wide)};`);
   lines.push(`  --container-measure: ${tokens.limits.measure};`);

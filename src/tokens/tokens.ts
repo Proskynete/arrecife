@@ -274,6 +274,17 @@ export const spacing = {
 export const size = {
   /** Navigation bar height. */
   nav: 64,
+  /**
+   * The bar when it shares the screen with a sidebar.
+   *
+   * It is not «a smaller bar because it looks better». At 64 the header of an
+   * app shell competes with the rail beside it for the same corner, and the two
+   * together eat the top of the content area. 56 is what `cursos` had arrived at
+   * on its own, and it is the same reasoning as `control.iconSm`: the one admin
+   * app of the five is denser than the four reading sites. See
+   * `docs/decisions.md` § 30.
+   */
+  navCompact: 56,
   /** Reading column width. */
   content: 760,
   /** Maximum page width. */

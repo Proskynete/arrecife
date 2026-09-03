@@ -209,6 +209,34 @@ It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
 
+### `Nav` is two slots and one height
+
+Almost everything an app shell wants from a site bar is already a slot:
+
+```tsx
+<Nav
+  size="compact"                                  // 56px, for a shell with a sidebar
+  brand={<a href="/"><Logo /><span><span className="text-accent">~/</span>cursos</span></a>}
+  actions={session ? <UserMenu /> : <Button size="sm" asChild><Link href="/login">Entrar</Link></Button>}
+>
+  <NavItem href="/cursos" active>cursos</NavItem>
+</Nav>
+```
+
+`brand` and `actions` are `ReactNode`, so a wordmark, a user menu, a theme toggle
+or a search box go in without the library knowing anything about sessions.
+**Session state does not get a prop** — it is project infrastructure, and the
+library takes none.
+
+`size="compact"` is 56px instead of 64, for a bar that shares the screen with a
+sidebar. It is a prop and not a class because the height lives on `Nav`'s inner
+container: `className` reaches the `<header>` and stops there, so passing `h-14`
+does nothing.
+
+**One `Nav` per page.** It renders the site's `banner` landmark, and two banners
+on one page is an accessibility failure — which is also why `PageHeader` goes
+inside `<main>` and is not a landmark. See `docs/decisions.md` § 30.
+
 ### Icons are yours, the way they are drawn is not
 
 The library ships no icon set and `lib/glyphs.tsx` is not exported: it is the
@@ -342,7 +370,7 @@ same value is available in both places and they cannot disagree.
 | `control.md` | `--spacing-control-md` | `px-control-md` |
 | `control.icon` | `--spacing-control-icon` | `size-control-icon` (42×42) |
 | `gradient[mode].hero` | `--gradient-hero` | `gradient-hero` |
-| `size.nav` | `--spacing-nav` | `h-nav` |
+| `size.nav` / `size.navCompact` | `--spacing-nav` / `--spacing-nav-compact` | `h-nav` / `h-nav-compact` |
 | `size.content` / `size.wide` | `--container-content` / `--container-wide` | `max-w-content` / `max-w-wide` |
 | `limits.measure` | `--container-measure` | `max-w-measure` |
 | `shadow.standard` | `--shadow-standard` | `shadow-standard` |

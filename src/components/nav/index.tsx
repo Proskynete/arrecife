@@ -4,7 +4,8 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
 
 /**
- * The site bar: 64px, abyss at 86 % and a 14px blur behind it.
+ * The site bar: 64px, abyss at 86 % and a 14px blur behind it — 56 when it
+ * shares the screen with a sidebar.
  *
  * It is page composition and not a primitive, but it lives in the library for a
  * concrete reason: the CLI aesthetic of the items — mono, `./section` format —
@@ -20,6 +21,13 @@ import { cn } from '../../lib/cn.ts';
  * floats in the middle of the bar and the eye has to cross the gap twice: once
  * to read the brand and once to come back and find the section. Grouped on the
  * right, brand and navigation are two anchors instead of three.
+ *
+ * `brand` and `actions` are `ReactNode` slots and they are the answer to almost
+ * everything an app shell asks for: a `~/cursos` wordmark goes in `brand`, and a
+ * user menu or a «Entrar» button goes in `actions`. Session state does not get a
+ * prop of its own — it is project infrastructure, which is the third clause of
+ * the criterion that decides what enters this library. See `docs/decisions.md`
+ * § 30.
  */
 export type NavProps = ComponentPropsWithoutRef<'header'> & {
   /** The logo, on the left. */
@@ -28,9 +36,20 @@ export type NavProps = ComponentPropsWithoutRef<'header'> & {
   children?: ReactNode;
   /** Actions on the right: conversion, theme switch, search. */
   actions?: ReactNode;
+  /**
+   * `compact` is 56px instead of 64, for a bar that shares the screen with a
+   * sidebar: at 64 the two compete for the same corner and together they eat the
+   * top of the content area.
+   *
+   * It is a prop and not a `className` because the height lives on the inner
+   * container, which never sees one — `className` reaches the `<header>` and
+   * stops there. Passing `h-14` from outside did nothing, silently, which is the
+   * kind of failure this repo writes checks for.
+   */
+  size?: 'default' | 'compact' | undefined;
 };
 
-export function Nav({ brand, children, actions, className, ...props }: NavProps) {
+export function Nav({ brand, children, actions, size = 'default', className, ...props }: NavProps) {
   return (
     <header
       className={cn(
@@ -43,7 +62,12 @@ export function Nav({ brand, children, actions, className, ...props }: NavProps)
       )}
       {...props}
     >
-      <div className="max-w-wide px-step-md h-nav gap-step-lg mx-auto flex items-center">
+      <div
+        className={cn(
+          'max-w-wide px-step-md gap-step-lg mx-auto flex items-center',
+          size === 'compact' ? 'h-nav-compact' : 'h-nav',
+        )}
+      >
         {brand ? <div className="shrink-0">{brand}</div> : null}
 
         {children ? (

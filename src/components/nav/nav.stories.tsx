@@ -7,6 +7,19 @@ import { Text } from '../../primitives/typography.tsx';
 import { ThemeToggle } from '../theme-toggle/index.tsx';
 import { Nav, NavItem } from './index.tsx';
 
+/** A `~/cursos` wordmark, which is what `brand` is a slot for. */
+function SectionBrand({ section }: { section: string }) {
+  return (
+    <a href="/" className="gap-step-xs text-meta flex items-center font-mono font-semibold">
+      <Logo background="dark" className="h-6" />
+      <span>
+        <span className="text-accent">~/</span>
+        {section}
+      </span>
+    </a>
+  );
+}
+
 const meta = {
   title: 'Components/Nav',
   component: Nav,
@@ -117,6 +130,57 @@ export const AsOnTheSite: Story = {
         <Note>
           The brand carries `withTagline`: the tagline comes from `tagline.short`
           and cannot be passed as a prop, for the same reason as the wordmark.
+        </Note>
+      </div>
+    </div>
+  ),
+};
+
+export const AppShell: Story = {
+  name: 'Compact · a bar that shares the screen with a sidebar',
+  render: () => (
+    <div className="-m-step-lg">
+      <Nav
+        size="compact"
+        brand={<SectionBrand section="cursos" />}
+        actions={
+          <>
+            <ThemeToggle />
+            <Button size="sm">Entrar</Button>
+          </>
+        }
+      >
+        <NavItem href="/cursos" active>
+          cursos
+        </NavItem>
+      </Nav>
+
+      <div className="px-step-md py-step-xl max-w-wide mx-auto">
+        <Note>
+          56px instead of 64. It is not «a smaller bar because it looks better»:
+          at 64 the header of an app shell competes with the rail beside it for
+          the same corner, and the two together eat the top of the content area.
+          Same reasoning as `Button size="icon-sm"` — the one admin app of the
+          five is denser than the four reading sites.
+        </Note>
+        <Note>
+          It is a prop and not a `className` because the height lives on the inner
+          container, which never sees one. Passing `h-14` from outside did
+          nothing, silently.
+        </Note>
+        <Note>
+          The 64px default is in `Basic`, and the two are deliberately NOT shown
+          in one story: `Nav` renders the site's `banner` landmark, and two
+          banners on one page is an accessibility failure. The suite said so
+          before this note existed.
+        </Note>
+        <Note>
+          Everything else here is composition, not new API. The `~/cursos`
+          wordmark is a `brand` slot, and the «Entrar» button — a user menu, when
+          there is a session — is an `actions` slot. Session state does not get a
+          prop of its own: it is project infrastructure, which is what the third
+          clause of the admission criterion excludes. See `docs/decisions.md`
+          § 30.
         </Note>
       </div>
     </div>

@@ -256,6 +256,32 @@ is what a four-section blog admin wants.
 accessible name when it is a string; a logo is not an accessible name, so pass
 `aria-label` when you use `brand`. See `docs/decisions.md` § 32.
 
+**It collapses to a rail, and the toggle is CONTROLLED:**
+
+```tsx
+const [collapsed, setCollapsed] = useState(false);
+
+<SidebarNav
+  collapsed={collapsed}
+  onCollapsedChange={setCollapsed}
+  brand={<Wordmark />}
+  mark={<Isotype className="h-6" />}
+  user={<Avatar … />}
+>
+```
+
+There is no uncontrolled mode: this state is almost always persisted, and an
+internal one would fight the cookie you already keep. `onCollapsedChange` is also
+what makes the toggle appear — `collapsed` on its own is a rail with no way out,
+which is a layout and not an accident.
+
+Collapsed, the widths become `w-sidebar-rail` (56) and `w-sidebar` (256), and the
+component owns them only when it can collapse. It does **not** transition, on
+purpose. `brand` is hidden and `mark` takes its place, because a wordmark does
+not fit in a rail. Every label stays in the accessibility tree as `sr-only`, so
+do not «simplify» by dropping the children of a collapsed item. See
+`docs/decisions.md` § 34.
+
 ### `Nav` is two slots and one height
 
 Almost everything an app shell wants from a site bar is already a slot:
@@ -1471,6 +1497,12 @@ A labelled block of items — «Contenido», «Alumnos», «Ventas».
 | --- | --- | --- | --- | --- |
 | `branch` | `ReactNode` |  |  |  |
 | `brand` | `ReactNode` |  |  | The row at the top: isotype and wordmark, `cursos · admin`. It is a slot and not a `logo`/`name` pair because every panel spells its own name differently, and the part that IS the system — the rhythm, the hairline under it — is here. |
+| `collapsed` | `boolean \| undefined` |  | `false` | Turns the sidebar into a rail: icons only, and the widths become the library's — `w-sidebar` and `w-sidebar-rail`. It is CONTROLLED and there is no uncontrolled mode, because this state is almost always persisted in a cookie or in `localStorage`, and an internal state would fight the one the project already keeps. |
+| `collapseLabel` | `string` |  | `Plegar el panel` | The toggle's accessible name, in the two directions. |
+| `expandLabel` | `string` |  | `Desplegar el panel` |  |
+| `mark` | `ReactNode` |  |  | What `brand` becomes in the rail. Usually the isotype with no wordmark. |
+| `onCollapsedChange` | `(collapsed: boolean) => void` |  |  | Called with what the state should become. With it, the toggle appears; with `collapsed` alone the sidebar is a rail with no way out of it, which is a legitimate layout and not an accident. |
+| `user` | `ReactNode` |  |  | Who is signed in, at the bottom above the version. A slot, because an avatar needs a session and a sign-out route and the library takes no project infrastructure — the same reason `Nav`'s user menu goes in `actions`. |
 | `version` | `ReactNode` |  |  | Version and branch, at the bottom. |
 
 ### Stat
@@ -1781,7 +1813,7 @@ it: if the code does not mount React, that subpath is the one to import.
 | `radius` | `{ readonly chip: 6; readonly control: 10; readonly card: 14; readonly panel: 16; readonly pill: 999; }` |  |
 | `series` | `{ readonly dark: readonly ["#35D6C0", "#F2A65A", "#3E7CB1", "#71919C"]; readonly light: readonly ["#0D7C6F", "#A65B27", "#3E7CB1", "#626A75"]; }` | The chart series palette. FOUR, for the same reason as the syntax palette: the system communicates with color and border, not with chromatic noise. |
 | `shadow` | `{ readonly standard: "0 1px 2px rgba(0, 0, 0, 0.35)"; }` | A single level. There is no elevation scale. |
-| `size` | `{ readonly nav: 64; readonly navCompact: 56; readonly content: 760; readonly wide: 1180; }` |  |
+| `size` | `{ readonly nav: 64; readonly navCompact: 56; readonly sidebar: 256; readonly sidebarRail: 56; readonly content: 760; readonly wide: 1180; }` |  |
 | `spacing` | `{ readonly stepXs: 8; readonly stepSm: 12; readonly stepMd: 16; readonly stepLg: 26; readonly stepXl: 40; readonly section: 96; }` | Page rhythm. All five steps carry `step` in the name, and that is not decoration: it is the fix for a bug that never surfaced anywhere. |
 | `syntax` | `{ background, identifier, literal, keyword, comment, invalid }` | The syntax highlighting palette. |
 | `tagline` | `{ long, short, en }` |  |

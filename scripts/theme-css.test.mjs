@@ -120,6 +120,7 @@ describe('theme.css over Tailwind v4', () => {
       'px-control-md',
       'size-control-icon',
       'h-nav',
+      'h-nav-compact',
       'max-w-content',
       'max-w-measure',
       'rounded-card',
@@ -129,6 +130,10 @@ describe('theme.css over Tailwind v4', () => {
     expect(rule(css, 'py-section')).toContain('var(--spacing-section)');
     expect(rule(css, 'px-control-md')).toContain('var(--spacing-control-md)');
     expect(rule(css, 'h-nav')).toBe('height: var(--spacing-nav);');
+    // It was added to `tokens.ts` and did not come out of `build-tokens.mjs`,
+    // because the `size` group is written line by line and the line was missing.
+    // `h-nav-compact` then resolved to nothing and the bar silently kept its 64.
+    expect(rule(css, 'h-nav-compact')).toBe('height: var(--spacing-nav-compact);');
     expect(rule(css, 'max-w-content')).toBe('max-width: var(--container-content);');
     expect(rule(css, 'max-w-measure')).toBe('max-width: var(--container-measure);');
     expect(rule(css, 'rounded-card')).toBe('border-radius: var(--radius-card);');

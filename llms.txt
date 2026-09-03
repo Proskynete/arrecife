@@ -209,6 +209,26 @@ It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
 
+### `npx arrecife` — run it once after installing
+
+Two things break with **no error at all**, and the command catches both.
+
+**Tailwind purges everything the components emit** unless the stylesheet has
+`@source "<path>/node_modules/@eduardoalvarez/arrecife/dist"`. It does not scan
+`node_modules`. There is no console error and no undefined class: the card mounts
+with no padding, no radius and no border. The path is relative to the SHEET, not
+to the project root, and the command computes it.
+
+**A `--color-*` of yours silently replaces ours.** A project coming from shadcn
+has `@theme inline { --color-accent: var(--accent); }` — shadcn's `--accent` is
+the hover surface, `#17303E`, and ours is the brand turquoise, `#35D6C0`. That
+one line repainted 88 classes inside the library's own components grey. Five
+names collide in total; four agree on the value and are harmless, and the command
+tells them apart.
+
+Do not silence it by removing the `@import`: the fix is the `@source` line, or
+renaming your own token.
+
 ### `SidebarNav` groups, and the icon replaces the prompt
 
 ```tsx

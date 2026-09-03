@@ -436,6 +436,13 @@ them stops dying at prerender.
   badge and the line now carry the tone and three accents in one card is two too
   many. `alert` and `achievement` still paint the number sand. See
   [`decisions.md`](decisions.md) § 31.
+- **`npx arrecife`**, and it is worth running once in each project before
+  anything else. It catches the two failures that produce no error: a missing
+  `@source`, which purges every class the components emit, and a `--color-*` of
+  yours silently replacing one of ours. The second is not hypothetical —
+  `@theme inline { --color-accent: var(--accent); }`, which a shadcn project
+  brings with it, repainted 88 classes inside the library's own components grey.
+  See [`decisions.md`](decisions.md) § 33.
 - **`SidebarGroup`**, plus `icon` on `SidebarItem` and `brand` on `SidebarNav`.
   Eleven flat items is where a sidebar stops being readable, and each group is a
   nested list named by its label so a screen reader gets «lista Ventas, 3

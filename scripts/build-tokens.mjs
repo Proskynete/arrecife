@@ -122,6 +122,8 @@ function shapeBlock() {
   // Adding a size means adding its line.
   lines.push(`  --spacing-nav: ${px(tokens.size.nav)};`);
   lines.push(`  --spacing-nav-compact: ${px(tokens.size.navCompact)};`);
+  lines.push(`  --spacing-sidebar: ${px(tokens.size.sidebar)};`);
+  lines.push(`  --spacing-sidebar-rail: ${px(tokens.size.sidebarRail)};`);
   lines.push(`  --container-content: ${px(tokens.size.content)};`);
   lines.push(`  --container-wide: ${px(tokens.size.wide)};`);
   lines.push(`  --container-measure: ${tokens.limits.measure};`);

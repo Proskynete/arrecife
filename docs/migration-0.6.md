@@ -428,6 +428,14 @@ them stops dying at prerender.
   `direction` picks the arrow and never the colour — «+12 alumnos» and «+12
   errores» point the same way and mean opposite things — and `spark` is a
   `ReactNode` so no charting library reaches the barrel.
+
+  **The card also looks different, and no prop changed.** `icon` is now a badge
+  in the corner opposite the title, in a circle tinted at 10 % of the tone; the
+  sparkline is pinned to the bottom edge so a row of cards shares one baseline;
+  and a NEUTRAL number renders in primary ink instead of biolume, because the
+  badge and the line now carry the tone and three accents in one card is two too
+  many. `alert` and `achievement` still paint the number sand. See
+  [`decisions.md`](decisions.md) § 31.
 - **`Nav size="compact"`**, 56px instead of 64, for a bar that shares the screen
   with a sidebar. It is a prop and not a class because the height lives on the
   inner container, so passing `h-14` from outside did nothing — silently. The

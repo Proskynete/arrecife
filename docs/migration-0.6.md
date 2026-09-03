@@ -436,6 +436,12 @@ them stops dying at prerender.
   badge and the line now carry the tone and three accents in one card is two too
   many. `alert` and `achievement` still paint the number sand. See
   [`decisions.md`](decisions.md) § 31.
+- **`SidebarGroup`**, plus `icon` on `SidebarItem` and `brand` on `SidebarNav`.
+  Eleven flat items is where a sidebar stops being readable, and each group is a
+  nested list named by its label so a screen reader gets «lista Ventas, 3
+  elementos» instead of one list of eleven. `icon` **replaces** the `▸` rather
+  than joining it; a sidebar with no icons keeps the prompt, so nothing written
+  before this moves. See [`decisions.md`](decisions.md) § 32.
 - **`Nav size="compact"`**, 56px instead of 64, for a bar that shares the screen
   with a sidebar. It is a prop and not a class because the height lives on the
   inner container, so passing `h-14` from outside did nothing — silently. The

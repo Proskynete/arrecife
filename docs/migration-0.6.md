@@ -231,7 +231,7 @@ took under an hour on the largest consumer.
 
 ## Part two · the API changes
 
-### The three breaking changes
+### The four breaking changes
 
 #### 1 · `themeScript` is a function
 
@@ -310,6 +310,26 @@ invalid HTML. The type says so:
 Only code that spreads a props object typed as `TalkCardProps` and then adds
 `href` conditionally needs narrowing. Every call site that passes `href` and
 nothing else is unchanged.
+
+#### 4 · `Stat`'s `tone="alerta"` is `tone="alert"`
+
+```diff
+- <Stat value="0" label="design systems" tone="alerta" />
++ <Stat value="0" label="design systems" tone="alert" />
+```
+
+The last public API value still in Spanish, and the only one `llms.txt` was
+publishing — which meant an agent reading the document from a consuming project
+wrote Spanish into a library that had decided it would not have any.
+
+Nothing else moves: same colour, same rule, same `neutral` default. `tsc` points
+at every call site, and there is nowhere for it to hide, because `tone` is not a
+string a project computes.
+
+While you are there, there is now a **third** value and it breaks nothing:
+`tone="achievement"`, for the number that is the opposite of a problem — the
+diplomas issued, the modules finished. It paints the same sand as `alert` on
+purpose; see [`decisions.md`](decisions.md) § 28.
 
 ---
 
@@ -393,6 +413,26 @@ them stops dying at prerender.
 - **`TalkCard`'s `resources`**, **`NewsletterForm`'s `aside`**,
   **`resetOnSuccess`**, **`onFieldChange`** and **`fieldErrors`**.
 - **`social.Newsletter`**, the bell.
+- **`Stat`'s `delta` and `spark`**, and the `achievement` tone, which together
+  cover the seven pieces `cursos` was keeping its own KPI card for:
+
+  ```tsx
+  <Stat
+    label="inscripciones"
+    value="312"
+    delta={{ value: '+18 esta semana', direction: 'up' }}
+    spark={<TuSparkline points={…} />}
+  />
+  ```
+
+  `direction` picks the arrow and never the colour — «+12 alumnos» and «+12
+  errores» point the same way and mean opposite things — and `spark` is a
+  `ReactNode` so no charting library reaches the barrel.
+- **`EmptyState variant="inline"`**, the hole inside a table page or a dashboard
+  widget: no face, no surface, no border. The type does not accept an
+  `expression` there. `page` is the default, so nothing written before this
+  moves. It is what replaces the 19 hand-written empty states in `cursos` and the
+  18 in `blog-content-manager`.
 - **`./social`**, the nine icons loose and with no `"use client"`. `import
   { LinkedIn } from '@eduardoalvarez/arrecife/social'` is the form to reach for
   from now on, and from a Server Component it is the only one that works — the

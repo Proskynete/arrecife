@@ -256,6 +256,32 @@ is what a four-section blog admin wants.
 accessible name when it is a string; a logo is not an accessible name, so pass
 `aria-label` when you use `brand`. See `docs/decisions.md` § 32.
 
+**It collapses to a rail, and the toggle is CONTROLLED:**
+
+```tsx
+const [collapsed, setCollapsed] = useState(false);
+
+<SidebarNav
+  collapsed={collapsed}
+  onCollapsedChange={setCollapsed}
+  brand={<Wordmark />}
+  mark={<Isotype className="h-6" />}
+  user={<Avatar … />}
+>
+```
+
+There is no uncontrolled mode: this state is almost always persisted, and an
+internal one would fight the cookie you already keep. `onCollapsedChange` is also
+what makes the toggle appear — `collapsed` on its own is a rail with no way out,
+which is a layout and not an accident.
+
+Collapsed, the widths become `w-sidebar-rail` (56) and `w-sidebar` (256), and the
+component owns them only when it can collapse. It does **not** transition, on
+purpose. `brand` is hidden and `mark` takes its place, because a wordmark does
+not fit in a rail. Every label stays in the accessibility tree as `sr-only`, so
+do not «simplify» by dropping the children of a collapsed item. See
+`docs/decisions.md` § 34.
+
 ### `Nav` is two slots and one height
 
 Almost everything an app shell wants from a site bar is already a slot:

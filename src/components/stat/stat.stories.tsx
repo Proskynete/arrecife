@@ -49,7 +49,7 @@ export const WithIconAndDeck: Story = {
         icon={<ArrowUpRight />}
         label="aplicaciones"
         value="12"
-        description="Repartidas en cuatro equipos, ninguno con dueño declared."
+        description="Repartidas en cuatro equipos, ninguno con dueño declarado."
       />
       <Stat
         icon={<Ellipsis />}
@@ -77,7 +77,7 @@ export const ReadingOrder: Story = {
         icon={<ArrowUpRight />}
         label="aplicaciones"
         value="12"
-        description="Repartidas en cuatro equipos, ninguno con dueño declared."
+        description="Repartidas en cuatro equipos, ninguno con dueño declarado."
       />
       <Note>
         The top says what it is about, the middle how much, the bottom the nuance.

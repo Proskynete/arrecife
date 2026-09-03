@@ -61,8 +61,8 @@ const SCALES = [
   { variant: 'h2', detail: '30 / 1.1 / 600 / -0.02em · display', example: 'Arquitectura que sobrevive al equipo que la escribió' },
   { variant: 'h3', detail: '25 / 1.15 / 600 / -0.02em · display', example: 'Decisiones documentadas, no heredadas' },
   { variant: 'body', detail: '18 / 1.75 / 400 · sans', example: 'El sistema no anima posición ni escala. Los estados se comunican con borde y color, no con movimiento, porque el movimiento es caro de leer y barato de abusar.' },
-  { variant: 'ui', detail: '15 / 1.6 / 400 · sans', example: 'Label de interfaz, quince píxeles' },
-  { variant: 'label', detail: '13 / 1.5 / 500 · sans', example: 'Label mínima, trece píxeles' },
+  { variant: 'ui', detail: '15 / 1.6 / 400 · sans', example: 'Etiqueta de interfaz, quince píxeles' },
+  { variant: 'label', detail: '13 / 1.5 / 500 · sans', example: 'Etiqueta mínima, trece píxeles' },
   { variant: 'eyebrow', detail: '12 · mono · tracking 0.12em · versalitas', example: 'sección' },
 ] as const;
 

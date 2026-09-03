@@ -9,7 +9,7 @@ const meta = {
   title: 'Components/NewsletterForm',
   component: NewsletterForm,
   args: {
-    title: 'Un email cada dos semanas',
+    title: 'Un correo cada dos semanas',
     description:
       'Lo que aprendí escalando equipos, escrito en corto. Sin resúmenes de noticias y sin lanzamientos.',
     disclaimer: 'Sin spam. Te das de baja en un clic.',
@@ -154,7 +154,7 @@ export const Behaviour: StoryObj = {
       const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
       return (
         <NewsletterForm
-          title="Un email cada dos semanas"
+          title="Un correo cada dos semanas"
           disclaimer="Suscríbete y mira qué pasa con el campo."
           expression="wink"
           state={state}

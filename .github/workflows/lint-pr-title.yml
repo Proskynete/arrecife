@@ -31,13 +31,16 @@ jobs:
           # `og` and `shiki`: a published subpath in `exports` is a scope. It is
           # not that the list is opening up, it is that there are three more areas.
           # `social` joined in 0.6.0 for the same reason, when the nine icons got
-          # a subpath of their own so they could cross the RSC boundary.
+          # a subpath of their own so they could cross the RSC boundary, and
+          # `icons` with it when the system adopted @phosphor-icons/react as an
+          # optional peer on a subpath of its own.
           scopes: |
             tokens
             primitives
             components
             brand
             social
+            icons
             theme
             variants
             og

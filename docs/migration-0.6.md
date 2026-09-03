@@ -428,6 +428,12 @@ them stops dying at prerender.
   `direction` picks the arrow and never the colour — «+12 alumnos» and «+12
   errores» point the same way and mean opposite things — and `spark` is a
   `ReactNode` so no charting library reaches the barrel.
+- **`Nav size="compact"`**, 56px instead of 64, for a bar that shares the screen
+  with a sidebar. It is a prop and not a class because the height lives on the
+  inner container, so passing `h-14` from outside did nothing — silently. The
+  other two things a header wants were already slots: `brand` takes a `~/cursos`
+  wordmark and `actions` takes a user menu or a «Entrar» button. See
+  [`decisions.md`](decisions.md) § 30.
 - **`./icons` and `Icon`**, which is the system adopting
   `@phosphor-icons/react` as an **optional** peer dependency. The library still
   ships no icons; what it now ships is how they are drawn:

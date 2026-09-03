@@ -129,6 +129,18 @@ so the command reports the value on each side and only fails on the ones that
 differ. A collision that agrees is worth knowing about and is not worth failing
 over.
 
+> **Coming from 0.6.0.** One break, and it is a find and replace the type checker
+> points at: `Stat`'s `tone="alerta"` is `tone="alert"`.
+>
+> Everything else is additive, and most of it lets a project delete something it
+> was maintaining by hand: `./social` and `./icons` are two new subpaths,
+> `EmptyState` has a shape with no face, `Stat` covers the KPI cards, `SidebarNav`
+> groups and collapses, and `npx arrecife` catches two failures that produce no
+> error at all.
+>
+> Run `npx arrecife` first, then read
+> [`docs/migration-0.7.md`](docs/migration-0.7.md).
+
 > **Coming from 0.5.x.** Two unrelated things landed in 0.6.0, and they ship
 > together because in `0.x` a breaking change bumps the minor.
 >
@@ -400,6 +412,13 @@ change and `docs/decisions.md` § 29 says so.
 `@phosphor-icons/react` is an **optional** peer dependency on its own subpath, by
 the same rule as `./form` and `./chart`: two of the five projects use no icons and
 install nothing.
+
+**An icon is not illustration.** Tiburoncín — the faces, the poses, the fin — is
+the mascot, it comes from `./brand`, and the manual doses it by surface: a face
+only in an empty state, a confirmation, an error, course progress or a
+celebration. An icon is functional vocabulary and goes wherever a control needs a
+label it cannot spell. Adopting a set changed nothing about the first, and
+neither stands in for the other in either direction.
 
 **In Next, import from `@phosphor-icons/react/ssr` inside a Server Component.**
 Phosphor's default build reads `IconContext` through `useContext`, and a hook in a

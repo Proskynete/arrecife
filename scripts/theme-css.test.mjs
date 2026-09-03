@@ -119,6 +119,7 @@ describe('theme.css over Tailwind v4', () => {
       'py-section',
       'px-control-md',
       'size-control-icon',
+      'size-control-icon-sm',
       'h-nav',
       'h-nav-compact',
       'max-w-content',
@@ -129,6 +130,9 @@ describe('theme.css over Tailwind v4', () => {
 
     expect(rule(css, 'py-section')).toContain('var(--spacing-section)');
     expect(rule(css, 'px-control-md')).toContain('var(--spacing-control-md)');
+    // `Stat`'s icon badge is a circle of this size, and a `size-*` that resolves
+    // to nothing is a circle that collapses to its glyph with no error.
+    expect(rule(css, 'size-control-icon-sm')).toContain('var(--spacing-control-icon-sm)');
     expect(rule(css, 'h-nav')).toBe('height: var(--spacing-nav);');
     // It was added to `tokens.ts` and did not come out of `build-tokens.mjs`,
     // because the `size` group is written line by line and the line was missing.

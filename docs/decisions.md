@@ -1001,6 +1001,27 @@ where there is a way out.
 `./form` and `./chart`: a heavy dependency never hangs off the root. The two
 projects with zero icons install nothing and pay nothing.
 
+**AN ICON IS NOT ILLUSTRATION, and adopting a set changed nothing about that.**
+It is worth writing because the two had never had to be told apart before — until
+this entry the library had one kind of drawing in it, and now it has two.
+
+| | Tiburoncín | An icon |
+| --- | --- | --- |
+| What it is | the mascot: faces, poses, the fin | functional vocabulary |
+| Where it lives | `./brand`, and the PNGs in `assets/` | `./icons`, from a third-party set |
+| Who decides it | the brand manual, by surface — § 09 | the call site, wherever a control needs a label it cannot spell |
+| Where it may appear | empty states, confirmations, errors, course progress, celebration. Nowhere else | anywhere |
+
+Neither substitutes for the other in either direction. An icon does not get to
+stand in for a face in an empty state, which is why `EmptyState`'s `page` variant
+still demands an `expression` and § 31's `inline` variant takes an `icon` and
+refuses a face at the type level. And a face is not a control's label: it carries
+tone, not meaning.
+
+The manual's dosage is untouched by any of this. It was written about
+illustration and it still governs illustration; a set of functional glyphs is a
+category it never described and never restricted.
+
 **Action in the document:** add an icon line to the design system — «iconos de
 interfaz · Phosphor a 1em y peso `regular`, que es el mismo trazo 1.6 escrito en
 otra retícula · los glifos internos van más pesados y hay que igualarlos».

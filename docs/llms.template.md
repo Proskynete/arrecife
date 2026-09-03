@@ -342,6 +342,14 @@ a 24 grid = 0.0667em. Six per cent apart, which is no pixel on any screen.
 `@phosphor-icons/react` is an **optional** peer dependency. If your project uses
 no icons you install nothing; two of the five do exactly that.
 
+**An icon is not illustration, and the two never substitute for each other.**
+Tiburoncín — the faces, the poses, the fin — is the mascot; it comes from
+`./brand`, and the manual says where a face may appear: empty states,
+confirmations, errors, course progress, celebration, and nowhere else. An icon is
+functional vocabulary and goes wherever a control needs a label it cannot spell.
+Do not put an icon where the system asks for a face, and do not put a face where
+a control wants an icon.
+
 **In Next, import from `@phosphor-icons/react/ssr` inside a Server Component.**
 Phosphor's default build reads `IconContext` through `useContext`, and a hook in
 a Server Component throws. It ships no `"use client"` to stop you, so the failure

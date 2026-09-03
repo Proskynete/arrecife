@@ -31,8 +31,8 @@ function DemoForm({ withErrors = false }: { withErrors?: boolean }) {
     ...(withErrors
       ? {
           errors: {
-            name: { type: 'minLength', message: 'El name necesita al menos dos letras.' },
-            email: { type: 'pattern', message: 'Eso no parece un email.' },
+            name: { type: 'minLength', message: 'El nombre necesita al menos dos letras.' },
+            email: { type: 'pattern', message: 'Eso no parece un correo.' },
           },
         }
       : {}),

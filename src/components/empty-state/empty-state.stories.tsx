@@ -43,7 +43,7 @@ export const WithAction: Story = {
   ),
 };
 
-/** The document.s four, with their copy verbatim. */
+/** The document's four, with their copy verbatim. */
 export const FromTheDocument: Story = {
   name: 'The document\'s four',
   render: () => (
@@ -88,7 +88,7 @@ export const WhereFacesGo: Story = {
         <Stack>
           <EmptyState
             expression="annoyed"
-            title="Esta página no exists"
+            title="Esta página no existe"
             description="El enlace que seguiste apunta a algo que se movió o que nunca estuvo."
             action={<Button variant="tertiary">./volver_al_inicio →</Button>}
           />
@@ -110,7 +110,7 @@ export const WhereFacesGo: Story = {
           <EmptyState
             expression="hearts"
             title="Terminaste el curso"
-            description="El certificado te llega por email en unos minutos."
+            description="El certificado te llega por correo en unos minutos."
           />
         </Stack>
       </Block>

@@ -83,17 +83,22 @@
     "./assets/*": "./assets/*",
     "./package.json": "./package.json"
   },
+  "bin": {
+    "arrecife": "./dist/doctor.mjs"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "pnpm check:tokens && pnpm check:namespace && tsup && node scripts/add-use-client.mjs && pnpm build:tokens && pnpm build:llms",
+    "build": "pnpm check:tokens && pnpm check:namespace && tsup && node scripts/add-use-client.mjs && pnpm build:tokens && pnpm build:doctor && pnpm build:llms",
     "build:tokens": "node scripts/build-tokens.mjs",
+    "build:doctor": "node scripts/build-doctor.mjs",
     "build:llms": "node scripts/build-llms.mjs",
     "check:tokens": "node scripts/check-tokens-purity.mjs",
     "check:namespace": "node scripts/check-tokens-namespace.mjs",
     "check:llms": "node scripts/build-llms.mjs --check",
     "check:copy": "node scripts/check-copy-language.mjs",
+    "doctor": "node scripts/doctor.mjs",
     "check:exports": "node scripts/check-package-exports.mjs",
     "check:release": "node scripts/check-release-config.mjs",
     "typecheck": "tsc --noEmit",

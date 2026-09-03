@@ -58,6 +58,13 @@ jobs:
       - name: 🏷️ Validate the release-please configuration
         run: pnpm check:release
 
+      # The 0.6.0 rename swept twenty-one user-facing strings into English, and
+      # nothing noticed: axe checks that a control HAS an accessible name, not
+      # which language it is in. `Pagination` said «Siguiente» on screen and
+      # announced «Página next» for a whole version.
+      - name: 🗣️ Verify user-facing copy stays in Spanish
+        run: pnpm check:copy
+
       - name: 🧮 Check the types
         run: pnpm typecheck
 

@@ -209,6 +209,33 @@ It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
 
+### `SidebarNav` groups, and the icon replaces the prompt
+
+```tsx
+<SidebarNav aria-label="Administración" brand={<>…</>} version="v0.6.0" branch="main">
+  <SidebarItem href="/admin" icon={<Icon as={SquaresFour} />} active>Resumen</SidebarItem>
+
+  <SidebarGroup label="Ventas">
+    <SidebarItem href="/admin/ventas" icon={<Icon as={CreditCard} />}>Ventas</SidebarItem>
+    <SidebarItem href="/admin/cupones" icon={<Icon as={Ticket} />}>Cupones</SidebarItem>
+  </SidebarGroup>
+</SidebarNav>
+```
+
+Past about eight items a flat sidebar stops being readable. Each `SidebarGroup`
+is a nested list named by its label, so a screen reader says «lista Ventas, 3
+elementos» instead of one list of eleven. The label is a paragraph and **not** a
+heading on purpose: a sidebar is navigation, and a heading here would land in the
+page's own outline.
+
+**`icon` replaces the `▸`, it does not join it.** Do not pass a glyph and expect
+the prompt as well. A sidebar with no icons keeps the prompt on every item, which
+is what a four-section blog admin wants.
+
+**`brand` does not replace `title`.** `title` is the eyebrow and also the `nav`'s
+accessible name when it is a string; a logo is not an accessible name, so pass
+`aria-label` when you use `brand`. See `docs/decisions.md` § 32.
+
 ### `Nav` is two slots and one height
 
 Almost everything an app shell wants from a site bar is already a slot:
@@ -1113,7 +1140,7 @@ Source: `src/primitives/typography.tsx`
 
 ## Components
 
-Imported from `@eduardoalvarez/arrecife`. 24 exports.
+Imported from `@eduardoalvarez/arrecife`. 25 exports.
 
 ### ArticleCard
 
@@ -1392,7 +1419,7 @@ How much you have read. It is NOT `Progress` under another name.
 | `target` | `RefObject<HTMLElement \| null>` |  |  | The element being measured. Without it, the whole document. |
 | `tone` | `"accent" \| "warm"` |  | `accent` | Sand instead of biolume, to match course progress. |
 
-### SidebarItem, SidebarNav
+### SidebarItem, SidebarGroup, SidebarNav
 
 Source: `src/components/sidebar-nav/index.tsx`
 
@@ -1406,6 +1433,16 @@ The blog admin's sidebar.
 | `active` | `boolean \| undefined` |  | `false` |  |
 | `asChild` | `boolean \| undefined` |  | `false` |  |
 | `badge` | `ReactNode` |  |  | Counter on the right: pending drafts, unused media. |
+| `icon` | `ReactNode` |  |  | The section's glyph, on the left. It REPLACES the `▸` rather than joining it, and it inherits `currentColor`, so it follows the item's state without being tinted separately. |
+
+**SidebarGroup**
+A labelled block of items — «Contenido», «Alumnos», «Ventas».
+
+- Extends: `Omit<ComponentPropsWithoutRef<'li'>, 'title'>`
+
+| prop | type | req. | default | what it does |
+| --- | --- | --- | --- | --- |
+| `label` | `ReactNode` | yes |  | The block's name. Sentence case, not a section title. |
 
 **SidebarNav**
 - Extends: `ComponentPropsWithoutRef<'nav'>`
@@ -1413,6 +1450,7 @@ The blog admin's sidebar.
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
 | `branch` | `ReactNode` |  |  |  |
+| `brand` | `ReactNode` |  |  | The row at the top: isotype and wordmark, `cursos · admin`. It is a slot and not a `logo`/`name` pair because every panel spells its own name differently, and the part that IS the system — the rhythm, the hairline under it — is here. |
 | `version` | `ReactNode` |  |  | Version and branch, at the bottom. |
 
 ### Stat
@@ -1820,7 +1858,7 @@ Types (6): `ArticleData`, `BaseData`, `CourseData`, `DefaultData`, `SatoriNode`,
 | `toast` | `(message: ReactNode, options?: ToastOptions \| undefined): string` | Fires a notice. It returns its id, which is what you keep in order to close it by hand — the «guardando…» case that gets replaced when the request finishes. |
 | `useTheme` | `(): Theme` | The theme set right now, for a project that needs to branch in React — a different logo per mode, an image with no light version. |
 
-Types (61): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `SocialLink`, `StatDelta`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
+Types (62): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarGroupProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `SocialLink`, `StatDelta`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
 
 # Where to look if this is not enough
 

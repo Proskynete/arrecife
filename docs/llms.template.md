@@ -209,6 +209,33 @@ It has to go INLINE. A `<script src>`, even a synchronous one, gets downloaded,
 and the flash comes back. The script re-attaches on `astro:after-swap` because
 view transitions replace the whole `<html>`.
 
+### `SidebarNav` groups, and the icon replaces the prompt
+
+```tsx
+<SidebarNav aria-label="Administración" brand={<>…</>} version="v0.6.0" branch="main">
+  <SidebarItem href="/admin" icon={<Icon as={SquaresFour} />} active>Resumen</SidebarItem>
+
+  <SidebarGroup label="Ventas">
+    <SidebarItem href="/admin/ventas" icon={<Icon as={CreditCard} />}>Ventas</SidebarItem>
+    <SidebarItem href="/admin/cupones" icon={<Icon as={Ticket} />}>Cupones</SidebarItem>
+  </SidebarGroup>
+</SidebarNav>
+```
+
+Past about eight items a flat sidebar stops being readable. Each `SidebarGroup`
+is a nested list named by its label, so a screen reader says «lista Ventas, 3
+elementos» instead of one list of eleven. The label is a paragraph and **not** a
+heading on purpose: a sidebar is navigation, and a heading here would land in the
+page's own outline.
+
+**`icon` replaces the `▸`, it does not join it.** Do not pass a glyph and expect
+the prompt as well. A sidebar with no icons keeps the prompt on every item, which
+is what a four-section blog admin wants.
+
+**`brand` does not replace `title`.** `title` is the eyebrow and also the `nav`'s
+accessible name when it is a string; a logo is not an accessible name, so pass
+`aria-label` when you use `brand`. See `docs/decisions.md` § 32.
+
 ### `Nav` is two slots and one height
 
 Almost everything an app shell wants from a site bar is already a slot:

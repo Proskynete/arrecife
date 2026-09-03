@@ -84,6 +84,7 @@ src/
   components/   the identity pieces, one folder per component
   brand/        logo, isotype, mascot and the PNG catalog
   social/       the nine social icons. Published at ./social, with no `"use client"`
+  icons/        the Phosphor wrapper. Published at ./icons; asks for @phosphor-icons/react
   theme/        light/dark mode and `themeScript`. No React. Published at ./theme
   variants/     the cva definitions and the class constants. No React. Published at ./variants
   og/           Satori templates. No React. Published at ./og
@@ -322,8 +323,16 @@ A sixth has to land on one of those two, with the argument written in
 - Visible focus with `focus-visible:outline-2 outline-offset-2 outline-accent`.
 - Every control with no text carries an `aria-label`. `Progress` requires `label`
   as a prop.
-- No icon libraries: the glyphs are inline in `src/lib/glyphs.tsx`, they inherit
-  `currentColor` and they measure 1em.
+- **The library ships no icons**, and `src/lib/glyphs.tsx` is the minimum set the
+  primitives need: inline, inheriting `currentColor`, measuring 1em, and not
+  exported. It does not grow.
+  What the library DOES ship is how an icon is drawn. Since 0.6.0
+  `@phosphor-icons/react` is an optional peer dependency and `./icons` publishes
+  `Icon`, which fixes the size at 1em and the weight at `regular` — 16 on a 256
+  grid, which is 0.0625em against the document's 0.0667em. A project's icons are
+  still the project's; what stopped being the project's is the line weight.
+  `glyphs.tsx` itself is the known outlier at 0.109em. See `docs/decisions.md`
+  § 29.
 
 ### 6 · The stories are not optional
 
@@ -398,16 +407,16 @@ docs(readme): the third contrast correction
 ```
 
 Valid scopes, and the list is short on purpose: `tokens`, `primitives`,
-`components`, `brand`, `social`, `theme`, `og`, `shiki`, `form`, `chart`,
-`storybook`, `a11y`, `deps`, `deps-dev`, `ci`. **A change to the repo's process
+`components`, `brand`, `social`, `icons`, `theme`, `og`, `shiki`, `form`,
+`chart`, `storybook`, `a11y`, `deps`, `deps-dev`, `ci`. **A change to the repo's process
 goes without a scope** — `docs:`, `ci:`: there is no scope for «how we work», and
 an invented one is rejected.
 
 The rule governing the list: **a published subpath in `exports` is a scope.** It
 is what `og` and `shiki` already did, it is why `theme`, `form` and `chart`
 joined them in 0.4.0 instead of being split between `tokens` and `components`,
-and it is why `social` joined in 0.6.0. A new scope with no subpath behind it
-does have to be discussed.
+and it is why `social` and `icons` joined in 0.6.0. A new scope with no subpath
+behind it does have to be discussed.
 
 Careful with one trap: the workflow validates the **PR title**, not the scopes of
 the commits inside it. A `docs(agents):` buried in a PR titled `feat(tokens)!:`
@@ -577,8 +586,13 @@ In order of how often they actually happen:
 2. Importing something in `src/tokens/`. It breaks `./og`, `./shiki` and the
    Astro site.
 3. Adding an entrance animation because «it looks better». It does not get in.
-4. Adding `lucide-react` or another icon library. All five projects pay for it;
-   the glyph goes inline in `src/lib/glyphs.tsx`.
+4. Putting a new glyph in `src/lib/glyphs.tsx` because a component wants one.
+   That file is the primitives' minimum set and it does not grow: a component
+   that needs an icon takes it as a prop, and the project draws it with `Icon`
+   from `./icons`. The ban on icon libraries was lifted in 0.6.0 — see
+   `docs/decisions.md` § 29 — and what replaced it is narrower, not looser:
+   Phosphor is an OPTIONAL peer on its own subpath, so the two projects that use
+   no icons still install nothing.
 5. Changing props without regenerating `llms.txt`. `pnpm check:llms` stops it in
    CI.
 6. Running the suite in one mode only. A color fails in one and passes in the

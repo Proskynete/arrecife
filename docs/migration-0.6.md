@@ -428,6 +428,23 @@ them stops dying at prerender.
   `direction` picks the arrow and never the colour — «+12 alumnos» and «+12
   errores» point the same way and mean opposite things — and `spark` is a
   `ReactNode` so no charting library reaches the barrel.
+- **`./icons` and `Icon`**, which is the system adopting
+  `@phosphor-icons/react` as an **optional** peer dependency. The library still
+  ships no icons; what it now ships is how they are drawn:
+
+  ```diff
+  - <GraduationCap className="size-4" />
+  - <Search className="size-3.5" />
+  + <Icon as={GraduationCap} />
+  + <Icon as={MagnifyingGlass} />
+  ```
+
+  1em instead of five hand-picked sizes, and weight `regular` — which is 16 on
+  Phosphor's 256 grid, or 0.0625em, against the 0.0667em the document names as
+  «trazo 1.6». Six per cent apart, so nothing had to be derived. In a Next Server
+  Component import from `@phosphor-icons/react/ssr`: the default build reads
+  `IconContext` through `useContext` and ships no `"use client"` to stop you. See
+  [`decisions.md`](decisions.md) § 29.
 - **`EmptyState variant="inline"`**, the hole inside a table page or a dashboard
   widget: no face, no surface, no border. The type does not accept an
   `expression` there. `page` is the default, so nothing written before this

@@ -319,6 +319,51 @@ decided not to have, and from there it grows on its own. A project that needs an
 icon passes its own: `Stat` receives `icon`, `Footer` receives each social link's
 `icon`.
 
+### The icons are yours, the way they are drawn is not
+
+That last sentence used to end there, and «its own what, drawn how» had no
+answer. The admin panel imports 89 distinct icons in 229 places — 77 of them
+domain icons for a course admin, which no design system was going to ship — and
+drew them at `size-4` twenty-six times, plus `size-3.5`, `size-3`, `size-6` and
+`size-7`, with no rule behind any of them.
+
+```tsx
+import { GraduationCap } from '@phosphor-icons/react';
+import { Icon } from '@eduardoalvarez/arrecife/icons';
+
+<Icon as={GraduationCap} />
+```
+
+1em, so the icon takes the size of the text it sits in and nobody picks a number.
+Weight `regular`, and **that is the whole reason the set is Phosphor**: it bakes
+the weight into the path instead of exposing a `strokeWidth`, and its regular
+lands on the one stroke the identity document names. Measured on the `Minus` path
+itself, whose regular form is a bar of radius 8 on a 256 grid:
+
+| | Line | As a fraction of the rendered size |
+| --- | --- | --- |
+| phosphor `regular` | 16 on a 256 grid | **0.0625em** |
+| the document | 1.6 on a 24 grid | **0.0667em** |
+| `lib/glyphs.tsx` | 1.75 on a 16 grid | 0.109em |
+
+Six per cent apart, which is no pixel on any screen. Nothing had to be derived and
+no number had to be invented. The `Icons/Icon` → `regular IS the document's
+stroke` story alternates the bars so the claim can be checked instead of believed
+— and it also shows the third row, because **`glyphs.tsx` is the outlier**: at
+0.109em it is three quarters heavier than both, it was never argued anywhere, and
+aligning it would restyle every primitive in the library. That is a separate
+change and `docs/decisions.md` § 29 says so.
+
+`@phosphor-icons/react` is an **optional** peer dependency on its own subpath, by
+the same rule as `./form` and `./chart`: two of the five projects use no icons and
+install nothing.
+
+**In Next, import from `@phosphor-icons/react/ssr` inside a Server Component.**
+Phosphor's default build reads `IconContext` through `useContext`, and a hook in a
+Server Component throws — and it ships no `"use client"` to stop you, so the
+failure arrives at render. The `/ssr` entry is the same icons without the context
+read, and `Icon` works with either.
+
 ### `"use client"` is in the published `dist`
 
 The root, `./brand`, `./form` and `./chart` carry the directive. They render
@@ -685,9 +730,13 @@ about as library pieces. They get in anyway: the CLI aesthetic — the bar's
 
 ### Phase 3 decisions
 
-- **No `lucide-react`.** The eight glyphs the primitives need are inline in
-  `src/lib/glyphs.tsx`, inherit `currentColor` and measure 1em. An icon library
-  as a dependency is something each of the five projects pays for.
+- **It ships no icon set**, and that has not changed. The eight glyphs the
+  primitives need are inline in `src/lib/glyphs.tsx`, inherit `currentColor` and
+  measure 1em, and they are not exported. What DID change is that
+  `@phosphor-icons/react` is now an optional peer on `./icons`, so the set a
+  project chooses is drawn at the system's weight — see «The icons are yours»
+  above. Optional and on a subpath is the point: the two projects that use no
+  icons install nothing.
 - **No entrance animations.** Modals, menus, tooltips and toasts appear where
   they will stay. The `Switch` knob changes position without sliding. The
   system's only transition is `transition-standard`, which can only animate color

@@ -110,9 +110,25 @@ The root keeps the group, unchanged, for iterating the catalogue. See
 ```
 
 The library still ships **no icons**. What it now ships is how they are drawn:
-1em instead of five hand-picked sizes, and weight `regular` — 16 on Phosphor's
-256 grid, or 0.0625em, against the 0.0667em the document names as «trazo 1.6».
-Six per cent apart, so nothing had to be derived.
+1em instead of five hand-picked sizes, and a weight that comes from what the icon
+is doing. **`weight` is not a prop; `tone` is**, and there are three:
+
+| `tone` | Weight | What it is |
+| --- | --- | --- |
+| `action` · the default | `regular` | A control, or the label of one. 16 on Phosphor's 256 grid = 0.0625em, against the 0.0667em the document names as «trazo 1.6» |
+| `current` | `fill` | The one of a set you are on — the item carrying `aria-current` |
+| `quiet` | `light` | Furniture: a marker in a metadata row, not a control and not a state |
+
+```diff
+  <SidebarItem href="/cursos" active
+-   icon={<Icon as={GraduationCap} />}>
++   icon={<Icon as={GraduationCap} tone="current" />}>
+```
+
+`current` is worth using wherever you already pass `active`: colour on its own is
+the channel WCAG 1.4.1 says may not carry meaning, and the fill survives a
+forced-colours mode where the accent does not. See
+[`decisions.md`](decisions.md) § 35.
 
 `@phosphor-icons/react` is an **optional** peer dependency: a project that uses
 no icons installs nothing. In a Next Server Component import from
@@ -184,8 +200,31 @@ menu or a «Entrar» button. See [`decisions.md`](decisions.md) § 30.
 
 ---
 
+## Two things look different and you change nothing
+
+Both come out of the token layer, so a project that imports `theme.css` gets them
+by rebuilding. They are here because they are **visible**, not because they need
+work.
+
+**The focus ring moved to offset 3**, which is what the design document specifies
+and what twenty-eight call sites had at 2 because the first one did. It is one
+`focus-ring` utility now. The conversion button — the system's only sand fill —
+takes a sand ring instead of a biolume one, so the two brand accents stop meeting
+three pixels apart. See [`decisions.md`](decisions.md) § 37.
+
+**The light-mode gradients sweep to `#FFFFFF` instead of `#EFE9DE`.** The old
+light `hero` ended on `surfaceRaised`, the light palette's worst surface, where
+`accent` reads 4.21 and `warm` 4.19 — both under AA, and both fine where the
+gradient starts. That made a token's contrast depend on where in the panel the
+text sat, and nothing caught it because axe cannot evaluate text over a gradient.
+Both light blocks now sweep between `background` and `surface`, so the darkest
+point of either is the page itself. Dark mode is untouched.
+
+If you copied the gradient by hand instead of using `gradient-hero` — `links`
+did, into its Astro — **that copy is now stale.** The utility is the fix.
+
 ## What did not change
 
-Every colour, size, radius and contrast ratio that already existed. The new
-tokens — `navCompact`, `sidebar`, `sidebarRail` — are additions. The suite passes
-axe in both modes before and after.
+Every colour, size and radius that already existed, and dark mode entirely. The
+new tokens — `navCompact`, `sidebar`, `sidebarRail` — are additions. The suite
+passes axe in both modes before and after.

@@ -390,10 +390,11 @@ import { Icon } from '@eduardoalvarez/arrecife/icons';
 ```
 
 1em, so the icon takes the size of the text it sits in and nobody picks a number.
-Weight `regular`, and **that is the whole reason the set is Phosphor**: it bakes
-the weight into the path instead of exposing a `strokeWidth`, and its regular
-lands on the one stroke the identity document names. Measured on the `Minus` path
-itself, whose regular form is a bar of radius 8 on a 256 grid:
+Weight `regular` by default, and **that is the whole reason the set is
+Phosphor**: it bakes the weight into the path instead of exposing a
+`strokeWidth`, and its regular lands on the one stroke the identity document
+names. Measured on the `Minus` path itself, whose regular form is a bar of radius
+8 on a 256 grid:
 
 | | Line | As a fraction of the rendered size |
 | --- | --- | --- |
@@ -408,6 +409,24 @@ stroke` story alternates the bars so the claim can be checked instead of believe
 0.109em it is three quarters heavier than both, it was never argued anywhere, and
 aligning it would restyle every primitive in the library. That is a separate
 change and `docs/decisions.md` § 29 says so.
+
+**The weight is an axis with three values, and `tone` is how you name them.**
+`weight` is not a prop: Phosphor ships six and this system reads three, because
+`thin`, `bold` and `duotone` have no role behind them here.
+
+| `tone` | Weight | What it is |
+| --- | --- | --- |
+| `action` · the default | `regular` | An icon that is a control or names one |
+| `current` | `fill` | The one of a set you are on — the item carrying `aria-current` |
+| `quiet` | `light` | Furniture: a marker in a metadata row, not a control and not a state |
+
+`current` is the value that earns the axis, and the argument is not taste.
+An active sidebar item already says so in biolume, and **colour on its own is the
+one channel WCAG 1.4.1 says may not carry meaning** — the fill is the second
+channel, and it is the one that survives a forced-colours mode where the biolume
+does not. `quiet` is the opposite problem: in a metadata row the icon is not the
+point of the line, and at `regular` it draws as heavy as the date beside it.
+`docs/decisions.md` § 35 has the rest.
 
 `@phosphor-icons/react` is an **optional** peer dependency on its own subpath, by
 the same rule as `./form` and `./chart`: two of the five projects use no icons and

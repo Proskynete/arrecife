@@ -57,9 +57,9 @@ export const Weight: Story = {
   name: 'regular IS the document\'s stroke',
   render: () => (
     <>
-      <Block title="the three weights, beside the two families the library already draws">
+      <Block title="the three the system reads, beside the two families the library already draws">
         <Stack>
-          {(['light', 'regular', 'bold'] as const).map((weight) => (
+          {(['light', 'regular', 'fill'] as const).map((weight) => (
             <Text key={weight} variant="h3" as="p" className="gap-step-sm flex items-center">
               <span className="text-meta w-16 shrink-0 font-mono">{weight}</span>
               <PhosphorMinus weight={weight} size="1em" aria-hidden="true" />
@@ -92,6 +92,78 @@ export const Weight: Story = {
         heavier than both. It is deliberately not reconciled here: aligning it
         restyles every primitive in the library and is its own change. See
         `docs/decisions.md` § 29.
+      </Note>
+      <Note>
+        These are the three the system reads, not the six Phosphor ships.
+        `thin`, `bold` and `duotone` are left out because no role here means
+        them — `bold` in particular is what a set with a `strokeWidth` would
+        have called the emphasis step, and this system emphasises with colour.
+        See `docs/decisions.md` § 35.
+      </Note>
+    </>
+  ),
+};
+
+export const Tone: Story = {
+  name: 'Three roles, and the weight is not a prop',
+  render: () => (
+    <>
+      <Block title="the same icon, doing three different jobs">
+        <Stack>
+          {(['action', 'current', 'quiet'] as const).map((tone) => (
+            <Text key={tone} variant="h3" as="p" className="gap-step-sm flex items-center">
+              <span className="text-meta w-20 shrink-0 font-mono">{tone}</span>
+              <Icon as={GraduationCap} tone={tone} />
+              <Icon as={Trophy} tone={tone} />
+              <Icon as={Ticket} tone={tone} />
+            </Text>
+          ))}
+        </Stack>
+      </Block>
+
+      <Block title="current · the second channel, beside the colour">
+        <Stack>
+          <Text variant="ui" as="p" className="gap-step-xs text-accent flex items-center">
+            <Icon as={GraduationCap} tone="current" />
+            cursos
+          </Text>
+          <Text variant="ui" tone="secondary" as="p" className="gap-step-xs flex items-center">
+            <Icon as={Trophy} />
+            diplomas
+          </Text>
+          <Text variant="ui" tone="secondary" as="p" className="gap-step-xs flex items-center">
+            <Icon as={Ticket} />
+            cupones
+          </Text>
+        </Stack>
+      </Block>
+
+      <Block title="quiet · furniture, not a control">
+        <Stack>
+          <Text variant="meta" tone="muted" as="p" className="gap-step-xs flex items-center">
+            <Icon as={Ticket} tone="quiet" />
+            12 sep 2026 · 8 min
+          </Text>
+        </Stack>
+      </Block>
+
+      <Note>
+        `tone` names what the icon is DOING and the weight follows from it.
+        `action` is the default and is the system's line; `current` is filled;
+        `quiet` is light. `weight` is not a prop, so there is one way to say
+        each of the three and no way to say the other three Phosphor ships.
+      </Note>
+      <Note>
+        `current` is the value that earns the axis. The first row above is the
+        one you are on, and it says so twice: biolume, and a filled glyph.
+        Colour on its own is the channel WCAG 1.4.1 says may not carry meaning
+        alone, and the fill is the one that survives a forced-colours mode.
+      </Note>
+      <Note>
+        `quiet` is the opposite problem. In a metadata row the icon is not the
+        point of the line, and at `regular` it draws as heavy as the date beside
+        it. At `light` — 12 on a 256 grid, 0.0469em — it annotates instead of
+        competing.
       </Note>
     </>
   ),

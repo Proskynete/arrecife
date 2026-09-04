@@ -35,6 +35,11 @@ import { cn } from '../lib/cn.ts';
  * in this library already follows. An icon beside `text-label` is 13px and
  * beside `text-ui` is 15px, and nobody picks a number.
  *
+ * THE WEIGHT IS AN AXIS, AND IT IS THE ONLY ONE AN ICON HAS. There are three
+ * roles and `tone` is how you name them; the weights themselves are not a prop,
+ * because Phosphor's other three — `thin`, `bold`, `duotone` — say nothing this
+ * system means. See `TONE_WEIGHT` below and `docs/decisions.md` § 35.
+ *
  * `lib/glyphs.tsx` is the outlier and it is NOT reconciled here: it draws at
  * 1.75 on a 16 grid, which is 0.109em — three quarters heavier than both the
  * document and this. Aligning it restyles every primitive in the library and is
@@ -46,9 +51,18 @@ import { cn } from '../lib/cn.ts';
  * `/ssr` entry is the same icons without the context read. This wrapper works
  * with either.
  */
-export type IconProps = Omit<PhosphorIconProps, 'size' | 'ref'> & {
+export type IconTone = 'action' | 'current' | 'quiet';
+
+export type IconProps = Omit<PhosphorIconProps, 'size' | 'weight' | 'ref'> & {
   /** The Phosphor icon itself, passed as a component: `<Icon as={Books} />`. */
   as: PhosphorIcon;
+  /**
+   * WHAT THE ICON IS DOING, which is what picks the weight. Three values, and
+   * there is no fourth: `action` is the default and the system's line, `current`
+   * is the one of a set you are on, `quiet` is furniture that is not a control.
+   * `weight` is deliberately not a prop — see `TONE_WEIGHT`.
+   */
+  tone?: IconTone | undefined;
   /**
    * The accessible name. WITHOUT it the icon is decorative and gets
    * `aria-hidden`, which is the right default: most icons sit beside their own
@@ -60,14 +74,35 @@ export type IconProps = Omit<PhosphorIconProps, 'size' | 'ref'> & {
   label?: string | undefined;
 };
 
-/** Phosphor's own name for the system's line. It is not a default to override lightly. */
+/** Phosphor's own name for the system's line. It is what `tone="action"` resolves to. */
 export const ICON_WEIGHT: IconWeight = 'regular';
 
-export function Icon({ as: Glyph, label, weight = ICON_WEIGHT, className, ...props }: IconProps) {
+/**
+ * The three roles, and the weight each one is drawn at. This is the whole of the
+ * weight axis: Phosphor ships six and this system reads three, because the other
+ * three — `thin`, `bold`, `duotone` — have no role behind them here.
+ *
+ * `current` is the one that earns the axis. A sidebar's active item already
+ * carries `aria-current="page"` and paints itself biolume, and colour alone is
+ * the one channel WCAG 1.4.1 says may not carry meaning by itself. A filled
+ * glyph is the second channel, and it survives a forced-colours mode where the
+ * biolume does not.
+ *
+ * `quiet` is for the icon that is not a control and not a state — a marker in a
+ * metadata row, a bullet that happens to be a shape. At `regular` it competes
+ * with the text it is annotating; at `light` it sits under it.
+ */
+export const TONE_WEIGHT: Record<IconTone, IconWeight> = {
+  action: ICON_WEIGHT,
+  current: 'fill',
+  quiet: 'light',
+};
+
+export function Icon({ as: Glyph, tone = 'action', label, className, ...props }: IconProps) {
   return (
     <Glyph
       size="1em"
-      weight={weight}
+      weight={TONE_WEIGHT[tone]}
       aria-hidden={label ? undefined : true}
       aria-label={label}
       role={label ? 'img' : undefined}

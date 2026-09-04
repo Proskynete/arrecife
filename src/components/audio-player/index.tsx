@@ -143,7 +143,7 @@ function ProgressBar({
 }
 
 const CONTROL =
-  'rounded-chip transition-standard cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+  'rounded-chip transition-standard cursor-pointer focus-ring';
 
 function SkipButton({
   seconds,
@@ -273,7 +273,7 @@ function PlayButton({
       onClick={onToggle}
       className={cn(
         'text-accent-on transition-standard cursor-pointer',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-ring',
         state.error ? 'bg-error hover:bg-error/80' : 'bg-accent hover:bg-accent-hover',
         className,
       )}

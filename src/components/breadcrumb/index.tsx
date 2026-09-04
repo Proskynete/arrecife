@@ -34,7 +34,7 @@ export type BreadcrumbProps = Omit<ComponentPropsWithoutRef<'nav'>, 'children'> 
 };
 
 const LINK =
-  'transition-standard hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-chip cursor-pointer';
+  'transition-standard hover:text-accent focus-ring rounded-chip cursor-pointer';
 
 export function Breadcrumb({
   items,

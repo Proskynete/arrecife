@@ -144,7 +144,7 @@ export function AvatarUpload({
           'transition-standard hover:text-accent hover:border-accent',
           // Focus lives on the input, which is hidden: without this, tabbing to
           // the control shows up nowhere.
-          'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent',
+          'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-accent',
           disabled && 'pointer-events-none opacity-50',
         )}
       >

@@ -61,7 +61,7 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
               'gap-step-xs rounded-chip flex items-center px-2 py-1',
               'text-label font-mono text-text-muted cursor-pointer',
               'transition-standard hover:bg-surface hover:text-text-primary',
-              'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+              'focus-ring',
             )}
           >
             {copiado ? <Check className="text-accent" /> : <Copy />}

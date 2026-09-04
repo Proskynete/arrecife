@@ -119,7 +119,7 @@ export function Footer({
               aria-label={socialLink.label}
               className={cn(
                 'text-text-muted hover:text-accent transition-standard block cursor-pointer text-[19px]',
-                'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+                'rounded-chip focus-ring',
               )}
             >
               {socialLink.icon}
@@ -163,7 +163,7 @@ export function FooterLink({ asChild = false, className, ...props }: FooterLinkP
     <Root
       className={cn(
         'font-mono text-meta text-text-secondary hover:text-accent transition-standard cursor-pointer',
-        'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'rounded-chip focus-ring',
         className,
       )}
       {...props}

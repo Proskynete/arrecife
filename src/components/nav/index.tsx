@@ -129,7 +129,7 @@ export function NavItem({ active = false, asChild = false, className, children, 
         aria-current={active ? 'page' : undefined}
         className={cn(
           'font-mono text-meta transition-standard cursor-pointer',
-          'rounded-chip focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+          'rounded-chip focus-ring',
           active
             ? 'text-accent underline decoration-1 underline-offset-4'
             : 'text-text-secondary hover:text-accent',

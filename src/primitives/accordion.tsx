@@ -83,7 +83,7 @@ export function AccordionTrigger({
             'font-sans text-lead font-medium text-text-primary',
             'transition-standard',
             'hover:text-accent',
-            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+            'focus-ring',
             'disabled:pointer-events-none disabled:opacity-50',
             '[&[data-state=open]>svg]:rotate-180',
             className,

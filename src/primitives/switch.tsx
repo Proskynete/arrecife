@@ -17,7 +17,7 @@ export function Switch({ className, ...props }: SwitchProps) {
         'rounded-pill border-border bg-surface-raised inline-flex h-6 w-11 shrink-0 cursor-pointer items-center border',
         'transition-standard',
         'hover:border-hairline-hover',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-ring',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[state=checked]:border-accent data-[state=checked]:bg-accent',
         className,

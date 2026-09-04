@@ -33,7 +33,7 @@ export function PaginationLink({ className, isActive = false, ...props }: Pagina
         'font-sans text-ui text-text-secondary',
         'transition-standard',
         'hover:bg-surface hover:text-text-primary',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-ring',
         isActive && 'bg-surface-raised text-text-primary',
         className,
       )}

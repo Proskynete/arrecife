@@ -17,7 +17,7 @@ export function Textarea({ className, invalid = false, ...props }: TextareaProps
         'font-sans text-ui text-text-primary placeholder:text-text-muted',
         'transition-standard',
         'hover:border-hairline-hover',
-        'focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-visible:border-accent focus-ring',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[invalid]:border-error data-[invalid]:focus-visible:outline-error',
         className,

@@ -52,6 +52,15 @@ function rule(css, className) {
   return css.match(new RegExp(`\\.${escaped}\\s*\\{([^}]*)\\}`))?.[1].trim();
 }
 
+/** The body of an arbitrary selector's rule, for utilities that nest one. */
+function selector(css, sel) {
+  const escaped = sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return css
+    .match(new RegExp(`${escaped}\\s*\\{([^}]*)\\}`))?.[1]
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
 /** The value declared for a custom property inside the compiled CSS. */
 function property(css, name) {
   return css.match(new RegExp(`${name}:\\s*([^;]+);`))?.[1].trim();
@@ -148,6 +157,28 @@ describe('theme.css over Tailwind v4', () => {
     expect(rule(css, 'max-w-measure')).toBe('max-width: var(--container-measure);');
     expect(rule(css, 'rounded-card')).toBe('border-radius: var(--radius-card);');
     expect(rule(css, 'text-h1')).toContain('var(--text-h1)');
+  });
+
+  it('serves the focus ring at the offset the document gives, and lets sand win', async () => {
+    const css = await compileClasses(['focus-ring', 'focus-ring-warm']);
+
+    // The document gives it once, on the primary button: «focus ring 2px
+    // #35D6C0 + offset 3px». It used to be three classes copied to twenty-eight
+    // call sites, all of them at offset 2, and nothing was comparing them to
+    // anything — three audits in a row reported it and it never moved.
+    expect(selector(css, '.focus-ring:focus-visible')).toBe(
+      'outline: 2px solid var(--color-accent); outline-offset: 3px;',
+    );
+    // It changes only the color, so the width and the offset stay in one place.
+    expect(selector(css, '.focus-ring-warm:focus-visible')).toBe(
+      'outline-color: var(--color-warm);',
+    );
+    // And it has to come after, or the conversion button keeps the biolume ring
+    // it exists to replace. Source order is the whole mechanism: same
+    // specificity, last one wins.
+    expect(css.indexOf('.focus-ring-warm:focus-visible')).toBeGreaterThan(
+      css.indexOf('.focus-ring:focus-visible'),
+    );
   });
 
   it('serves the four chart series and switches them with the mode', async () => {

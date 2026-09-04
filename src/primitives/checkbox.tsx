@@ -13,7 +13,7 @@ export function Checkbox({ className, ...props }: CheckboxProps) {
         'rounded-chip border-border bg-surface size-5 shrink-0 cursor-pointer border',
         'text-accent-on transition-standard',
         'hover:border-hairline-hover',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-ring',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[state=checked]:border-accent data-[state=checked]:bg-accent',
         'data-[state=indeterminate]:border-accent data-[state=indeterminate]:bg-accent',

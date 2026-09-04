@@ -498,9 +498,11 @@ five projects.
 In `cursos` it forced a `"use client"` on an adapter whose entire content was one
 call to CVA. In `links`, which depends on no React at all, it was not even an
 option: that project copied the class vocabulary by hand into `LinkRow.astro` and
-`Footer.astro`, and the copy had already drifted once — the hero gradient sat at
-`55%` and `#e9eeea` against the token's `60%` and `#EFE9DE`, and nothing compared
-them.
+`Footer.astro`, and the copy had already drifted once: the hero gradient sat at
+`55%` and `#e9eeea` against the token's `60%` and, at the time, `#EFE9DE`, and
+nothing compared them. That light stop is `#FFFFFF` now — § 9 measured it — which
+is the same lesson seen from the other end. A copied value goes stale the moment
+the original moves, and only the original is ever right.
 
 The rule for what belongs in the subpath: if it returns classes, it goes there;
 if it returns markup, it stays in the component. `Button` renders a `<button>`,
@@ -585,6 +587,21 @@ contrast ratio, which overshoots near white.
 
 `textMuted` never goes over `surfaceRaised`: in dark it gives 4.07. Menus use
 `textSecondary`, which gives 6.96.
+
+**And no gradient ends there either**, which is the same rule applied to a
+surface that moves. The light `hero` and `section` blocks used to sweep from the
+page down onto `surfaceRaised`, where light `accent` reads **4.21** and `warm`
+**4.19** — both under 4.5, and both of them fine at 4.55 and 4.53 on the page
+they started from. That makes a token's contrast a function of **where in the
+panel the text happens to sit**, which no token can guarantee and the suite
+cannot see: axe does not evaluate text over a gradient, so both modes passed it.
+`Hero` puts an `accent` eyebrow directly on that gradient.
+
+The light blocks now sweep between `background` and `surface` and never touch
+`surfaceRaised`, so the darkest point of either one is the page itself — a token
+that passes on the page passes at every point of the sweep. `docs/decisions.md`
+§ 9 has the measurements, including the two other things the first composition
+got wrong.
 
 ### The third correction: a semantic color is not a text color over its own tint
 

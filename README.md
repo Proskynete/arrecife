@@ -103,10 +103,11 @@ wrong.
 `@theme inline { --color-accent: var(--accent); }`, and the two are not the same
 colour: shadcn's `--accent` is the hover **surface**, `#17303E`, and this
 library's is the brand turquoise, `#35D6C0`. The result was **88 classes inside
-the library's own components** painting grey — 28 `text-accent`, 26
-`outline-accent`, 15 `bg-accent`, 12 `border-accent`. Buttons, focus rings and
-badges came out the colour of a surface and it looked as though the migration had
-done nothing.
+the library's own components** painting grey — 28 `text-accent`, 26 focus rings,
+15 `bg-accent`, 12 `border-accent`. Buttons, focus rings and badges came out the
+colour of a surface and it looked as though the migration had done nothing. (The
+twenty-six are one `focus-ring` utility now, which changes the count and not the
+failure: it reads `var(--color-accent)` like everything else here.)
 
 ```
 arrecife · 2 thing(s) that fail without saying so:

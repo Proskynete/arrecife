@@ -324,7 +324,14 @@ A sixth has to land on one of those two, with the argument written in
   deliberate exceptions: `Label`, which points at a control but is not the
   control, and the menu items of `Select` and `DropdownMenu`, which stay on
   `cursor-default` because a native menu does not show the pointing hand.
-- Visible focus with `focus-visible:outline-2 outline-offset-2 outline-accent`.
+- **Visible focus is `focus-ring`, one utility, and it is not written out by
+  hand.** 2px of biolume at offset 3, which is what the document gives —
+  «focus ring 2px #35D6C0 + offset 3px». It used to be three classes copied to
+  twenty-eight call sites in twenty-four files, all of them at offset 2 because
+  the first one was and the next twenty-seven inherited it. The one control that
+  changes the colour is the conversion button, which adds `focus-ring-warm`: it
+  is the system's only sand fill, and a biolume ring three pixels off it puts
+  both of the brand's accents in the same glance. See `docs/decisions.md` § 37.
 - Every control with no text carries an `aria-label`. `Progress` requires `label`
   as a prop.
 - **The library ships no icons**, and `src/lib/glyphs.tsx` is the minimum set the

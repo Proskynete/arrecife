@@ -10,7 +10,10 @@
  * hand: that project ships no framework JavaScript and cannot import a
  * component, so until now it copied the class list into its Astro. The copy had
  * already drifted once — the hero gradient sat at `55%` and `#e9eeea` against
- * the token's `60%` and `#EFE9DE`, and nothing compared them.
+ * the token's `60%` and, at the time, `#EFE9DE`. Nothing compared them. The
+ * light gradient's second stop is `#FFFFFF` since § 9 was measured, which is the
+ * same lesson from the other side: a copied value goes stale when the original
+ * moves, and only the original is ever right.
  */
 export const CARD_SURFACE = 'rounded-card border-hairline bg-surface border';
 

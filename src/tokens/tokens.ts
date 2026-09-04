@@ -384,9 +384,35 @@ export const series = {
  * a key in `dark` with no counterpart in `light` would be a token that lies in
  * light mode.
  *
- * The document only specifies the two dark gradients. The light ones are
- * composed from the light palette with the same angles and stops, so the hero
- * does not go flat in light mode. Still pending ratification in the document.
+ * THE DOCUMENT ONLY SPECIFIES THE TWO DARK ONES. The light ones are composed,
+ * and the first attempt composed them the obvious way — the same angles, the
+ * same stops, `surfaceRaised` wherever the dark one used `deep`. Measured, that
+ * did three wrong things at once, because the light palette is not the dark one
+ * turned upside down: in dark the raised surface is the LIGHTEST of the three,
+ * in light it is the DARKEST. Paper does not work like a screen.
+ *
+ *   dark hero      #091319 → #0D2129    +11.46 L*   lifts away from the base
+ *   light hero v1  #F6F2EA → #EFE9DE     −3.06 L*   sank below it
+ *
+ * And it put the sweep on the wrong block: dark is hero 11.46 / section 0.11,
+ * the composed light was hero 3.06 / section 7.47.
+ *
+ * The third one is the one that matters, because it is not a matter of taste.
+ * `surfaceRaised` is the light palette's worst surface — `accent` reads 4.21 on
+ * it and `warm` 4.19, both under the 4.5 a text needs — so a hero that ENDS
+ * there makes a token's contrast depend on where in the panel the text happens
+ * to sit. `Hero` puts an `accent` eyebrow directly on this gradient. Nothing
+ * catches it either: axe cannot evaluate text over a gradient, so the story
+ * suite passes it in both modes.
+ *
+ * SO THE LIGHT ONES SWEEP BETWEEN `background` AND `surface`, AND NEVER TOUCH
+ * `surfaceRaised`. 4.40 L* each, the hero lifting like the dark one does, and
+ * the darkest point of either gradient is `background` — the surface every
+ * light-mode contrast value in this repo is already ratified against. A token
+ * that passes on the page passes everywhere on both blocks, at any angle, at
+ * any point of the sweep. `scripts/theme-css.test.mjs` asserts the stops.
+ *
+ * See `docs/decisions.md` § 9.
  */
 const deep = '#0D2129';
 
@@ -398,9 +424,9 @@ export const gradient = {
     og: `linear-gradient(145deg, ${dark.background} 55%, ${deep} 100%)`,
   },
   light: {
-    hero: `linear-gradient(160deg, ${light.background} 60%, ${light.surfaceRaised} 100%)`,
-    section: `linear-gradient(150deg, ${light.surface} 0%, ${light.surfaceRaised} 100%)`,
-    og: `linear-gradient(145deg, ${light.background} 55%, ${light.surfaceRaised} 100%)`,
+    hero: `linear-gradient(160deg, ${light.background} 60%, ${light.surface} 100%)`,
+    section: `linear-gradient(150deg, ${light.surface} 0%, ${light.background} 100%)`,
+    og: `linear-gradient(145deg, ${light.background} 55%, ${light.surface} 100%)`,
   },
 } as const;
 

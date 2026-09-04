@@ -117,7 +117,7 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/shiki` | **no** | — | The syntax highlighting theme |
 | `@eduardoalvarez/arrecife/brand` | yes | — | Logo, isotype and mascot as components |
 | `@eduardoalvarez/arrecife/social` | yes, on the server only | — | The nine social icons, loose. No `"use client"` |
-| `@eduardoalvarez/arrecife/icons` | yes | `@phosphor-icons/react` | `Icon`, which draws a Phosphor icon at the system's size and weight |
+| `@eduardoalvarez/arrecife/icons` | yes | `@phosphor-icons/react` | `Icon`, which draws a Phosphor icon at the system's size, and at the weight its role asks for |
 | `@eduardoalvarez/arrecife/form` | yes | `react-hook-form` | The form layer: labels, errors and `aria-*` |
 | `@eduardoalvarez/arrecife/chart` | yes | `recharts` | The chart chassis and the series palette |
 | `@eduardoalvarez/arrecife/assets/*` | — | — | The brand PNGs |
@@ -320,7 +320,7 @@ is the drawing.
 import { GraduationCap, Trash } from '@phosphor-icons/react';
 import { Icon } from '@eduardoalvarez/arrecife/icons';
 
-// 1em and weight `regular`, which is the stroke the identity document names
+// 1em, and `tone="action"` by default — `regular`, the stroke the document names
 <Icon as={GraduationCap} />
 
 // Inside a control with no text, the name goes on the CONTROL
@@ -335,9 +335,30 @@ import { Icon } from '@eduardoalvarez/arrecife/icons';
 **Do not size them by hand.** `size-4`, `size-3.5`, `size-6` scattered through a
 codebase is what this replaces: at 1em the icon takes the size of the text it
 sits in — 13px beside `text-label`, 15px beside `text-ui` — and nobody picks a
-number. **Do not change the weight either.** Phosphor bakes the weight into the
-path, and `regular` is 16 on a 256 grid = 0.0625em, against the document's 1.6 on
-a 24 grid = 0.0667em. Six per cent apart, which is no pixel on any screen.
+number.
+
+**The weight is not yours to pick either, but it is not one value.** `tone` names
+what the icon is doing and the weight follows from it. There are three and there
+is no fourth:
+
+| `tone` | Weight | What it is |
+| --- | --- | --- |
+| `action` · the default | `regular` | An icon that is a control or names one. It is the system's line: 16 on a 256 grid = 0.0625em, against the document's 1.6 on a 24 grid = 0.0667em. Six per cent apart, which is no pixel on any screen |
+| `current` | `fill` | The one of a set you are on — the sidebar item carrying `aria-current` |
+| `quiet` | `light` | Furniture: a marker in a metadata row, not a control and not a state |
+
+```tsx
+<SidebarItem href="/cursos" active icon={<Icon as={GraduationCap} tone="current" />}>
+  cursos
+</SidebarItem>
+```
+
+`current` is the one that earns the axis. An active item already paints itself
+biolume, and colour on its own is the channel WCAG 1.4.1 says may not carry
+meaning alone; the fill is the second channel, and it is the one that survives a
+forced-colours mode. `weight` is deliberately **not** a prop: Phosphor ships six
+and this system reads three, because `thin`, `bold` and `duotone` have no role
+behind them here.
 
 `@phosphor-icons/react` is an **optional** peer dependency. If your project uses
 no icons you install nothing; two of the five do exactly that.
@@ -356,7 +377,7 @@ a Server Component throws. It ships no `"use client"` to stop you, so the failur
 arrives at render rather than at build. The `/ssr` entry is the same icons
 without the context read, and `Icon` works with either.
 
-See `docs/decisions.md` § 29.
+See `docs/decisions.md` § 29 and § 35.
 
 ### `Stat`'s delta says direction, not judgement
 
@@ -1680,14 +1701,13 @@ Imported from `@eduardoalvarez/arrecife/icons` · requires `@phosphor-icons/reac
 
 Source: `src/icons/index.tsx`
 
-The system adopts `@phosphor-icons/react`, and this is the whole of what «adopts» means: an optional peer dependency, and one place that fixes what a call site was getting wrong on its own.
-
-- Extends: `Omit<PhosphorIconProps, 'size' \| 'ref'>`
+- Extends: `Omit<PhosphorIconProps, 'size' \| 'weight' \| 'ref'>`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
 | `as` | `Icon` | yes |  | The Phosphor icon itself, passed as a component: `<Icon as={Books} />`. |
 | `label` | `string` |  |  | The accessible name. WITHOUT it the icon is decorative and gets `aria-hidden`, which is the right default: most icons sit beside their own label and announcing them twice is noise. |
+| `tone` | `"action" \| "current" \| "quiet"` |  | `action` | WHAT THE ICON IS DOING, which is what picks the weight. Three values, and there is no fourth: `action` is the default and the system's line, `current` is the one of a set you are on, `quiet` is furniture that is not a control. `weight` is deliberately not a prop — see `TONE_WEIGHT`. |
 
 ## Forms
 
@@ -1869,9 +1889,10 @@ Types (8): `Background`, `Face`, `Fin`, `IsotypeProps`, `LogoProps`, `MascotFace
 
 | export | type | what it is |
 | --- | --- | --- |
-| `ICON_WEIGHT` | `"light" \| "fill" \| "thin" \| "regular" \| "bold" \| "duotone"` | Phosphor's own name for the system's line. It is not a default to override lightly. |
+| `ICON_WEIGHT` | `"light" \| "fill" \| "thin" \| "regular" \| "bold" \| "duotone"` | Phosphor's own name for the system's line. It is what `tone="action"` resolves to. |
+| `TONE_WEIGHT` | `Record<IconTone, IconWeight>` | The three roles, and the weight each one is drawn at. This is the whole of the weight axis: Phosphor ships six and this system reads three, because the other three — `thin`, `bold`, `duotone` — have no role behind them here. |
 
-Types (1): `IconProps`.
+Types (2): `IconProps`, `IconTone`.
 
 ### `@eduardoalvarez/arrecife/shiki`
 

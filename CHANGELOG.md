@@ -6,7 +6,7 @@
 ### ⚠ BREAKING CHANGES
 
 * **icons:** `Icon` no longer accepts `weight`. Pass `tone` instead — `action` is the old default, `current` is `fill` and `quiet` is `light`. The version it changes in has not been published, so nothing on npm carries the old shape.
-* **components:** `Stat`'s `tone="alerta"` becomes `tone="alert"`. Nothing else changes — same colour, same rule, same default. Migration in docs/migration-0.6.md.
+* **components:** `Stat`'s `tone="alerta"` becomes `tone="alert"`. Nothing else changes — same colour, same rule, same default. Migration in docs/migration-0.7.md.
 
 ### 🚀 Novedades
 

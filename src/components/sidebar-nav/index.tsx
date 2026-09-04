@@ -67,7 +67,7 @@ export function SidebarItem({
           'rounded-chip px-step-sm gap-step-xs flex cursor-pointer items-center py-1.5',
           collapsed && 'justify-center',
           'font-mono text-meta transition-standard',
-          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+          'focus-ring',
           // The active item is `surfaceRaised` with primary ink, same as
           // `TabsTrigger`. NOT biolume: `tokens.ts` says so explicitly — light
           // accent passes over background and over surface, but over
@@ -256,7 +256,7 @@ export function SidebarNav({
                 className={cn(
                   'rounded-chip transition-standard shrink-0 cursor-pointer p-1',
                   'text-text-muted hover:text-text-primary hover:bg-surface-raised',
-                  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+                  'focus-ring',
                 )}
               >
                 {collapsed ? <ChevronRight /> : <ChevronLeft />}

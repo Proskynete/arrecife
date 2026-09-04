@@ -32,7 +32,7 @@ export function TabsTrigger({
         'font-sans text-label text-text-secondary',
         'transition-standard',
         'hover:text-text-primary',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-ring',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[state=active]:bg-surface-raised data-[state=active]:text-text-primary',
         className,
@@ -49,7 +49,7 @@ export function TabsContent({
   return (
     <TabsPrimitive.Content
       className={cn(
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-ring',
         className,
       )}
       {...props}

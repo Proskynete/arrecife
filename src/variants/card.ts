@@ -29,5 +29,5 @@ export const CARD = [
   'group block cursor-pointer',
   CARD_SURFACE,
   CARD_HOVER,
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+  'focus-ring',
 ];

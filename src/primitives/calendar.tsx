@@ -52,7 +52,7 @@ export function Calendar({
     'rounded-chip inline-flex items-center justify-center',
     'transition-standard cursor-pointer',
     'hover:bg-surface-raised',
-    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+    'focus-ring',
     'disabled:pointer-events-none disabled:opacity-50',
   ].join(' ');
 
@@ -60,7 +60,7 @@ export function Calendar({
     'size-8 rounded-chip inline-flex items-center justify-center',
     'text-text-secondary transition-standard cursor-pointer',
     'hover:bg-surface-raised hover:text-text-primary',
-    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+    'focus-ring',
     'disabled:pointer-events-none disabled:opacity-50',
   ].join(' ');
 

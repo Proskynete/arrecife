@@ -66,7 +66,7 @@ export function TableOfContents({
           const classes = cn(
             'px-step-sm -ml-px block border-l',
             'font-sans text-label transition-standard',
-            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+            'focus-ring',
             'cursor-pointer',
             item.nested && 'pl-step-lg',
             'border-transparent text-text-secondary hover:text-text-primary',

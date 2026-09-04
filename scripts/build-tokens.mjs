@@ -309,6 +309,33 @@ ${gradientsBlock('light')}
   animation: arrecife-slide-out-bottom var(--duration-standard) var(--ease-standard);
 }
 
+/* --- the focus ring ---------------------------------------------------------
+   The document gives it once, on the primary button: «focus ring 2px #35D6C0 +
+   offset 3px». The code had it as three classes copied to twenty-nine call
+   sites in twenty-four files, all of them at offset 2, and three audits in a row
+   said so — the value was never argued down to 2, it was copied from the first
+   component and inherited by the next twenty-eight.
+
+   It is one utility for the reason § 15 gives: a list kept in sync by hand with
+   another list ends up out of sync. Twenty-nine copies is twenty-nine chances to
+   write the next one at offset 2 again, and nothing was checking.
+
+   focus-ring-warm exists for the ONE control the ring cannot be biolume on:
+   the conversion button is the system's only sand fill, and a biolume ring
+   around it puts both of the brand's accents in the same three pixels. It sets
+   only the color, so the width and the offset stay in one place. */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
+@utility focus-ring-warm {
+  &:focus-visible {
+    outline-color: var(--color-warm);
+  }
+}
+
 /* The system's only transition, as a utility. States are communicated with
    border and color, not with movement: this class cannot animate anything else. */
 @utility transition-standard {

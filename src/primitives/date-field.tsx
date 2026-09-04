@@ -41,7 +41,7 @@ export function DateField({
         'font-mono text-ui text-text-primary',
         'transition-standard',
         'hover:border-hairline-hover',
-        'focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        'focus-visible:border-accent focus-ring',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[invalid]:border-error data-[invalid]:focus-visible:outline-error',
         // The native indicator inherits the active theme's scheme.

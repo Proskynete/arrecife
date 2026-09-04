@@ -68,7 +68,7 @@ export function SheetContent({ className, side, children, ...props }: SheetConte
             'rounded-chip text-text-muted absolute top-4 right-4 flex size-8 cursor-pointer items-center justify-center',
             'transition-standard',
             'hover:bg-surface-raised hover:text-text-primary',
-            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+            'focus-ring',
           )}
         >
           <Close />

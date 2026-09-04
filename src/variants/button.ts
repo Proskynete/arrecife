@@ -44,7 +44,7 @@ const button = cva(
     'inline-flex cursor-pointer items-center justify-center gap-step-xs whitespace-nowrap select-none',
     'rounded-control font-sans font-medium',
     'transition-standard',
-    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+    'focus-ring',
     'disabled:pointer-events-none disabled:opacity-50',
     '[&_svg]:shrink-0',
   ],
@@ -55,7 +55,10 @@ const button = cva(
           'bg-accent text-accent-on hover:bg-accent-hover',
           'light:bg-brand-hull light:text-accent-on light:hover:bg-text-secondary',
         ],
-        conversion: 'bg-warm text-warm-on hover:bg-warm-hover',
+        // The one control whose focus ring is not biolume. It is the system's
+        // only sand fill, and a biolume ring three pixels off a sand button puts
+        // both of the brand's accents in the same glance. See `decisions.md` § 37.
+        conversion: 'bg-warm text-warm-on hover:bg-warm-hover focus-ring-warm',
         secondary: [
           'border-hairline-hover border bg-transparent text-text-primary',
           'hover:border-accent hover:text-accent',

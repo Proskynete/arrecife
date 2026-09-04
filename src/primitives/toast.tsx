@@ -56,7 +56,7 @@ export function Toast({ className, variant, children, ...props }: ToastProps) {
           'rounded-chip text-text-muted absolute top-3 right-3 flex size-7 cursor-pointer items-center justify-center',
           'transition-standard',
           'hover:bg-surface-raised hover:text-text-primary',
-          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+          'focus-ring',
         )}
       >
         <Close />

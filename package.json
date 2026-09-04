@@ -98,6 +98,7 @@
     "check:namespace": "node scripts/check-tokens-namespace.mjs",
     "check:llms": "node scripts/build-llms.mjs --check",
     "check:copy": "node scripts/check-copy-language.mjs",
+    "check:decisions": "node scripts/check-decisions.mjs",
     "doctor": "node scripts/doctor.mjs",
     "check:exports": "node scripts/check-package-exports.mjs",
     "check:release": "node scripts/check-release-config.mjs",

@@ -65,6 +65,13 @@ jobs:
       - name: 🗣️ Verify user-facing copy stays in Spanish
         run: pnpm check:copy
 
+      # It cannot fail on the list — the actions land on a Claude Design canvas
+      # this repo cannot open. It prints them, which is the whole point: § 22
+      # asked for a row in the controls table and nobody re-read § 22 for
+      # thirteen entries. It DOES fail on an entry that never asked at all.
+      - name: 📐 List the actions still pending on the identity documents
+        run: pnpm check:decisions
+
       - name: 🧮 Check the types
         run: pnpm typecheck
 

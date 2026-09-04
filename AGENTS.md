@@ -66,6 +66,7 @@ pnpm storybook        # generates the tokens and serves Storybook on 6006
 | `pnpm check:exports`                | verifies `dist/` holds what `exports` promises, that the portable subpaths bring no React, and that `"use client"` is on the client entries and only there |
 | `pnpm check:llms`                   | fails if `llms.txt` does not match the types              |
 | `pnpm check:copy`                   | fails if user-facing copy drifted into English            |
+| `pnpm check:decisions`              | lists the actions `decisions.md` still owes a canvas       |
 | `pnpm doctor`                       | the check a CONSUMING project runs: `@source` and token collisions |
 | `pnpm build:doctor`                 | copies `doctor.mjs` into `dist/`, where `bin` points        |
 | `pnpm check:release`                | validates the release-please configuration                |
@@ -331,11 +332,13 @@ A sixth has to land on one of those two, with the argument written in
   exported. It does not grow.
   What the library DOES ship is how an icon is drawn. Since 0.7.0
   `@phosphor-icons/react` is an optional peer dependency and `./icons` publishes
-  `Icon`, which fixes the size at 1em and the weight at `regular` — 16 on a 256
-  grid, which is 0.0625em against the document's 0.0667em. A project's icons are
-  still the project's; what stopped being the project's is the line weight.
-  `glyphs.tsx` itself is the known outlier at 0.109em. See `docs/decisions.md`
-  § 29.
+  `Icon`, which fixes the size at 1em and takes the weight from `tone` —
+  `action` is `regular`, which is 16 on a 256 grid = 0.0625em against the
+  document's 0.0667em; `current` is `fill`; `quiet` is `light`. `weight` is not
+  a prop: three of Phosphor's six have a role here and the other three do not.
+  A project's icons are still the project's; what stopped being the project's is
+  the line they are drawn with. `glyphs.tsx` itself is the known outlier at
+  0.109em. See `docs/decisions.md` § 29 and § 35.
 - **An icon is not illustration.** Tiburoncín — the faces, the poses, the fin —
   is the mascot, it lives in `src/brand/` and the manual doses it by surface: a
   face only in an empty state, a confirmation, an error, course progress or a

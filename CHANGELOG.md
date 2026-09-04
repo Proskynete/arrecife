@@ -1,5 +1,74 @@
 # Changelog
 
+## [0.7.0](https://github.com/Proskynete/arrecife/compare/v0.6.0...v0.7.0) (2026-09-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **icons:** `Icon` no longer accepts `weight`. Pass `tone` instead — `action` is the old default, `current` is `fill` and `quiet` is `light`. The version it changes in has not been published, so nothing on npm carries the old shape.
+* **components:** `Stat`'s `tone="alerta"` becomes `tone="alert"`. Nothing else changes — same colour, same rule, same default. Migration in docs/migration-0.6.md.
+
+### 🚀 Novedades
+
+* **components:** EmptyState gains the shape that carries no face ([7292ec0](https://github.com/Proskynete/arrecife/commit/7292ec07cc3332442335325c49bbc0f3473267fc))
+* **components:** Nav gains the one thing of the three it was missing ([1d2ec5b](https://github.com/Proskynete/arrecife/commit/1d2ec5b0a39d46bf17ee91f2a756c3fa7e8e1cd8))
+* **components:** Stat gains delta, spark and the achievement tone ([0cf4348](https://github.com/Proskynete/arrecife/commit/0cf4348f4efd16c49ab54a5c205bb06c4f04ffd6))
+* **components:** Stat's tone stops being called alerta ([43ffa43](https://github.com/Proskynete/arrecife/commit/43ffa431ac6f675ab27be2a8096e0acbad758711))
+* **components:** the sidebar collapses to a rail, and takes who is signed in ([6fae58f](https://github.com/Proskynete/arrecife/commit/6fae58f3e6bc9cf975a78ca1aeab484421386f51))
+* **components:** the sidebar gets blocks, and the icon replaces the prompt ([1d910a3](https://github.com/Proskynete/arrecife/commit/1d910a38d56000d955bc317fc4566fb7038864f0))
+* **components:** the Stat card as it goes in the panel ([50e47f1](https://github.com/Proskynete/arrecife/commit/50e47f1b898afe207011d00f983af260e623a970))
+* **icons:** the system adopts Phosphor, and it still ships no icons ([8a89c4e](https://github.com/Proskynete/arrecife/commit/8a89c4ef3e2292b8cb5d3c0a287fa59ceb635679))
+* **icons:** the weight is an axis with three roles, and none of them is bold ([a8a9bed](https://github.com/Proskynete/arrecife/commit/a8a9bed9df6dea6c48b63dfd5e4af8f44368befa))
+* npx arrecife, for the two failures that produce no error ([1b2160f](https://github.com/Proskynete/arrecife/commit/1b2160f378a53d433851b4c7995d164f3b93edd1))
+* **social:** the nine icons get a subpath that crosses the RSC boundary ([bfa239f](https://github.com/Proskynete/arrecife/commit/bfa239f6c75c8cd99b7c9fa0bad155fdc68b7d98))
+* **tokens:** a second bar height, for a shell that also has a sidebar ([2277afb](https://github.com/Proskynete/arrecife/commit/2277afb6bc2a2674d7722d69a989259634b74cbd))
+* **tokens:** the sidebar's two widths, because a collapsible one needs both ([8b04bc0](https://github.com/Proskynete/arrecife/commit/8b04bc0dcc065d408b40d2076cb61d5bbe19dbc6))
+
+
+### 🐛 Correcciones
+
+* **a11y:** the focus ring is one utility, at the offset the document gives ([66519b9](https://github.com/Proskynete/arrecife/commit/66519b9ab9834608aae7098b127d1789ad932579))
+* **a11y:** the two accessible names the English sweep took with it ([dea2b8c](https://github.com/Proskynete/arrecife/commit/dea2b8cf17b5ee4a449d92c4805e89c528aa4021))
+* **components:** the default copy goes back to Spanish ([1b0121e](https://github.com/Proskynete/arrecife/commit/1b0121e284b3a5fd244ba63704adf35de06937d5))
+* **components:** the story taught a face map that `faceUsage` denies ([98c46ff](https://github.com/Proskynete/arrecife/commit/98c46ff337e90eb4acb6e90b38a00b54be4805e3))
+* **components:** thirteen more strings the sweep corrupted, in the demo copy ([d6dd7fc](https://github.com/Proskynete/arrecife/commit/d6dd7fcc84a205dba562c8e1f1559328bac73e76))
+* **tokens:** no light gradient ends on surfaceRaised, where accent is 4.21 ([802fdd0](https://github.com/Proskynete/arrecife/commit/802fdd09e6841ea29c384e5f8f99866c1b30bb81))
+
+
+### 🔧 Mantenimiento
+
+* **components:** the AudioPlayer's internals finish the move to English ([db566d7](https://github.com/Proskynete/arrecife/commit/db566d7223c04db928e925ef0fb4edc462c240f8))
+
+
+### 📚 Documentación
+
+* § 35 and § 36, the weight axis and the two actions nobody carried over ([dc72b1d](https://github.com/Proskynete/arrecife/commit/dc72b1d70fe5344b34473fb1a6ae8bb22dca29e6))
+* § 37, the focus ring, and the one half of it that is an interpretation ([6084787](https://github.com/Proskynete/arrecife/commit/6084787068bbd5882574aae323d42581d7ccdbd7))
+* § 9 is ratified and § 38 answers the number nobody looked up ([cd301fc](https://github.com/Proskynete/arrecife/commit/cd301fc8bcba06a4df3928de83fa8eee573cc261))
+* an icon is not illustration, and the version that says so is 0.7.0 ([5d5a88c](https://github.com/Proskynete/arrecife/commit/5d5a88c162fe8ec747602cff7c09476650cab2b8))
+* **components:** the delta says direction, and the document says so first ([ad39c6f](https://github.com/Proskynete/arrecife/commit/ad39c6f9776817f745cca82b1c93fab6287eec31))
+* the ban on icon libraries is lifted, and the set was picked by measurement ([b313b64](https://github.com/Proskynete/arrecife/commit/b313b64b69e0db6a75001a888d95be7c71d5b211))
+* the contrast rule for surfaceRaised covers gradients too ([e5e92d5](https://github.com/Proskynete/arrecife/commit/e5e92d5efc7a0610d06b09b6a757def4fb88dce8))
+* the focus ring is a utility now, and AGENTS said to write it out by hand ([1943567](https://github.com/Proskynete/arrecife/commit/1943567070e30aed733b08c1ca66fd18287221ff))
+* the neutral number stops being biolume, and where the tone went ([9f3fffb](https://github.com/Proskynete/arrecife/commit/9f3fffbd1f6e65f8797a140f6be71268a2f62d38))
+* the rail gets in, and the entry says which premise expired ([86d7b04](https://github.com/Proskynete/arrecife/commit/86d7b044432120d2b29eb3295c1958075a6109c1))
+* the second shape of the empty state, and where it bends the document ([612e7a8](https://github.com/Proskynete/arrecife/commit/612e7a8c78b49a03a6db8f787b90ae13bc60a6eb))
+* the sidebar's blocks, and why the label is not a heading ([dc030f1](https://github.com/Proskynete/arrecife/commit/dc030f1ae707e4ee8596b4b6659716c3debd0fa0))
+* the third tone, and the fourth breaking change ([abb6dfc](https://github.com/Proskynete/arrecife/commit/abb6dfce7cf93f2167dbff29c32c8d6b399c440c))
+* the two forms of the social icons, and which one crosses the boundary ([9b90a82](https://github.com/Proskynete/arrecife/commit/9b90a829201de857462c80cf846dde46d628597b))
+* the two silent failures get a command, and the README stops being the guard ([4b40bb6](https://github.com/Proskynete/arrecife/commit/4b40bb6359e79100544da3ba8cb0586dfc82bd03))
+* the weight is three values, and the README and AGENTS said it was one ([05f3351](https://github.com/Proskynete/arrecife/commit/05f33513c4332ab4651b0a256ad8cbecfe810e34))
+* this is two releases, not one — the guide splits back ([16fdf94](https://github.com/Proskynete/arrecife/commit/16fdf9494092f0b77f7397d891637d130407555b))
+* two of the three things Nav was missing were already there ([f77b712](https://github.com/Proskynete/arrecife/commit/f77b7125d500122b26bf22f79f5983be483e3df4))
+
+
+### 🚀 CI/CD
+
+* a check for the copy, because «nothing catches this» was the wrong answer ([74169c3](https://github.com/Proskynete/arrecife/commit/74169c3803f753a61800de130184ec0a2043d821))
+* icons joins the scope list ([783acc4](https://github.com/Proskynete/arrecife/commit/783acc432cea7f947e3dbd8fc3590be9617c5102))
+* social joins the scope list, by the rule that was already written ([d805a37](https://github.com/Proskynete/arrecife/commit/d805a37e0206ff3f6f71718d69d8db93e2e70f75))
+* the actions decisions.md owes a canvas get printed, because § 22's was not ([c5dc751](https://github.com/Proskynete/arrecife/commit/c5dc751aa01be82c3429239afb6372fa8471acc6))
+
 ## [0.6.0](https://github.com/Proskynete/arrecife/compare/v0.5.1...v0.6.0) (2026-09-02)
 
 

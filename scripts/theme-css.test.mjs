@@ -159,6 +159,34 @@ describe('theme.css over Tailwind v4', () => {
     expect(rule(css, 'text-h1')).toContain('var(--text-h1)');
   });
 
+  it('keeps every light gradient stop off surfaceRaised, the palette\'s worst surface', async () => {
+    const css = await compileClasses(['gradient-hero', 'gradient-section']);
+
+    // The document gives the two dark ones and no light ones. The composed light
+    // ones used to end on `surfaceRaised`, where `accent` reads 4.21 and `warm`
+    // 4.19 — both under the 4.5 a text needs — which made a token's contrast
+    // depend on where in the panel the text happened to sit. `Hero` puts an
+    // `accent` eyebrow directly on this gradient, and nothing caught it: axe
+    // cannot evaluate text over a gradient, so both modes passed.
+    //
+    // Sweeping only between `background` and `surface` is what makes the
+    // guarantee flat: the darkest point of either block is `background`, which
+    // is the surface every light contrast value here is ratified against.
+    const light = css.slice(css.indexOf("[data-theme='light']"));
+    for (const name of ['--gradient-hero', '--gradient-section', '--gradient-og']) {
+      const value = property(light, name);
+      expect(value, `${name} exists in light mode`).toBeDefined();
+      expect(value, `${name} must not touch surfaceRaised`).not.toContain('#EFE9DE');
+    }
+
+    // The dark ones are the document's and are asserted verbatim, so a rewrite
+    // of the light side can never quietly take them with it.
+    const dark = css.slice(css.indexOf("[data-theme='dark']"));
+    expect(property(dark, '--gradient-hero')).toBe(
+      'linear-gradient(160deg, #091319 60%, #0D2129 100%)',
+    );
+  });
+
   it('serves the focus ring at the offset the document gives, and lets sand win', async () => {
     const css = await compileClasses(['focus-ring', 'focus-ring-warm']);
 

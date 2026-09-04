@@ -184,6 +184,9 @@ it goes into the document **first** and in here second».
 That is exactly the road it came back by. The palette was decided outside the
 code, and then the variant was written.
 
+**Action in the document:** none — § 21 carries it. This entry is kept for the
+route it records, not for anything the document still owes.
+
 ---
 
 ## 9 · The light gradients are invented
@@ -319,6 +322,9 @@ no longer be forgotten here, because there is nothing to add here.
 **Lesson, and it goes to the team's document before the design one:** a list that
 has to be kept in sync by hand with another list ends up out of sync. If it can
 be derived, derive it.
+
+**Action in the document:** none. It is an implementation decision and it changes
+nothing anyone reads on a canvas.
 
 ---
 
@@ -1277,6 +1283,118 @@ avatar needs a session and a sign-out route.
 
 **Action in the document:** add the rail to the admin's description in § 09 —
 «barra lateral de 256, rail de 56 a solo iconos».
+
+---
+
+## 35 · The weight is an axis with three values, and none of them is `bold`
+
+**Document:** «funcionales en trazo 1.6», which is one stroke and no second one.
+**Code:** `Icon` takes a `tone` — `action` · `current` · `quiet` — and the weight
+follows from it. `weight` is not a prop.
+
+**What § 29 left half-done.** That entry answered «which set» and «drawn how» and
+it answered them well: `regular` IS the document's 1.6, measured and not derived.
+What it did not do is notice that it had settled a DEFAULT and written it down as
+a CONSTANT. The generated documentation says «Do not change the weight either» in
+so many words, and by the time the sidebar had icons in it that sentence was
+already false — the active item needed something the default could not say.
+
+**`current` is what earns the axis, and the argument is not taste.** A sidebar
+item that is the one you are on already carries `aria-current="page"` and paints
+itself biolume. Colour on its own is the single channel WCAG 1.4.1 says may not
+carry meaning, so the state was resting on one channel and a landmark attribute
+nobody sees. A filled glyph is the second visible channel, and it is the one that
+survives `forced-colors`, where the biolume is replaced by the system palette and
+the distinction disappears. It costs nothing: Phosphor already ships the fill.
+
+**`quiet` is the opposite problem.** In a metadata row — a date, a reading time,
+a tag count — the icon is not the point of the line, and at `regular` it draws as
+heavy as the text it is annotating. `light` is 12 on a 256 grid = 0.0469em, a
+quarter under the system line, which is enough to put it behind the text without
+it disappearing.
+
+| `tone` | Weight | Line | What it is |
+| --- | --- | --- | --- |
+| `action` · default | `regular` | 0.0625em | A control, or the label of one |
+| `current` | `fill` | — | The one of a set you are on |
+| `quiet` | `light` | 0.0469em | Furniture: not a control, not a state |
+
+**Three and not six, and `weight` is not a prop.** Phosphor ships `thin`,
+`light`, `regular`, `bold`, `fill` and `duotone`. Three of them have a role here
+and three do not: `thin` is `light` with less of it, `duotone` needs a second
+colour this system has no token for, and **`bold` is the emphasis step a
+`strokeWidth` set would have offered** — which this system does not want, because
+it emphasises with colour and has since the first button. Exposing `weight`
+alongside `tone` would have given two ways to say the same thing and one way to
+say three things that mean nothing, which is exactly the failure § 26's JSDoc is
+about on the other subpath.
+
+`ICON_WEIGHT` stays exported. It is no longer «the weight», it is what
+`tone="action"` resolves to, and it is still the right thing to reach for when a
+project draws a Phosphor icon directly instead of through the wrapper.
+
+**It repealed four sentences, and three of them were in generated files.** The
+handoff was written against the code and against § 21, § 22 and § 29 and all of
+that held; what nobody re-read was the documentation, where
+`docs/llms.template.md` said «Do not change the weight either» and «at the
+system's size and weight» in the singular, `AGENTS.md` said «fixes the size at
+1em and the weight at `regular`», and the `Icons/Icon` weight story opposed
+`light · regular · bold` — putting the one weight the decision rules out in the
+middle of the exhibit. The edits go in `docs/llms.template.md`, never in
+`llms.txt`, which `scripts/build-llms.mjs` writes. **This is the same failure
+mode as § 15 and as § 22's forgotten row**: two places that have to agree, living
+in different files, with nothing checking that they do.
+
+**Action in the document:** the icon line § 29 already asked for gains a second
+half — «peso por rol · `regular` funcional, `fill` para el elemento actual,
+`light` para lo que acompaña».
+
+---
+
+## 36 · Two actions on the document that were never carried over
+
+Not a discrepancy between code and document: a discrepancy between a decision and
+its own action. Both are recorded here because they were found in an audit rather
+than by anyone reading the entry that asked for them, which is the point.
+
+**§ 22 asked for a row and never got it.** The entry closes with «Action in the
+document: add `icon-sm 32×32` to the controls table». The code has had it since:
+it is in `tokens.control.iconSm`, in `buttonVariants` and in the generated props
+table. The canvas still lists four sizes — «sm 8/14 · md 12/22 · lg 15/30 · icono
+42×42» — so a reader who trusts the document and builds an admin toolbar reaches
+for 42 and gets the row height the size exists to avoid.
+
+**§ 29's icon line is still pending too**, and § 35 above has now added a second
+half to it before the first half was ever written down.
+
+**Why they are not fixed here.** `docs/design-system.md` is a **verbatim**
+transcription of the canvas, and its own header says translating or editing it
+would break the one property it exists for: that a drift like the Shiki theme's
+`#E05252` can be caught by grepping the copy against the source. Editing the copy
+to match the code inverts that — the next drift would be invisible because the
+copy would already agree. **The canvas is the source, so the canvas is where
+these two go**, and the transcription is re-extracted afterwards.
+
+**The durable half of the fix is a script, and it is in this change.** Every one
+of the thirty-seven entries ends in «Action in the document», thirteen say
+«none», and **twenty-four are asking for a change to a canvas** — with nothing
+anywhere that listed them. An
+action was only as durable as whoever last read the entry it was buried in, and
+§ 22's sat in the middle of this file for thirteen entries.
+`pnpm check:decisions` collects the lines and prints them.
+
+**It reports, it does not enforce**, and that is not a compromise: the actions
+land on a canvas the script cannot open, so it can say what is outstanding and it
+cannot say whether it was done. It exits 0 on the list. The one thing it DOES
+fail on is its own contract — an entry with no action line at all — because the
+line exists to force the question «and what does the document have to say now»,
+and «none» is a valid answer that still has to be written down. **It found three
+on its first run**: § 8, § 15 and this entry, all of which had simply ended
+without asking. That is the same class of gap it was built for, one level up.
+
+**Action in the document:** none. Both actions above belong to § 22 and § 29 and
+are listed under those; this entry is the record that they were dropped, not a
+new request.
 
 ---
 

@@ -241,6 +241,50 @@ ${gradientsBlock('light')}
   animation: arrecife-caret 1.06s step-end infinite;
 }
 
+/* --- the sixth exception: the halo, and the mark the signature actually uses -
+   The mark stays solid and RADIATES: a ring grows out of it to 5px and fades.
+   It never turns off, and nothing about it is on-or-off.
+
+   THIS IS WHAT THE CLI SIGNATURE ENDS IN. Both sites that draw that signature
+   had it — cursos in app/globals.css, eduardoalvarez.dev in base.css — under
+   the name cursor-ping, and the blog's copy is still there with nothing
+   rendering it, because adopting the library's Footer replaced its mark with a
+   blink. The library had overruled the identity in the one direction it is not
+   allowed to: it invented.
+
+   It is NOT a variant of the caret above, and that is why there are two
+   utilities and not one with a setting. § 23 argued the caret's case ON
+   step-end — «a real caret is on or off, and easing it turns a terminal into a
+   pulsing dot» — so a halo folded into that name would be that entry
+   contradicting itself.
+
+   Its reason is the one the first four exceptions share: it is feedback about
+   PROGRESS. A prompt that radiates says the terminal is live, which is the same
+   thing the button spinner says and the same thing a still mark cannot say.
+
+   The color comes from --color-accent and not from a hex, so it follows the
+   mode. cursos wrote it against its own --primary, which freezes to whichever
+   mode was active; the blog hardcoded rgba(53, 214, 192, 0.7), which is this
+   accent at 70 % and goes stale the day the accent moves. 1.5s ease-in-out,
+   which is the cadence both arrived at.
+
+   Behind motion-safe at the call site — the half NOT copied from cursos, whose
+   span animates regardless. The blog guarded it, every other exception here is
+   guarded, and at rest the bar is simply solid.
+   See docs/decisions.md § 45. */
+@keyframes arrecife-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent) 70%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+}
+
+@utility pulse-accent {
+  animation: arrecife-pulse 1.5s ease-in-out infinite;
+}
+
 /* --- the accordion exception -----------------------------------------------
    The fourth one and, like the other three, it is not «it looks better»: a
    disclosure that reveals content with no transition makes everything below it

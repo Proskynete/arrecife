@@ -55,7 +55,7 @@ had achieved nothing.
 
 Five names collide with shadcn's; four agree on their value and are harmless, and
 the command tells them apart instead of failing on all five. See
-[`decisions.md`](decisions.md) § 33.
+[`../decisions/0.7.md`](../decisions/0.7.md#33--the-two-silent-failures-get-a-command-not-another-paragraph) § 33.
 
 ---
 
@@ -98,7 +98,7 @@ import { LinkedIn } from '@eduardoalvarez/arrecife/social';
 properties of a plain object are not exports, so `social.LinkedIn` is `undefined`
 on the server and `undefined` as an element type kills the build at prerender.
 The root keeps the group, unchanged, for iterating the catalogue. See
-[`decisions.md`](decisions.md) § 26.
+[`../decisions/0.7.md`](../decisions/0.7.md#26--the-social-icons-are-published-twice-and-they-are-not-two-ways-of-writing-the-same-import) § 26.
 
 ### `./icons`, and the system adopts Phosphor
 
@@ -128,18 +128,18 @@ is doing. **`weight` is not a prop; `tone` is**, and there are three:
 `current` is worth using wherever you already pass `active`: colour on its own is
 the channel WCAG 1.4.1 says may not carry meaning, and the fill survives a
 forced-colours mode where the accent does not. See
-[`decisions.md`](decisions.md) § 35.
+[`../decisions/0.7.md`](../decisions/0.7.md#35--the-weight-is-an-axis-with-three-values-and-none-of-them-is-bold) § 35.
 
 `@phosphor-icons/react` is an **optional** peer dependency: a project that uses
 no icons installs nothing. In a Next Server Component import from
 `@phosphor-icons/react/ssr` — the default build reads `IconContext` through
 `useContext` and ships no `"use client"` to stop you, so the failure arrives at
-render. See [`decisions.md`](decisions.md) § 29.
+render. See [`../decisions/0.7.md`](../decisions/0.7.md#29--the-system-adopts-phosphor-and-it-still-ships-no-icons) § 29.
 
 **Icons are not illustration.** Tiburoncín — the faces, the poses, the fin — is
 the mascot, it lives in `./brand`, and the manual doses it by surface. An icon
 from `./icons` is functional vocabulary and never replaces it, in either
-direction. See [`decisions.md`](decisions.md) § 29.
+direction. See [`../decisions/0.7.md`](../decisions/0.7.md#29--the-system-adopts-phosphor-and-it-still-ships-no-icons) § 29.
 
 ### `EmptyState variant="inline"`
 
@@ -169,7 +169,7 @@ the corner opposite the title, in a circle tinted at 10 % of the tone; the
 sparkline is pinned to the bottom edge so a row of cards shares one baseline; and
 a NEUTRAL number renders in primary ink instead of biolume, because the badge and
 the line now carry the tone. `alert` and `achievement` still paint the number
-sand. See [`decisions.md`](decisions.md) § 31.
+sand. See [`../decisions/0.7.md`](../decisions/0.7.md#31--the-neutral-number-stops-being-biolume-and-the-tone-moves-to-the-badge) § 31.
 
 ### `SidebarNav` groups, collapses, and takes who is signed in
 
@@ -188,7 +188,7 @@ and a sidebar with no icons keeps the prompt — nothing written before this mov
 The rail is controlled: this state is almost always persisted, and an internal one
 would fight the cookie you already keep. Its chevron comes from the library's own
 glyphs, so a project that installs no icon set still gets the button. See
-[`decisions.md`](decisions.md) § 32 and § 34.
+[`../decisions/0.7.md`](../decisions/0.7.md#32--the-sidebar-gets-blocks-and-the-icon-replaces-the-prompt--reversed-in--48) § 32 and § 34.
 
 ### `Nav size="compact"`
 
@@ -196,7 +196,7 @@ glyphs, so a project that installs no icon set still gets the button. See
 and not a class because the height lives on the inner container, so passing
 `h-14` from outside did nothing — silently. The other two things a header wants
 were already slots: `brand` takes a `~/cursos` wordmark and `actions` takes a user
-menu or a «Entrar» button. See [`decisions.md`](decisions.md) § 30.
+menu or a «Entrar» button. See [`../decisions/0.7.md`](../decisions/0.7.md#30--nav-needed-one-of-the-three-things-the-backlog-asked-for) § 30.
 
 ---
 
@@ -210,7 +210,7 @@ work.
 and what twenty-eight call sites had at 2 because the first one did. It is one
 `focus-ring` utility now. The conversion button — the system's only sand fill —
 takes a sand ring instead of a biolume one, so the two brand accents stop meeting
-three pixels apart. See [`decisions.md`](decisions.md) § 37.
+three pixels apart. See [`../decisions/0.7.md`](../decisions/0.7.md#37--the-focus-ring-is-one-utility-at-the-offset-the-document-actually-gives) § 37.
 
 **The light-mode gradients sweep to `#FFFFFF` instead of `#EFE9DE`.** The old
 light `hero` ended on `surfaceRaised`, the light palette's worst surface, where

@@ -112,4 +112,4 @@ migrating:
   emits `onSelectFile(File)` and your project does the `POST`.
 - **`EventCalendar`** is new: a schedule with create, edit and delete.
 - **`Accordion`** animates its height, behind `motion-safe`. See
-  [`decisions.md`](decisions.md) § 20.
+  [`../decisions/0.6.md`](../decisions/0.6.md#20--the-accordion-does-animate-its-height) § 20.

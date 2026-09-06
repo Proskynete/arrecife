@@ -1,11 +1,18 @@
 /**
  * The pending actions on the identity documents, collected and printed.
  *
- * `docs/decisions.md` is where a discrepancy between the code and a Claude
- * Design canvas gets recorded, and most entries end in **Action in the
- * document** — a change somebody has to make on the canvas, which lives outside
- * this repo. Nothing lists them, so an action is only as durable as whoever last
- * read the entry it is buried in.
+ * `docs/decisions/` is where a discrepancy between the code and a Claude Design
+ * canvas gets recorded, and most entries end in **Action in the document** — a
+ * change somebody has to make on the canvas, which lives outside this repo.
+ * Nothing lists them, so an action is only as durable as whoever last read the
+ * entry it is buried in.
+ *
+ * It reads every `*.md` in that folder EXCEPT `README.md`, which is the index
+ * and holds no entries of its own. The files are named for the release that
+ * closed them — `0.6.md`, `0.7.md`, `0.8.md` — and they are sorted NUMERICALLY
+ * and not as strings: `0.10` sorts before `0.6` alphabetically, which would put
+ * the report out of order on the first two-digit minor and do it silently. The
+ * ordering inside a file is already the numbering.
  *
  * § 22 is the proof. It asked for `icon-sm 32×32` in the controls table in
  * August; the code has had the size since, and thirteen entries later an audit
@@ -23,14 +30,34 @@
  * force the question «and what does the document have to say now», and «none» is
  * a valid answer that has to be written down. Twelve entries answer «none» today.
  */
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const file = join(root, 'docs', 'decisions.md');
+const folder = join(root, 'docs', 'decisions');
 
-const source = await readFile(file, 'utf8');
+const parts = (name) => name.replace(/\.md$/, '').split('.').map(Number);
+
+const files = (await readdir(folder))
+  .filter((name) => name.endsWith('.md') && name !== 'README.md')
+  .sort((a, b) => {
+    const [left, right] = [parts(a), parts(b)];
+    for (let i = 0; i < Math.max(left.length, right.length); i += 1) {
+      const diff = (left[i] ?? 0) - (right[i] ?? 0);
+      if (diff !== 0) return diff;
+    }
+    return 0;
+  });
+
+if (files.length === 0) {
+  console.error('docs/decisions/ holds no entry files.');
+  process.exit(1);
+}
+
+const source = (
+  await Promise.all(files.map((name) => readFile(join(folder, name), 'utf8')))
+).join('\n');
 
 /** Split on the `##` headings, keeping the numbered entries and dropping the prose ones. */
 const entries = source

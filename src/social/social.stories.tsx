@@ -24,7 +24,7 @@ import * as icons from './index.tsx';
  * The SOURCE does not move with the title. `src/social/` is its own published
  * subpath because a namespace object cannot cross the RSC boundary and `./icons`
  * asks for an optional peer dependency these ten must never need. See
- * `docs/decisions.md` § 26 and § 29.
+ * `docs/decisions/0.7.md` § 26 and § 29.
  */
 const meta = { title: 'Icons/Social' } satisfies Meta;
 export default meta;

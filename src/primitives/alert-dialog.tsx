@@ -28,7 +28,7 @@ import { buttonVariants } from '../variants/button.ts';
  * «Borrar el artículo», not «Aceptar».
  *
  * `destructive` is for the destructive button that has none of that around it:
- * a table row, a toolbar. See `docs/decisions.md` § 21.
+ * a table row, a toolbar. See `docs/decisions/0.6.md` § 21.
  */
 export const AlertDialog = AlertDialogPrimitive.Root;
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;

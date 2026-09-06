@@ -116,7 +116,7 @@ export const Sizes: Story = {
         A single control radius for all three sizes. The document stepped the
         radius 8/10/12; three radius tokens for a two-pixel difference is harder
         to defend than one control radius, so the step comes out of the document
-        rather than going into the code. It is recorded in `docs/decisions.md`.
+        rather than going into the code. It is recorded in `docs/decisions/`.
       </Note>
       <Note>
         `icon` is the document's 42×42 square. It carries no text, so it carries
@@ -238,7 +238,7 @@ export const Destructive: Story = {
           It stops working in a table row. `cursos` has eight of these in row
           actions and toolbars, next to «Editar» and «Duplicar»: rendered as
           `secondary`, «Eliminar curso» looked exactly like «Cancelar» and only
-          the word separated them. See `docs/decisions.md` § 21.
+          the word separated them. See `docs/decisions/0.6.md` § 21.
         </Note>
       </Block>
 

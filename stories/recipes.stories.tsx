@@ -19,7 +19,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../src/primitives/popov
  * and a decision that leaves no trace gets taken again in six months.
  *
  * There were two. The sidebar recipe left with `SidebarNav` in 0.8.0 — see
- * `docs/decisions.md` § 48 — and what it demonstrated is now moot: the piece it
+ * `docs/decisions/0.8.md` § 48 — and what it demonstrated is now moot: the piece it
  * was composed from is gone, and the two admin projects it was for each have a
  * sidebar of their own that they prefer.
  *

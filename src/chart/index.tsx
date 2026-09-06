@@ -46,7 +46,7 @@ import { radius } from '../tokens/tokens.ts';
  * What IS published, since this version, are three CHART TYPES on top of that
  * chassis: `AreaChart`, `BarChart` and `LineChart`. They are not wrappers over
  * Recharts' components of the same name — they take `data`, `series` and `xKey`
- * and draw the whole thing. See `docs/decisions.md` § 43 for why the names
+ * and draw the whole thing. See `docs/decisions/0.8.md` § 43 for why the names
  * collide on purpose.
  */
 

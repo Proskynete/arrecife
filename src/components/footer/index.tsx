@@ -26,7 +26,7 @@ import { naming } from '../../tokens/tokens.ts';
  * answer has not moved: `EmptyState` is a discriminated union where `page` is
  * the default and `inline` cannot be handed a face; `Nav` takes a `size` where
  * `default` is the bar it always was. Both left what was written before exactly
- * where it was. See `docs/decisions.md` § 44.
+ * where it was. See `docs/decisions/0.8.md` § 44.
  *
  * The union is what holds the rule up. `columns`, `description` and `action`
  * exist only on `full`, and the default form cannot be handed one. As loose
@@ -75,7 +75,7 @@ export type FooterColumn = {
  * `./aviso-legal` — and that row is what `variant="full"`'s columns replace. A
  * flat row cannot say which block a link belongs to, cannot carry a heading a
  * screen reader can jump to, and made whoever wrote the label type the `./`
- * themselves, which the columns put there. See docs/decisions.md § 47.
+ * themselves, which the columns put there. See docs/decisions/0.8.md § 47.
  */
 type FooterBase = Omit<ComponentPropsWithoutRef<'footer'>, 'children'> & {
   social?: readonly SocialLink[];
@@ -172,7 +172,7 @@ function SocialRow({ social }: { social: readonly SocialLink[] }) {
  * So the mark is `pulse-accent`, and the geometry is the one those two sites
  * drew: a 2px bar, not a half-em block. A halo needs something thin to radiate
  * from — around a block it reads as a glowing rectangle, which is the shape the
- * bar exists to avoid. See `docs/decisions.md` § 45, and § 23 for the argument
+ * bar exists to avoid. See `docs/decisions/0.8.md` § 45, and § 23 for the argument
  * this reverses.
  *
  * The height is `1em` and not `cursos`'s fixed 12px, so the mark tracks the text

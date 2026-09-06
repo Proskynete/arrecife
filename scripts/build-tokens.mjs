@@ -236,7 +236,7 @@ ${gradientsBlock('light')}
    written from first principles about terminals rather than read off the two
    sites that already had a signature. A utility with no consumer and no origin
    is not a feature, it is the invention still sitting there under a new label.
-   See docs/decisions.md § 45.
+   See docs/decisions/0.8.md § 45.
 
    Its reason is the one the other four exceptions share: it is feedback about
    PROGRESS. A prompt that radiates says the terminal is live, which is the same
@@ -254,7 +254,7 @@ ${gradientsBlock('light')}
    Behind motion-safe at the call site — the half NOT copied from cursos, whose
    span animates regardless. The blog guarded it, every other exception here is
    guarded, and at rest the bar is simply solid.
-   See docs/decisions.md § 45. */
+   See docs/decisions/0.8.md § 45. */
 @keyframes arrecife-pulse {
   0%, 100% {
     box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent) 70%, transparent);

@@ -125,7 +125,7 @@ export const Motion: Story = {
         that of an entrance animation. It sits behind `motion-safe`, with
         `--duration-standard` and `--ease-standard`: no new timing, no new curve.
       </Note>
-      <Note>See `docs/decisions.md` § 20.</Note>
+      <Note>See `docs/decisions/0.6.md` § 20.</Note>
     </div>
   ),
 };

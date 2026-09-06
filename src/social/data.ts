@@ -34,7 +34,7 @@
  * want to iterate the catalogue, and know that iterating it is asking for all of
  * it.
  *
- * See `docs/decisions.md` § 42.
+ * See `docs/decisions/0.8.md` § 42.
  */
 
 /** The stroke width of a functional glyph, from the document. */

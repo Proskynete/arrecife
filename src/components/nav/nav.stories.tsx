@@ -179,8 +179,7 @@ export const AppShell: Story = {
           wordmark is a `brand` slot, and the «Entrar» button — a user menu, when
           there is a session — is an `actions` slot. Session state does not get a
           prop of its own: it is project infrastructure, which is what the third
-          clause of the admission criterion excludes. See `docs/decisions.md`
-          § 30.
+          clause of the admission criterion excludes. See `docs/decisions/0.7.md` § 30.
         </Note>
       </div>
     </div>

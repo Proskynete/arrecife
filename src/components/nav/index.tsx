@@ -26,7 +26,7 @@ import { cn } from '../../lib/cn.ts';
  * everything an app shell asks for: a `~/cursos` wordmark goes in `brand`, and a
  * user menu or a «Entrar» button goes in `actions`. Session state does not get a
  * prop of its own — it is project infrastructure, which is the third clause of
- * the criterion that decides what enters this library. See `docs/decisions.md`
+ * the criterion that decides what enters this library. See `docs/decisions/`
  * § 30.
  */
 export type NavProps = ComponentPropsWithoutRef<'header'> & {
@@ -127,7 +127,7 @@ export type NavItemProps = ComponentPropsWithoutRef<'a'> & {
  * impossible to call. It passed `tsc` and it passed the build, because the shape
  * of the children is not something either one looks at. `Slottable` is Radix's
  * answer to exactly this: it marks which child the router's `Link` replaces and
- * leaves the decoration where it is. See `docs/decisions.md` § 40.
+ * leaves the decoration where it is. See `docs/decisions/0.8.md` § 40.
  */
 export function NavItem({ active = false, asChild = false, className, children, ...props }: NavItemProps) {
   const Root = asChild ? Slot : 'a';

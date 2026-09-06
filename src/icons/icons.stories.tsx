@@ -91,14 +91,14 @@ export const Weight: Story = {
         `lib/glyphs.tsx` is the outlier at **1.75/16 = 0.109em**, three quarters
         heavier than both. It is deliberately not reconciled here: aligning it
         restyles every primitive in the library and is its own change. See
-        `docs/decisions.md` § 29.
+        `docs/decisions/0.7.md` § 29.
       </Note>
       <Note>
         These are the three the system reads, not the six Phosphor ships.
         `thin`, `bold` and `duotone` are left out because no role here means
         them — `bold` in particular is what a set with a `strokeWidth` would
         have called the emphasis step, and this system emphasises with colour.
-        See `docs/decisions.md` § 35.
+        See `docs/decisions/0.7.md` § 35.
       </Note>
     </>
   ),

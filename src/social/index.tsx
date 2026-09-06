@@ -11,7 +11,7 @@
  * own. These are published twice — loose from `./social` and grouped as `social`
  * from the root — and the difference is not cosmetic: this module renders React
  * but carries NO `"use client"`, so a Next Server Component can render an icon
- * without opening a client boundary for two `<svg>`. See `docs/decisions.md`
+ * without opening a client boundary for two `<svg>`. See `docs/decisions/`
  * § 26.
  *
  * The rule comes from the document, and it is a drawing rule, not a styling
@@ -24,7 +24,7 @@
  * for the consumer that mounts no React and used to paste the paths by hand.
  * This file is one of two renderers over that one description; the other builds a
  * string. A `d` that changes changes in both, in the same commit, or in neither.
- * See `docs/decisions.md` § 42.
+ * See `docs/decisions/0.8.md` § 42.
  *
  * Each component names its own glyph const rather than reaching into the
  * catalogue record, and that is what keeps the import cheap: `import { LinkedIn }`

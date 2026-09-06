@@ -1304,7 +1304,7 @@ Source: `src/components/article-card/index.tsx`
 
 The metadata line uses `meta` and not `eyebrow`: `18 ago 2026 · 8 min de lectura` is a datum, not an overline, and in small caps it was neither.
 
-- Extends: `Omit<CardShellProps, 'children' \| 'title'>`
+- Extends: `Omit<CardShellProps, "children" \| "title">`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |

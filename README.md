@@ -130,14 +130,29 @@ so the command reports the value on each side and only fails on the ones that
 differ. A collision that agrees is worth knowing about and is not worth failing
 over.
 
+> **Coming from 0.7.0.** Four breaks, and three of them are things the library
+> takes back OUT because nothing in the four projects drew them: the `caret`
+> utility, the footer's row of loose text links, and `SidebarNav`.
+>
+> Only one fails at compile time — `Footer` no longer takes `children` — and that
+> is the one to look at first. The other three fail silently or not at all: the
+> `Table` wrapper you no longer need gives you two borders, and a hand-written
+> `motion-safe:caret` just stops animating.
+>
+> Everything else is additive: `Footer variant="full"` with columns, three chart
+> shapes, `./social/data` for a project that mounts no React, and a `Website`
+> glyph.
+>
+> Run `npx arrecife` first, then read
+> [`docs/migration-0.8.md`](docs/migration-0.8.md).
+
 > **Coming from 0.6.0.** One break, and it is a find and replace the type checker
 > points at: `Stat`'s `tone="alerta"` is `tone="alert"`.
 >
 > Everything else is additive, and most of it lets a project delete something it
 > was maintaining by hand: `./social` and `./icons` are two new subpaths,
-> `EmptyState` has a shape with no face, `Stat` covers the KPI cards, `SidebarNav`
-> groups and collapses, and `npx arrecife` catches two failures that produce no
-> error at all.
+> `EmptyState` has a shape with no face, `Stat` covers the KPI cards, and
+> `npx arrecife` catches two failures that produce no error at all.
 >
 > Run `npx arrecife` first, then read
 > [`docs/migration-0.7.md`](docs/migration-0.7.md).
@@ -815,8 +830,13 @@ run summary.
 - **Phase 4** · `AudioPlayer`, migrated. Done.
 - **Phase 5** · done. `ArticleCard`, `AuthorCard`, `TalkCard`, `CourseCard`,
   `LinkRow`, `CodeBlock`, `Blockquote`, `PageHeader`, `EmptyState`, `Breadcrumb`,
-  `Nav`, `SidebarNav`, `TableOfContents`, `Stat`, `Footer`, `Hero`,
-  `NewsletterForm`, `og/` and `shiki/`.
+  `Nav`, `TableOfContents`, `Stat`, `Footer`, `Hero`, `NewsletterForm`, `og/` and
+  `shiki/`.
+
+  `SidebarNav` was on that list and came off it in 0.8.0. It met the rule below
+  on the identity half and never on the consumer half: the two admin projects it
+  was built for each wrote their own and never imported it. See
+  `docs/decisions.md` § 48.
 
   The criterion for deciding what gets in is still the same: **it encodes an
   identity rule, it has two or more consumers, and it drags in no project

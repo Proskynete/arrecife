@@ -1765,9 +1765,9 @@ The layer that ties the controls to a form with validation and messages.
 
 ## Charts
 
-Imported from `@eduardoalvarez/arrecife/chart` · requires `recharts`. 5 exports.
+Imported from `@eduardoalvarez/arrecife/chart` · requires `recharts`. 8 exports.
 
-### ChartContainer, ChartTooltip, ChartLegend, ChartTooltipContent, ChartLegendContent
+### ChartContainer, ChartTooltip, ChartLegend, ChartTooltipContent, ChartLegendContent, AreaChart, BarChart, LineChart
 
 Source: `src/chart/index.tsx`
 
@@ -1813,6 +1813,57 @@ The legend, with the tooltip's same square swatch and the `label` scale.
 | --- | --- | --- | --- | --- |
 | `className` | `string` |  |  |  |
 | `payload` | `readonly ChartPayloadItem[]` |  |  |  |
+
+**AreaChart**
+A series over time, with the fill fading out underneath it.
+
+- Extends: `SeriesChartProps`
+
+| prop | type | req. | default | what it does |
+| --- | --- | --- | --- | --- |
+| `data` | `readonly ChartDatum[]` | yes |  |  |
+| `formatter` | `(value: unknown) => ReactNode` |  |  | Formats the value in the tooltip. The library imposes no locale. |
+| `height` | `number` |  |  | Height in pixels. Recharts needs a concrete one to measure itself. |
+| `label` | `string` | yes |  | What the chart shows, in one sentence. Mandatory, like `Progress`'s `label`: a bar `<svg>` with no accessible name is not «a chart without a label», it is an empty region. |
+| `legend` | `boolean \| undefined` |  |  | Shows the legend. It defaults to «only when there is more than one series»: a legend naming the one line already named by the chart's own heading is a row of pixels that says nothing. |
+| `series` | `readonly ChartSeries[]` | yes |  |  |
+| `stacked` | `boolean \| undefined` |  | `false` | Adds the series up instead of overlaying them. |
+| `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
+| `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
+
+**BarChart**
+Bars, upright or lying down.
+
+- Extends: `SeriesChartProps`
+
+| prop | type | req. | default | what it does |
+| --- | --- | --- | --- | --- |
+| `data` | `readonly ChartDatum[]` | yes |  |  |
+| `formatter` | `(value: unknown) => ReactNode` |  |  | Formats the value in the tooltip. The library imposes no locale. |
+| `height` | `number` |  |  | Height in pixels. Recharts needs a concrete one to measure itself. |
+| `label` | `string` | yes |  | What the chart shows, in one sentence. Mandatory, like `Progress`'s `label`: a bar `<svg>` with no accessible name is not «a chart without a label», it is an empty region. |
+| `legend` | `boolean \| undefined` |  |  | Shows the legend. It defaults to «only when there is more than one series»: a legend naming the one line already named by the chart's own heading is a row of pixels that says nothing. |
+| `orientation` | `"horizontal" \| "vertical"` |  | `vertical` | `vertical` grows the bars upwards, which is the default. `horizontal` is a ranking. |
+| `series` | `readonly ChartSeries[]` | yes |  |  |
+| `stacked` | `boolean \| undefined` |  | `false` | Stacks the series instead of putting them side by side. |
+| `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
+| `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
+
+**LineChart**
+Lines, for comparing series against each other.
+
+- Extends: `SeriesChartProps`
+
+| prop | type | req. | default | what it does |
+| --- | --- | --- | --- | --- |
+| `data` | `readonly ChartDatum[]` | yes |  |  |
+| `formatter` | `(value: unknown) => ReactNode` |  |  | Formats the value in the tooltip. The library imposes no locale. |
+| `height` | `number` |  |  | Height in pixels. Recharts needs a concrete one to measure itself. |
+| `label` | `string` | yes |  | What the chart shows, in one sentence. Mandatory, like `Progress`'s `label`: a bar `<svg>` with no accessible name is not «a chart without a label», it is an empty region. |
+| `legend` | `boolean \| undefined` |  |  | Shows the legend. It defaults to «only when there is more than one series»: a legend naming the one line already named by the chart's own heading is a row of pixels that says nothing. |
+| `series` | `readonly ChartSeries[]` | yes |  |  |
+| `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
+| `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
 
 ## Exports that are not components
 
@@ -1942,7 +1993,7 @@ Types (1): `ShikiTheme`.
 | `SERIES_COLORS` | `string[]` | All four, in order, to hand to a `Pie` with `Cell` in one go. |
 | `seriesColor` | `(index: number): string` | The color of series `index`, as a custom property. |
 
-Types (4): `ChartContainerProps`, `ChartLegendContentProps`, `ChartPayloadItem`, `ChartTooltipContentProps`.
+Types (10): `AreaChartProps`, `BarChartProps`, `ChartContainerProps`, `ChartDatum`, `ChartLegendContentProps`, `ChartPayloadItem`, `ChartSeries`, `ChartTooltipContentProps`, `LineChartProps`, `SeriesChartProps`.
 
 ### `@eduardoalvarez/arrecife/form`
 

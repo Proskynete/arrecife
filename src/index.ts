@@ -31,7 +31,7 @@ export { cn } from './lib/cn.ts';
  *
  *   import { LinkedIn } from '@eduardoalvarez/arrecife/social';
  *
- * See `docs/decisions.md` § 26 for which of the two to reach for.
+ * See `docs/decisions/0.7.md` § 26 for which of the two to reach for.
  *
  * What is NOT exported from `lib/` are the glyphs: `Close`, `ChevronDown`, `Sun`
  * and company are the minimum set the primitives need and they stay inside.

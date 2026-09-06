@@ -165,7 +165,7 @@ export const typeScale = {
    * (plankton 5.57:1 over abyss), which is the part that is not negotiable.
    *
    * At 13 the three badge families grew past the size of a small button and
-   * outweighed the title they accompany. See `docs/decisions.md`.
+   * outweighed the title they accompany. See `docs/decisions/`.
    */
   chip: { family: 'mono', size: 11.5, lineHeight: 1.4, weight: 400 },
   /**
@@ -211,7 +211,7 @@ export const radius = {
  *
  * Only the horizontal padding and the icon button's square. Height comes from
  * the type scale, and there is a single radius for all three sizes: see
- * `docs/decisions.md`.
+ * `docs/decisions/`.
  *
  * They are not in `spacing` because they are not page rhythm: 14, 22 and 30 do
  * not compose with 8/12/16/26/40 and must not be offered as margins.
@@ -235,7 +235,7 @@ export const control = {
    * baseline; 28 would have been a fifth height that matches nothing.
    *
    * It does not replace `icon`. A page's primary action stays at 42; this is for
-   * a row of a table. See `docs/decisions.md` § 22.
+   * a row of a table. See `docs/decisions/0.6.md` § 22.
    */
   iconSm: 32,
 } as const;
@@ -282,7 +282,7 @@ export const size = {
    * together eat the top of the content area. 56 is what `cursos` had arrived at
    * on its own, and it is the same reasoning as `control.iconSm`: the one admin
    * app of the five is denser than the four reading sites. See
-   * `docs/decisions.md` § 30.
+   * `docs/decisions/0.7.md` § 30.
    */
   navCompact: 56,
   /**
@@ -367,7 +367,7 @@ export const syntax = {
  *
  * A fifth series is not added by inventing a hue. If a chart needs five
  * categories, either there are too many categories or they need an «other»
- * bucket: see `docs/decisions.md`.
+ * bucket: see `docs/decisions/`.
  */
 export const series = {
   dark: [dark.accent, dark.warm, brand.body, dark.textMuted],
@@ -412,7 +412,7 @@ export const series = {
  * that passes on the page passes everywhere on both blocks, at any angle, at
  * any point of the sweep. `scripts/theme-css.test.mjs` asserts the stops.
  *
- * See `docs/decisions.md` § 9.
+ * See `docs/decisions/0.6.md` § 9.
  */
 const deep = '#0D2129';
 

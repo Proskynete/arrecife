@@ -23,7 +23,7 @@ import { Text } from '../../primitives/typography.tsx';
  * smaller one: the hole inside a table page or a dashboard widget, competing with
  * a dozen elements around it. An admin panel has twenty of those on one screen,
  * and twenty faces is not the humour contract, it is a zoo. The variant carries
- * no face, and the type does not let one through. See `docs/decisions.md` § 27.
+ * no face, and the type does not let one through. See `docs/decisions/0.7.md` § 27.
  */
 type EmptyStateBase = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   title: ReactNode;

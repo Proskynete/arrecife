@@ -75,7 +75,7 @@ export const Basic: Story = {
           The mark at the end is `pulse-accent`: a 2px bar that stays solid and radiates a halo,
           which is what `cursos` and `eduardoalvarez.dev` both drew before this library had a
           `Footer`. It used to be a blinking block the library had invented on top of them. See
-          `docs/decisions.md` § 45.
+          `docs/decisions/0.8.md` § 45.
         </Note>
       </div>
     </div>

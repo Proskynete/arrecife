@@ -21,7 +21,7 @@ import { cn } from '../lib/cn.ts';
  * `querySelector`.
  *
  * The same applies to every primitive that wraps a native control you can focus:
- * `Textarea`, `Label` and `DateField` change with it. See `docs/decisions.md`
+ * `Textarea`, `Label` and `DateField` change with it. See `docs/decisions/`
  * § 41.
  */
 export type InputProps = ComponentProps<'input'> & {

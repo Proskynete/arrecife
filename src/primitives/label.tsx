@@ -1,9 +1,10 @@
 import * as LabelPrimitive from '@radix-ui/react-label';
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '../lib/cn.ts';
 
-export type LabelProps = ComponentPropsWithoutRef<typeof LabelPrimitive.Root>;
+/** `ComponentProps` carries `ref`, which React 19 passes as a prop. See `InputProps`. */
+export type LabelProps = ComponentProps<typeof LabelPrimitive.Root>;
 
 /**
  * The `label` scale: 13px, which is the system's absolute minimum on screen.

@@ -1,8 +1,9 @@
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '../lib/cn.ts';
 
-export type TextareaProps = ComponentPropsWithoutRef<'textarea'> & {
+/** `ComponentProps` carries `ref`, which React 19 passes as a prop. See `InputProps`. */
+export type TextareaProps = ComponentProps<'textarea'> & {
   invalid?: boolean;
 };
 

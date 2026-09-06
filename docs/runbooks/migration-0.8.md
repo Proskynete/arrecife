@@ -9,7 +9,7 @@ four hand-pasted SVG paths and fourteen copies of the same wrapper `div`.
 **Three of the four are the library taking something back out**, and they are
 worth reading together: a motion utility, a footer row and a whole component,
 all removed for the same reason — nothing in any of the four projects drew them.
-See [`decisions.md`](decisions.md) § 45, § 47 and § 48.
+See [`../decisions/0.8.md`](../decisions/0.8.md#45--the-signatures-mark-is-the-halo-and-the-library-had-invented-the-blink) § 45, § 47 and § 48.
 
 If you are coming from 0.6.x, do [`migration-0.7.md`](migration-0.7.md) first.
 
@@ -47,7 +47,7 @@ cannot reach is content that is not there.
 **If your table sits inside a card** and now reads as a box in a box, that is the
 one case this shape does not serve yet. Say so — a second shape gets a prop when
 there is a second consumer, and right now fourteen call sites wanted the same one.
-See [`decisions.md`](decisions.md) § 39.
+See [`../decisions/0.8.md`](../decisions/0.8.md#39--the-table-carries-its-own-surface) § 39.
 
 ### The `caret` utility is removed
 
@@ -78,7 +78,7 @@ change its mind, and leaving it in the package leaves the invention there under 
 label that makes it look like a feature.
 
 It also puts the motion rule back to one criterion. See
-[`decisions.md`](decisions.md) § 45, and § 23 for the entry it reverses.
+[`../decisions/0.8.md`](../decisions/0.8.md#45--the-signatures-mark-is-the-halo-and-the-library-had-invented-the-blink) § 45, and § 23 for the entry it reverses.
 
 ### `Footer` takes no loose links, and `FooterLink` is gone
 
@@ -113,8 +113,7 @@ legal» — which is the half a hand-written row got wrong.
 `brand` and `social`; `links` is an Astro replica with the glyph row and the
 prompt; `cursos` has three columns, which is what a flat row cannot express — it
 cannot say which block a link belongs to, so a screen reader walks the lot
-instead of jumping to «Legal» by heading. See [`decisions.md`](decisions.md)
-§ 47.
+instead of jumping to «Legal» by heading. See [`../decisions/0.8.md`](../decisions/0.8.md#47--the-footer-takes-no-loose-links-and-the-columns-are-why) § 47.
 
 ### `SidebarNav` is removed
 
@@ -135,7 +134,7 @@ neither of them already has.
 **Why it goes.** The entry criterion is «it encodes an identity rule, it has two
 or more consumers, and it drags in no project infrastructure», and it never had
 the middle one. The two consumers were counted as projects that COULD use it
-rather than projects that DID. See [`decisions.md`](decisions.md) § 48, and § 32
+rather than projects that DID. See [`../decisions/0.8.md`](../decisions/0.8.md#48--sidebarnav-goes-and-the-entry-criterion-is-why) § 48, and § 32
 and § 34 for the entries it reverses.
 
 ---
@@ -152,7 +151,7 @@ no component of ours. If everything you import is `./tokens`, `./theme`,
 `./variants`, `./social/data`, `./og` or `./shiki`, the directive is not needed
 and adding it makes Tailwind generate the whole library for markup that is not
 there — measured at 16 KB → 52 KB in `links`. You now get a note saying so
-instead of a failure. See [`decisions.md`](decisions.md) § 46.
+instead of a failure. See [`../decisions/0.8.md`](../decisions/0.8.md#46--the-doctor-stops-asking-links-for-a-directive-it-must-not-add) § 46.
 
 The token-collision half is unchanged, and it is still the one that costs hours:
 a `@theme inline { --color-accent: var(--accent); }` from shadcn repaints the
@@ -177,7 +176,7 @@ it passed the build; it broke at render.
 
 If you worked around it with a bare `<NavItem href>`, that link was costing a
 full page load instead of a client transition. See
-[`decisions.md`](decisions.md) § 40.
+[`../decisions/0.8.md`](../decisions/0.8.md#40--navitem-aschild-was-declared-typed-and-impossible-to-call) § 40.
 
 ### `ref` is in the type of the form controls
 
@@ -196,7 +195,7 @@ was at runtime.
 
 If you took a `ref` on a wrapping element and reached the control with a
 `querySelector`, that detour was around a type and not around a behaviour. See
-[`decisions.md`](decisions.md) § 41.
+[`../decisions/0.8.md`](../decisions/0.8.md#41--ref-is-a-prop-in-react-19-and-the-types-said-otherwise) § 41.
 
 ---
 
@@ -229,7 +228,7 @@ third shape to design by accident. The `./` in front of each column link is put
 there by the component, like `NavItem`'s, and it is `aria-hidden`.
 
 The signature closes the footer on its own row behind a hairline, centred below
-`sm` and right-aligned above. See [`decisions.md`](decisions.md) § 44.
+`sm` and right-aligned above. See [`../decisions/0.8.md`](../decisions/0.8.md#44--the-footers-second-shape-and-why-the-first-one-is-the-default) § 44.
 
 ### A chart written by hand
 
@@ -265,7 +264,7 @@ Two notes. **The names collide with Recharts' on purpose** — you import ours, 
 both, and this library's own module aliases theirs. And
 **`orientation="horizontal"` means the bars lie down**, against Recharts'
 `layout="vertical"`, which means the same thing and reads as the opposite. See
-[`decisions.md`](decisions.md) § 43.
+[`../decisions/0.8.md`](../decisions/0.8.md#43--the-chart-types-take-the-names-recharts-uses) § 43.
 
 A doughnut has no type and is not missing one: `ChartContainer` plus Recharts'
 `Pie` is still the answer.
@@ -287,7 +286,7 @@ names, and each glyph is exported on its own — `gitHubGlyph`, `websiteGlyph` �
 if you want the shapes rather than the markup.
 
 The React components are drawn from that same file, so a `d` that changes changes
-in both. See [`decisions.md`](decisions.md) § 42.
+in both. See [`../decisions/0.8.md`](../decisions/0.8.md#42--the-glyphs-are-data-and-the-tenth-one-is-ours) § 42.
 
 ### A borrowed globe
 

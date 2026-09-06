@@ -7,7 +7,7 @@ Published Storybook: [arrecife.eduardoalvarez.dev](https://arrecife.eduardoalvar
 
 ## The identity documents
 
-`docs/design-system.md` and `docs/brand-manual.md` are the extraction of the two
+`docs/architecture/design-system.md` and `docs/architecture/brand-manual.md` are the extraction of the two
 Claude Design canvases, kept in the repo so they can be grepped and versioned.
 The canvas is still the source; this is the consultable copy.
 
@@ -15,7 +15,7 @@ They are here for a concrete reason: the highlighting palette lived hand-written
 in a project with a `#E05252` that this README has declared wrong for months, and
 nobody saw it because the document was not greppable from the code.
 
-`docs/decisions.md` is the other half: the points where the code and the document
+`docs/decisions/` is the other half: the points where the code and the document
 do not say the same thing, each with its resolution and its reason.
 
 ## The two documents for agents
@@ -144,7 +144,7 @@ over.
 > glyph.
 >
 > Run `npx arrecife` first, then read
-> [`docs/migration-0.8.md`](docs/migration-0.8.md).
+> [`docs/runbooks/migration-0.8.md`](docs/runbooks/migration-0.8.md).
 
 > **Coming from 0.6.0.** One break, and it is a find and replace the type checker
 > points at: `Stat`'s `tone="alerta"` is `tone="alert"`.
@@ -155,7 +155,7 @@ over.
 > `npx arrecife` catches two failures that produce no error at all.
 >
 > Run `npx arrecife` first, then read
-> [`docs/migration-0.7.md`](docs/migration-0.7.md).
+> [`docs/runbooks/migration-0.7.md`](docs/runbooks/migration-0.7.md).
 
 > **Coming from 0.5.x.** Two unrelated things landed in 0.6.0, and they ship
 > together because in `0.x` a breaking change bumps the minor.
@@ -169,19 +169,19 @@ over.
 > the type checker catches every one at the call site.
 >
 > Both halves, in order, with the full rename table and what each project can now
-> **delete**: [`docs/migration-0.6.md`](docs/migration-0.6.md).
+> **delete**: [`docs/runbooks/migration-0.6.md`](docs/runbooks/migration-0.6.md).
 
 > **Coming from 0.4.0 or earlier.** `Toast`, `ToastProvider`, `ToastViewport`,
 > `ToastTitle` and `ToastDescription` stopped being public API in 0.5.0: you use
 > `Toaster` and `toast()`. `ToastAction` stays. The migration, with the reasoning
-> and the examples, is in [`docs/migration-0.5.md`](docs/migration-0.5.md).
+> and the examples, is in [`docs/runbooks/migration-0.5.md`](docs/runbooks/migration-0.5.md).
 
 > **Coming from 0.2.0 or earlier.** The five spacing steps were renamed: `p-md`
 > is now `p-step-md`, `gap-sm` is `gap-step-sm`. It is a breaking change, and if
 > your project uses `max-w-sm`, `max-w-md` or `max-w-lg`, those were also worth
 > 12, 16 and 26px with nothing saying so. The reasoning, the migration pattern
 > and what to check afterwards are in
-> [`docs/migration-0.3.md`](docs/migration-0.3.md).
+> [`docs/runbooks/migration-0.3.md`](docs/runbooks/migration-0.3.md).
 
 The font families are declared by name. Each project loads Bricolage Grotesque,
 Geist and JetBrains Mono however it prefers: the library does not dictate how.
@@ -372,7 +372,7 @@ which returns a complete `<svg>` as a string. It is for the consumer that mounts
 no React and used to paste the `<path>` into its own template — `links` had four
 of them and `cursos` had six. The React components above are drawn from that same
 file, so a `d` that changes changes in both or in neither. See
-`docs/decisions.md` § 42.
+`docs/decisions/0.8.md` § 42.
 
 **The two forms are not taste, and in Next they are not interchangeable.** The
 root carries `"use client"`, and what crosses into a Server Component is a client
@@ -435,7 +435,7 @@ stroke` story alternates the bars so the claim can be checked instead of believe
 — and it also shows the third row, because **`glyphs.tsx` is the outlier**: at
 0.109em it is three quarters heavier than both, it was never argued anywhere, and
 aligning it would restyle every primitive in the library. That is a separate
-change and `docs/decisions.md` § 29 says so.
+change and `docs/decisions/0.7.md` § 29 says so.
 
 **The weight is an axis with three values, and `tone` is how you name them.**
 `weight` is not a prop: Phosphor ships six and this system reads three, because
@@ -453,7 +453,7 @@ one channel WCAG 1.4.1 says may not carry meaning** — the fill is the second
 channel, and it is the one that survives a forced-colours mode where the biolume
 does not. `quiet` is the opposite problem: in a metadata row the icon is not the
 point of the line, and at `regular` it draws as heavy as the date beside it.
-`docs/decisions.md` § 35 has the rest.
+`docs/decisions/0.7.md` § 35 has the rest.
 
 `@phosphor-icons/react` is an **optional** peer dependency on its own subpath, by
 the same rule as `./form` and `./chart`: two of the five projects use no icons and
@@ -492,8 +492,7 @@ in with it.
 portable ones. It renders React — it is ten `<svg>` — so it can never be
 portable, and it holds no state, so it must not be a client entry either. Listed
 in neither set, nothing would have noticed it being marked client by mistake, and
-that mistake undoes the only reason the subpath exists. See `docs/decisions.md`
-§ 26.
+that mistake undoes the only reason the subpath exists. See `docs/decisions/0.7.md` § 26.
 
 It is stamped by `scripts/add-use-client.mjs` after tsup, and not by tsup's
 `banner`. That was tried first: esbuild writes the directive and the bundling
@@ -565,7 +564,7 @@ collision is deliberate: what they replace is not an import, it is sixty lines o
 composition — a `linearGradient` with a hardcoded id, a `CartesianGrid
 vertical={false}`, two axes with the line and the tick off, a `type="natural"`
 and a `strokeWidth` — which `cursos` wrote four times, once per chart. None of
-that is a decision the project made. See `docs/decisions.md` § 43.
+that is a decision the project made. See `docs/decisions/0.8.md` § 43.
 
 `check:exports` verifies that the six portable ones — `./tokens`, `./theme`,
 `./variants`, `./social/data`, `./og` and `./shiki` — bring no React into the published `dist/`,
@@ -636,8 +635,7 @@ cannot see: axe does not evaluate text over a gradient, so both modes passed it.
 
 The light blocks now sweep between `background` and `surface` and never touch
 `surfaceRaised`, so the darkest point of either one is the page itself — a token
-that passes on the page passes at every point of the sweep. `docs/decisions.md`
-§ 9 has the measurements, including the two other things the first composition
+that passes on the page passes at every point of the sweep. `docs/decisions/0.6.md` § 9 has the measurements, including the two other things the first composition
 got wrong.
 
 ### The third correction: a semantic color is not a text color over its own tint
@@ -836,7 +834,7 @@ run summary.
   `SidebarNav` was on that list and came off it in 0.8.0. It met the rule below
   on the identity half and never on the consumer half: the two admin projects it
   was built for each wrote their own and never imported it. See
-  `docs/decisions.md` § 48.
+  `docs/decisions/0.8.md` § 48.
 
   The criterion for deciding what gets in is still the same: **it encodes an
   identity rule, it has two or more consumers, and it drags in no project
@@ -909,7 +907,7 @@ about as library pieces. They get in anyway: the CLI aesthetic — the bar's
   than width failed axe on `scrollable-region-focusable` immediately. It is
   unconditional, because whether a table overflows depends on the viewport and
   the only alternative is a ResizeObserver on every table in the system. See
-  `docs/decisions.md` § 39.
+  `docs/decisions/0.8.md` § 39.
 
 ### The syntax palette
 
@@ -1094,7 +1092,7 @@ spatial continuity. A sixth lands on that or it does not exist.
 The bar is 2px and not a block because a halo needs something thin to radiate
 from, the colour is `var(--color-accent)` so it follows the mode, and
 `motion-safe` is the one thing not copied from `cursos` — whose span animates
-regardless of the setting. See `docs/decisions.md` § 45, and § 23 for the entry
+regardless of the setting. See `docs/decisions/0.8.md` § 45, and § 23 for the entry
 it reverses.
 
 ### The second motion exception
@@ -1141,7 +1139,7 @@ text, and `surfaceRaised` is where a toolbar lives.
 `destructiveOutline` fills on hover, and that is a declared exception to
 «secondary is never filled» — a destructive that looks identical to a secondary
 until you read it is the problem the variant exists to fix. See
-`docs/decisions.md` § 21.
+`docs/decisions/0.6.md` § 21.
 
 ### `icon-sm`, for the one admin app
 
@@ -1152,7 +1150,7 @@ three actions per table row, and at 42 the row grows with them.
 `size="icon-sm"` is 32×32, and it is 32 and not the 28 that project actually had:
 32 is `sm`'s height, so a dense icon button lines up with a small text button and
 a toolbar mixing the two stays on one baseline. It does not replace `icon` — a
-page's primary action stays at 42. See `docs/decisions.md` § 22.
+page's primary action stays at 42. See `docs/decisions/0.6.md` § 22.
 
 ### The theme script, and the mode a site already decided
 

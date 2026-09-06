@@ -66,7 +66,7 @@ pnpm storybook        # generates the tokens and serves Storybook on 6006
 | `pnpm check:exports`                | verifies `dist/` holds what `exports` promises, that the portable subpaths bring no React, and that `"use client"` is on the client entries and only there |
 | `pnpm check:llms`                   | fails if `llms.txt` does not match the types              |
 | `pnpm check:copy`                   | fails if user-facing copy drifted into English            |
-| `pnpm check:decisions`              | lists the actions `decisions.md` still owes a canvas       |
+| `pnpm check:decisions`              | lists the actions `docs/decisions/` still owes a canvas       |
 | `pnpm doctor`                       | the check a CONSUMING project runs: `@source` and token collisions |
 | `pnpm build:doctor`                 | copies `doctor.mjs` into `dist/`, where `bin` points        |
 | `pnpm check:release`                | validates the release-please configuration                |
@@ -97,8 +97,21 @@ src/
   lib/          cn and the inline glyphs. `lib/` is what is NOT published
 stories/        stories that do not belong to a component (tokens, brand, og) and utils
 scripts/        the generators and the checks
-docs/           the identity documents and the llms.txt template
+docs/
+  architecture/ the Design System and the Brand Manual, as consulted from the code
+  decisions/    the decision log, one file per release. The numbering is global
+  runbooks/     one migration guide per release that broke something
+  llms.template.md  NOT documentation: the input scripts/build-llms.mjs reads
 ```
+
+`docs/` splits by what you came to do — look up what the system IS, find out WHY
+it is that way, or upgrade a project. Each folder has a `README.md` that says
+which is which; `docs/README.md` is the way in.
+
+**A decision keeps its number for ever.** `§ 45` is `§ 45` wherever it lives, the
+files are named for the release that closed them, and a release file is
+append-only: an entry written in 0.8 stays in `decisions/0.8.md`. That is what
+makes it safe for a code comment to point at the exact file.
 
 ## Generated files: not edited by hand
 
@@ -237,7 +250,7 @@ Rules of the pattern, all of them with a reason:
   the part's data and returns the element; the library keeps the classes and the
   rule. `linkAsChild` in `Breadcrumb` and `tagAsChild` in `ArticleCard` are the
   two precedents, and they have the same signature on purpose. See
-  `docs/decisions.md` § 24.
+  `docs/decisions/0.6.md` § 24.
 - **JSDoc with the why, not the what.** `/** Primary button */` above `Button`
   informs nobody. The whole repo is written this way; keep it that way.
 - **Reuse the primitives.** A component in `components/` that writes its own
@@ -266,7 +279,7 @@ Everything comes from a token, through its Tailwind utility:
   not gratuitous verbosity. `xs, sm, md, lg, xl` are the names of Tailwind's
   `--container-*` scale, and a `--spacing-md` of ours was swallowing `max-w-md`
   in every consuming project with no trace. A `p-md` written today does not fail:
-  it lands on the numeric scale and does nothing. See `docs/decisions.md` § 16.
+  it lands on the numeric scale and does nothing. See `docs/decisions/0.6.md` § 16.
 - **Zero literal hexes.** ESLint blocks it across all of `src/**` except
   `src/tokens/tokens.ts`, which is where they live.
 - **No arbitrary values** like `p-[13px]` or `text-[15px]`: if the value has no
@@ -285,7 +298,7 @@ Everything comes from a token, through its Tailwind utility:
   `AlertDialog`.** There the title, the focus on cancel and the no-close-on-
   outside already carry the gravity, and a red button on top of that is shouting.
   The variant exists for the destructive that has none of that around it — a
-  table row, a toolbar. See `docs/decisions.md` § 21.
+  table row, a toolbar. See `docs/decisions/0.6.md` § 21.
 
 ### 4 · Motion
 
@@ -319,7 +332,7 @@ anything else — goes with it. See § 23 and § 45.
 The lesson is the reusable half: **a new exception is not argued from first
 principles when the thing it describes already exists in a consuming project.**
 Read the project first. A sixth has to land on the one criterion, with the
-argument written in `docs/decisions.md`, not because it looks better. See § 20.
+argument written in `docs/decisions/`, not because it looks better. See § 20.
 
 ### 5 · Accessibility
 
@@ -335,7 +348,7 @@ argument written in `docs/decisions.md`, not because it looks better. See § 20.
   the first one was and the next twenty-seven inherited it. The one control that
   changes the colour is the conversion button, which adds `focus-ring-warm`: it
   is the system's only sand fill, and a biolume ring three pixels off it puts
-  both of the brand's accents in the same glance. See `docs/decisions.md` § 37.
+  both of the brand's accents in the same glance. See `docs/decisions/0.7.md` § 37.
 - Every control with no text carries an `aria-label`. `Progress` requires `label`
   as a prop.
 - **The library ships no icons**, and `src/lib/glyphs.tsx` is the minimum set the
@@ -349,7 +362,7 @@ argument written in `docs/decisions.md`, not because it looks better. See § 20.
   a prop: three of Phosphor's six have a role here and the other three do not.
   A project's icons are still the project's; what stopped being the project's is
   the line they are drawn with. `glyphs.tsx` itself is the known outlier at
-  0.109em. See `docs/decisions.md` § 29 and § 35.
+  0.109em. See `docs/decisions/0.7.md` § 29 and § 35.
 - **An icon is not illustration.** Tiburoncín — the faces, the poses, the fin —
   is the mascot, it lives in `src/brand/` and the manual doses it by surface: a
   face only in an empty state, a confirmation, an error, course progress or a
@@ -390,9 +403,9 @@ Two traps already documented, with their table in the README:
 
 ### 8 · If you contradict the identity document
 
-`docs/design-system.md` and `docs/brand-manual.md` are the consultable copy of
+`docs/architecture/design-system.md` and `docs/architecture/brand-manual.md` are the consultable copy of
 the Claude Design canvases. When the code and the document do not say the same
-thing, the discrepancy is recorded in **`docs/decisions.md`** with what there
+thing, the discrepancy is recorded in **`docs/decisions/`** with what there
 was, what stayed and why. It is not resolved silently and it is not left for
 later.
 
@@ -472,7 +485,7 @@ The split that works in this repo, in this order:
 | the code | `src/`, `stories/`, `scripts/`, the configs, `llms.txt` and its template |
 | the CI | `.github/` — workflows, actions, issue and PR templates |
 | the process documents | `README.md`, `AGENTS.md` |
-| the reference documents | `docs/` |
+| the reference documents | `docs/` — and a decision, a runbook and an architecture note are three commits, not one |
 | the metadata | `package.json` fields that are not scripts or `exports` |
 
 **Every commit leaves the tree green.** That is the constraint that decides where
@@ -538,7 +551,8 @@ feat(tokens)!: page rhythm carries step, so it stops swallowing max-w-*
 <the why, as in any commit in this repo>
 
 BREAKING CHANGE: `p-md` becomes `p-step-md` and `spacing.md` becomes
-`spacing.stepMd`. The values do not change. Migration in docs/migration-0.3.md.
+`spacing.stepMd`. The values do not change. Migration in
+docs/runbooks/migration-0.3.md.
 
 <anything you like: nobody reads down here except whoever opens the commit>
 ```
@@ -557,7 +571,7 @@ Hence the two rules that matter:
 2. **The real migration goes in a document in `docs/`**, and the paragraph links
    it. It is not a consolation prize: the document exists before the release is
    cut, it can be linked from the README in the meantime, and it is not limited
-   to one paragraph. `docs/migration-0.3.md` is the precedent.
+   to one paragraph. `docs/runbooks/migration-0.3.md` is the precedent.
 
 `Co-Authored-By:` and other footers go at the very end, never in the middle of
 the footer.
@@ -613,7 +627,7 @@ In order of how often they actually happen:
    That file is the primitives' minimum set and it does not grow: a component
    that needs an icon takes it as a prop, and the project draws it with `Icon`
    from `./icons`. The ban on icon libraries was lifted in 0.7.0 — see
-   `docs/decisions.md` § 29 — and what replaced it is narrower, not looser:
+   `docs/decisions/0.7.md` § 29 — and what replaced it is narrower, not looser:
    Phosphor is an OPTIONAL peer on its own subpath, so the two projects that use
    no icons still install nothing.
 5. Changing props without regenerating `llms.txt`. `pnpm check:llms` stops it in

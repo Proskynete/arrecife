@@ -256,7 +256,7 @@ does nothing.
 
 **One `Nav` per page.** It renders the site's `banner` landmark, and two banners
 on one page is an accessibility failure — which is also why `PageHeader` goes
-inside `<main>` and is not a landmark. See `docs/decisions.md` § 30.
+inside `<main>` and is not a landmark. See `decisions/0.7.md` § 30.
 
 ### Icons are yours, the way they are drawn is not
 
@@ -325,7 +325,7 @@ a Server Component throws. It ships no `"use client"` to stop you, so the failur
 arrives at render rather than at build. The `/ssr` entry is the same icons
 without the context read, and `Icon` works with either.
 
-See `docs/decisions.md` § 29 and § 35.
+See `decisions/0.7.md` § 29 and § 35.
 
 ### `Stat`'s delta says direction, not judgement
 
@@ -342,7 +342,7 @@ errores» point the same way and mean opposite things, so whether a number is go
 news is `tone`'s job and yours: `neutral` for a datum, `alert` when the number IS
 the problem, `achievement` when it is the reward. `alert` and `achievement` paint
 the same sand on purpose — the API is the meaning, the colour is the
-implementation. See `docs/decisions.md` § 28.
+implementation. See `decisions/0.7.md` § 28.
 
 `delta.value` arrives already formatted, like `value`: the library imposes no
 locale and computes no percentage. `spark` is a `ReactNode` and the library ships
@@ -352,7 +352,7 @@ no sparkline — pass your own, exactly like `icon`.
 and biolume goes on the icon badge and the sparkline instead: three accents in
 one card and the figure stops being the loudest thing in it. `alert` and
 `achievement` DO paint the number sand, which is how «this number is not just a
-number» is said. See `docs/decisions.md` § 31.
+number» is said. See `decisions/0.7.md` § 31.
 
 **`icon` is a badge in the corner opposite the title**, in a circle tinted at
 10 % of the tone. You pass the glyph; the circle, the tint and the size are the
@@ -567,7 +567,7 @@ They carry a prefix because `xs, sm, md, lg, xl` are the names of Tailwind's
 `--container-*` scale, and a `--spacing-md` of our own was swallowing `max-w-md`
 across the whole project with nothing warning about it. `max-w-*`, `w-*` and
 `h-*` belong to Tailwind and are used as they are. Migration guide from 0.2.0:
-<https://github.com/Proskynete/arrecife/blob/main/docs/migration-0.3.md>.
+<https://github.com/Proskynete/arrecife/blob/main/docs/runbooks/migration-0.3.md>.
 
 ## System rules the consuming code must not break
 
@@ -580,7 +580,7 @@ compiles and looks wrong, or that fails the project's accessibility audit.
 3. **`Button variant="destructive"` is for the irreversible only.** Never for
    «cancel» on a form, and not inside an `AlertDialog` — there the confirm button
    stays `primary`, because the title, the focus on cancel and the no-click-outside
-   already carry the weight. See `docs/decisions.md` § 21.
+   already carry the weight. See `decisions/0.6.md` § 21.
 4. **`secondary` is never filled.** It is border and text.
 5. **No entrance animations.** Modals, menus, tooltips and toasts appear where
    they will stay. There are five declared exceptions, all behind `motion-safe`
@@ -609,7 +609,7 @@ compiles and looks wrong, or that fails the project's accessibility audit.
     hole inside a table page or a dashboard widget, and it carries no face — the
     type does not accept one. `page`, the default, is the one that IS the screen,
     and there `expression` stays mandatory. A dozen mascots on one admin screen is
-    not the humour contract. See `docs/decisions.md` § 27.
+    not the humour contract. See `decisions/0.7.md` § 27.
 12. **The fin is not a free parameter**: `foam` on a dark background, `color` on a
     light one. The components already choose it from the background.
 
@@ -1589,7 +1589,7 @@ A large metric: the number in the `stat` scale and its name underneath.
 | `label` | `ReactNode` | yes |  | What is being counted. It goes in mono small caps. |
 | `progress` | `number` |  |  | With `progress`, the metric reads as progress and adds the bar. |
 | `spark` | `ReactNode` |  |  | The number's shape over time, under it. A `ReactNode` and not a data prop: a sparkline needs a charting library, and this component lives in the barrel that four projects install. The one project that draws them passes its own, exactly like `icon`. |
-| `tone` | `"neutral" \| "alert" \| "achievement"` |  | `neutral` | `alert` ONLY when the number is the problem, and `achievement` when it is the opposite — the diplomas issued, the modules finished. The two paint the same sand today and they are still two names: a system that names by meaning cannot make «this is bad» the only way to say «this stands out». See `docs/decisions.md` § 28. |
+| `tone` | `"neutral" \| "alert" \| "achievement"` |  | `neutral` | `alert` ONLY when the number is the problem, and `achievement` when it is the opposite — the diplomas issued, the modules finished. The two paint the same sand today and they are still two names: a system that names by meaning cannot make «this is bad» the only way to say «this stands out». See `docs/decisions/0.7.md` § 28. |
 | `value` | `ReactNode` | yes |  | The number, already formatted. The library imposes no locale. |
 
 ### TalkCard
@@ -2064,8 +2064,8 @@ Types (60): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCar
   generated from the types.
 - The repo's `README.md`: the reasoning behind each decision, the contrast
   correction table and the release cycle.
-- `docs/design-system.md` and `docs/brand-manual.md`: the identity documents,
+- `architecture/design-system.md` and `architecture/brand-manual.md`: the identity documents,
   greppable.
-- `docs/decisions.md`: the points where the code and the document did not say the
+- `decisions/`: the points where the code and the document did not say the
   same thing, each with its resolution.
 - `AGENTS.md`: for working inside the library's repo.

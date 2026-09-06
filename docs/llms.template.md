@@ -116,10 +116,11 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/og` | **no** | — | The Open Graph templates for Satori |
 | `@eduardoalvarez/arrecife/shiki` | **no** | — | The syntax highlighting theme |
 | `@eduardoalvarez/arrecife/brand` | yes | — | Logo, isotype and mascot as components |
-| `@eduardoalvarez/arrecife/social` | yes, on the server only | — | The nine social icons, loose. No `"use client"` |
+| `@eduardoalvarez/arrecife/social` | yes, on the server only | — | The ten social icons, loose. No `"use client"` |
+| `@eduardoalvarez/arrecife/social/data` | **no** | — | The same ten as shapes, plus `socialSvg`. For a template that mounts no React |
 | `@eduardoalvarez/arrecife/icons` | yes | `@phosphor-icons/react` | `Icon`, which draws a Phosphor icon at the system's size, and at the weight its role asks for |
 | `@eduardoalvarez/arrecife/form` | yes | `react-hook-form` | The form layer: labels, errors and `aria-*` |
-| `@eduardoalvarez/arrecife/chart` | yes | `recharts` | The chart chassis and the series palette |
+| `@eduardoalvarez/arrecife/chart` | yes | `recharts` | The chart chassis, the series palette and the three chart types |
 | `@eduardoalvarez/arrecife/assets/*` | — | — | The brand PNGs |
 
 Importing the root from a build script to get one token is the mistake the
@@ -146,11 +147,11 @@ import in an adapter of your own marked `"use client"` — that was the workarou
 before 0.6.0 and it pulled 272 KB of client chunk in for components that never
 needed it.
 
-The five portable subpaths do NOT carry the directive, and that is the half that
-matters in a Server Component: `./tokens`, `./theme`, `./variants`, `./og` and
-`./shiki` stay on the server. Neither does `./social`, which is a third case: it
-renders React — it is nine `<svg>` — so it can never be portable, but it holds no
-state and nothing about it needs a client boundary. It is the only way to put a
+The six portable subpaths do NOT carry the directive, and that is the half that
+matters in a Server Component: `./tokens`, `./theme`, `./variants`, `./social/data`,
+`./og` and `./shiki` stay on the server. Neither does `./social`, which is a third
+case: it renders React — it is ten `<svg>` — so it can never be portable, but it
+holds no state and nothing about it needs a client boundary. It is the only way to put a
 social icon in a Server Component, and § «The social icons come from `./social`»
 below says why the grouped form cannot do it. If all you need are classes — for a `<div>`, an
 `<a>` or an Astro island you do not want to hydrate — import them from
@@ -432,6 +433,102 @@ Do not reach for `page` inside a table because the face is «nicer»: an admin
 screen with a dozen empty regions gets a dozen mascots, which is what made every
 consuming project write its own empty state instead of using this one.
 
+### The two shapes of `Footer`
+
+```tsx
+// The default. Stacked rows, signature level with the first one.
+<Footer brand={<Logo />} social={SOCIAL}>
+  <FooterLink href="/rss.xml">./rss</FooterLink>
+</Footer>
+
+// `full`. Brand and description on the left, link columns on the right,
+// signature closing the piece behind a hairline.
+<Footer
+  variant="full"
+  brand={<Logo />}
+  description="Cursos para construir con IA, directos y al grano."
+  columns={[
+    { title: 'Aprendizaje', links: [{ label: 'Cursos', href: '/cursos' }] },
+    { title: 'Legal', links: [{ label: 'Términos', href: '/terminos' }] },
+  ]}
+  social={SOCIAL}
+  action={<Button variant="tertiary" size="sm">Reportar un problema</Button>}
+  linkAsChild={({ href, children }) => <Link href={href}>{children}</Link>}
+/>
+```
+
+**Passing no `variant` is the default shape, and it is not a fallback**: two of
+the three sites that draw a footer want exactly that, and it has not changed.
+
+`columns`, `description`, `action` and `linkAsChild` exist ONLY on `full`. The
+props are a discriminated union, like `EmptyState`'s, so the default form cannot
+be handed one — if `tsc` rejects a `columns` you passed, you meant to pass
+`variant="full"` as well.
+
+Reach for `full` when the footer has GROUPS of links. Nine flat links in
+`children` is the wrong shape for it, and columns are also the only way to say
+«this block changes with who is looking» — an admin block against an account
+block — because they are data you build and not markup the library walks.
+
+The `./` in front of each column link is the component's, like `NavItem`'s, and
+it is `aria-hidden`. The column titles render as `<h3>`. Pass `linkAsChild` to
+plug in the router's `Link`; without it the columns are plain `<a>` and every
+navigation costs a page load.
+
+### `Table` brings its own surface
+
+```tsx
+// ✅ this is the whole thing
+<Table>…</Table>
+
+// ❌ two borders. The radius, the border and the clip are the component's
+<div className="rounded-lg border border-border bg-card overflow-hidden">
+  <Table>…</Table>
+</div>
+```
+
+`Table` draws `rounded-card`, `border-hairline` and the clip on the same
+container that scrolls it horizontally. Do not wrap it in a surface of your own,
+and do not add `overflow-hidden`: `TableRow`'s hover tint is already clipped by
+the corners, which is what the wrapper used to be for.
+
+`className` reaches the `<table>`, not the container, so a `rounded-none` from
+the call site does nothing.
+
+### The three chart types, and the names they took
+
+```tsx
+import { AreaChart, BarChart, LineChart } from '@eduardoalvarez/arrecife/chart';
+
+<AreaChart
+  label="Registros nuevos por día"
+  summary="Sube de 24 a 52 con una caída en mayo."
+  height={200}
+  data={data}
+  series={[{ key: 'count', label: 'Registros' }]}
+  xKey="day"
+/>
+```
+
+`data`, `series` and `xKey`, plus the mandatory `label`. The gradient, the grid,
+the axes and the tooltip belong to the component — that composition is the system
+drawing, and writing it at the call site is how it drifts.
+
+**These are NOT Recharts' components of the same name.** Import ours; do not
+import both in one file. Recharts' `Area`, `Line` and `XAxis` are still not
+re-exported, because they are unchanged and wrapping them buys nothing.
+
+`BarChart`'s `orientation` is named for what you see: `horizontal` lays the bars
+down for a ranking. Recharts calls that same thing `layout="vertical"` — if you
+are porting code, the value flips.
+
+`stacked` on `AreaChart` and `BarChart` adds the series up. Without it areas
+overlap, which is honest and rarely what you want with more than one series: to
+COMPARE rather than add up, the type is `LineChart`.
+
+Anything that is not a series over a category axis has no type and is not missing
+one. A doughnut is `ChartContainer` plus Recharts' `Pie` with `SERIES_COLORS`.
+
 ### The social icons come from `./social`
 
 ```tsx
@@ -446,9 +543,16 @@ import { social } from '@eduardoalvarez/arrecife';
 <social.GitHub />
 ```
 
-All nine: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
-`Email`, `Newsletter`. `Newsletter` is the bell: a way to follow, like `Rss`,
-named for what it means.
+All ten: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
+`Email`, `Newsletter`, `Website`. `Newsletter` is the bell: a way to follow, like
+`Rss`, named for what it means. `Website` is «my other site» — the personal
+domain in a footer full of networks — and it is what replaces borrowing a globe
+from an icon set, which brings its own stroke weight and its own margins.
+
+Six are brands and go SOLID, four are functional and use a 1.6 stroke. A row that
+mixes the two pens is the normal case, not a defect: a brand is somebody else's
+silhouette and cannot be outlined, and a symbol the system draws itself has no
+owner to be faithful to.
 
 **In a Server Component the subpath is mandatory, not preferred.** The root
 carries `"use client"`, and a client reference crosses the boundary per EXPORT —
@@ -459,6 +563,24 @@ client JS. Use `social` only when mapping a list of names onto icons.
 
 The root keeps the group because one of them is called `X`, and loose at the root
 it collides. In the subpath, alias it: `import { X as XIcon }`.
+
+**If you mount no React, the shapes are published too.** `./social/data` imports
+nothing, so an `.astro` that ships no framework JavaScript can draw the same
+glyph instead of pasting the `<path>` into the project:
+
+```astro
+---
+import { socialSvg } from '@eduardoalvarez/arrecife/social/data';
+---
+<Fragment set:html={socialSvg('GitHub', { class: 'size-[19px]' })} />
+```
+
+`socialGlyphs` is the catalogue keyed by name, `socialNames` is the ten names in
+order, and every glyph is exported on its own — `gitHubGlyph`, `websiteGlyph` —
+if you want the shapes rather than the markup. The React components are drawn
+from that same file, so the two renderings cannot disagree. Reaching for
+`socialGlyphs` or `socialSvg` names all ten, which is the price of iterating a
+catalogue; `import { LinkedIn }` still costs one shape.
 
 The internal glyphs — `Close`, `ChevronDown`, `Sun` — are **not exported** and
 are not going to be: they are the primitives' minimum set. A component that needs
@@ -514,7 +636,13 @@ compiles and looks wrong, or that fails the project's accessibility audit.
    already carry the weight. See `docs/decisions.md` § 21.
 4. **`secondary` is never filled.** It is border and text.
 5. **No entrance animations.** Modals, menus, tooltips and toasts appear where
-   they will stay. The only exception is the `Button loading` spinner.
+   they will stay. There are five declared exceptions, all behind `motion-safe`
+   and all with a reason written down: the `Button loading` spinner, `Sheet`'s
+   side panel, `Skeleton`'s shimmer, `Accordion`'s height and the `pulse-accent`
+   halo the footer signature ends in. All five are the same criterion — feedback
+   about progress or about spatial continuity — and a sixth lands on it or it
+   does not exist. The `caret` blink 0.6.0 shipped is removed in 0.8.0; it was
+   the only member of the second criterion § 23 opened for it.
 6. **Semantics and scale are independent.** An `h2` that has to look small is
    `<Text as="h2" variant="h3">`, never an `h3` that lies about the hierarchy.
 7. **`textMuted` never goes over `surfaceRaised`**: it gives 4.07 in dark. Over a

@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.8.0](https://github.com/Proskynete/arrecife/compare/v0.7.0...v0.8.0) (2026-09-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **components:** `SidebarNav`, `SidebarGroup` and `SidebarItem` are removed. A project that wants a sidebar builds one from `Nav` and `Sheet`, which is what both admin projects already did. Migration in docs/migration-0.8.md.
+* **components:** `Footer` no longer accepts `children`, and `FooterLink` is removed. A row of loose text links becomes `variant="full"` with `columns`. Migration in docs/migration-0.8.md.
+* **tokens:** the `caret` utility is removed. If you wrote `motion-safe:caret` by hand, Tailwind now drops it silently and your mark goes still with no error: use `pulse-accent` on a thin shape. Migration in docs/migration-0.8.md.
+* **primitives:** `Table` draws its own radius, border and clip, so the wrapper `div` around it has to lose its `rounded-*`, `border` and `overflow-hidden` or you get two borders. Nothing fails at compile time. Migration in docs/migration-0.8.md.
+
+### 🚀 Novedades
+
+* **chart:** AreaChart, BarChart and LineChart on the chassis ([780c976](https://github.com/Proskynete/arrecife/commit/780c97633b1d245f9de42cc42a333e0b7baf679c))
+* **components:** Footer gets a full shape, and its signature draws the halo ([88c5af3](https://github.com/Proskynete/arrecife/commit/88c5af362ff2ee44e50e534259014d1a3f19c253))
+* **components:** SidebarNav goes, and so does the recipe built on it ([27f6a3e](https://github.com/Proskynete/arrecife/commit/27f6a3e65c4f67dfd1531992b436965bc591bdf6))
+* **components:** the footer stops taking loose links, and the columns are the answer ([5d4495e](https://github.com/Proskynete/arrecife/commit/5d4495eb8f9928dfea0605026b8e99a91922ee27))
+* **primitives:** Table draws its own surface, and its scroll region is reachable ([ca07f2c](https://github.com/Proskynete/arrecife/commit/ca07f2c5a04f9db45819a9d3f0d69e32e3d112c6))
+* **social:** the glyphs come out as portable data, and Website joins them ([bb62292](https://github.com/Proskynete/arrecife/commit/bb62292c16d4a9c4953b4a83deab61db0f07afcf))
+* **tokens:** pulse-accent, the halo both sites already drew ([28d1c49](https://github.com/Proskynete/arrecife/commit/28d1c49fa9c7f48077391e2462ace69053c1377e))
+* **tokens:** the caret goes, and the motion rule is one criterion again ([46f03ff](https://github.com/Proskynete/arrecife/commit/46f03ff26c5568b38a1a0633f2ed1f1ac34bcaa7))
+
+
+### 🐛 Correcciones
+
+* **components:** NavItem asChild reaches its child ([f0556d5](https://github.com/Proskynete/arrecife/commit/f0556d5a7e36af188e7c7cac8df82258310c5205))
+* **primitives:** ref is in the type of the four form controls ([f219d32](https://github.com/Proskynete/arrecife/commit/f219d3253fbddf35f004cb5f88015ad25cedde90))
+* the llms generator stops interpreting $ in the inventory ([e0f5309](https://github.com/Proskynete/arrecife/commit/e0f5309b6620c9b8e6ed07d77bc08a5164b977fd))
+* **tokens:** the doctor stops asking a React-less project for [@source](https://github.com/source) ([7bf6e8f](https://github.com/Proskynete/arrecife/commit/7bf6e8fe97e444ed60547265cceda1bd960511c4))
+
+
+### 📚 Documentación
+
+* §§ 47 and 48, and the two removals in the migration guide ([424933e](https://github.com/Proskynete/arrecife/commit/424933e7a419398e755ccd49019f00e54bcc8abf))
+* docs/ splits into architecture, decisions and runbooks ([db5a9b4](https://github.com/Proskynete/arrecife/commit/db5a9b4621100bbf1b77b83894f43caea99c56c1))
+* **readme:** the 0.8.0 callout, and SidebarNav comes off the Phase 5 list ([a5af2f0](https://github.com/Proskynete/arrecife/commit/a5af2f0c2f838432d4a9c815d2127c35146c88bd))
+* **readme:** the table's surface, the halo, and the caret that goes with it ([a30b8b6](https://github.com/Proskynete/arrecife/commit/a30b8b601b30fb133cd1876c1139f88142c83d8a))
+* the reference documents for 0.8.0 ([e4521e2](https://github.com/Proskynete/arrecife/commit/e4521e2b1492132baa3849d8b73e36425ff40f4c))
+
+
+### 🚀 CI/CD
+
+* the templates and the size labeler follow docs/ into its folders ([ea037a1](https://github.com/Proskynete/arrecife/commit/ea037a16517e379ec7bf6544caa96239fae2a491))
+
 ## [0.7.0](https://github.com/Proskynete/arrecife/compare/v0.6.0...v0.7.0) (2026-09-04)
 
 

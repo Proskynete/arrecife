@@ -419,6 +419,38 @@ function ShapeAndRhythm() {
             </p>
           </div>
         </div>
+
+        {/*
+          The system's fifth motion exception, on its own because it is the only
+          one with no component visible in this file. It is what `cursos` and
+          `eduardoalvarez.dev` both drew before this library had a `Footer`, and
+          the blink the library briefly published on top of them — the `caret`
+          utility — is gone. See `docs/decisions.md` § 45, and § 23 for the
+          argument it reverses.
+        */}
+        <div className="gap-step-lg mt-step-lg flex flex-wrap items-start">
+          <div className="bg-surface border-hairline rounded-card p-step-lg gap-step-sm flex flex-col border">
+            <p className="text-label font-mono text-text-secondary">
+              pulse-accent · the signature&rsquo;s mark
+            </p>
+            <p className="text-meta font-mono text-text-muted">
+              $ cd ~/eduardoalvarez.dev
+              <span
+                aria-hidden="true"
+                className="bg-accent motion-safe:pulse-accent rounded-pill ml-1 inline-block h-[1em] w-[2px] align-middle"
+              />
+            </p>
+            <p className="text-ui font-sans text-text-secondary max-w-measure">
+              The mark stays solid and radiates a halo at 1.5s. It is what `cursos` and
+              `eduardoalvarez.dev` both drew before this library had a `Footer`, and it says the
+              terminal is live — the same thing the button spinner says.
+            </p>
+            <p className="text-ui font-sans text-text-secondary max-w-measure">
+              A 2px bar and not a block: a halo needs something thin to radiate from, or the ring
+              reads as a glowing rectangle.
+            </p>
+          </div>
+        </div>
       </Section>
     </Page>
   );

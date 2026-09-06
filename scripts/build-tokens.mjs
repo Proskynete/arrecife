@@ -218,49 +218,32 @@ ${gradientsBlock('light')}
   animation: arrecife-shimmer 1.4s linear infinite;
 }
 
-/* --- the fifth exception: the caret of the CLI signature --------------------
-   A terminal prompt with a caret that does not blink is a terminal that has
-   hung. The caret is the one piece of the footer that says the signature is a
-   prompt and not a decorative string, and a still block reads as a typo.
-
-   step-end and not a fade: a real caret is on or off, and easing it turns a
-   terminal into a pulsing dot. 1.06s is the cadence of a VT100 and of the site
-   this comes from.
-
-   It is the only exception that is not feedback about progress, and it earns its
-   place on the other half of the criterion the other four share: it is not
-   decoration, it is what makes the piece legible as what it is. Behind
-   motion-safe, where the caret stays solid — which is a caret at rest, not a
-   missing one. See docs/decisions.md § 23. */
-@keyframes arrecife-caret {
-  0%, 50% { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
-}
-
-@utility caret {
-  animation: arrecife-caret 1.06s step-end infinite;
-}
-
-/* --- the sixth exception: the halo, and the mark the signature actually uses -
+/* --- the fifth exception: the halo the CLI signature ends in ----------------
    The mark stays solid and RADIATES: a ring grows out of it to 5px and fades.
    It never turns off, and nothing about it is on-or-off.
 
    THIS IS WHAT THE CLI SIGNATURE ENDS IN. Both sites that draw that signature
    had it — cursos in app/globals.css, eduardoalvarez.dev in base.css — under
-   the name cursor-ping, and the blog's copy is still there with nothing
-   rendering it, because adopting the library's Footer replaced its mark with a
-   blink. The library had overruled the identity in the one direction it is not
-   allowed to: it invented.
+   the name cursor-ping, and the blog's copy sat there with nothing rendering
+   it, because adopting the library's Footer had replaced its mark with a blink.
+   The library had overruled the identity in the one direction it is not allowed
+   to: it invented.
 
-   It is NOT a variant of the caret above, and that is why there are two
-   utilities and not one with a setting. § 23 argued the caret's case ON
-   step-end — «a real caret is on or off, and easing it turns a terminal into a
-   pulsing dot» — so a halo folded into that name would be that entry
-   contradicting itself.
+   That blink shipped in 0.6.0 as a caret utility and it is GONE. It was kept
+   for one release on the grounds that a terminal caret is a real thing to want,
+   which is true and is not a reason: nothing in the library drew it, no
+   consumer had ever asked for it, and the argument that justified it had been
+   written from first principles about terminals rather than read off the two
+   sites that already had a signature. A utility with no consumer and no origin
+   is not a feature, it is the invention still sitting there under a new label.
+   See docs/decisions.md § 45.
 
-   Its reason is the one the first four exceptions share: it is feedback about
+   Its reason is the one the other four exceptions share: it is feedback about
    PROGRESS. A prompt that radiates says the terminal is live, which is the same
    thing the button spinner says and the same thing a still mark cannot say.
+   With the caret gone the criterion is ONE again — progress or spatial
+   continuity — and the legibility half § 23 opened turns out to have had
+   exactly one member for its whole life.
 
    The color comes from --color-accent and not from a hex, so it follows the
    mode. cursos wrote it against its own --primary, which freezes to whichever

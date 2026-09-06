@@ -1,9 +1,15 @@
 # Migrating to 0.8.0
 
-Two breaking changes, and both of them are lines you **delete** rather than lines
-you rewrite. Everything else is additive, and most of it exists so a project can
+Four breaking changes. Three of them are lines you **delete** rather than lines
+you rewrite, and the fourth is a component that leaves because nobody was
+importing it. Everything else is additive, and most of it exists so a project can
 delete something it was maintaining by hand: 197 lines of footer, four charts,
 four hand-pasted SVG paths and fourteen copies of the same wrapper `div`.
+
+**Three of the four are the library taking something back out**, and they are
+worth reading together: a motion utility, a footer row and a whole component,
+all removed for the same reason — nothing in any of the four projects drew them.
+See [`decisions.md`](decisions.md) § 45, § 47 and § 48.
 
 If you are coming from 0.6.x, do [`migration-0.7.md`](migration-0.7.md) first.
 
@@ -73,6 +79,64 @@ label that makes it look like a feature.
 
 It also puts the motion rule back to one criterion. See
 [`decisions.md`](decisions.md) § 45, and § 23 for the entry it reverses.
+
+### `Footer` takes no loose links, and `FooterLink` is gone
+
+```diff
+- <Footer brand={<Logo />} social={networks}>
+-   <FooterLink href="/rss.xml">./rss</FooterLink>
+-   <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
+- </Footer>
++ <Footer
++   variant="full"
++   brand={<Logo />}
++   social={networks}
++   columns={[
++     { title: 'legal', links: [
++       { label: 'aviso legal', href: '/aviso-legal' },
++       { label: 'rss', href: '/rss.xml' },
++     ]},
++   ]}
++ />
+```
+
+`children` is omitted from the props, so this one DOES fail at compile time —
+the only break in this release that does. If you passed no children, nothing
+changes for you: `brand`, `social`, `year` and `signatureHref` are untouched and
+the default shape renders exactly as it did.
+
+Do not write the `./` in the label. The columns put it there and mark it
+`aria-hidden`, so a screen reader says «aviso legal» and not «punto barra aviso
+legal» — which is the half a hand-written row got wrong.
+
+**Why it goes.** No project passed those links. `eduardoalvarez.dev` passes
+`brand` and `social`; `links` is an Astro replica with the glyph row and the
+prompt; `cursos` has three columns, which is what a flat row cannot express — it
+cannot say which block a link belongs to, so a screen reader walks the lot
+instead of jumping to «Legal» by heading. See [`decisions.md`](decisions.md)
+§ 47.
+
+### `SidebarNav` is removed
+
+```diff
+- import { SidebarNav, SidebarGroup, SidebarItem } from '@eduardoalvarez/arrecife';
+```
+
+`SidebarNav`, `SidebarGroup` and `SidebarItem` are gone. **If you are one of the
+four projects, this costs you nothing**: neither admin app imported it. `cursos`
+uses shadcn's `components/ui/sidebar.tsx` and `blog-content-manager` has its own
+`src/components/sidebar/Sidebar.tsx`.
+
+If you did import it, build the sidebar from `Nav` and `Sheet` — which is what
+both admin projects already did. `Sheet side="left"` is the mobile drawer, and
+`Nav` carries the item states; a component wrapping the two encodes no rule
+neither of them already has.
+
+**Why it goes.** The entry criterion is «it encodes an identity rule, it has two
+or more consumers, and it drags in no project infrastructure», and it never had
+the middle one. The two consumers were counted as projects that COULD use it
+rather than projects that DID. See [`decisions.md`](decisions.md) § 48, and § 32
+and § 34 for the entries it reverses.
 
 ---
 
@@ -296,5 +360,8 @@ wide block the ring reads as a glowing rectangle.
 | `Website` glyph | Nothing. It replaces a borrowed one |
 | The footer signature's mark | Nothing. It becomes the halo both sites already drew; delete your `cursor-ping` keyframes |
 | `caret` is removed | Nothing unless you wrote the class by hand. Then the mark goes still with no error: use `pulse-accent` |
+| `Footer` takes no `children` | Nothing unless you passed loose links. This one DOES fail at compile time: move them to `variant="full"` columns |
+| `FooterLink` is removed | Nothing. It only styled the row that went |
+| `SidebarNav` is removed | Nothing for the four projects — neither admin app imported it. Otherwise: `Nav` inside a `Sheet` |
 | `pulse-accent` | Nothing. New utility, also usable outside the footer |
 | `npx arrecife` on a React-less project | One fewer false failure |

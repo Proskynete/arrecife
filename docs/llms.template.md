@@ -230,59 +230,6 @@ tells them apart.
 Do not silence it by removing the `@import`: the fix is the `@source` line, or
 renaming your own token.
 
-### `SidebarNav` groups, and the icon replaces the prompt
-
-```tsx
-<SidebarNav aria-label="Administración" brand={<>…</>} version="v0.6.0" branch="main">
-  <SidebarItem href="/admin" icon={<Icon as={SquaresFour} />} active>Resumen</SidebarItem>
-
-  <SidebarGroup label="Ventas">
-    <SidebarItem href="/admin/ventas" icon={<Icon as={CreditCard} />}>Ventas</SidebarItem>
-    <SidebarItem href="/admin/cupones" icon={<Icon as={Ticket} />}>Cupones</SidebarItem>
-  </SidebarGroup>
-</SidebarNav>
-```
-
-Past about eight items a flat sidebar stops being readable. Each `SidebarGroup`
-is a nested list named by its label, so a screen reader says «lista Ventas, 3
-elementos» instead of one list of eleven. The label is a paragraph and **not** a
-heading on purpose: a sidebar is navigation, and a heading here would land in the
-page's own outline.
-
-**`icon` replaces the `▸`, it does not join it.** Do not pass a glyph and expect
-the prompt as well. A sidebar with no icons keeps the prompt on every item, which
-is what a four-section blog admin wants.
-
-**`brand` does not replace `title`.** `title` is the eyebrow and also the `nav`'s
-accessible name when it is a string; a logo is not an accessible name, so pass
-`aria-label` when you use `brand`. See `docs/decisions.md` § 32.
-
-**It collapses to a rail, and the toggle is CONTROLLED:**
-
-```tsx
-const [collapsed, setCollapsed] = useState(false);
-
-<SidebarNav
-  collapsed={collapsed}
-  onCollapsedChange={setCollapsed}
-  brand={<Wordmark />}
-  mark={<Isotype className="h-6" />}
-  user={<Avatar … />}
->
-```
-
-There is no uncontrolled mode: this state is almost always persisted, and an
-internal one would fight the cookie you already keep. `onCollapsedChange` is also
-what makes the toggle appear — `collapsed` on its own is a rail with no way out,
-which is a layout and not an accident.
-
-Collapsed, the widths become `w-sidebar-rail` (56) and `w-sidebar` (256), and the
-component owns them only when it can collapse. It does **not** transition, on
-purpose. `brand` is hidden and `mark` takes its place, because a wordmark does
-not fit in a rail. Every label stays in the accessibility tree as `sr-only`, so
-do not «simplify» by dropping the children of a collapsed item. See
-`docs/decisions.md` § 34.
-
 ### `Nav` is two slots and one height
 
 Almost everything an app shell wants from a site bar is already a slot:
@@ -345,13 +292,13 @@ is no fourth:
 | `tone` | Weight | What it is |
 | --- | --- | --- |
 | `action` · the default | `regular` | An icon that is a control or names one. It is the system's line: 16 on a 256 grid = 0.0625em, against the document's 1.6 on a 24 grid = 0.0667em. Six per cent apart, which is no pixel on any screen |
-| `current` | `fill` | The one of a set you are on — the sidebar item carrying `aria-current` |
+| `current` | `fill` | The one of a set you are on — the nav item carrying `aria-current` |
 | `quiet` | `light` | Furniture: a marker in a metadata row, not a control and not a state |
 
 ```tsx
-<SidebarItem href="/cursos" active icon={<Icon as={GraduationCap} tone="current" />}>
+<NavItem href="/cursos" active icon={<Icon as={GraduationCap} tone="current" />}>
   cursos
-</SidebarItem>
+</NavItem>
 ```
 
 `current` is the one that earns the axis. An active item already paints itself
@@ -437,9 +384,7 @@ consuming project write its own empty state instead of using this one.
 
 ```tsx
 // The default. Stacked rows, signature level with the first one.
-<Footer brand={<Logo />} social={SOCIAL}>
-  <FooterLink href="/rss.xml">./rss</FooterLink>
-</Footer>
+<Footer brand={<Logo />} social={SOCIAL} />
 
 // `full`. Brand and description on the left, link columns on the right,
 // signature closing the piece behind a hairline.
@@ -465,10 +410,12 @@ props are a discriminated union, like `EmptyState`'s, so the default form cannot
 be handed one — if `tsc` rejects a `columns` you passed, you meant to pass
 `variant="full"` as well.
 
-Reach for `full` when the footer has GROUPS of links. Nine flat links in
-`children` is the wrong shape for it, and columns are also the only way to say
-«this block changes with who is looking» — an admin block against an account
-block — because they are data you build and not markup the library walks.
+Reach for `full` whenever the footer has links at all. **There is no other
+place to put them**: `Footer` takes no `children`, so a row of loose text links
+does not compile. That row existed until 0.8.0 and no project ever passed it —
+and columns are also the only way to say «this block changes with who is
+looking», an admin block against an account block, because they are data you
+build and not markup the library walks.
 
 The `./` in front of each column link is the component's, like `NavItem`'s, and
 it is `aria-hidden`. The column titles render as `<h3>`. Pass `linkAsChild` to

@@ -73,7 +73,25 @@ function isSpanish(text) {
  * correct Spanish cannot be evidence of anything.
  */
 const ENGLISH =
-  /\b(exists?|declared|label|labels|theme|next|previous|email|name|title|value|size|width|height|loading|delete|cancel|save|search|filter|row|rows|item|items|list|state|group|content|header|footer|body|link|button|card|page|text|type|new|old|first|last|and|the|with|from|not|are|was|were)\b/i;
+  /\b(exists?|declared|label|labels|theme|next|previous|email|name|title|value|size|width|height|loading|delete|cancel|save|search|filter|row|rows|item|items|list|state|group|content|header|footer|body|link|button|card|page|text|type|new|old|first|last|and|the|with|from|not|are|was|were|one|two|three|four|five|six|seven|eight|nine|ten|year|years|month|months|week|weeks|day|days|hour|hours)\b/i;
+
+/*
+  The numbers and the units of time are the newer half of that list, and they are
+  there because one of them got through.
+
+  «Charlas de los últimos two años» sat in `table.stories.tsx` from the 0.6.0
+  sweep until this round. The string is unmistakably Spanish — it has an accent
+  and four function words — and it carried an English word in the middle, which
+  is the exact shape the first rule was written for. It survived because the list
+  was built from the words the sweep was SEEN to take, and `dos` was not one of
+  them until it was.
+
+  A spelled-out number and a unit of time are the same kind of word as `label` or
+  `state`: each has a one-to-one Spanish counterpart, so a find-and-replace takes
+  it without changing the sentence around it and the result still reads almost
+  right. Neither is a word that belongs to both languages, which is the only test
+  that keeps something OFF this list.
+*/
 
 /**
  * Every string literal in the file.

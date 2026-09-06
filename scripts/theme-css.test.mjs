@@ -11,8 +11,9 @@
  * exactly in the gap between what the library publishes and what it uses.
  *
  * `check-tokens-namespace.mjs` covers the same ground from the names side. Both
- * two, because son razonamientos independientes: el check sabe qué nombres
- * reserva Tailwind, este sabe qué hace Tailwind de verdad al compilarlos.
+ * exist, because they are independent pieces of reasoning: that check knows
+ * which names Tailwind reserves, and this one knows what Tailwind actually does
+ * with them when it compiles.
  */
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';

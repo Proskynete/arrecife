@@ -1120,7 +1120,7 @@ The knob changes position, but is not animated while doing so: the position IS t
 Source: `src/primitives/table.tsx`
 
 **Table**
-The container scrolls horizontally: the page never does.
+The table, and the surface it sits on. The two are one piece.
 
 - No own props: it passes through those of the element or primitive it wraps.
 
@@ -1143,6 +1143,8 @@ The container scrolls horizontally: the page never does.
 - No own props: it passes through those of the element or primitive it wraps.
 
 **TableCaption**
+The caption, at the bottom and INSIDE the surface.
+
 - No own props: it passes through those of the element or primitive it wraps.
 
 ### Tabs, TabsList, TabsTrigger, TabsContent

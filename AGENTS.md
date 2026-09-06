@@ -295,7 +295,7 @@ will stay. The `Switch` knob changes position without sliding.
 The system's only transition is `transition-standard`, and by how the utility is
 written it **can only animate color and border**.
 
-There are **four declared exceptions**, all wrapped in `motion-safe` and all with
+There are **five declared exceptions**, all wrapped in `motion-safe` and all with
 the same criterion: they are feedback about progress or about spatial continuity,
 never decoration.
 
@@ -305,17 +305,21 @@ never decoration.
 | `Sheet`'s side panel | A panel entering from an edge slides by definition; held still it is an off-centre modal |
 | `Skeleton`'s shimmer | A block that is still and a block that will never load look the same |
 | `Accordion`'s height | Nothing appears: a gap opens and what is below shifts. With no transition it is a jump and you lose your place on the page |
-| The footer's caret | A prompt whose caret does not blink is a terminal that has hung, and a still block reads as a typo |
+| The footer signature's halo | A prompt that radiates says the terminal is live, which is what the button spinner says and what a still mark cannot |
 
-The fifth is the one that splits the criterion in two. The first four are
-feedback about **progress or spatial continuity**; the caret is neither, and it
-gets in on the other half: **it is not decoration, it is what makes the piece
-legible as what it is.** The spinner says «this is loading» rather than «this is
-disabled»; the caret says «this is a prompt» rather than «this is a string with a
-smudge».
+**One criterion, and it took a reversal to get it back.** 0.6.0 admitted a sixth
+— a blinking `caret` on the footer signature — by splitting the criterion in two
+and putting the caret on a new «legibility» half. The argument was sound about
+terminals and it had never been checked against the projects: `cursos` and
+`eduardoalvarez.dev` both drew the signature already, and both drew the halo. The
+library had invented where it was supposed to be recording. 0.8.0 makes the halo
+the mark, removes the `caret` utility, and the legibility half — which never held
+anything else — goes with it. See § 23 and § 45.
 
-A sixth has to land on one of those two, with the argument written in
-`docs/decisions.md`, not because it looks better. See § 20 and § 23.
+The lesson is the reusable half: **a new exception is not argued from first
+principles when the thing it describes already exists in a consuming project.**
+Read the project first. A sixth has to land on the one criterion, with the
+argument written in `docs/decisions.md`, not because it looks better. See § 20.
 
 ### 5 · Accessibility
 

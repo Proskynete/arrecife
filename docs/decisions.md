@@ -1207,7 +1207,7 @@ biolume va en el badge del icono y en la sparkline · arena en el número para
 
 ---
 
-## 32 · The sidebar gets blocks, and the icon replaces the prompt
+## 32 · The sidebar gets blocks, and the icon replaces the prompt · REVERSED in § 48
 
 **Document:** `docs/brand-manual.md` § 09 gives the admin its dosage — «Solo la
 aleta. Sin caras salvo estados vacíos» — and says nothing about how its
@@ -1294,7 +1294,7 @@ cover.
 
 ---
 
-## 34 · The collapsed rail gets in, and the reason it was ruled out is gone
+## 34 · The collapsed rail gets in, and the reason it was ruled out is gone · REVERSED in § 48
 
 **Backlog:** «Lo que NO se puede componer es el rail plegado a solo iconos, y el
 motivo no es el contenedor: el sistema no tiene iconos de navegación […] Un rail
@@ -1987,6 +1987,91 @@ imports the root barrel, so add an `@source`» is the reason, and the reason is 
 decides whether the next project understands when it needs the line.
 
 **Action in the document:** none. It is a check, not an identity decision.
+
+---
+
+## 47 · The footer takes no loose links, and the columns are why
+
+**System rule, from the entry criterion:** a shape gets in when it has two or
+more consumers. The footer's row of loose text links had none.
+
+**What stayed:** `children` comes off `FooterProps` — omitted from the element's
+props, so it does not compile — and `FooterLink` is removed. A footer's link list
+is `variant="full"`'s columns.
+
+**Nobody drew it, and that is the finding.** `eduardoalvarez.dev` passes `brand`
+and `social` and nothing else. `links` is an Astro replica: fin, wordmark, the
+glyph row, the prompt. `cursos` has three columns — aprendizaje, cuenta, legal —
+which is exactly what a flat row cannot say. The only place the loose links were
+ever rendered is this library's own stories, and a story is not a consumer.
+
+**And where it did fit, the columns are better at the job.** A row cannot say
+which block a link belongs to, so a screen reader walks nine links instead of
+jumping to «Legal» by heading — which is the argument § 44 already made for the
+columns being data. It also made whoever wrote the label type the `./` prefix
+themselves: the stories that go with this entry read `./rss` and `./aviso-legal`,
+hand-typed, while the columns put that prefix in for you and mark it
+`aria-hidden`. Two renderings of one idea, one of them worse, kept side by side
+because nothing forced a choice.
+
+**What it is not.** This is not «the default shape loses something». The default
+shape is brand, icons and signature, and that is exactly what the two sites that
+use it pass. What goes is a third row neither of them ever filled.
+
+The row assembly stays a list at two entries rather than collapsing into a
+conditional. What it encodes is «the signature goes in the first row, whichever
+it is», and that does not stop being the rule because the list got shorter.
+
+**Action in the document:** the footer's specification loses the row of loose
+links. The link list is the full shape's columns.
+
+---
+
+## 48 · `SidebarNav` goes, and the entry criterion is why
+
+**System rule, from «Decide whether it really gets in»:** it encodes an identity
+rule, it has TWO OR MORE CONSUMERS, and it drags in no project infrastructure.
+All three at once.
+
+**What stayed:** `SidebarNav`, `SidebarGroup` and `SidebarItem` are removed —
+593 lines, plus the `Recipes/Sidebar` composition built on them. § 32 and § 34
+are reversed.
+
+**It had the first and the third, and never the second.** The two projects it was
+built for each have a sidebar of their own and prefer it: `cursos` uses shadcn's
+`components/ui/sidebar.tsx`, `blog-content-manager` has
+`src/components/sidebar/Sidebar.tsx`. Neither has ever imported this one. The
+other two consumers are reading sites with no sidebar at all.
+
+**The criterion was met on paper by counting the wrong thing.** «Two or more
+consumers» was read as two projects that COULD use it — both admin surfaces
+existed, both had navigation, so the box was ticked. What it means is two that
+DO. A candidate is a hypothesis; a consumer is a fact, and the gap between them
+is where a component like this lives for two releases before anyone notices it is
+alone.
+
+**§ 34 is the expensive half.** The collapsed rail went in on the strength of the
+icon set adopted in § 29 — the reason it had been ruled out was «the system has
+no navigation icons», and that stopped being true. The reasoning was sound and it
+was answering the wrong question: whether the rail COULD be built, not whether
+the project that wanted it was still waiting for it. It was not; it was building
+its own.
+
+**Both entries stay, marked rather than deleted, for the reason § 23 does.** What
+they argued — a sidebar's sections need blocks, an icon says more than a `>` in a
+12px rail — is not what was wrong. What was wrong is that nothing checked who was
+going to draw it. This repo now has three of these in one release: the caret, the
+loose links and this. All three are the same shape, and the shape has a name —
+**the library building for a consumer it has not read.**
+
+**What a project does now.** It builds the sidebar from `Nav` and `Sheet`, which
+is what both of them already did, and what the recipe that went with this
+demonstrated: `Sheet side="left"` IS the mobile drawer, and a component wrapping
+the two is an alias with maintenance.
+
+**Action in the document:** the admin's navigation section comes out of the
+specification. What stays is the dosage rule from `brand-manual.md` § 09, which
+was never about this component.
 
 ---
 

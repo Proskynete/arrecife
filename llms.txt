@@ -1349,7 +1349,7 @@ Source: `src/primitives/typography.tsx`
 
 ## Components
 
-Imported from `@eduardoalvarez/arrecife`. 25 exports.
+Imported from `@eduardoalvarez/arrecife`. 24 exports.
 
 ### ArticleCard
 
@@ -1489,11 +1489,10 @@ Source: `src/components/event-calendar/index.tsx`
 | `onUpdateEvent` | `(event: CalendarEvent) => void` |  |  |  |
 | `selected` | `Date` |  |  | Selected day, if the project controls it. Without it, it starts on today. |
 
-### Footer, FooterLink
+### Footer
 
 Source: `src/components/footer/index.tsx`
 
-**Footer**
 - Extends: `FooterBase & ( \| { /** The shape the library has always had: stacked rows and the signature at the top right. */ variant?: 'default' \| undefined; columns?: never; description?: never; action?: never; linkAsChild?: never; } \| { /** `full`: brand and description on the left, link columns on the right, signature closing it. */ variant: 'full'; /** The link columns. Mandatory: without them `full` is the default form with extra steps. */ columns: readonly FooterColumn[]; /** One line under the brand, saying what the site is. */ description?: ReactNode; /** An action under the row of icons — «Reportar un problema». Usually a tertiary button. */ action?: ReactNode; /** * Renders the column links through the child, to plug in the framework's * `Link`. It receives each `href` in the Slot's `props`. * * It is § 24's rule applied where it now bites: a column turns data into * markup, so without a slot the only way to reach one of those links * from a project is to select it by structure or by a style class, and * neither is a contract. `Breadcrumb` and `ArticleCard` have the same * signature on purpose. * * It is also what a client-side transition needs: `cursos` reached for * it the moment its columns stopped being `<a>` tags. */ linkAsChild?: ((props: { href: string; children: ReactNode }) => ReactNode) \| undefined; } )`
 
 | prop | type | req. | default | what it does |
@@ -1507,13 +1506,6 @@ Source: `src/components/footer/index.tsx`
 | `social` | `readonly SocialLink[]` |  |  |  |
 | `variant` | `"full" \| "default"` |  |  | The shape the library has always had: stacked rows and the signature at the top right. `full`: brand and description on the left, link columns on the right, signature closing it. |
 | `year` | `number` |  | `new Date().getFullYear()` | The signature's year. |
-
-**FooterLink**
-- Extends: `ComponentPropsWithoutRef<'a'>`
-
-| prop | type | req. | default | what it does |
-| --- | --- | --- | --- | --- |
-| `asChild` | `boolean \| undefined` |  | `false` |  |
 
 ### Hero
 
@@ -2157,7 +2149,7 @@ Types (6): `ArticleData`, `BaseData`, `CourseData`, `DefaultData`, `SatoriNode`,
 | `toast` | `(message: ReactNode, options?: ToastOptions \| undefined): string` | Fires a notice. It returns its id, which is what you keep in order to close it by hand — the «guardando…» case that gets replaced when the request finishes. |
 | `useTheme` | `(): Theme` | The theme set right now, for a project that needs to branch in React — a different logo per mode, an image with no light version. |
 
-Types (64): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterColumn`, `FooterColumnLink`, `FooterLinkProps`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarGroupProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `SocialLink`, `StatDelta`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
+Types (63): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterColumn`, `FooterColumnLink`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarGroupProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `SocialLink`, `StatDelta`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
 
 # Where to look if this is not enough
 

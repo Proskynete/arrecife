@@ -15,7 +15,7 @@ import {
   YouTube,
 } from '../../social/index.tsx';
 import { Button } from '../../primitives/button.tsx';
-import { Footer, FooterLink } from './index.tsx';
+import { Footer } from './index.tsx';
 
 const meta = {
   title: 'Components/Footer',
@@ -100,10 +100,7 @@ export const WithBrand: Story = {
   name: 'With the brand row',
   render: () => (
     <div className="-m-step-lg">
-      <Footer brand={<Logo />} social={SOCIAL}>
-        <FooterLink href="/rss.xml">./rss</FooterLink>
-        <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
-      </Footer>
+      <Footer brand={<Logo />} social={SOCIAL} />
 
       <div className="p-step-lg">
         <Note>
@@ -113,8 +110,13 @@ export const WithBrand: Story = {
         </Note>
         <Note>
           And the signature shares a line WITH THE BRAND, which is the first row.
-          Pinned to the social row — as it was in 0.5.0 — it fell to the third line
-          the moment the footer had a brand and links above it.
+          Pinned to the social row — as it was in 0.5.0 — it fell to the second line
+          the moment the footer had a brand above it.
+        </Note>
+        <Note>
+          There is no third row of loose text links any more, and there is no
+          `children` to put one in. That row is what `variant="full"`'s columns
+          replace — see «Full · the shape of cursos».
         </Note>
       </div>
     </div>
@@ -171,35 +173,12 @@ export const FirstRowIsTheBrand: Story = {
   name: 'First row · the brand',
   render: () => (
     <div className="-m-step-lg">
-      <Footer brand={<Logo />} social={SOCIAL}>
-        <FooterLink href="/rss.xml">./rss</FooterLink>
-        <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
-      </Footer>
+      <Footer brand={<Logo />} social={SOCIAL} />
 
       <div className="p-step-lg">
         <Note>
           With a brand, the signature shares its line. It is the difference between
           «the signature goes right» and «the signature goes at the TOP right».
-        </Note>
-      </div>
-    </div>
-  ),
-};
-
-export const FirstRowIsTheLinks: Story = {
-  name: 'First row · the links',
-  render: () => (
-    <div className="-m-step-lg">
-      <Footer social={SOCIAL}>
-        <FooterLink href="/rss.xml">./rss</FooterLink>
-        <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
-      </Footer>
-
-      <div className="p-step-lg">
-        <Note>
-          With no brand, the first row is the links and the signature lines up with
-          them. It is not pinned to any particular row: it is pinned to whichever
-          one comes first.
         </Note>
       </div>
     </div>
@@ -290,16 +269,18 @@ export const FullNotAsked: Story = {
   name: 'Full · not asking for it changes nothing',
   render: () => (
     <div className="-m-step-lg">
-      <Footer brand={<Logo />} social={SOCIAL}>
-        <FooterLink href="/rss.xml">./rss</FooterLink>
-        <FooterLink href="/aviso-legal">./aviso-legal</FooterLink>
-      </Footer>
+      <Footer brand={<Logo />} social={SOCIAL} />
 
       <div className="p-step-lg">
         <Note>
           No `variant`, so this is the shape the library has always had: stacked rows and the
           signature level with the first one. Two of the three projects that draw a footer want
           this, which is why it is what comes out of passing nothing.
+        </Note>
+        <Note>
+          It is also exactly what `eduardoalvarez.dev` passes today — `brand` and
+          `social`, nothing else — which is how the loose-link row turned out to
+          be drawn by nobody.
         </Note>
       </div>
     </div>

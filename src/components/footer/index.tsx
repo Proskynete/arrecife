@@ -67,12 +67,20 @@ export type FooterColumn = {
   links: readonly FooterColumnLink[];
 };
 
-type FooterBase = ComponentPropsWithoutRef<'footer'> & {
+/**
+ * `children` is OMITTED, and it is the point of the type rather than an
+ * oversight.
+ *
+ * The footer used to take a row of loose text links this way — `./rss`,
+ * `./aviso-legal` — and that row is what `variant="full"`'s columns replace. A
+ * flat row cannot say which block a link belongs to, cannot carry a heading a
+ * screen reader can jump to, and made whoever wrote the label type the `./`
+ * themselves, which the columns put there. See docs/decisions.md § 47.
+ */
+type FooterBase = Omit<ComponentPropsWithoutRef<'footer'>, 'children'> & {
   social?: readonly SocialLink[];
   /** The signature's year. */
   year?: number;
-  /** Text links: legal notice, RSS, sitemap. */
-  children?: ReactNode;
   /**
    * The brand row: the fin and the wordmark, at the very top.
    *
@@ -254,7 +262,6 @@ export function Footer({
   linkAsChild,
   social,
   brand,
-  children,
   year = new Date().getFullYear(),
   signatureHref,
   className,
@@ -340,11 +347,6 @@ export function Footer({
           </div>
         </div>
 
-        {/* The loose links keep working here, under both blocks. */}
-        {children ? (
-          <div className="gap-step-md mt-step-lg flex flex-wrap items-center">{children}</div>
-        ) : null}
-
         {/*
           The signature CLOSES the full footer, on its own row and behind a
           hairline.
@@ -368,24 +370,21 @@ export function Footer({
     The footer's rows, in order and without the empty ones. They are assembled
     before painting because the signature ALWAYS goes in the first one that
     exists, and which one is first depends on what gets passed: with a brand it
-    is the brand, without one it is the links, and with only social icons it is
-    the icons.
+    is the brand, and with only social icons it is the icons.
 
     It is the difference between «the signature goes on the right» and «the
     signature goes at the top right». Pinning it to the social row — as it was —
-    left it on the third line the moment the footer had a brand and links above,
-    which is exactly where it does not go.
+    left it on the third line the moment the footer had a brand above it, which
+    is exactly where it does not go.
+
+    Two rows now, and the assembly is kept rather than collapsed into a
+    conditional: what it encodes is «first row, whichever it is», and that
+    survives the list being short.
   */
   const rows = [
     brand ? (
       <div key="brand" className="flex items-center">
         {brand}
-      </div>
-    ) : null,
-
-    children ? (
-      <div key="links" className="gap-step-md flex flex-wrap items-center">
-        {children}
       </div>
     ) : null,
 
@@ -410,23 +409,5 @@ export function Footer({
 
       {others}
     </Shell>
-  );
-}
-
-export type FooterLinkProps = ComponentPropsWithoutRef<'a'> & {
-  asChild?: boolean | undefined;
-};
-
-export function FooterLink({ asChild = false, className, ...props }: FooterLinkProps) {
-  const Root = asChild ? Slot : 'a';
-  return (
-    <Root
-      className={cn(
-        'font-mono text-meta text-text-secondary hover:text-accent transition-standard cursor-pointer',
-        'rounded-chip focus-ring',
-        className,
-      )}
-      {...props}
-    />
   );
 }

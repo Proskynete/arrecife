@@ -1,13 +1,13 @@
-import { Slot } from '@radix-ui/react-slot';
-import type { ReactNode } from 'react';
+import { Slot } from "@radix-ui/react-slot";
+import type { ReactNode } from "react";
 
-import { cn } from '../../lib/cn.ts';
-import { CategoryBadge } from '../../primitives/badge.tsx';
-import { Text } from '../../primitives/typography.tsx';
-import { categoryBadgeVariants } from '../../variants/badge.ts';
-import { CardShell, type CardShellProps } from '../card-base.tsx';
+import { cn } from "../../lib/cn.ts";
+import { CategoryBadge } from "../../primitives/badge.tsx";
+import { Text } from "../../primitives/typography.tsx";
+import { categoryBadgeVariants } from "../../variants/badge.ts";
+import { CardShell, type CardShellProps } from "../card-base.tsx";
 
-export type ArticleCardProps = Omit<CardShellProps, 'children' | 'title'> & {
+export type ArticleCardProps = Omit<CardShellProps, "children" | "title"> & {
   title: ReactNode;
   /** Standfirst. Clamped to two lines so the grid does not fall out of line. */
   excerpt?: ReactNode;
@@ -46,12 +46,14 @@ export type ArticleCardProps = Omit<CardShellProps, 'children' | 'title'> & {
    * `TableOfContents`, and it is deliberately the same: one idiom for «the
    * project supplies the element, the library supplies the styling».
    */
-  tagAsChild?: ((props: { tag: string; children: ReactNode }) => ReactNode) | undefined;
+  tagAsChild?:
+    | ((props: { tag: string; children: ReactNode }) => ReactNode)
+    | undefined;
 };
 
 /**
- * The metadata line uses `meta` and not `eyebrow`: `18 ago 2026 · 8 min de
- * lectura` is a datum, not an overline, and in small caps it was neither.
+ * The metadata line uses `meta` and not `eyebrow`: `18 ago 2026 · 8 min de lectura`
+ * is a datum, not an overline, and in small caps it was neither.
  *
  * The tags are the CATEGORY family — a lowercase sand pill — not the status one.
  * A slug is something you read as `engineering-culture`.
@@ -69,17 +71,28 @@ export function ArticleCard({
   ...props
 }: ArticleCardProps) {
   const meta = [
-    date ? <time key="date" dateTime={dateTime}>{date}</time> : null,
-    readingMinutes ? <span key="lectura">{readingMinutes} min de lectura</span> : null,
+    date ? (
+      <time key="date" dateTime={dateTime}>
+        {date}
+      </time>
+    ) : null,
+    readingMinutes ? (
+      <span key="lectura">{readingMinutes} min de lectura</span>
+    ) : null,
   ].filter(Boolean);
 
   return (
-    <CardShell className={cn('p-step-lg', className)} {...props}>
-      <article className="gap-step-sm flex h-full flex-col">
+    <CardShell className={cn("p-step-lg", className)} {...props}>
+      <article className="flex flex-col h-full gap-step-sm">
         {meta.length > 0 ? (
-          <Text variant="meta" tone="muted" as="p" className="gap-step-xs flex items-center">
+          <Text
+            variant="meta"
+            tone="muted"
+            as="p"
+            className="flex items-center gap-step-xs"
+          >
             {meta.map((m, i) => (
-              <span key={i} className="gap-step-xs flex items-center">
+              <span key={i} className="flex items-center gap-step-xs">
                 {i > 0 ? <span aria-hidden="true">·</span> : null}
                 {m}
               </span>
@@ -88,7 +101,7 @@ export function ArticleCard({
         ) : null}
 
         <Text
-          as={headingLevel === 2 ? 'h2' : 'h3'}
+          as={headingLevel === 2 ? "h2" : "h3"}
           variant="h3"
           className="group-hover:text-accent transition-standard"
         >
@@ -102,10 +115,13 @@ export function ArticleCard({
         ) : null}
 
         {tags && tags.length > 0 ? (
-          <div className="gap-step-xs mt-auto flex flex-wrap pt-step-sm">
+          <div className="flex flex-wrap mt-auto gap-step-xs pt-step-sm">
             {tags.map((t) =>
               tagAsChild ? (
-                <Slot key={t} className={categoryBadgeVariants({ active: false })}>
+                <Slot
+                  key={t}
+                  className={categoryBadgeVariants({ active: false })}
+                >
                   {tagAsChild({ tag: t, children: t })}
                 </Slot>
               ) : (

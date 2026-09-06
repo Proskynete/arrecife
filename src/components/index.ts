@@ -14,7 +14,6 @@ export * from './nav/index.tsx';
 export * from './newsletter-form/index.tsx';
 export * from './page-header/index.tsx';
 export * from './scrolling-progress-bar/index.tsx';
-export * from './sidebar-nav/index.tsx';
 export * from './stat/index.tsx';
 export * from './talk-card/index.tsx';
 export * from './theme-toggle/index.tsx';

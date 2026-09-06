@@ -1349,7 +1349,7 @@ Source: `src/primitives/typography.tsx`
 
 ## Components
 
-Imported from `@eduardoalvarez/arrecife`. 24 exports.
+Imported from `@eduardoalvarez/arrecife`. 21 exports.
 
 ### ArticleCard
 
@@ -1625,46 +1625,6 @@ How much you have read. It is NOT `Progress` under another name.
 | `sticky` | `boolean` |  | `true` | Pins the bar to the top edge of the window. |
 | `target` | `RefObject<HTMLElement \| null>` |  |  | The element being measured. Without it, the whole document. |
 | `tone` | `"accent" \| "warm"` |  | `accent` | Sand instead of biolume, to match course progress. |
-
-### SidebarItem, SidebarGroup, SidebarNav
-
-Source: `src/components/sidebar-nav/index.tsx`
-
-**SidebarItem**
-The blog admin's sidebar.
-
-- Extends: `ComponentPropsWithoutRef<'a'>`
-
-| prop | type | req. | default | what it does |
-| --- | --- | --- | --- | --- |
-| `active` | `boolean \| undefined` |  | `false` |  |
-| `asChild` | `boolean \| undefined` |  | `false` |  |
-| `badge` | `ReactNode` |  |  | Counter on the right: pending drafts, unused media. |
-| `icon` | `ReactNode` |  |  | The section's glyph, on the left. It REPLACES the `▸` rather than joining it, and it inherits `currentColor`, so it follows the item's state without being tinted separately. |
-
-**SidebarGroup**
-A labelled block of items — «Contenido», «Alumnos», «Ventas».
-
-- Extends: `Omit<ComponentPropsWithoutRef<'li'>, 'title'>`
-
-| prop | type | req. | default | what it does |
-| --- | --- | --- | --- | --- |
-| `label` | `ReactNode` | yes |  | The block's name. Sentence case, not a section title. |
-
-**SidebarNav**
-- Extends: `ComponentPropsWithoutRef<'nav'>`
-
-| prop | type | req. | default | what it does |
-| --- | --- | --- | --- | --- |
-| `branch` | `ReactNode` |  |  |  |
-| `brand` | `ReactNode` |  |  | The row at the top: isotype and wordmark, `cursos · admin`. It is a slot and not a `logo`/`name` pair because every panel spells its own name differently, and the part that IS the system — the rhythm, the hairline under it — is here. |
-| `collapsed` | `boolean \| undefined` |  | `false` | Turns the sidebar into a rail: icons only, and the widths become the library's — `w-sidebar` and `w-sidebar-rail`. It is CONTROLLED and there is no uncontrolled mode, because this state is almost always persisted in a cookie or in `localStorage`, and an internal state would fight the one the project already keeps. |
-| `collapseLabel` | `string` |  | `Plegar el panel` | The toggle's accessible name, in the two directions. |
-| `expandLabel` | `string` |  | `Desplegar el panel` |  |
-| `mark` | `ReactNode` |  |  | What `brand` becomes in the rail. Usually the isotype with no wordmark. |
-| `onCollapsedChange` | `(collapsed: boolean) => void` |  |  | Called with what the state should become. With it, the toggle appears; with `collapsed` alone the sidebar is a rail with no way out of it, which is a legitimate layout and not an accident. |
-| `user` | `ReactNode` |  |  | Who is signed in, at the bottom above the version. A slot, because an avatar needs a session and a sign-out route and the library takes no project infrastructure — the same reason `Nav`'s user menu goes in `actions`. |
-| `version` | `ReactNode` |  |  | Version and branch, at the bottom. |
 
 ### Stat
 
@@ -2149,7 +2109,7 @@ Types (6): `ArticleData`, `BaseData`, `CourseData`, `DefaultData`, `SatoriNode`,
 | `toast` | `(message: ReactNode, options?: ToastOptions \| undefined): string` | Fires a notice. It returns its id, which is what you keep in order to close it by hand — the «guardando…» case that gets replaced when the request finishes. |
 | `useTheme` | `(): Theme` | The theme set right now, for a project that needs to branch in React — a different logo per mode, an image with no light version. |
 
-Types (63): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterColumn`, `FooterColumnLink`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SidebarGroupProps`, `SidebarItemProps`, `SidebarNavProps`, `SkeletonProps`, `SocialLink`, `StatDelta`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
+Types (60): `AccordionProps`, `AccordionTriggerProps`, `AlertProps`, `ArticleCardProps`, `AudioPlayerMode`, `AudioPlayerProps`, `AuthorCardProps`, `AvatarProps`, `AvatarUploadProps`, `BadgeProps`, `BlockquoteProps`, `BreadcrumbProps`, `ButtonProps`, `CalendarEvent`, `CalendarProps`, `CategoryBadgeProps`, `CheckboxProps`, `CodeBlockProps`, `CodeProps`, `CourseCardProps`, `Crumb`, `DateFieldProps`, `EmptyStateProps`, `EventCalendarProps`, `FooterColumn`, `FooterColumnLink`, `FooterProps`, `HeroProps`, `InputProps`, `LabelProps`, `LinkRowProps`, `MetricBadgeProps`, `NavItemProps`, `NavProps`, `NewsletterFormProps`, `NewsletterState`, `PageHeaderProps`, `PaginationLinkProps`, `PopoverContentProps`, `ProgressProps`, `RadioGroupItemProps`, `RadioGroupProps`, `ScrollingProgressBarProps`, `SeparatorProps`, `SheetContentProps`, `SkeletonProps`, `SocialLink`, `StatDelta`, `StatProps`, `SwitchProps`, `TableOfContentsProps`, `TabsProps`, `TalkCardProps`, `TextProps`, `TextareaProps`, `ThemeToggleProps`, `ToastOptions`, `ToastVariant`, `ToasterProps`, `TocEntry`.
 
 # Where to look if this is not enough
 

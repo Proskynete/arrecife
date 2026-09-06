@@ -7,25 +7,27 @@ import { Calendar } from '../src/primitives/calendar.tsx';
 import { DateField } from '../src/primitives/date-field.tsx';
 import { Label } from '../src/primitives/label.tsx';
 import { Popover, PopoverContent, PopoverTrigger } from '../src/primitives/popover.tsx';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '../src/primitives/sheet.tsx';
-import { SidebarItem, SidebarNav } from '../src/components/sidebar-nav/index.tsx';
 
 /**
- * Composiciones que NO son components de la librería, y por qué no lo son.
+ * Compositions that are NOT components of the library, and why they are not.
  *
- * Las two se pidieron como piezas nuevas —`DateTimePicker` y `Sidebar`— y al
- * mirarlas de cerca resultó que ya estaban, repartidas entre primitivos que se
- * montan en cuatro líneas. Un component que solo junta otros two no codifica
- * ninguna rule de identidad: es un alias con mantenimiento.
+ * They were asked for as new pieces and, looked at closely, they were already
+ * here: primitives that assemble in four lines. A component that only puts two
+ * others together encodes no identity rule — it is an alias with maintenance.
  *
- * Están aquí because el criterio de entry dice que hay que decidirlo antes, y
- * una decisión que no deja rastro se vuelve a tomar en seis meses.
+ * They live here because the entry criterion says it gets decided beforehand,
+ * and a decision that leaves no trace gets taken again in six months.
+ *
+ * There were two. The sidebar recipe left with `SidebarNav` in 0.8.0 — see
+ * `docs/decisions.md` § 48 — and what it demonstrated is now moot: the piece it
+ * was composed from is gone, and the two admin projects it was for each have a
+ * sidebar of their own that they prefer.
+ *
+ * This docstring was Spanish with English swept through the middle of it — «las
+ * two se pidieron», «ninguna rule de identidad», «están aquí because». It is the
+ * 0.6.0 migration's other half and `check:copy` cannot see it: the check reads
+ * string literals, and a comment is neither user-facing copy nor a literal. A
+ * comment goes in English, whole.
  */
 const meta = { title: 'Recipes/Compositions' } satisfies Meta;
 
@@ -83,64 +85,6 @@ export const DateTimePicker: Story = {
       <Note>
         Which is why no new component gets in: it encodes no identity rule the two
         primitives do not already encode.
-      </Note>
-    </div>
-  ),
-};
-
-export const Sidebar: Story = {
-  name: 'Sidebar, with its mobile version',
-  render: () => (
-    <div>
-      <Block title="desktop · plain SidebarNav">
-        <div className="border-hairline h-72 w-60 overflow-hidden rounded-card border">
-          <SidebarNav title="Administración" version="v5.0.1" branch="main">
-            <SidebarItem href="#" active>
-              Artículos
-            </SidebarItem>
-            <SidebarItem href="#" badge="3">
-              Borradores
-            </SidebarItem>
-            <SidebarItem href="#">Medios</SidebarItem>
-            <SidebarItem href="#">Ajustes</SidebarItem>
-          </SidebarNav>
-        </div>
-      </Block>
-
-      <Block title="mobile · the same nav inside a Sheet">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="secondary">Abrir el menú</Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="p-0">
-            <SheetHeader className="sr-only">
-              <SheetTitle>Administración</SheetTitle>
-            </SheetHeader>
-            <SidebarNav title="Administración" version="v5.0.1" branch="main">
-              <SidebarItem href="#" active>
-                Artículos
-              </SidebarItem>
-              <SidebarItem href="#" badge="3">
-                Borradores
-              </SidebarItem>
-              <SidebarItem href="#">Medios</SidebarItem>
-            </SidebarNav>
-          </SheetContent>
-        </Sheet>
-      </Block>
-
-      <Note>
-        The chassis that was missing was the mobile drawer, and it already exists:
-        `Sheet` with `side="left"`. A `Sidebar` component wrapping the two would be
-        an alias with maintenance.
-      </Note>
-      <Note>
-        What CANNOT be composed is the rail collapsed to icons only, and not for
-        lack of a container: **the system has no navigation icons**. The glyphs in
-        `lib/glyphs.tsx` are the ones the primitives need and they do not grow, and
-        bringing in an icon library is something all five projects pay for. A
-        collapsed rail showing each section's initial is worse than not collapsing
-        it.
       </Note>
     </div>
   ),

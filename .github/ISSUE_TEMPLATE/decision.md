@@ -18,4 +18,4 @@ labels: design-system
 
 ## Recommendation
 
-<!-- It ends up in docs/decisions.md, with its «action in the document». -->
+<!-- It ends up in docs/decisions/, with its «action in the document». -->

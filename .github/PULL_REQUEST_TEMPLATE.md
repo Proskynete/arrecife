@@ -6,7 +6,7 @@
 
 <!-- The reason, not the change. If it comes from the Design System or the Brand
      Manual, cite the section; if it contradicts the document, say so here and
-     record it in docs/decisions.md. -->
+     record it in docs/decisions/. -->
 
 ## Checks
 
@@ -15,7 +15,7 @@
 - [ ] The stories cover the new states, not just the resting one
 - [ ] If it touches color: the contrast is **measured**, not estimated, and recorded
 - [ ] If it touches `tokens.ts`: `pnpm check:tokens` is still green
-- [ ] If it contradicts the document: it is in `docs/decisions.md` with its reason
+- [ ] If it contradicts the document: it is in `docs/decisions/` with its reason
 
 ## Screenshots
 

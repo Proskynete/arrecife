@@ -30,4 +30,4 @@ jobs:
           message_if_xl: >
             ⚠️ This PR is over 1000 lines. Check that it is not solving several
             things at once, and consider splitting it.
-          files_to_ignore: "pnpm-lock.yaml *.lock docs/* CHANGELOG.md"
+          files_to_ignore: "pnpm-lock.yaml *.lock docs/** CHANGELOG.md"

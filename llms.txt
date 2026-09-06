@@ -1664,9 +1664,9 @@ Tiburoncín's head, with an expression.
 
 ## Social icons
 
-Imported from `@eduardoalvarez/arrecife/social` · or grouped as `social` from the root. 9 exports.
+Imported from `@eduardoalvarez/arrecife/social` · or grouped as `social` from the root. 10 exports.
 
-### GitHub, LinkedIn, X, Instagram, Discord, YouTube, Rss, Email, Newsletter
+### GitHub, LinkedIn, X, Instagram, Discord, YouTube, Rss, Email, Newsletter, Website
 
 Source: `src/social/index.tsx`
 
@@ -1696,6 +1696,11 @@ Source: `src/social/index.tsx`
 
 **Newsletter**
 The newsletter. It plays the same role as `Rss` — a way to follow, not a social network — which is why it belongs in this catalogue and does not open the door to an icon library.
+
+- No own props: it passes through those of the element or primitive it wraps.
+
+**Website**
+«My other site»: the personal domain in a footer full of social networks.
 
 - No own props: it passes through those of the element or primitive it wraps.
 
@@ -1814,6 +1819,28 @@ The legend, with the tooltip's same square swatch and the `label` scale.
 The root re-exports everything from `./tokens` and `./brand` for convenience.
 Each one appears exactly once, under the most specific subpath that publishes
 it: if the code does not mount React, that subpath is the one to import.
+
+### `@eduardoalvarez/arrecife/social/data`
+
+| export | type | what it is |
+| --- | --- | --- |
+| `discordGlyph` | `SocialGlyph` | Discord's mark. Brand, so it is a solid silhouette. |
+| `emailGlyph` | `SocialGlyph` | The envelope. Functional, so it is a 1.6 stroke. |
+| `gitHubGlyph` | `SocialGlyph` | GitHub's mark. Brand, so it is a solid silhouette. |
+| `instagramGlyph` | `SocialGlyph` | Instagram's mark. Brand, so it is a solid silhouette. |
+| `linkedInGlyph` | `SocialGlyph` | LinkedIn's mark. Brand, so it is a solid silhouette. |
+| `newsletterGlyph` | `SocialGlyph` |  |
+| `rssGlyph` | `SocialGlyph` | The feed. Functional, so it is a 1.6 stroke — with one filled dot, because a ring that small reads as a smudge. |
+| `SOCIAL_STROKE_WIDTH` | `1.6` | The stroke width of a functional glyph, from the document. |
+| `SOCIAL_VIEW_BOX` | `"0 0 24 24"` | The grid every glyph is drawn on. |
+| `socialGlyphs` | `{ Discord, Email, GitHub, Instagram, LinkedIn, Newsletter, Rss, Website, X, YouTube }` | The whole catalogue, keyed by the name each glyph is exported under in `./social`. |
+| `socialNames` | `readonly ("Discord" \| "Email" \| "GitHub" \| "Instagram" \| "LinkedIn" \| "Newsletter" \| "Rss" \| "Website" \| "X" \| "YouTube")[]` | The ten names, in the order the catalogue declares them. |
+| `socialSvg` | `(name: "Discord" \| "Email" \| "GitHub" \| "Instagram" \| "LinkedIn" \| "Newsletter" \| "Rss" \| "Website" \| "X" \| "YouTube", extra?: Readonly<Record<string, string \| number>>): string` | One glyph as a complete `<svg>` string, for a template that cannot mount React. |
+| `websiteGlyph` | `SocialGlyph` | «My other site», and the reason it is here rather than borrowed. |
+| `xGlyph` | `SocialGlyph` | X's mark. Brand, so it is a solid silhouette. |
+| `youTubeGlyph` | `SocialGlyph` | YouTube's mark. Brand, so it is a solid silhouette. |
+
+Types (3): `SocialGlyph`, `SocialGlyphShape`, `SocialName`.
 
 ### `@eduardoalvarez/arrecife/variants`
 

@@ -54,6 +54,11 @@
       "import": "./dist/social/index.js",
       "require": "./dist/social/index.cjs"
     },
+    "./social/data": {
+      "types": "./dist/social/data.d.ts",
+      "import": "./dist/social/data.js",
+      "require": "./dist/social/data.cjs"
+    },
     "./icons": {
       "types": "./dist/icons/index.d.ts",
       "import": "./dist/icons/index.js",

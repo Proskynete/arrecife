@@ -7,11 +7,17 @@
  *
  *   1. Every file `exports` promises really exists in `dist/`.
  *   2. Every entry in `files` exists.
- *   3. The portable subpaths — `./tokens`, `./theme`, `./og`, `./shiki` — do not
- *      drag React in. That is THE constraint of the library: they are consumed
- *      by a Satori OG generator, by an `astro.config.mjs` and by a site that
- *      never mounts React. The moment a token depends on a component, they stop
- *      being portable.
+ *   3. The portable subpaths — the keys of `PORTABLE` below — do not drag React
+ *      in. That is THE constraint of the library: they are consumed by a Satori
+ *      OG generator, by an `astro.config.mjs` and by a site that never mounts
+ *      React. The moment a token depends on a component, they stop being
+ *      portable.
+ *
+ *      They are not enumerated here on purpose. This paragraph listed four while
+ *      the object held five, because `./variants` was added to the check and not
+ *      to the sentence — and a comment that disagrees with the code beside it is
+ *      worse than no comment. The object is the list; each key carries its own
+ *      reason.
  *
  * The third one is checked by FOLLOWING the relative imports, not by reading the
  * entry file and stopping there. With `treeshake` on, tsup splits the code into
@@ -34,6 +40,8 @@ const PORTABLE = {
   './tokens': 'all five projects, Satori and a React-less Astro consume it',
   './theme': 'an Astro that mounts no React consumes it, and `themeScript` goes inline in the <head>',
   './variants': 'it is the class vocabulary for a project that mounts no React, and for a server component',
+  './social/data':
+    'it is the glyph shapes for a project that mounts no React — `links` replicates the footer in Astro',
   './og': 'it runs in a worker or in a build script',
   './shiki': 'it is consumed from astro.config.mjs',
 };

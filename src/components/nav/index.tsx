@@ -1,4 +1,4 @@
-import { Slot } from '@radix-ui/react-slot';
+import { Slot, Slottable } from '@radix-ui/react-slot';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../../lib/cn.ts';
@@ -119,6 +119,15 @@ export type NavItemProps = ComponentPropsWithoutRef<'a'> & {
  * than it looks in a mockup. Brackets are how a terminal marks the active path,
  * so they say «you are here» without relying on the color being told apart. They
  * are `aria-hidden`, because whoever is listening already has `aria-current`.
+ *
+ * `children` goes through `Slottable`, and that is what makes `asChild` work at
+ * all. The prompt and the brackets are the component's own nodes, so a plain
+ * `Slot` saw four children where it needs one and threw «Slot failed to slot
+ * onto its children» on EVERY render — the prop was declared, typed and
+ * impossible to call. It passed `tsc` and it passed the build, because the shape
+ * of the children is not something either one looks at. `Slottable` is Radix's
+ * answer to exactly this: it marks which child the router's `Link` replaces and
+ * leaves the decoration where it is. See `docs/decisions.md` § 40.
  */
 export function NavItem({ active = false, asChild = false, className, children, ...props }: NavItemProps) {
   const Root = asChild ? Slot : 'a';
@@ -145,7 +154,7 @@ export function NavItem({ active = false, asChild = false, className, children, 
         <span aria-hidden="true" className={active ? 'text-accent' : 'text-text-muted'}>
           ./
         </span>
-        {children}
+        <Slottable>{children}</Slottable>
         {active ? (
           <span aria-hidden="true" className="text-accent">
             ]

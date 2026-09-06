@@ -524,7 +524,27 @@ if (!template.includes(BRAND)) {
  */
 const withoutDiskPaths = (text) => text.split(`${root}/`).join('').split(root).join('.');
 
-const output = withoutDiskPaths(template.replace(BRAND, lines.join('\n').trimEnd()));
+/**
+ * The inventory goes in through a FUNCTION and not a string, and the difference
+ * is not style.
+ *
+ * `String.replace(pattern, replacement)` reads `$` sequences in the replacement:
+ * `$&` is the match, `$1` is a group, and `` $` `` is EVERYTHING BEFORE THE
+ * MATCH. The inventory is generated from JSDoc written by whoever adds a
+ * component, so the day one of them documents a shell prompt — «keeping the
+ * `` `$` ``, the path and the prompt's mark as text» — that backtick-dollar-
+ * backtick expands to the whole template above the marker and llms.txt comes out
+ * with the document repeated inside a table cell.
+ *
+ * It got in exactly that way, in `Footer`'s `signatureHref`. And `check:llms`
+ * cannot see it: the check runs this same generator, so it compares corrupt
+ * output against corrupt output and agrees with itself. 624 lines of duplication
+ * passed every gate in the repo.
+ *
+ * A function replacement disables the whole `$` grammar. It is one pair of
+ * parentheses and it removes the class.
+ */
+const output = withoutDiskPaths(template.replace(BRAND, () => lines.join('\n').trimEnd()));
 
 /**
  * The first differences between what is committed and what was generated.

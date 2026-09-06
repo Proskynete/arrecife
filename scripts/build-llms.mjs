@@ -40,6 +40,7 @@ const ENTRIES = [
   { subpath: './variants', file: 'src/variants/index.ts' },
   { subpath: './brand', file: 'src/brand/index.ts' },
   { subpath: './social', file: 'src/social/index.tsx' },
+  { subpath: './social/data', file: 'src/social/data.ts' },
   { subpath: './icons', file: 'src/icons/index.tsx' },
   { subpath: './og', file: 'src/og/index.ts' },
   { subpath: './shiki', file: 'src/shiki/index.ts' },

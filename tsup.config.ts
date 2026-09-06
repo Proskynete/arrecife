@@ -21,6 +21,7 @@ export default defineConfig({
     'variants/index': 'src/variants/index.ts',
     'brand/index': 'src/brand/index.ts',
     'social/index': 'src/social/index.tsx',
+    'social/data': 'src/social/data.ts',
     'icons/index': 'src/icons/index.tsx',
     'og/index': 'src/og/index.ts',
     'shiki/index': 'src/shiki/index.ts',

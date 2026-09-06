@@ -11,8 +11,22 @@ import * as icons from './index.tsx';
  * The stories are what make the two renderings comparable: the React column and
  * the string column are painted side by side from the same `data.ts`, so a shape
  * that only reaches one of them is visible rather than theoretical.
+ *
+ * It titles under `Icons/` and not under a `Social/` of its own. These are the
+ * library's ten icons and `Icons/Icon` is the eleventh rule — how a project's
+ * own icons get DRAWN — so a reader looking for «what does this library know
+ * about icons» finds both in one place. The repo already describes them that
+ * way: the map calls `src/social/` «the social icons» and the generated
+ * inventory titles the section «Social icons». Storybook orders the top level
+ * alphabetically, so a `Social/` section lands ten entries away from `Icons/`
+ * for no reason a reader can see.
+ *
+ * The SOURCE does not move with the title. `src/social/` is its own published
+ * subpath because a namespace object cannot cross the RSC boundary and `./icons`
+ * asks for an optional peer dependency these ten must never need. See
+ * `docs/decisions.md` § 26 and § 29.
  */
-const meta = { title: 'Social/Glyphs' } satisfies Meta;
+const meta = { title: 'Icons/Social' } satisfies Meta;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

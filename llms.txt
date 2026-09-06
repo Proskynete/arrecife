@@ -833,7 +833,7 @@ Source: `src/primitives/date-field.tsx`
 
 A date field on the native control, not on a calendar of our own.
 
-- Extends: `Omit<ComponentPropsWithoutRef<'input'>, 'type'>`
+- Extends: `Omit<ComponentProps<'input'>, 'type'>`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
@@ -922,7 +922,9 @@ No entrance animation: the menu appears, it does not unfold.
 
 Source: `src/primitives/input.tsx`
 
-- Extends: `ComponentPropsWithoutRef<'input'>`
+`ComponentProps` and not `ComponentPropsWithoutRef`, and the difference is a bug and not a preference.
+
+- Extends: `ComponentProps<'input'>`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
@@ -934,7 +936,7 @@ Source: `src/primitives/label.tsx`
 
 The `label` scale: 13px, which is the system's absolute minimum on screen.
 
-- Extends: `ComponentPropsWithoutRef<typeof LabelPrimitive.Root>`
+- Extends: `ComponentProps<typeof LabelPrimitive.Root>`
 - No own props: it passes through those of the element or primitive it wraps.
 
 ### Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis
@@ -1164,7 +1166,9 @@ Source: `src/primitives/tabs.tsx`
 
 Source: `src/primitives/textarea.tsx`
 
-- Extends: `ComponentPropsWithoutRef<'textarea'>`
+`ComponentProps` carries `ref`, which React 19 passes as a prop. See `InputProps`.
+
+- Extends: `ComponentProps<'textarea'>`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |

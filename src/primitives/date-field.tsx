@@ -1,8 +1,9 @@
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '../lib/cn.ts';
 
-export type DateFieldProps = Omit<ComponentPropsWithoutRef<'input'>, 'type'> & {
+/** `ComponentProps` carries `ref`, which React 19 passes as a prop. See `InputProps`. */
+export type DateFieldProps = Omit<ComponentProps<'input'>, 'type'> & {
   invalid?: boolean | undefined;
   /** Adds the time to the field. It is the native `datetime-local`. */
   withTime?: boolean | undefined;

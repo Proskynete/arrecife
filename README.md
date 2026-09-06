@@ -345,8 +345,19 @@ import { social } from '@eduardoalvarez/arrecife';
 <social.GitHub />
 ```
 
-All nine are `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
-`Email` and `Newsletter`.
+All ten are `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
+`Email`, `Newsletter` and `Website`. The last one is «my other site» — the
+personal domain in a footer full of networks — and it exists so that footer stops
+borrowing a globe from an icon set, which brings its own stroke weight and its
+own margins with it.
+
+**And the shapes are published a second time, without React.** `./social/data`
+imports nothing: it holds every glyph as structured shapes plus `socialSvg`,
+which returns a complete `<svg>` as a string. It is for the consumer that mounts
+no React and used to paste the `<path>` into its own template — `links` had four
+of them and `cursos` had six. The React components above are drawn from that same
+file, so a `d` that changes changes in both or in neither. See
+`docs/decisions.md` § 42.
 
 **The two forms are not taste, and in Next they are not interchangeable.** The
 root carries `"use client"`, and what crosses into a Server Component is a client
@@ -457,13 +468,13 @@ It blocked `cursos` for a whole version, and the workaround there was a
 that is a `<span>` with no interaction. It cost 272 KB of client chunk.
 
 The five portable subpaths do NOT carry it — `./tokens`, `./theme`,
-`./variants`, `./og` and `./shiki` — and that is the half that matters more.
+`./variants`, `./social/data`, `./og` and `./shiki` — and that is the half that matters more.
 Marking them client would be a lie with a cost: a Server Component importing
 `buttonVariants`, a function that returns a string, would pull a client boundary
 in with it.
 
 `./social` is the third case, and it is why the check stopped looking only at the
-portable ones. It renders React — it is nine `<svg>` — so it can never be
+portable ones. It renders React — it is ten `<svg>` — so it can never be
 portable, and it holds no state, so it must not be a client entry either. Listed
 in neither set, nothing would have noticed it being marked client by mistake, and
 that mistake undoes the only reason the subpath exists. See `docs/decisions.md`
@@ -528,10 +539,21 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage }
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent, seriesColor }
   from '@eduardoalvarez/arrecife/chart';
+
+// And the three chart types, which are what a project actually reaches for.
+import { AreaChart, BarChart, LineChart } from '@eduardoalvarez/arrecife/chart';
 ```
 
-`check:exports` verifies that the five portable ones — `./tokens`, `./theme`,
-`./variants`, `./og` and `./shiki` — bring no React into the published `dist/`,
+`AreaChart`, `BarChart` and `LineChart` take `data`, `series` and `xKey` and draw
+the whole thing. **They are not Recharts' components of the same name**, and the
+collision is deliberate: what they replace is not an import, it is sixty lines of
+composition — a `linearGradient` with a hardcoded id, a `CartesianGrid
+vertical={false}`, two axes with the line and the tick off, a `type="natural"`
+and a `strokeWidth` — which `cursos` wrote four times, once per chart. None of
+that is a decision the project made. See `docs/decisions.md` § 43.
+
+`check:exports` verifies that the six portable ones — `./tokens`, `./theme`,
+`./variants`, `./social/data`, `./og` and `./shiki` — bring no React into the published `dist/`,
 **by following the relative imports**. Without that the check was worthless: with `treeshake`
 on, each portable entry ends up as two lines re-exporting from a
 `chunk-XXXX.js`, and a grep over those two lines finds no React even when the
@@ -859,6 +881,15 @@ about as library pieces. They get in anyway: the CLI aesthetic — the bar's
   And the **menu items** of `Select` and `DropdownMenu` stay on `cursor-default`:
   a native menu does not show the pointing hand, and the row highlight already
   says the row responds.
+- **`Table`'s scroll region is a focus stop.** A region you can pan with a mouse
+  has to be reachable with a keyboard — WCAG 2.1.1 — and a table of text holds
+  nothing focusable to land on, so the columns past the right edge were simply
+  unreadable without one. It had been true since the container started scrolling
+  and no story was ever narrow enough to say so; the first one with more columns
+  than width failed axe on `scrollable-region-focusable` immediately. It is
+  unconditional, because whether a table overflows depends on the viewport and
+  the only alternative is a ResizeObserver on every table in the system. See
+  `docs/decisions.md` § 39.
 
 ### The syntax palette
 
@@ -1004,22 +1035,47 @@ maintain for nothing.
 `role="dialog"` on the content, and a dialog with no accessible name says nothing
 to a screen reader: now it cannot be forgotten because it does not compile.
 
-### The fifth motion exception: the footer's caret
+### The signature's mark: the halo, and the caret it removed
 
-The CLI signature ends in a block caret that blinks, behind `motion-safe`. It is
-the first exception that is not feedback about progress, so it needed a different
-argument.
+The CLI signature ends in a 2px bar that stays solid and **radiates** — a
+`box-shadow` ring grows out to 5px and fades, 1.5s `ease-in-out`, behind
+`motion-safe`. It is the fifth declared motion exception and it lands on the
+one criterion the other four share, next to the button spinner: a prompt that
+radiates says the terminal is live, which is what a still mark cannot say.
 
-The signature is a **prompt** — that is why it is mono, why the `$` is in accent
-and why it sits in a footer instead of a `<p>` saying «© 2026». A prompt whose
-caret does not blink is a terminal that has hung, and a still block at the end of
-a line reads as a stray character.
+**It replaced a blink this library had invented.** The signature used to end in a
+half-em block blinking at `step-end`, argued from first principles: a prompt
+whose caret does not blink is a terminal that has hung. Every sentence of that
+argument is true, and it was answering a question the identity had already
+answered — `cursos` and `eduardoalvarez.dev` both shipped `@keyframes cursor-ping`,
+the same effect under the same name, written before this library had a `Footer`.
+The blog's copy is still in its `base.css` with nothing rendering it, because
+adopting the component replaced its mark. That is the drift this library exists
+to remove, arriving through the library.
 
-So the criterion splits in two. The first four exceptions are feedback about
-progress or spatial continuity; this one is legibility: it is not decoration, it
-is what makes the piece readable as what it is. `step-end` and not a fade,
-because a real caret is on or off and easing it turns a terminal into a pulsing
-dot. See `docs/decisions.md` § 23.
+**`caret` is gone, not merely unused.** It arrived in 0.6.0 and it is removed
+here. A published utility is normally not withdrawn the day its one consumer
+changes its mind, but it never had a consumer to change its mind: no project ever
+wrote the class, and the argument that justified it was reasoned rather than
+read. Leaving it published leaves the invention in the package under a label that
+makes it look like a feature.
+
+**The halo is not that utility with a setting**, which is why it arrives under
+its own name. The caret's whole case rested on `step-end`: a real caret is on or
+off, and easing it turns a terminal into a pulsing dot. Folding a halo into that
+name would make the argument contradict itself.
+
+**And the rule gets its shape back.** The caret was the only member of the
+«legibility» criterion that was invented to admit it, so the five exceptions —
+the button spinner, the `Sheet` panel, the `Skeleton` shimmer, the `Accordion`
+height and this halo — are again all one thing: feedback about progress or about
+spatial continuity. A sixth lands on that or it does not exist.
+
+The bar is 2px and not a block because a halo needs something thin to radiate
+from, the colour is `var(--color-accent)` so it follows the mode, and
+`motion-safe` is the one thing not copied from `cursos` — whose span animates
+regardless of the setting. See `docs/decisions.md` § 45, and § 23 for the entry
+it reverses.
 
 ### The second motion exception
 

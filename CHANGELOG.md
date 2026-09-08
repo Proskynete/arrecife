@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0](https://github.com/Proskynete/arrecife/compare/v0.8.0...v0.9.0) (2026-09-08)
+
+
+### 🚀 Novedades
+
+* **chart:** the axes get their own tick formatters ([25e9311](https://github.com/Proskynete/arrecife/commit/25e93118775b9ce0c6091d3a98cd9067f7ddc8cb))
+* **components:** the signature prints the site's domain, not the identity's ([6d9839d](https://github.com/Proskynete/arrecife/commit/6d9839dbf43b8820431a78c9100dac607e6e1b8e))
+
 ## [0.8.0](https://github.com/Proskynete/arrecife/compare/v0.7.0...v0.8.0) (2026-09-06)
 
 

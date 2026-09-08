@@ -1448,6 +1448,7 @@ Source: `src/components/footer/index.tsx`
 | `brand` | `ReactNode` |  |  | The brand row: the fin and the wordmark, at the very top. |
 | `columns` | `readonly FooterColumn[]` |  |  | The link columns. Mandatory: without them `full` is the default form with extra steps. |
 | `description` | `ReactNode` |  |  | One line under the brand, saying what the site is. |
+| `domain` | `string` |  |  | The domain the signature prints, defaulting to the identity's own. |
 | `linkAsChild` | `(props: { href: string; children: ReactNode; }) => ReactNode` |  |  | Renders the column links through the child, to plug in the framework's `Link`. It receives each `href` in the Slot's `props`. |
 | `signatureHref` | `string` |  |  | Makes the domain inside the signature a link, keeping the `$`, the path and the prompt's mark as text. |
 | `social` | `readonly SocialLink[]` |  |  |  |
@@ -1863,6 +1864,8 @@ A series over time, with the fill fading out underneath it.
 | `stacked` | `boolean \| undefined` |  | `false` | Adds the series up instead of overlaying them. |
 | `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
 | `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
+| `xTickFormatter` | `(value: unknown) => string` |  |  | Formats the TICK on the category axis. Returns a string, because an axis tick is an SVG `<text>` and not a place a node can go. |
+| `yTickFormatter` | `(value: unknown) => string` |  |  | Formats the tick on the VALUE axis — the currency symbol, the thousands separator, the percent sign. |
 
 **BarChart**
 Bars, upright or lying down.
@@ -1881,6 +1884,8 @@ Bars, upright or lying down.
 | `stacked` | `boolean \| undefined` |  | `false` | Stacks the series instead of putting them side by side. |
 | `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
 | `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
+| `xTickFormatter` | `(value: unknown) => string` |  |  | Formats the TICK on the category axis. Returns a string, because an axis tick is an SVG `<text>` and not a place a node can go. |
+| `yTickFormatter` | `(value: unknown) => string` |  |  | Formats the tick on the VALUE axis — the currency symbol, the thousands separator, the percent sign. |
 
 **LineChart**
 Lines, for comparing series against each other.
@@ -1897,6 +1902,8 @@ Lines, for comparing series against each other.
 | `series` | `readonly ChartSeries[]` | yes |  |  |
 | `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
 | `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
+| `xTickFormatter` | `(value: unknown) => string` |  |  | Formats the TICK on the category axis. Returns a string, because an axis tick is an SVG `<text>` and not a place a node can go. |
+| `yTickFormatter` | `(value: unknown) => string` |  |  | Formats the tick on the VALUE axis — the currency symbol, the thousands separator, the percent sign. |
 
 ## Exports that are not components
 

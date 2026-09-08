@@ -304,6 +304,28 @@ export type SeriesChartProps = Omit<ChartContainerProps, 'children'> & {
   /** Formats the value in the tooltip. The library imposes no locale. */
   formatter?: ((value: unknown) => ReactNode) | undefined;
   /**
+   * Formats the TICK on the category axis. Returns a string, because an axis
+   * tick is an SVG `<text>` and not a place a node can go.
+   *
+   * It is separate from `formatter` because the two answer different questions.
+   * The tooltip has room for «15 de julio de 2026»; a tick on a 30-day series
+   * has room for «07-15», and without this the axis prints the raw key —
+   * `2026-07-15` repeated thirty times, overlapping into a grey band.
+   *
+   * The library imposes no format: a date key can be a day, a month or a course
+   * name, and only the project knows which. See `docs/decisions/0.9.md` § 50.
+   */
+  xTickFormatter?: ((value: unknown) => string) | undefined;
+  /**
+   * Formats the tick on the VALUE axis — the currency symbol, the thousands
+   * separator, the percent sign.
+   *
+   * Same reason as `xTickFormatter` and the same shape. `formatter` reaches the
+   * tooltip only, so without this a revenue chart reads «1200» on the axis and
+   * «$1200» in the tooltip, and the axis is the one you read while comparing.
+   */
+  yTickFormatter?: ((value: unknown) => string) | undefined;
+  /**
    * Shows the legend. It defaults to «only when there is more than one series»:
    * a legend naming the one line already named by the chart's own heading is a
    * row of pixels that says nothing.
@@ -324,6 +346,15 @@ const MARGIN = { left: 0, right: 12, top: 8, bottom: 0 };
 
 /** An axis with no line and no tick mark: the grid already says where the values are. */
 const AXIS = { tickLine: false, axisLine: false } as const;
+
+/**
+ * The tick formatter as a spread, because `exactOptionalPropertyTypes` is on:
+ * Recharts declares `tickFormatter` as required-if-present, so handing it an
+ * explicit `undefined` is a type error rather than «no formatter». Same shape as
+ * `stackId` below.
+ */
+const tickOf = (format?: ((value: unknown) => string) | undefined) =>
+  format ? { tickFormatter: format } : {};
 
 const legendOf = (series: readonly ChartSeries[], legend?: boolean | undefined) =>
   (legend ?? series.length > 1) ? <ChartLegend key="legend" content={<ChartLegendContent />} /> : null;
@@ -368,6 +399,8 @@ export function AreaChart({
   series,
   xKey,
   formatter,
+  xTickFormatter,
+  yTickFormatter,
   legend,
   stacked = false,
   ...container
@@ -387,8 +420,8 @@ export function AreaChart({
         </defs>
 
         <CartesianGrid vertical={false} />
-        <XAxis dataKey={xKey} {...AXIS} tickMargin={8} />
-        <YAxis {...AXIS} width={40} />
+        <XAxis dataKey={xKey} {...AXIS} tickMargin={8} {...tickOf(xTickFormatter)} />
+        <YAxis {...AXIS} width={40} {...tickOf(yTickFormatter)} />
 
         {tooltipOf(formatter)}
         {legendOf(series, legend)}
@@ -440,6 +473,8 @@ export function BarChart({
   series,
   xKey,
   formatter,
+  xTickFormatter,
+  yTickFormatter,
   legend,
   orientation = 'vertical',
   stacked = false,
@@ -467,12 +502,25 @@ export function BarChart({
         */}
         {lying
           ? [
-              <YAxis key="category" dataKey={xKey} type="category" {...AXIS} width={130} />,
-              <XAxis key="value" type="number" hide />,
+              <YAxis
+                key="category"
+                dataKey={xKey}
+                type="category"
+                {...AXIS}
+                width={130}
+                {...tickOf(xTickFormatter)}
+              />,
+              <XAxis key="value" type="number" hide {...tickOf(yTickFormatter)} />,
             ]
           : [
-              <XAxis key="category" dataKey={xKey} {...AXIS} tickMargin={8} />,
-              <YAxis key="value" {...AXIS} width={40} />,
+              <XAxis
+                key="category"
+                dataKey={xKey}
+                {...AXIS}
+                tickMargin={8}
+                {...tickOf(xTickFormatter)}
+              />,
+              <YAxis key="value" {...AXIS} width={40} {...tickOf(yTickFormatter)} />,
             ]}
 
         {tooltipOf(formatter)}
@@ -512,6 +560,8 @@ export function LineChart({
   series,
   xKey,
   formatter,
+  xTickFormatter,
+  yTickFormatter,
   legend,
   ...container
 }: LineChartProps) {
@@ -519,8 +569,8 @@ export function LineChart({
     <ChartContainer {...container}>
       <RechartsLineChart data={rows(data)} margin={MARGIN}>
         <CartesianGrid vertical={false} />
-        <XAxis dataKey={xKey} {...AXIS} tickMargin={8} />
-        <YAxis {...AXIS} width={40} />
+        <XAxis dataKey={xKey} {...AXIS} tickMargin={8} {...tickOf(xTickFormatter)} />
+        <YAxis {...AXIS} width={40} {...tickOf(yTickFormatter)} />
 
         {tooltipOf(formatter)}
         {legendOf(series, legend)}

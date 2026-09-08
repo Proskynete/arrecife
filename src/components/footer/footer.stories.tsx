@@ -235,9 +235,15 @@ export const Full: Story = {
           </Button>
         }
         signatureHref="/"
+        domain="cursos.eduardoalvarez.dev"
       />
 
       <div className="p-step-lg">
+        <Note>
+          The signature prints `domain`, which is this site's and not the identity's. Without it the
+          line would say `eduardoalvarez.dev` — a site signing with its parent's domain, which
+          nothing fails on and nothing warns about. See `docs/decisions/0.9.md` § 49.
+        </Note>
         <Note>
           The 197 hand-written lines of `cursos`, as data. Brand, description, icons and the action
           go in one block on the left; the columns go on the right; the signature closes the footer

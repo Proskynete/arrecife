@@ -8,9 +8,10 @@ import { naming } from '../../tokens/tokens.ts';
 /**
  * The footer, and the site's CLI signature: `$ cd ~/eduardoalvarez.dev/2026`.
  *
- * The domain comes from `naming.domain` and not from a hand-written string, for
+ * The domain defaults to `naming.domain` and not to a hand-written string, for
  * the same reason as the wordmark: if it changes, it changes in all five
- * projects at once.
+ * projects at once. A project that lives on its OWN domain passes `domain` —
+ * see `docs/decisions/0.9.md` § 49.
  *
  * The social links are icons with NO visible text, so `aria-label` is not an
  * improvement: it is the only thing that makes them legible. Which is why it is
@@ -99,6 +100,21 @@ type FooterBase = Omit<ComponentPropsWithoutRef<'footer'>, 'children'> & {
    * signature is text, which is what it has always been.
    */
   signatureHref?: string | undefined;
+  /**
+   * The domain the signature prints, defaulting to the identity's own.
+   *
+   * It exists because the default is right for the sites that ARE
+   * `eduardoalvarez.dev` and wrong for the ones that are not: `cursos` lives on
+   * `cursos.eduardoalvarez.dev` and had been printing it since before this
+   * component existed. Adopting the footer would have made a site sign with its
+   * parent's domain — a fact, not a style, and one nothing in the type could
+   * have warned about.
+   *
+   * It is a domain and not a whole signature: the `$`, the `cd ~/` and the year
+   * are the identity's and stay the component's. See `docs/decisions/0.9.md`
+   * § 49.
+   */
+  domain?: string | undefined;
 };
 
 export type FooterProps = FooterBase &
@@ -193,10 +209,12 @@ function SocialRow({ social }: { social: readonly SocialLink[] }) {
 function Signature({
   year,
   href,
+  domain: domainName = naming.domain,
   className,
 }: {
   year: number;
   href?: string | undefined;
+  domain?: string | undefined;
   className?: string;
 }) {
   const domain = href ? (
@@ -204,10 +222,10 @@ function Signature({
       href={href}
       className="text-accent hover:text-text-primary transition-standard rounded-chip focus-ring cursor-pointer"
     >
-      {naming.domain}
+      {domainName}
     </a>
   ) : (
-    naming.domain
+    domainName
   );
 
   return (
@@ -264,6 +282,7 @@ export function Footer({
   brand,
   year = new Date().getFullYear(),
   signatureHref,
+  domain,
   className,
   ...rest
 }: FooterProps) {
@@ -360,7 +379,7 @@ export function Footer({
           rather than as a decision.
         */}
         <div className="border-hairline mt-step-xl pt-step-lg border-t">
-          <Signature year={year} href={signatureHref} className="text-center sm:text-right" />
+          <Signature year={year} href={signatureHref} domain={domain} className="text-center sm:text-right" />
         </div>
       </Shell>
     );
@@ -404,7 +423,7 @@ export function Footer({
       */}
       <div className="gap-step-md flex flex-wrap items-center">
         {first ?? null}
-        <Signature year={year} href={signatureHref} className="ml-auto" />
+        <Signature year={year} href={signatureHref} domain={domain} className="ml-auto" />
       </div>
 
       {others}

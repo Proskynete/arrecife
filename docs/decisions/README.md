@@ -22,6 +22,7 @@ PR still resolves. This index is how you find which file holds it.
 | [`0.6.md`](0.6.md) | §§ 1–25, and § 4b | Tokens, contrast, the shape of a primitive |
 | [`0.7.md`](0.7.md) | §§ 26–38 | Subpaths, Phosphor, the doctor |
 | [`0.8.md`](0.8.md) | §§ 39–48 | Three removals, and why each one was built for nobody |
+| [`0.9.md`](0.9.md) | §§ 49–50 | Two pieces built from a consumer that the consumer could not use |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -97,3 +98,8 @@ light `warning`, dark `error`), `Isotype` with a mandatory `background`, `Logo`
 with no text prop, `Text` with no `font` prop, `CodeBlock` with its theme island,
 `AudioPlayer` without movement, `check-tokens-purity.mjs` on every build and the
 `data-theme` on the preview area in `brand.stories.tsx`.
+
+**[`0.9.md`](0.9.md)**
+
+- § 49 · [The signature prints a domain, and it is not always ours](0.9.md#49--the-signature-prints-a-domain-and-it-is-not-always-ours)
+- § 50 · [The tooltip's formatter never reached the axis](0.9.md#50--the-tooltips-formatter-never-reached-the-axis)

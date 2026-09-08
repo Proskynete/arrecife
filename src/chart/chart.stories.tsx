@@ -52,6 +52,20 @@ const SERIES = [
   { key: 'bajas', label: 'Bajas' },
 ];
 
+/**
+ * A series keyed by ISO date, which is what a query returns and what the axis
+ * cannot print. It is the shape that motivated the tick formatters: thirty of
+ * these along an axis overlap into a grey band.
+ */
+const REVENUE = [
+  { day: '2026-07-11', ingresos: 1200 },
+  { day: '2026-07-12', ingresos: 1850 },
+  { day: '2026-07-13', ingresos: 1420 },
+  { day: '2026-07-14', ingresos: 2310 },
+  { day: '2026-07-15', ingresos: 1980 },
+  { day: '2026-07-16', ingresos: 2640 },
+];
+
 /* -------------------------------------------------------------- the types */
 
 /**
@@ -78,6 +92,34 @@ export const Area: Story = {
       <Note>
         No legend: with one series it would name what the heading already names. It appears on its
         own from the second series onwards.
+      </Note>
+    </div>
+  ),
+};
+
+export const AxisFormatters: Story = {
+  name: 'Area · axis formatters',
+  render: () => (
+    <div>
+      <AreaChart
+        label="Ingresos por día, del 11 al 16 de julio"
+        summary="Sube de 1.200 a 2.640 dólares, con caídas el 13 y el 15."
+        height={260}
+        data={REVENUE}
+        series={[{ key: 'ingresos', label: 'Ingresos' }]}
+        xKey="day"
+        xTickFormatter={(value) => String(value).slice(5)}
+        yTickFormatter={(value) => `$${value}`}
+        formatter={(value) => `$${value}`}
+      />
+      <Note>
+        The key is `2026-07-15` and the tick says `07-15`. Without `xTickFormatter` the axis prints
+        the whole key, and on a 30-day range the labels overlap into a band. See
+        `docs/decisions/0.9.md` § 50.
+      </Note>
+      <Note>
+        `yTickFormatter` and `formatter` are separate on purpose. The axis is what you read while
+        comparing; the tooltip needs a hover to exist at all, and it has room for more.
       </Note>
     </div>
   ),

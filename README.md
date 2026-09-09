@@ -130,6 +130,22 @@ so the command reports the value on each side and only fails on the ones that
 differ. A collision that agrees is worth knowing about and is not worth failing
 over.
 
+> **Coming from 0.9.0.** Two breaks and they are the same one twice: the library
+> stopped drawing icons of its own. `@phosphor-icons/react` becomes a REQUIRED
+> peer dependency — even if your project draws no icons, the `Alert` and the
+> `Select` you import do — and `./social` and `./social/data` are removed.
+> Phosphor has all ten marks and `tsc` points at every call site; the mapping
+> table is in the runbook.
+>
+> Everything else is additive and asks nothing of you: the footer centres itself
+> on a phone, `Nav` and `TabsList` scroll instead of pushing the page sideways,
+> `Pagination` wraps, `Toast` carries a real colour again, `Alert`'s four mono
+> characters become Phosphor marks, and `ThemeToggle` toggles without
+> `onThemeChange` — which was a genuine bug.
+>
+> Run `npx arrecife` first, then read
+> [`docs/runbooks/migration-0.10.md`](docs/runbooks/migration-0.10.md).
+
 > **Coming from 0.7.0.** Four breaks, and three of them are things the library
 > takes back OUT because nothing in the four projects drew them: the `caret`
 > utility, the footer's row of loose text links, and `SidebarNav`.
@@ -141,7 +157,7 @@ over.
 >
 > Everything else is additive: `Footer variant="full"` with columns, three chart
 > shapes, `./social/data` for a project that mounts no React, and a `Website`
-> glyph.
+> glyph. Both `./social` subpaths were removed again in 0.10.0.
 >
 > Run `npx arrecife` first, then read
 > [`docs/runbooks/migration-0.8.md`](docs/runbooks/migration-0.8.md).
@@ -346,60 +362,63 @@ Verified by packing the library with `pnpm pack` and installing it in a separate
 project: the types resolve from `dist/`, `./tokens` loads without dragging React
 in and `./tokens/theme.css` resolves by subpath.
 
-### The social icons come from `./social`
+### The social icons are yours too, and they come from Phosphor
+
+Until 0.10.0 this section documented a catalogue of ten hand-drawn marks at
+`./social`, published a second time as shapes at `./social/data` for a consumer
+that mounts no React. Both are gone.
 
 ```tsx
-// ❌ does not exist: the root publishes them grouped, not loose
-import { GitHub, LinkedIn } from '@eduardoalvarez/arrecife';
-
-// ✅ the normal form
+// ❌ removed in 0.10.0
 import { GitHub, LinkedIn } from '@eduardoalvarez/arrecife/social';
-
-// ✅ for iterating the catalogue
 import { social } from '@eduardoalvarez/arrecife';
-<social.GitHub />
+
+// ✅
+import { GithubLogo, LinkedinLogo } from '@phosphor-icons/react';
+import { Icon } from '@eduardoalvarez/arrecife/icons';
+
+<Icon as={GithubLogo} tone="current" />
 ```
 
-All ten are `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
-`Email`, `Newsletter` and `Website`. The last one is «my other site» — the
-personal domain in a footer full of networks — and it exists so that footer stops
-borrowing a globe from an icon set, which brings its own stroke weight and its
-own margins with it.
+| Removed | Phosphor | `tone` |
+| --- | --- | --- |
+| `GitHub` | `GithubLogo` | `current` |
+| `LinkedIn` | `LinkedinLogo` | `current` |
+| `X` | `XLogo` | `current` |
+| `Instagram` | `InstagramLogo` | `current` |
+| `Discord` | `DiscordLogo` | `current` |
+| `YouTube` | `YoutubeLogo` | `current` |
+| `Rss` | `Rss` | `action` |
+| `Email` | `Envelope` | `action` |
+| `Newsletter` | `BellSimple` | `action` |
+| `Website` | `Globe` | `action` |
 
-**And the shapes are published a second time, without React.** `./social/data`
-imports nothing: it holds every glyph as structured shapes plus `socialSvg`,
-which returns a complete `<svg>` as a string. It is for the consumer that mounts
-no React and used to paste the `<path>` into its own template — `links` had four
-of them and `cursos` had six. The React components above are drawn from that same
-file, so a `d` that changes changes in both or in neither. See
-`docs/decisions/0.8.md` § 42.
+**The `tone` column is the old drawing rule, not a new one.** Six are brands and
+went SOLID, which is `tone="current"` — Phosphor's `fill`. Four were functional
+and used the document's 1.6 stroke, which is the default `action`. Nothing about
+how the row looks changed; what changed is who draws it.
 
-**The two forms are not taste, and in Next they are not interchangeable.** The
-root carries `"use client"`, and what crosses into a Server Component is a client
-reference **per export** — the properties of a plain object are not exports. So
-from a Server Component `social.LinkedIn` is `undefined`, and `undefined` as an
-element type kills the build at prerender. `./social` carries no directive: the
-icon renders on the server, ships no client JS, and pulls 5.6 KB instead of the
-root's 116 KB. Reach for the subpath by default; reach for `social` when you are
-mapping a list of link names onto icons.
+**Why they went, when the whole point of `./social/data` was that `links` had
+pasted four `<path>`s by hand.** Because `links` left first. Its `Footer.astro`
+now draws Phosphor through `astro-icon` and its own docstring lists the divergence:
+«every icon on the page — the six in the cards and the four here — is then one set
+at one weight». `eduardoalvarez.dev` did the same in `site-footer.tsx`. Two
+consumers walking away from a subpath built for them is the library being out of
+step, not the consumers. See `docs/decisions/0.10.md` § 51.
 
-The namespace stays because **one of them is called `X`**. An `export const X` at
-the root of a component library collides with anything — a generic's type
-variable, an `import { X }` from somewhere else — and the failure shows up far
-from here. In the subpath you asked for icons, so the collision is yours to
-resolve and it takes one word: `import { X as XIcon }`.
+**In a Next Server Component, take the glyph from `@phosphor-icons/react/ssr`.**
+`./icons` carries no `"use client"` on purpose, so an icon renders on the server
+and ships no client JS. Phosphor's default build reads `IconContext` through
+`useContext` and a hook in a Server Component throws; the `/ssr` entry is the same
+icons without that read, and `Icon` works with either.
 
-`Newsletter` is the bell, and it is named for what it means and not for what it
-draws — same as everything else in the system. It plays `Rss`'s role: a way to
-follow, not a social network. That is what keeps it inside this catalogue and
-keeps the catalogue from turning into an icon library.
-
-**The internal glyphs are NOT exported.** `Close`, `ChevronDown`, `Copy`, `Sun`
-and company are the minimum set the primitives need and they stay inside.
-Publishing them would turn `lib/glyphs.tsx` into the icon library the system
-decided not to have, and from there it grows on its own. A project that needs an
-icon passes its own: `Stat` receives `icon`, `Footer` receives each social link's
-`icon`.
+**There are no internal glyphs left to not export.** `lib/glyphs.tsx` held
+`Close`, `ChevronDown`, `Copy`, `Sun` and fifteen others, and the rule was that
+publishing them would turn it into the icon library the system decided not to
+have. The file is deleted: the primitives draw from Phosphor like everything else.
+A component that needs an icon still takes it as a prop — `Stat` receives `icon`,
+`Footer` receives each social link's `icon` — and the project passes
+`<Icon as={…} />`.
 
 ### The icons are yours, the way they are drawn is not
 
@@ -427,15 +446,17 @@ names. Measured on the `Minus` path itself, whose regular form is a bar of radiu
 | --- | --- | --- |
 | phosphor `regular` | 16 on a 256 grid | **0.0625em** |
 | the document | 1.6 on a 24 grid | **0.0667em** |
-| `lib/glyphs.tsx` | 1.75 on a 16 grid | 0.109em |
+| `lib/glyphs.tsx`, until 0.10.0 | 1.75 on a 16 grid | 0.109em |
 
 Six per cent apart, which is no pixel on any screen. Nothing had to be derived and
 no number had to be invented. The `Icons/Icon` → `regular IS the document's
-stroke` story alternates the bars so the claim can be checked instead of believed
-— and it also shows the third row, because **`glyphs.tsx` is the outlier**: at
-0.109em it is three quarters heavier than both, it was never argued anywhere, and
-aligning it would restyle every primitive in the library. That is a separate
-change and `docs/decisions/0.7.md` § 29 says so.
+stroke` story shows the bars so the claim can be checked instead of believed.
+
+**The third row is history now, and it is left in because it is the argument.**
+`glyphs.tsx` drew at 0.109em — three quarters heavier than both — and 0.7.0
+measured it, said so and left it alone, because aligning it restyles every
+primitive in the library. 0.10.0 is that change: the file is gone and there is
+one line in the system. See `docs/decisions/0.10.md` § 51.
 
 **The weight is an axis with three values, and `tone` is how you name them.**
 `weight` is not a prop: Phosphor ships six and this system reads three, because
@@ -483,16 +504,17 @@ It blocked `cursos` for a whole version, and the workaround there was a
 that is a `<span>` with no interaction. It cost 272 KB of client chunk.
 
 The five portable subpaths do NOT carry it — `./tokens`, `./theme`,
-`./variants`, `./social/data`, `./og` and `./shiki` — and that is the half that matters more.
+`./variants`, `./og` and `./shiki` — and that is the half that matters more.
 Marking them client would be a lie with a cost: a Server Component importing
 `buttonVariants`, a function that returns a string, would pull a client boundary
 in with it.
 
-`./social` is the third case, and it is why the check stopped looking only at the
-portable ones. It renders React — it is ten `<svg>` — so it can never be
+`./icons` is the third case, and it is why the check stopped looking only at the
+portable ones. It renders React — it is one `<svg>` — so it can never be
 portable, and it holds no state, so it must not be a client entry either. Listed
 in neither set, nothing would have noticed it being marked client by mistake, and
-that mistake undoes the only reason the subpath exists. See `docs/decisions/0.7.md` § 26.
+that mistake undoes the only reason the subpath exists: an icon in a Server
+Component with no client boundary opened for it.
 
 It is stamped by `scripts/add-use-client.mjs` after tsup, and not by tsup's
 `banner`. That was tried first: esbuild writes the directive and the bundling
@@ -566,8 +588,8 @@ vertical={false}`, two axes with the line and the tick off, a `type="natural"`
 and a `strokeWidth` — which `cursos` wrote four times, once per chart. None of
 that is a decision the project made. See `docs/decisions/0.8.md` § 43.
 
-`check:exports` verifies that the six portable ones — `./tokens`, `./theme`,
-`./variants`, `./social/data`, `./og` and `./shiki` — bring no React into the published `dist/`,
+`check:exports` verifies that the five portable ones — `./tokens`, `./theme`,
+`./variants`, `./og` and `./shiki` — bring no React into the published `dist/`,
 **by following the relative imports**. Without that the check was worthless: with `treeshake`
 on, each portable entry ends up as two lines re-exporting from a
 `chunk-XXXX.js`, and a grep over those two lines finds no React even when the
@@ -869,12 +891,17 @@ about as library pieces. They get in anyway: the CLI aesthetic — the bar's
 
 ### Phase 3 decisions
 
-- **It ships no icon set**, and that has not changed. The eight glyphs the
-  primitives need are inline in `src/lib/glyphs.tsx`, inherit `currentColor` and
-  measure 1em, and they are not exported. What DID change is that
-  `@phosphor-icons/react` is now an optional peer on `./icons`, so the set a
-  project chooses is drawn at the system's weight — see «The icons are yours»
-  above. Optional and on a subpath is the point: the two projects that use no
+- **It shipped no icon set, and by 0.10.0 that position had been abandoned from
+  both ends.** Phase 3 said the eight glyphs the primitives need are inline in
+  `src/lib/glyphs.tsx` and not exported; 0.7.0 added `@phosphor-icons/react` as an
+  optional peer on `./icons` so the set a project chooses is drawn at the system's
+  weight; and 0.10.0 deleted `glyphs.tsx` and `./social` and made Phosphor
+  required, because a library drawing in three hands cannot say which one is
+  right. See «The social icons are yours too» above and `docs/decisions/0.10.md`
+  § 51. What survives verbatim is the part that was always the real rule: the
+  icons are the project's, the LINE is the system's. The rest of this bullet is
+  the 0.7.0 argument, kept because it is what the reversal was measured against:
+  optional and on a subpath was the point, since the two projects that use no
   icons install nothing.
 - **No entrance animations.** Modals, menus, tooltips and toasts appear where
   they will stay. The `Switch` knob changes position without sliding. The
@@ -968,8 +995,11 @@ skips, the 1 → 1.25 → 1.5 → 1.75 → 2 speed cycle and the volume with mut
 portfolio's. What changed:
 
 **Two dependencies a package cannot have.** The portfolio's `Icon` became
-`src/lib/glyphs.tsx` with identical paths; `trackEvent` became the `onFirstPlay`
-prop, which still fires exactly once per load.
+`src/lib/glyphs.tsx` with identical paths — and since 0.10.0 those eight paths are
+gone too, replaced by `Play`, `Pause`, `SpeakerHigh`, `SpeakerSlash`,
+`CircleNotch`, `ArrowsClockwise` and the two seek arrows from Phosphor.
+`trackEvent` became the `onFirstPlay` prop, which still fires exactly once per
+load.
 
 **One API change.** `compact`/`banner` as two booleans became
 `mode="full" | "compact" | "banner"`, which is the vocabulary the three modes were

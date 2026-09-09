@@ -16,7 +16,23 @@ export function Pagination({ className, ...props }: ComponentPropsWithoutRef<'na
 }
 
 export function PaginationContent({ className, ...props }: ComponentPropsWithoutRef<'ul'>) {
-  return <ul className={cn('gap-step-xs flex flex-row items-center', className)} {...props} />;
+  /*
+    `flex-wrap` and centred, which is what a phone needs and what a wide screen
+    never notices. Nine pages plus «Anterior» and «Siguiente» is eleven controls
+    at 36px minimum each: 400px of row on a 360px screen, and without the wrap
+    the whole page scrolls sideways to reach page 9.
+
+    Wrapping and not scrolling, unlike `TabsList` two files over, and the
+    difference is what the row IS. A tab list is one object and cutting it in
+    half says the tabs are two groups; a pagination row is a list of
+    interchangeable numbers, so a second line is just more of the same line.
+  */
+  return (
+    <ul
+      className={cn('gap-step-xs flex flex-row flex-wrap items-center justify-center', className)}
+      {...props}
+    />
+  );
 }
 
 export function PaginationItem(props: ComponentPropsWithoutRef<'li'>) {

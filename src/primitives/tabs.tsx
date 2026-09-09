@@ -15,7 +15,18 @@ export function TabsList({
 }: ComponentPropsWithoutRef<typeof TabsPrimitive.List>) {
   return (
     <TabsPrimitive.List
-      className={cn('rounded-control bg-surface gap-step-xs inline-flex items-center p-1', className)}
+      className={cn(
+        'rounded-control bg-surface gap-step-xs inline-flex max-w-full items-center p-1',
+        // The triggers are `whitespace-nowrap` — a tab whose label wraps stops
+        // reading as a tab — so on a narrow screen the list is wider than the
+        // page and takes the whole document with it. It SCROLLS instead: the
+        // list keeps hugging its content up to the width available and gives up
+        // the overflow to itself rather than to the page. Every tab stays
+        // reachable, and reaching one by keyboard scrolls it into view on its
+        // own because focus does that.
+        'overflow-x-auto',
+        className,
+      )}
       {...props}
     />
   );
@@ -28,7 +39,10 @@ export function TabsTrigger({
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        'rounded-chip px-step-sm inline-flex h-8 cursor-pointer items-center justify-center whitespace-nowrap',
+        // `shrink-0` is what makes the list's `overflow-x-auto` work: without it
+        // the triggers give up their width first and the labels run out of their
+        // own pills instead of the row scrolling.
+        'rounded-chip px-step-sm inline-flex h-8 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap',
         'font-sans text-label text-text-secondary',
         'transition-standard',
         'hover:text-text-primary',

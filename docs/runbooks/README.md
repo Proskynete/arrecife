@@ -5,14 +5,15 @@ whoever is upgrading a consuming project — not for whoever made the change.
 
 | Runbook | Breaks | The short version |
 | --- | --- | --- |
+| [`migration-0.10.md`](migration-0.10.md) | 2 | Phosphor is a required peer, and `./social` is gone |
 | [`migration-0.8.md`](migration-0.8.md) | 4 | `Table` draws its own surface, `Footer` takes no `children`, `caret` and `SidebarNav` are removed |
 | [`migration-0.7.md`](migration-0.7.md) | 1 | `Stat`'s `tone="alerta"` becomes `tone="alert"` |
 | [`migration-0.6.md`](migration-0.6.md) | many | The whole public API moved to English |
 | [`migration-0.5.md`](migration-0.5.md) | 1 | — |
 | [`migration-0.3.md`](migration-0.3.md) | 1 | Page rhythm carries `step`: `p-md` becomes `p-step-md` |
 
-There is no `migration-0.4.md` and no `migration-0.2.md`: those releases broke
-nothing.
+There is no `migration-0.9.md`, no `migration-0.4.md` and no `migration-0.2.md`:
+those releases broke nothing.
 
 ## Why a release note is not enough
 

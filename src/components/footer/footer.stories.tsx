@@ -1,19 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import {
+  BellSimple,
+  DiscordLogo,
+  Envelope,
+  GithubLogo,
+  Globe,
+  InstagramLogo,
+  LinkedinLogo,
+  Rss,
+  XLogo,
+  YoutubeLogo,
+} from '@phosphor-icons/react';
+
 import { Note } from '../../../stories/utils.tsx';
 import { Logo } from '../../brand/logo.tsx';
-import {
-  Email,
-  Discord,
-  GitHub,
-  Instagram,
-  LinkedIn,
-  Newsletter,
-  Rss,
-  Website,
-  X,
-  YouTube,
-} from '../../social/index.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { Footer } from './index.tsx';
 
@@ -27,20 +29,35 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * The system's ten. `aria-label` is mandatory in the `SocialLink` type: they are
- * icons with no visible text, so one cannot be built without an accessible name.
+ * The ten, and since 0.10.0 they are Phosphor's rather than the library's own.
+ *
+ * `Footer` never owned them: `SocialLink.icon` is a `ReactNode` the project
+ * supplies, and what the library used to supply alongside it was a catalogue of
+ * ten hand-drawn marks at `./social`. That catalogue is gone — this story is
+ * what a consumer now writes, verbatim.
+ *
+ * The six brands are `tone="current"`, which is Phosphor's `fill`: a mark
+ * belonging to somebody else has no outline form. The four functional ones —
+ * RSS, the envelope, the bell and the globe — stay at the default `action`,
+ * which is the system's line. That is the same drawing rule `./social` encoded
+ * by hand, now expressed on the axis `Icon` already has.
+ *
+ * `aria-label` is mandatory in the `SocialLink` type: they are icons with no
+ * visible text, so one cannot be built without an accessible name. Which is why
+ * the icons themselves carry none — `Icon` marks them `aria-hidden` when it is
+ * given no `label`, and the name on the link is the one that gets announced.
  */
 const SOCIAL = [
-  { label: 'GitHub', href: 'https://github.com/Proskynete', icon: <GitHub /> },
-  { label: 'LinkedIn', href: 'https://linkedin.com', icon: <LinkedIn /> },
-  { label: 'X', href: 'https://x.com/Proskynete', icon: <X /> },
-  { label: 'Instagram', href: 'https://instagram.com', icon: <Instagram /> },
-  { label: 'Discord', href: 'https://discord.com', icon: <Discord /> },
-  { label: 'YouTube', href: 'https://youtube.com', icon: <YouTube /> },
-  { label: 'RSS', href: '/rss.xml', icon: <Rss /> },
-  { label: 'Escríbeme', href: 'mailto:soy@eduardoalvarez.dev', icon: <Email /> },
-  { label: 'Newsletter', href: '/newsletter', icon: <Newsletter /> },
-  { label: 'Mi otro sitio', href: 'https://eduardoalvarez.dev', icon: <Website /> },
+  { label: 'GitHub', href: 'https://github.com/Proskynete', icon: <Icon as={GithubLogo} tone="current" /> },
+  { label: 'LinkedIn', href: 'https://linkedin.com', icon: <Icon as={LinkedinLogo} tone="current" /> },
+  { label: 'X', href: 'https://x.com/Proskynete', icon: <Icon as={XLogo} tone="current" /> },
+  { label: 'Instagram', href: 'https://instagram.com', icon: <Icon as={InstagramLogo} tone="current" /> },
+  { label: 'Discord', href: 'https://discord.com', icon: <Icon as={DiscordLogo} tone="current" /> },
+  { label: 'YouTube', href: 'https://youtube.com', icon: <Icon as={YoutubeLogo} tone="current" /> },
+  { label: 'RSS', href: '/rss.xml', icon: <Icon as={Rss} /> },
+  { label: 'Escríbeme', href: 'mailto:soy@eduardoalvarez.dev', icon: <Icon as={Envelope} /> },
+  { label: 'Newsletter', href: '/newsletter', icon: <Icon as={BellSimple} /> },
+  { label: 'Mi otro sitio', href: 'https://eduardoalvarez.dev', icon: <Icon as={Globe} /> },
 ] as const;
 
 export const Basic: Story = {
@@ -57,15 +74,17 @@ export const Basic: Story = {
           with no name cannot be built.
         </Note>
         <Note>
-          The six brands are SOLID and the four functional ones — RSS, email, the
-          newsletter bell and the globe — use a 1.6 stroke. It is a drawing rule, not a
-          styling one: the GitHub logo does not exist in outline, and a functional
-          symbol in this system is drawn with a line.
+          The six brands are SOLID — `tone="current"`, Phosphor's `fill` — and the
+          four functional ones use the system's line at the default `action`. It is
+          a drawing rule, not a styling one: the GitHub logo does not exist in
+          outline, and a functional symbol in this system is drawn with a line.
         </Note>
         <Note>
-          They live in `social/index.tsx` and not in `lib/glyphs.tsx`. That one
-          is the minimum set the primitives need and it does not grow; this is a
-          third-party inventory that will change when the social links change.
+          They come from `@phosphor-icons/react`, drawn through `Icon`. Until 0.10.0
+          the library shipped its own ten at `./social`, and that catalogue is gone:
+          `SocialLink.icon` was always a `ReactNode` the project supplies, so what
+          disappeared is a second hand drawing the same marks. See
+          `docs/decisions/0.10.md` § 51.
         </Note>
         <Note>
           The signature comes from `naming.domain`. The `$` is biolume and

@@ -1,8 +1,9 @@
+import { CaretRight, Check } from '@phosphor-icons/react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Check, ChevronRight } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -55,7 +56,7 @@ export function DropdownMenuCheckboxItem({
   return (
     <DropdownMenuPrimitive.CheckboxItem className={cn(item, 'pl-8', className)} {...props}>
       <DropdownMenuPrimitive.ItemIndicator className="text-accent absolute left-2 flex items-center">
-        <Check />
+        <Icon as={Check} />
       </DropdownMenuPrimitive.ItemIndicator>
       {children}
     </DropdownMenuPrimitive.CheckboxItem>
@@ -109,7 +110,7 @@ export function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRight className="text-text-muted ml-auto" />
+      <Icon as={CaretRight} className="text-text-muted ml-auto" />
     </DropdownMenuPrimitive.SubTrigger>
   );
 }

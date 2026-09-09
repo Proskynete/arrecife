@@ -1,3 +1,4 @@
+import { Camera } from '@phosphor-icons/react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { type VariantProps } from 'class-variance-authority';
 import {
@@ -10,7 +11,7 @@ import {
 } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Camera } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 import { avatarVariants as avatar } from '../variants/avatar.ts';
 
@@ -148,7 +149,7 @@ export function AvatarUpload({
           disabled && 'pointer-events-none opacity-50',
         )}
       >
-        <Camera aria-hidden="true" />
+        <Icon as={Camera} aria-hidden="true" />
         <span className="sr-only">{label}</span>
         <input
           id={id}

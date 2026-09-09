@@ -40,8 +40,10 @@ export type SocialLink = {
   label: string;
   href: string;
   /**
-   * The glyph, at 19px. Brands are SOLID (`fill`) and functional icons use a 1.6
-   * stroke. Never an emoji.
+   * The glyph, at 19px. It is the PROJECT's — the library ships no catalogue of
+   * social marks since 0.10.0 — and the drawing rule it should follow is the
+   * system's: a brand is SOLID, so `<Icon as={GithubLogo} tone="current" />`,
+   * and a functional mark keeps the default `action`. Never an emoji.
    */
   icon: ReactNode;
 };

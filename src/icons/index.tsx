@@ -3,14 +3,20 @@ import type { Icon as PhosphorIcon, IconProps as PhosphorIconProps, IconWeight }
 import { cn } from '../lib/cn.ts';
 
 /**
- * The system adopts `@phosphor-icons/react`, and this is the whole of what
- * «adopts» means: an optional peer dependency, and one place that fixes what a
- * call site was getting wrong on its own.
+ * The system adopts `@phosphor-icons/react`, and since 0.10.0 «adopts» means
+ * ALL of it: a required peer dependency, one place that fixes what a call site
+ * was getting wrong on its own, and no second set anywhere in the library.
+ *
+ * It was optional for three releases, and what made it required is that the
+ * library stopped keeping a set of its own to fall back on. That is the trade
+ * and it is worth naming: the two consumers that draw no icons of their own now
+ * install Phosphor anyway, because the `Alert` and the `Select` they DO draw are
+ * drawn with it.
  *
  * WHY IT IS HERE AT ALL. The position used to be that the system has no icons.
- * That was right for what the library was — five reading sites, where
- * `lib/glyphs.tsx` covers everything a primitive needs — and it stopped being
- * right when an admin panel arrived. Measured across the four consumers, the one
+ * That was right for what the library was — five reading sites, where a
+ * hand-drawn `lib/glyphs.tsx` covered everything a primitive needed — and it
+ * stopped being right when an admin panel arrived. Measured across the four consumers, the one
  * admin app imports 89 distinct icons in 229 places and the other three import
  * 9, 0 and 0. Seventy-seven of the 89 are domain icons for a course admin —
  * `GraduationCap`, `TicketPercent`, `Webhook` — and no design system was ever
@@ -40,10 +46,13 @@ import { cn } from '../lib/cn.ts';
  * because Phosphor's other three — `thin`, `bold`, `duotone` — say nothing this
  * system means. See `TONE_WEIGHT` below and `docs/decisions/0.7.md` § 35.
  *
- * `lib/glyphs.tsx` is the outlier and it is NOT reconciled here: it draws at
- * 1.75 on a 16 grid, which is 0.109em — three quarters heavier than both the
- * document and this. Aligning it restyles every primitive in the library and is
- * its own change. See `docs/decisions/0.7.md` § 29.
+ * IT IS NOW THE ONLY LINE THE LIBRARY DRAWS, which is what 0.10.0 changed.
+ * `lib/glyphs.tsx` drew at 1.75 on a 16 grid — 0.109em, three quarters heavier
+ * than both the document and this — and `./social` drew ten brand marks in a
+ * third hand. 0.7.0 left both alone because reconciling them restyles every
+ * primitive in the library; that is exactly what 0.10.0 did, and both files are
+ * gone. There is one description of what a line looks like here, and it is
+ * Phosphor's. See `docs/decisions/0.10.md` § 51.
  *
  * IN NEXT, IMPORT FROM `@phosphor-icons/react/ssr` inside a Server Component.
  * Phosphor's default build reads `IconContext` through `useContext`, and a hook

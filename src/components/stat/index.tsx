@@ -1,7 +1,8 @@
+import { Minus, TrendDown, TrendUp } from '@phosphor-icons/react';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-import { ChevronDown, ChevronUp, Minus } from '../../lib/glyphs.tsx';
 import { cn } from '../../lib/cn.ts';
+import { Icon } from '../../icons/index.tsx';
 import { CARD_SURFACE } from '../../variants/card.ts';
 import { Progress } from '../../primitives/progress.tsx';
 import { Text } from '../../primitives/typography.tsx';
@@ -92,10 +93,18 @@ export type StatDelta = {
   direction: 'up' | 'down' | 'flat';
 };
 
-/** The arrow, and the word a screen reader hears in its place. */
+/**
+ * The arrow, and the word a screen reader hears in its place.
+ *
+ * `TrendUp` and `TrendDown` and not the chevrons the hand-drawn set had. A
+ * chevron means «there is more this way» everywhere else in this library — it
+ * opens an accordion, a select and a pagination — and a delta is not navigation.
+ * Phosphor draws the one that says «this went up», so the delta gets it and the
+ * chevron goes back to meaning one thing.
+ */
 const DELTA = {
-  up: { glyph: ChevronUp, label: 'sube' },
-  down: { glyph: ChevronDown, label: 'baja' },
+  up: { glyph: TrendUp, label: 'sube' },
+  down: { glyph: TrendDown, label: 'baja' },
   flat: { glyph: Minus, label: 'sin cambio' },
 } as const;
 
@@ -143,7 +152,7 @@ export function Stat({
       {delta && DeltaGlyph ? (
         <Text variant="label" tone="secondary" as="p" className="gap-step-xs flex items-center">
           <span className="sr-only">{DELTA[delta.direction].label} </span>
-          <DeltaGlyph className="shrink-0" />
+          <Icon as={DeltaGlyph} />
           {delta.value}
         </Text>
       ) : null}

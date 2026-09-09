@@ -1,8 +1,9 @@
+import { Check, Copy } from '@phosphor-icons/react';
 import { useCallback, useRef, useState } from 'react';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../../lib/cn.ts';
-import { Check, Copy } from '../../lib/glyphs.tsx';
+import { Icon } from '../../icons/index.tsx';
 
 /**
  * `brand.hull` is «hull · outline and the background of code blocks», so a code
@@ -64,7 +65,7 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
               'focus-ring',
             )}
           >
-            {copiado ? <Check className="text-accent" /> : <Copy />}
+            {copiado ? <Icon as={Check} className="text-accent" /> : <Icon as={Copy} />}
             {copiado ? 'Copiado' : 'Copiar'}
           </button>
         ) : null}

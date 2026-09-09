@@ -1,17 +1,18 @@
+import {
+  ArrowClockwise,
+  ArrowCounterClockwise,
+  ArrowsClockwise,
+  CircleNotch,
+  Pause,
+  Play,
+  SpeakerHigh,
+  SpeakerSlash,
+} from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, PointerEvent as ReactPointerEvent } from 'react';
 
 import { cn } from '../../lib/cn.ts';
-import {
-  AdvanceSeconds,
-  GoBackSeconds,
-  Pause,
-  Play,
-  Retry,
-  Spinner,
-  VolumeMuted,
-  VolumeOn,
-} from '../../lib/glyphs.tsx';
+import { Icon } from '../../icons/index.tsx';
 
 /**
  * Migrated from `eduardoalvarez.dev/src/components/audio-player/index.tsx`.
@@ -21,8 +22,11 @@ import {
  * the same. What changed is the skin and the two dependencies a package cannot
  * have:
  *
- * - the portfolio's `Icon` → the glyphs now live in `src/lib/glyphs.tsx`, with
- *   the same paths.
+ * - the portfolio's `Icon` → the library's own `Icon` over Phosphor. The eight
+ *   paths this file used to carry verbatim from the portfolio are gone with
+ *   `lib/glyphs.tsx`; `Play`, `Pause`, `SpeakerHigh` and `SpeakerSlash` are the
+ *   same symbols in Phosphor's hand, and the ±15s skips are `ArrowCounterClockwise`
+ *   and `ArrowClockwise`. See `docs/decisions/0.10.md` § 51.
  * - analytics' `trackEvent` → the `onFirstPlay` prop, which the consumer wires
  *   to whatever they use. It still fires exactly once per load.
  *
@@ -163,7 +167,11 @@ function SkipButton({
       className={cn('text-text-muted hover:text-text-primary', CONTROL, className)}
       aria-label={seconds < 0 ? 'Retroceder 15 segundos' : 'Adelantar 15 segundos'}
     >
-      {seconds < 0 ? <GoBackSeconds className={size} /> : <AdvanceSeconds className={size} />}
+      {seconds < 0 ? (
+        <Icon as={ArrowCounterClockwise} className={size} />
+      ) : (
+        <Icon as={ArrowClockwise} className={size} />
+      )}
     </button>
   );
 }
@@ -219,9 +227,9 @@ function Volume({
         aria-label={muted ? 'Activar sonido' : 'Silenciar'}
       >
         {muted || volume === 0 ? (
-          <VolumeMuted className={size} />
+          <Icon as={SpeakerSlash} className={size} />
         ) : (
-          <VolumeOn className={size} />
+          <Icon as={SpeakerHigh} className={size} />
         )}
       </button>
       <input
@@ -247,10 +255,16 @@ type PlayState = { loading: boolean; error: boolean; playing: boolean };
 function PlayIcon({ className, loading, error, playing }: PlayState & { className: string }) {
   // The spin stays, with the same justification as in `Button`: it is feedback
   // about progress, not about state, and `motion-safe` turns it off.
-  if (loading) return <Spinner className={cn('motion-safe:animate-spin', className)} />;
-  if (error) return <Retry className={className} />;
-  if (playing) return <Pause className={className} />;
-  return <Play className={className} />;
+  if (loading)
+    return <Icon as={CircleNotch} className={cn('motion-safe:animate-spin', className)} />;
+  if (error) return <Icon as={ArrowsClockwise} className={className} />;
+  // All four at the default `action`, which is the system's line. The portfolio
+  // drew play and pause SOLID and the volume too, and that difference is not
+  // kept: `tone` names what an icon is DOING, not how it looks, and every glyph
+  // in this player is a control. Picking `fill` here to match the old drawing
+  // would be choosing a weight by hand, which is the thing `tone` exists to stop.
+  if (playing) return <Icon as={Pause} className={className} />;
+  return <Icon as={Play} className={className} />;
 }
 
 function PlayButton({

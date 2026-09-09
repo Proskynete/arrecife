@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { Note } from '../../../stories/utils.tsx';
-import { ArrowUpRight } from '../../lib/glyphs.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { LinkRow } from './index.tsx';
 
 const meta = {
@@ -18,7 +19,7 @@ export const List: Story = {
     <div className="gap-step-xs max-w-content flex flex-col">
       <LinkRow {...args} />
       <LinkRow {...args} name="LinkedIn" description="in/eduardo-alvarez" />
-      <LinkRow {...args} name="Cursos" description="cursos.eduardoalvarez.dev" icon={<ArrowUpRight />} />
+      <LinkRow {...args} name="Cursos" description="cursos.eduardoalvarez.dev" icon={<Icon as={ArrowUpRight}  />} />
       <LinkRow {...args} name="Sin descripción" description={undefined} external={false} />
     </div>
   ),

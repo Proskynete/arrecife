@@ -17,9 +17,10 @@ import { EmptyState } from './index.tsx';
 
 /**
  * The project's glyph, drawn HERE and not imported, because that is the contract:
- * the system has no icon library, `lib/glyphs.tsx` is the minimum set the
- * primitives need and it is not exported. A consumer passes its own, and this is
- * what «its own» looks like — 1em, `currentColor`, 1.6 stroke, `aria-hidden`.
+ * `EmptyState` takes an icon, it does not own one. Since 0.10.0 the library's
+ * own icons all come from Phosphor through `Icon`, and a consumer that reaches
+ * for a shape Phosphor does not have draws it — this is what «draws it» looks
+ * like: 1em, `currentColor`, a 1.6 stroke, `aria-hidden`.
  */
 function Clock(props: SVGProps<SVGSVGElement>) {
   return (
@@ -233,10 +234,13 @@ export const InlineStates: Story = {
       </Block>
 
       <Note>
-        `icon` is a `ReactNode` and the project passes its own, sized by the
-        project: the system has no icon library and is not getting one. It
-        inherits `currentColor`, so it takes the muted tone from the wrapper
-        without being tinted separately — the same contract as `Stat`'s `icon`.
+        `icon` is a `ReactNode` and the project passes its own — normally an
+        `Icon` from `./icons`, which is already 1em and
+        `currentColor`. The library names no icon for this slot and is not going
+        to: which glyph an empty state shows is the project's decision, and only
+        the LINE it is drawn with is the system's. It takes the muted tone from
+        the wrapper without being tinted separately — the same contract as
+        `Stat`'s `icon`.
       </Note>
     </>
   ),

@@ -1,7 +1,8 @@
+import { CaretLeft, CaretRight, DotsThree } from '@phosphor-icons/react';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { ChevronLeft, ChevronRight, Ellipsis } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 export function Pagination({ className, ...props }: ComponentPropsWithoutRef<'nav'>) {
   return (
@@ -45,7 +46,7 @@ export function PaginationLink({ className, isActive = false, ...props }: Pagina
 export function PaginationPrevious({ className, ...props }: PaginationLinkProps) {
   return (
     <PaginationLink aria-label="Página anterior" className={cn('gap-step-xs', className)} {...props}>
-      <ChevronLeft />
+      <Icon as={CaretLeft} />
       Anterior
     </PaginationLink>
   );
@@ -55,7 +56,7 @@ export function PaginationNext({ className, ...props }: PaginationLinkProps) {
   return (
     <PaginationLink aria-label="Página siguiente" className={cn('gap-step-xs', className)} {...props}>
       Siguiente
-      <ChevronRight />
+      <Icon as={CaretRight} />
     </PaginationLink>
   );
 }
@@ -67,7 +68,7 @@ export function PaginationEllipsis({ className, ...props }: ComponentPropsWithou
       className={cn('text-text-muted flex size-9 items-center justify-center', className)}
       {...props}
     >
-      <Ellipsis />
+      <Icon as={DotsThree} />
     </span>
   );
 }

@@ -1,8 +1,9 @@
+import { CaretDown, CaretUp, Check } from '@phosphor-icons/react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Check, ChevronDown, ChevronUp } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 export const Select = SelectPrimitive.Root;
 export const SelectGroup = SelectPrimitive.Group;
@@ -30,7 +31,7 @@ export function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDown className="text-text-muted" />
+        <Icon as={CaretDown} className="text-text-muted" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -57,11 +58,11 @@ export function SelectContent({
         {...props}
       >
         <SelectPrimitive.ScrollUpButton className="text-text-secondary flex h-6 items-center justify-center">
-          <ChevronUp />
+          <Icon as={CaretUp} />
         </SelectPrimitive.ScrollUpButton>
         <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
         <SelectPrimitive.ScrollDownButton className="text-text-secondary flex h-6 items-center justify-center">
-          <ChevronDown />
+          <Icon as={CaretDown} />
         </SelectPrimitive.ScrollDownButton>
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
@@ -99,7 +100,7 @@ export function SelectItem({
     >
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator className="text-accent absolute right-2 flex items-center">
-        <Check />
+        <Icon as={Check} />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );

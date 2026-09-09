@@ -40,8 +40,6 @@ const PORTABLE = {
   './tokens': 'all five projects, Satori and a React-less Astro consume it',
   './theme': 'an Astro that mounts no React consumes it, and `themeScript` goes inline in the <head>',
   './variants': 'it is the class vocabulary for a project that mounts no React, and for a server component',
-  './social/data':
-    'it is the glyph shapes for a project that mounts no React — `links` replicates the footer in Astro',
   './og': 'it runs in a worker or in a build script',
   './shiki': 'it is consumed from astro.config.mjs',
 };
@@ -164,10 +162,10 @@ for (const [subpath, reason] of Object.entries(PORTABLE)) {
  * string, which is the cost `./variants` exists to avoid.
  *
  * The second direction is checked against EVERY subpath and not only against the
- * portable ones, which is the newer half. `./social` is neither: it renders
+ * portable ones, which is the newer half. `./icons` is neither: it renders
  * React, so it can never be portable, and it must not be a client entry either —
  * the whole reason it exists is that a Next Server Component can render an icon
- * without opening a boundary for two `<svg>`. Listed only in `PORTABLE`, the
+ * without opening a boundary for one `<svg>`. Listed only in `PORTABLE`, the
  * check had nothing to say about it, and adding it to `CLIENT_ENTRIES` by
  * mistake would have quietly undone the fix. Now the rule is the one the
  * docstring already claimed: the directive is on `CLIENT_ENTRIES` and nowhere

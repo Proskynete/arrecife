@@ -1,9 +1,10 @@
+import { X } from '@phosphor-icons/react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Close } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 export const Sheet = DialogPrimitive.Root;
 export const SheetTrigger = DialogPrimitive.Trigger;
@@ -71,7 +72,7 @@ export function SheetContent({ className, side, children, ...props }: SheetConte
             'focus-ring',
           )}
         >
-          <Close />
+          <Icon as={X} />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>

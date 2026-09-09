@@ -1,9 +1,10 @@
+import { X } from '@phosphor-icons/react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Close } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 export const ToastProvider = ToastPrimitive.Provider;
 export const ToastAction = ToastPrimitive.Action;
@@ -59,7 +60,7 @@ export function Toast({ className, variant, children, ...props }: ToastProps) {
           'focus-ring',
         )}
       >
-        <Close />
+        <Icon as={X} />
       </ToastPrimitive.Close>
     </ToastPrimitive.Root>
   );

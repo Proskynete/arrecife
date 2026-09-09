@@ -23,6 +23,7 @@ PR still resolves. This index is how you find which file holds it.
 | [`0.7.md`](0.7.md) | §§ 26–38 | Subpaths, Phosphor, the doctor |
 | [`0.8.md`](0.8.md) | §§ 39–48 | Three removals, and why each one was built for nobody |
 | [`0.9.md`](0.9.md) | §§ 49–50 | Two pieces built from a consumer that the consumer could not use |
+| [`0.10.md`](0.10.md) | §§ 51–56 | The library stops drawing icons, and four things a phone already knew |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -62,10 +63,10 @@ repo cannot open.
 
 **[`0.7.md`](0.7.md)**
 
-- § 26 · [The social icons are published twice, and they are not two ways of writing the same import](0.7.md#26--the-social-icons-are-published-twice-and-they-are-not-two-ways-of-writing-the-same-import)
+- § 26 · [The social icons are published twice, and they are not two ways of writing the same import · REVERSED in § 51](0.7.md#26--the-social-icons-are-published-twice-and-they-are-not-two-ways-of-writing-the-same-import)
 - § 27 · [The empty state has a second shape, and it carries no face](0.7.md#27--the-empty-state-has-a-second-shape-and-it-carries-no-face)
 - § 28 · [There is a third tone, and two of them are the same sand](0.7.md#28--there-is-a-third-tone-and-two-of-them-are-the-same-sand)
-- § 29 · [The system adopts Phosphor, and it still ships no icons](0.7.md#29--the-system-adopts-phosphor-and-it-still-ships-no-icons)
+- § 29 · [The system adopts Phosphor, and it still ships no icons · COMPLETED in § 51](0.7.md#29--the-system-adopts-phosphor-and-it-still-ships-no-icons)
 - § 30 · [`Nav` needed one of the three things the backlog asked for](0.7.md#30--nav-needed-one-of-the-three-things-the-backlog-asked-for)
 - § 31 · [The neutral number stops being biolume, and the tone moves to the badge](0.7.md#31--the-neutral-number-stops-being-biolume-and-the-tone-moves-to-the-badge)
 - § 32 · [The sidebar gets blocks, and the icon replaces the prompt · REVERSED in § 48](0.7.md#32--the-sidebar-gets-blocks-and-the-icon-replaces-the-prompt--reversed-in--48)
@@ -103,3 +104,12 @@ with no text prop, `Text` with no `font` prop, `CodeBlock` with its theme island
 
 - § 49 · [The signature prints a domain, and it is not always ours](0.9.md#49--the-signature-prints-a-domain-and-it-is-not-always-ours)
 - § 50 · [The tooltip's formatter never reached the axis](0.9.md#50--the-tooltips-formatter-never-reached-the-axis)
+
+**[`0.10.md`](0.10.md)**
+
+- § 51 · [Phosphor is the only hand, and the two sets of our own go · REVERSES § 26 and half of § 29](0.10.md#51--phosphor-is-the-only-hand-and-the-two-sets-of-our-own-go--reverses--26-and-half-of--29)
+- § 52 · [The alert's mark stops being a mono character](0.10.md#52--the-alerts-mark-stops-being-a-mono-character)
+- § 53 · [The footer is centred on a phone, and `links` knew first](0.10.md#53--the-footer-is-centred-on-a-phone-and-links-knew-first)
+- § 54 · [Three rows that pushed the page sideways, and they do not get the same answer](0.10.md#54--three-rows-that-pushed-the-page-sideways-and-they-do-not-get-the-same-answer)
+- § 55 · [The toast's tone is a surface, not a hairline](0.10.md#55--the-toasts-tone-is-a-surface-not-a-hairline)
+- § 56 · [Storybook gets a way in, and the agent block is generated](0.10.md#56--storybook-gets-a-way-in-and-the-agent-block-is-generated)

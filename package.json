@@ -1,9 +1,9 @@
 {
   "name": "@eduardoalvarez/arrecife",
-  "version": "0.9.0",
-  "description": "The component library of Eduardo \u00c1lvarez\u2019s visual identity",
+  "version": "0.10.0",
+  "description": "The component library of Eduardo Álvarez’s visual identity",
   "license": "MIT",
-  "author": "Eduardo Esteban \u00c1lvarez Casta\u00f1eda <soy@eduardoalvarez.dev>",
+  "author": "Eduardo Esteban Álvarez Castañeda <soy@eduardoalvarez.dev>",
   "homepage": "https://arrecife.eduardoalvarez.dev",
   "repository": {
     "type": "git",

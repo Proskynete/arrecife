@@ -1,5 +1,47 @@
 # Changelog
 
+## [0.10.0](https://github.com/Proskynete/arrecife/compare/v0.9.0...v0.10.0) (2026-09-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **icons:** `@phosphor-icons/react` becomes a REQUIRED peer dependency, and `@eduardoalvarez/arrecife/social`, `/social/data` and the root's `social` namespace are removed. Phosphor has all ten marks; the mapping table and the `tone` each one takes are in docs/runbooks/migration-0.10.md.
+
+### 🚀 Novedades
+
+* **icons:** Phosphor is the only hand the library draws in ([833090e](https://github.com/Proskynete/arrecife/commit/833090e80d8d259f6965f389bc455cc72945a9c0))
+* **primitives:** the alert's four marks come from Phosphor ([0a4c86e](https://github.com/Proskynete/arrecife/commit/0a4c86ef7a8f5375c27bd7cea3afa3ab7ec76c35))
+* **storybook:** a way in, and a generated agent block on every component ([08eb4dd](https://github.com/Proskynete/arrecife/commit/08eb4ddcc8044ce561f88eb30894faaf00ff6e95))
+
+
+### 🐛 Correcciones
+
+* **a11y:** the code block's scroll region is reachable by keyboard ([5de3618](https://github.com/Proskynete/arrecife/commit/5de3618a81badb92a374e7dc40d0d251c133794d))
+* **components:** the audio player's waveform is Phosphor's, not five spans ([a0d92cd](https://github.com/Proskynete/arrecife/commit/a0d92cd99eaecbe1c506b60d03fa4b76f623faf0))
+* **components:** the footer stacks and centres below sm ([723920e](https://github.com/Proskynete/arrecife/commit/723920e0d3513d2834ac6215b6245491ac82be54))
+* **components:** the nav item row scrolls instead of pushing the page sideways ([716bb55](https://github.com/Proskynete/arrecife/commit/716bb55ccdecb796132928a73caa09e980b78015))
+* **components:** ThemeToggle switches the theme without onThemeChange ([c947036](https://github.com/Proskynete/arrecife/commit/c9470363618c3c70948616fb8e1a49b54921a830))
+* **primitives:** the tab list scrolls and the pagination row wraps ([e44a3dc](https://github.com/Proskynete/arrecife/commit/e44a3dc43022e25545c5802543f77e26b5bccdad))
+* **primitives:** the toast carries its tone as a surface, not as a hairline ([f1c6352](https://github.com/Proskynete/arrecife/commit/f1c6352de323acef2cb4ab55555d088da380b8ae))
+
+
+### 📚 Documentación
+
+* § 51 names the waveform, and the runbook says it moved ([aea65a1](https://github.com/Proskynete/arrecife/commit/aea65a108e11e3352c4fa35a2f27c19b2b6fac9b))
+* **readme:** the library stops drawing icons of its own ([7d56012](https://github.com/Proskynete/arrecife/commit/7d5601241eef5855148f3075a805585bc56b0fcf))
+* the 0.10 decision log ([254ab6a](https://github.com/Proskynete/arrecife/commit/254ab6a72a662c7303cac690eeb2e887735bd7d4))
+* the 0.10 migration runbook ([1118afd](https://github.com/Proskynete/arrecife/commit/1118afdc6221f6b7a22d5b7d8f7478ea875890dc))
+
+
+### 📦 Dependencias
+
+* ignoreDeprecations, because tsup injects a baseUrl TypeScript 6 rejects ([5eb20c8](https://github.com/Proskynete/arrecife/commit/5eb20c897346ed68b98e03b1c7f1519d57e7b513))
+
+
+### 🚀 CI/CD
+
+* the social scope goes with the subpath that named it ([b02ab52](https://github.com/Proskynete/arrecife/commit/b02ab525f6e30a6114abada71afcd8bb6f3d06a7))
+
 ## [0.9.0](https://github.com/Proskynete/arrecife/compare/v0.8.0...v0.9.0) (2026-09-08)
 
 

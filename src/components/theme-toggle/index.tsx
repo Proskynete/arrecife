@@ -1,7 +1,8 @@
+import { Moon, Sun } from '@phosphor-icons/react';
 import { useSyncExternalStore, type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../../lib/cn.ts';
-import { Moon, Sun } from '../../lib/glyphs.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { Button, type ButtonProps } from '../../primitives/button.tsx';
 import { toggleTheme, watchTheme, currentTheme, type Theme } from '../../theme/index.ts';
 
@@ -56,8 +57,8 @@ export function ThemeToggle({
       {...props}
     >
       {/* The target one, not the current state: you press it to go to the other. */}
-      <Sun className="light:hidden" />
-      <Moon className="hidden light:block" />
+      <Icon as={Sun} className="light:hidden" />
+      <Icon as={Moon} className="hidden light:block" />
     </Button>
   );
 }

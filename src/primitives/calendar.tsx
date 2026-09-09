@@ -1,9 +1,10 @@
+import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { es } from 'date-fns/locale';
 import { DayPicker } from 'react-day-picker';
 import type { ComponentProps } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { ChevronLeft, ChevronRight } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 export type CalendarProps = ComponentProps<typeof DayPicker> & {
   /**
@@ -108,7 +109,7 @@ export function Calendar({
       }}
       components={{
         Chevron: ({ orientation, ...rest }) =>
-          orientation === 'left' ? <ChevronLeft {...rest} /> : <ChevronRight {...rest} />,
+          orientation === 'left' ? <Icon as={CaretLeft} {...rest} /> : <Icon as={CaretRight} {...rest} />,
       }}
       {...props}
     />

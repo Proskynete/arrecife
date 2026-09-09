@@ -1,8 +1,9 @@
+import { X } from '@phosphor-icons/react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Close } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
@@ -49,7 +50,7 @@ export function DialogContent({
             'focus-ring',
           )}
         >
-          <Close />
+          <Icon as={X} />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>

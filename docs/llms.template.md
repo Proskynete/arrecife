@@ -34,6 +34,7 @@ Requirements, and they are not optional:
 | | |
 | --- | --- |
 | React | `^19.0.0` and `react-dom` `^19.0.0`, as peer dependencies |
+| Phosphor | `@phosphor-icons/react` `^2.1.0`, as a peer dependency. **Required since 0.10.0**: every icon the library draws comes from it |
 | Tailwind | v4. **There is no v3 preset**: the output is `@theme`, which v3 does not understand |
 | Node | `>=22.18.0` for the subpaths that run at build time (`./og`, `./tokens`) |
 
@@ -41,8 +42,15 @@ Radix, `clsx`, `tailwind-merge`, `class-variance-authority`, `date-fns` and
 `react-day-picker` come as dependencies of the library. You do not need to
 install or declare them.
 
-**It ships no icon set.** The glyphs the components
-need are inline, inherit `currentColor` and measure 1em.
+**It ships no icon INVENTORY, and it does ship the drawing.** Until 0.10.0 the
+components carried a hand-drawn set of their own; they now draw every glyph from
+`@phosphor-icons/react` through `Icon`, which fixes the size at 1em and takes the
+weight from `tone`. Which icons your project uses is still your project's
+decision — what stopped being the project's is the line they are drawn with.
+
+That is why Phosphor is a required peer dependency rather than an optional one:
+the `Alert`, the `Select` and the `Button` you import already draw with it,
+whether or not you draw an icon yourself.
 
 ## Tailwind configuration
 
@@ -116,8 +124,7 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/og` | **no** | — | The Open Graph templates for Satori |
 | `@eduardoalvarez/arrecife/shiki` | **no** | — | The syntax highlighting theme |
 | `@eduardoalvarez/arrecife/brand` | yes | — | Logo, isotype and mascot as components |
-| `@eduardoalvarez/arrecife/social` | yes, on the server only | — | The ten social icons, loose. No `"use client"` |
-| `@eduardoalvarez/arrecife/social/data` | **no** | — | The same ten as shapes, plus `socialSvg`. For a template that mounts no React |
+| `@eduardoalvarez/arrecife/icons` | yes, on the server only | `@phosphor-icons/react` | `Icon`, the wrapper that fixes size and weight. No `"use client"` |
 | `@eduardoalvarez/arrecife/icons` | yes | `@phosphor-icons/react` | `Icon`, which draws a Phosphor icon at the system's size, and at the weight its role asks for |
 | `@eduardoalvarez/arrecife/form` | yes | `react-hook-form` | The form layer: labels, errors and `aria-*` |
 | `@eduardoalvarez/arrecife/chart` | yes | `recharts` | The chart chassis, the series palette and the three chart types |
@@ -148,12 +155,12 @@ before 0.6.0 and it pulled 272 KB of client chunk in for components that never
 needed it.
 
 The six portable subpaths do NOT carry the directive, and that is the half that
-matters in a Server Component: `./tokens`, `./theme`, `./variants`, `./social/data`,
-`./og` and `./shiki` stay on the server. Neither does `./social`, which is a third
-case: it renders React — it is ten `<svg>` — so it can never be portable, but it
-holds no state and nothing about it needs a client boundary. It is the only way to put a
-social icon in a Server Component, and § «The social icons come from `./social`»
-below says why the grouped form cannot do it. If all you need are classes — for a `<div>`, an
+matters in a Server Component: `./tokens`, `./theme`, `./variants`,
+`./og` and `./shiki` stay on the server. Neither does `./icons`, which is a third
+case: it renders React — it is one `<svg>` — so it can never be portable, but it
+holds no state and nothing about it needs a client boundary. It is how you put an
+icon in a Server Component, and § «The social icons are yours, and they come from
+Phosphor» below says which Phosphor entry to pair it with there. If all you need are classes — for a `<div>`, an
 `<a>` or an Astro island you do not want to hydrate — import them from
 `./variants` and nothing crosses to the client:
 
@@ -373,8 +380,9 @@ component's.
 <EmptyState variant="inline" expression="waiting" title="…" />
 ```
 
-`inline` takes an optional `icon` — a `ReactNode` the project passes and sizes,
-at 1em and in `currentColor`, like `Stat`'s. The library ships no icons.
+`inline` takes an optional `icon` — a `ReactNode` the project passes, normally
+`<Icon as={…} />` from `./icons`, which is already 1em and `currentColor`. The
+library ships no icon inventory: which glyph goes there is your decision.
 
 Do not reach for `page` inside a table because the face is «nicer»: an admin
 screen with a dozen empty regions gets a dozen mascots, which is what made every
@@ -383,7 +391,10 @@ consuming project write its own empty state instead of using this one.
 ### The two shapes of `Footer`
 
 ```tsx
-// The default. Stacked rows, signature level with the first one.
+// The default. Stacked rows, signature level with the first one — and stacked
+// and CENTRED below `sm`, which is what a phone gets.
+// SOCIAL is the project's own array: `{ label, href, icon }`, the icon drawn
+// with `<Icon as={GithubLogo} tone="current" />`.
 <Footer brand={<Logo />} social={SOCIAL} />
 
 // `full`. Brand and description on the left, link columns on the right,
@@ -476,63 +487,50 @@ COMPARE rather than add up, the type is `LineChart`.
 Anything that is not a series over a category axis has no type and is not missing
 one. A doughnut is `ChartContainer` plus Recharts' `Pie` with `SERIES_COLORS`.
 
-### The social icons come from `./social`
+### The social icons are yours, and they come from Phosphor
+
+Until 0.10.0 the library shipped ten of them at `./social` — `GitHub`,
+`LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`, `Email`,
+`Newsletter`, `Website` — drawn by hand. That subpath is gone. Phosphor has all
+ten and the migration is one import per call site:
 
 ```tsx
-// ❌ does not exist: the root publishes them grouped, not loose
-import { GitHub } from '@eduardoalvarez/arrecife';
+// ❌ removed in 0.10.0
+import { GitHub, LinkedIn, Website } from '@eduardoalvarez/arrecife/social';
 
-// ✅ the normal form
-import { GitHub } from '@eduardoalvarez/arrecife/social';
+// ✅
+import { GithubLogo, LinkedinLogo, Globe } from '@phosphor-icons/react';
+import { Icon } from '@eduardoalvarez/arrecife/icons';
 
-// ✅ for iterating the catalogue
-import { social } from '@eduardoalvarez/arrecife';
-<social.GitHub />
+<Icon as={GithubLogo} tone="current" />
 ```
 
-All ten: `GitHub`, `LinkedIn`, `X`, `Instagram`, `Discord`, `YouTube`, `Rss`,
-`Email`, `Newsletter`, `Website`. `Newsletter` is the bell: a way to follow, like
-`Rss`, named for what it means. `Website` is «my other site» — the personal
-domain in a footer full of networks — and it is what replaces borrowing a globe
-from an icon set, which brings its own stroke weight and its own margins.
+| Removed | Phosphor | `tone` |
+| --- | --- | --- |
+| `GitHub` | `GithubLogo` | `current` |
+| `LinkedIn` | `LinkedinLogo` | `current` |
+| `X` | `XLogo` | `current` |
+| `Instagram` | `InstagramLogo` | `current` |
+| `Discord` | `DiscordLogo` | `current` |
+| `YouTube` | `YoutubeLogo` | `current` |
+| `Rss` | `Rss` | `action` |
+| `Email` | `Envelope` | `action` |
+| `Newsletter` | `BellSimple` | `action` |
+| `Website` | `Globe` | `action` |
 
-Six are brands and go SOLID, four are functional and use a 1.6 stroke. A row that
-mixes the two pens is the normal case, not a defect: a brand is somebody else's
-silhouette and cannot be outlined, and a symbol the system draws itself has no
-owner to be faithful to.
+The `tone` column IS the old drawing rule, written on the axis `Icon` already
+has. Six are brands and go SOLID, which is `tone="current"` — Phosphor's `fill`.
+Four are functional and keep the default `action`, which is the system's line. A
+row that mixes the two pens is the normal case, not a defect: a brand is somebody
+else's silhouette and cannot be outlined, and a symbol has no owner to be
+faithful to.
 
-**In a Server Component the subpath is mandatory, not preferred.** The root
-carries `"use client"`, and a client reference crosses the boundary per EXPORT —
-the properties of a plain object are not exports, so `social.LinkedIn` is
-`undefined` on the server and `undefined` as an element type kills the build at
-prerender. `./social` carries no directive: it renders on the server and ships no
-client JS. Use `social` only when mapping a list of names onto icons.
-
-The root keeps the group because one of them is called `X`, and loose at the root
-it collides. In the subpath, alias it: `import { X as XIcon }`.
-
-**If you mount no React, the shapes are published too.** `./social/data` imports
-nothing, so an `.astro` that ships no framework JavaScript can draw the same
-glyph instead of pasting the `<path>` into the project:
-
-```astro
----
-import { socialSvg } from '@eduardoalvarez/arrecife/social/data';
----
-<Fragment set:html={socialSvg('GitHub', { class: 'size-[19px]' })} />
-```
-
-`socialGlyphs` is the catalogue keyed by name, `socialNames` is the ten names in
-order, and every glyph is exported on its own — `gitHubGlyph`, `websiteGlyph` —
-if you want the shapes rather than the markup. The React components are drawn
-from that same file, so the two renderings cannot disagree. Reaching for
-`socialGlyphs` or `socialSvg` names all ten, which is the price of iterating a
-catalogue; `import { LinkedIn }` still costs one shape.
-
-The internal glyphs — `Close`, `ChevronDown`, `Sun` — are **not exported** and
-are not going to be: they are the primitives' minimum set. A component that needs
-an icon receives it as a prop (`Stat` has `icon`, each `SocialLink` in `Footer`
-has its own). Do not ask for them to be published: pass your own.
+**In a Server Component import `Icon` from `./icons` and the glyph from
+`@phosphor-icons/react/ssr`.** The root of this library carries `"use client"`;
+`./icons` deliberately does not, so an icon renders on the server and ships no
+client JS. Phosphor's default build reads `IconContext` through `useContext`,
+which throws in a Server Component — the `/ssr` entry is the same icons without
+that read.
 
 ## Tokens
 

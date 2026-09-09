@@ -1,9 +1,10 @@
+import { CircleNotch } from '@phosphor-icons/react';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps } from 'class-variance-authority';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { Spinner } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 import { buttonVariants as button } from '../variants/button.ts';
 
@@ -43,7 +44,14 @@ export function Button({
       aria-busy={loading || undefined}
       {...props}
     >
-      {loading ? <Spinner /> : icon}
+      {/*
+        The spinner is the first of the five declared exceptions to «no
+        movement», and since 0.10.0 it is Phosphor's `CircleNotch` rather than a
+        hand-drawn arc: the ring and its gap are the same shape, drawn at the
+        weight `tone="action"` resolves to. The spin is ours and stays behind
+        `motion-safe`.
+      */}
+      {loading ? <Icon as={CircleNotch} className="motion-safe:animate-spin" /> : icon}
       {children}
     </button>
   );

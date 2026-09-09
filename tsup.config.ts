@@ -20,8 +20,6 @@ export default defineConfig({
     'theme/index': 'src/theme/index.ts',
     'variants/index': 'src/variants/index.ts',
     'brand/index': 'src/brand/index.ts',
-    'social/index': 'src/social/index.tsx',
-    'social/data': 'src/social/data.ts',
     'icons/index': 'src/icons/index.tsx',
     'og/index': 'src/og/index.ts',
     'shiki/index': 'src/shiki/index.ts',
@@ -37,14 +35,18 @@ export default defineConfig({
   // to debug the library has all of it in the repo, with its history.
   sourcemap: false,
   target: 'es2022',
-  // The last three are OPTIONAL peer dependencies: only the project importing
-  // `./icons`, `./form` or `./chart` installs them. They are here because in this
-  // repo they are devDependencies — needed to compile and for the stories — and
-  // without this line tsup would bundle them into what gets published.
+  // `react-hook-form` and `recharts` are OPTIONAL peer dependencies: only the
+  // project importing `./form` or `./chart` installs them. They are here because
+  // in this repo they are devDependencies — needed to compile and for the
+  // stories — and without this line tsup would bundle them into what gets
+  // published.
   //
-  // `@phosphor-icons/react` reaches `./icons` as a TYPE only, so nothing of it survives
-  // into `dist/`. It is listed anyway: the day the wrapper needs a value from it,
-  // the line is already right, and a bundled copy of an icon set is not a
-  // mistake you want to find in a tarball.
+  // `@phosphor-icons/react` stopped being optional in 0.10.0 and stopped being a
+  // TYPE-only import in the same release: it is where every icon in the library
+  // now comes from, so the root entry, `./form` and `./chart` all reach it for
+  // VALUES. Keeping it external is what stops a copy of an icon set from being
+  // bundled into the tarball — the whole set resolves through `sideEffects:
+  // false`, so the consumer's bundler ships the eighteen this library draws and
+  // nothing else.
   external: ['react', 'react-dom', '@phosphor-icons/react', 'react-hook-form', 'recharts'],
 });

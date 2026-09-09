@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { Note } from '../../../stories/utils.tsx';
-import { ArrowUpRight } from '../../lib/glyphs.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { TalkCard } from './index.tsx';
 
@@ -78,13 +79,13 @@ export const WithResources: StoryObj = {
         description="Qué se rompe cuando un equipo pasa de ocho a treinta, y las tres decisiones que conviene escribir antes de que hagan falta."
         resources={
           <>
-            <Button asChild variant="tertiary" size="sm" icon={<ArrowUpRight />}>
+            <Button asChild variant="tertiary" size="sm" icon={<Icon as={ArrowUpRight}  />}>
               <a href="#slides">./slides</a>
             </Button>
-            <Button asChild variant="tertiary" size="sm" icon={<ArrowUpRight />}>
+            <Button asChild variant="tertiary" size="sm" icon={<Icon as={ArrowUpRight}  />}>
               <a href="#repo">./repo</a>
             </Button>
-            <Button asChild variant="tertiary" size="sm" icon={<ArrowUpRight />}>
+            <Button asChild variant="tertiary" size="sm" icon={<Icon as={ArrowUpRight}  />}>
               <a href="#video">./vídeo</a>
             </Button>
           </>

@@ -9,8 +9,6 @@ import {
 } from '@phosphor-icons/react';
 
 import { Block, Note, Row, Stack } from '../../stories/utils.tsx';
-import { Minus } from '../lib/glyphs.tsx';
-import { Rss } from '../social/index.tsx';
 import { Button } from '../primitives/button.tsx';
 import { Text } from '../primitives/typography.tsx';
 import { Stat } from '../components/stat/index.tsx';
@@ -57,15 +55,13 @@ export const Weight: Story = {
   name: 'regular IS the document\'s stroke',
   render: () => (
     <>
-      <Block title="the three the system reads, beside the two families the library already draws">
+      <Block title="the three the system reads">
         <Stack>
           {(['light', 'regular', 'fill'] as const).map((weight) => (
             <Text key={weight} variant="h3" as="p" className="gap-step-sm flex items-center">
               <span className="text-meta w-16 shrink-0 font-mono">{weight}</span>
               <PhosphorMinus weight={weight} size="1em" aria-hidden="true" />
-              <Minus />
               <PhosphorMinus weight={weight} size="1em" aria-hidden="true" />
-              <Rss />
               <PhosphorMinus weight={weight} size="1em" aria-hidden="true" />
             </Text>
           ))}
@@ -73,11 +69,13 @@ export const Weight: Story = {
       </Block>
 
       <Note>
-        The bars alternate a Phosphor `Minus` with, first, the library's own
-        `Minus` from `lib/glyphs.tsx` and then the `Rss` from `./social`. The
-        middle row is the one to read: at `regular` the Phosphor bar and the
-        social one are the same line, and the glyph between them is visibly
-        heavier than both.
+        Three bars per row and nothing else in the row, which is what 0.10.0
+        changed. Until then this story alternated them with the library's own
+        `Minus` from `lib/glyphs.tsx` and the `Rss` from `./social` — two other
+        hands drawing the same shape — and the point of the comparison was that
+        the middle bar was visibly heavier than the ones around it. Neither file
+        exists any more, so there is nothing left to compare against: `regular`
+        is the only line the library draws.
       </Note>
       <Note>
         The numbers, measured on the `Minus` path itself. Phosphor bakes the
@@ -88,10 +86,11 @@ export const Weight: Story = {
         and no number had to be invented.
       </Note>
       <Note>
-        `lib/glyphs.tsx` is the outlier at **1.75/16 = 0.109em**, three quarters
-        heavier than both. It is deliberately not reconciled here: aligning it
-        restyles every primitive in the library and is its own change. See
-        `docs/decisions/0.7.md` § 29.
+        `lib/glyphs.tsx` used to be the outlier at **1.75/16 = 0.109em**, three
+        quarters heavier than both, and 0.7.0 left it alone because aligning it
+        restyled every primitive in the library. 0.10.0 is that change: the file
+        is gone and the primitives draw from here. See
+        `docs/decisions/0.10.md` § 51.
       </Note>
       <Note>
         These are the three the system reads, not the six Phosphor ships.

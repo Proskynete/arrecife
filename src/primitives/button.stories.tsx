@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ArrowUpRight, X } from '@phosphor-icons/react';
 
-import { ArrowUpRight, Close } from '../lib/glyphs.tsx';
 import { Block, Row, Note } from '../../stories/utils.tsx';
+import { Icon } from '../icons/index.tsx';
 import { Button } from './button.tsx';
 
 const meta = {
@@ -109,7 +110,7 @@ export const Sizes: Story = {
           lg · 17px, padding 30
         </Button>
         <Button {...args} size="icon" aria-label="Cerrar">
-          <Close />
+          <Icon as={X}  />
         </Button>
       </Row>
       <Note>
@@ -135,7 +136,7 @@ export const Tertiary: Story = {
         <Button variant="tertiary" size="sm">
           ./copiar_uso →
         </Button>
-        <Button variant="tertiary" icon={<ArrowUpRight />}>
+        <Button variant="tertiary" icon={<Icon as={ArrowUpRight}  />}>
           ./abrir_en_github
         </Button>
       </Row>
@@ -280,16 +281,16 @@ export const DenseIcons: Story = {
     <>
       <Row>
         <Button size="icon" variant="secondary" aria-label="Cerrar">
-          <Close />
+          <Icon as={X}  />
         </Button>
         <Button size="icon-sm" variant="secondary" aria-label="Cerrar">
-          <Close />
+          <Icon as={X}  />
         </Button>
         <Button size="sm" variant="secondary">
           Editar
         </Button>
         <Button size="icon-sm" variant="destructiveOutline" aria-label="Eliminar el curso">
-          <Close />
+          <Icon as={X}  />
         </Button>
       </Row>
       <Note>

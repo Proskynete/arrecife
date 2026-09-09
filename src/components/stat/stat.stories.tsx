@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
-import { CurrencyDollar, ShoppingCart, Users } from '@phosphor-icons/react';
+import {
+  ArrowUpRight,
+  Check,
+  CurrencyDollar,
+  DotsThree,
+  ShoppingCart,
+  Users,
+} from '@phosphor-icons/react';
 
 import { Block, Note } from '../../../stories/utils.tsx';
-import { ArrowUpRight, Check, Ellipsis } from '../../lib/glyphs.tsx';
 import { Icon } from '../../icons/index.tsx';
 import { Stat } from './index.tsx';
 
@@ -82,20 +87,20 @@ export const WithIconAndDeck: Story = {
   render: () => (
     <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
       <Stat
-        icon={<ArrowUpRight />}
+        icon={<Icon as={ArrowUpRight}  />}
         label="aplicaciones"
         value="12"
         description="Repartidas en cuatro equipos, ninguno con dueño declarado."
       />
       <Stat
-        icon={<Ellipsis />}
+        icon={<Icon as={DotsThree}  />}
         label="design systems"
         value="0"
         tone="alert"
         description="Cada aplicación resuelve sus botones por su cuenta."
       />
       <Stat
-        icon={<Check />}
+        icon={<Icon as={Check}  />}
         label="cobertura"
         value="68%"
         progress={68}
@@ -110,7 +115,7 @@ export const ReadingOrder: Story = {
   render: () => (
     <div className="max-w-content">
       <Stat
-        icon={<ArrowUpRight />}
+        icon={<Icon as={ArrowUpRight}  />}
         label="aplicaciones"
         value="12"
         description="Repartidas en cuatro equipos, ninguno con dueño declarado."
@@ -122,7 +127,7 @@ export const ReadingOrder: Story = {
       </Note>
       <Note>
         The icon inherits `currentColor`, so it follows the title's tone and does
-        not have to be tinted separately. It comes from `lib/glyphs.tsx`, which is
+        not have to be tinted separately. It comes from Phosphor, which is
         not published: the project passes its own.
       </Note>
     </div>

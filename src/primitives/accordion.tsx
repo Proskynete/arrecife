@@ -1,8 +1,9 @@
+import { CaretDown } from '@phosphor-icons/react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
-import { ChevronDown } from '../lib/glyphs.tsx';
+import { Icon } from '../icons/index.tsx';
 
 /**
  * The disclosure. Two projects asked for it: the portfolio FAQ and the course
@@ -91,7 +92,7 @@ export function AccordionTrigger({
           {...props}
         >
           {children}
-          <ChevronDown className="text-text-muted shrink-0" />
+          <Icon as={CaretDown} className="text-text-muted shrink-0" />
         </AccordionPrimitive.Trigger>
       </Heading>
     </AccordionPrimitive.Header>

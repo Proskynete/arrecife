@@ -1,7 +1,8 @@
+import { ArrowUpRight } from '@phosphor-icons/react';
 import type { ReactNode } from 'react';
 
 import { cn } from '../../lib/cn.ts';
-import { ArrowUpRight } from '../../lib/glyphs.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { Text } from '../../primitives/typography.tsx';
 import { CardShell, type CardShellProps } from '../card-base.tsx';
 
@@ -57,10 +58,9 @@ export function LinkRow({
         </span>
 
         {external ? (
-          <ArrowUpRight
+          <Icon as={ArrowUpRight}
             className="text-text-muted group-hover:text-accent transition-standard shrink-0"
-            aria-hidden="true"
-          />
+            aria-hidden="true" />
         ) : null}
       </span>
     </CardShell>

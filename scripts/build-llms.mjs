@@ -39,8 +39,6 @@ const ENTRIES = [
   { subpath: './theme', file: 'src/theme/index.ts' },
   { subpath: './variants', file: 'src/variants/index.ts' },
   { subpath: './brand', file: 'src/brand/index.ts' },
-  { subpath: './social', file: 'src/social/index.tsx' },
-  { subpath: './social/data', file: 'src/social/data.ts' },
   { subpath: './icons', file: 'src/icons/index.tsx' },
   { subpath: './og', file: 'src/og/index.ts' },
   { subpath: './shiki', file: 'src/shiki/index.ts' },
@@ -75,12 +73,6 @@ const SECTIONS = [
     dir: 'src/brand/',
     file: 'src/index.ts',
     entry: '`@eduardoalvarez/arrecife` or `@eduardoalvarez/arrecife/brand`',
-  },
-  {
-    title: 'Social icons',
-    dir: 'src/social/',
-    file: 'src/social/index.tsx',
-    entry: '`@eduardoalvarez/arrecife/social` · or grouped as `social` from the root',
   },
   {
     title: 'Icons',
@@ -509,8 +501,8 @@ if (!template.includes(BRAND)) {
 /**
  * Strip absolute disk paths.
  *
- * TypeScript prints namespace re-exports — `export * as social from
- * './lib/social.tsx'` — as `typeof import("<absolute path>")`, so the file came
+ * TypeScript prints namespace re-exports — `export * as brand from
+ * './brand/index.ts'` — as `typeof import("<absolute path>")`, so the file came
  * out carrying the path of the machine that generated it. Two problems, and the
  * second is the serious one:
  *

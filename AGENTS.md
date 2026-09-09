@@ -86,7 +86,6 @@ src/
   primitives/   the 31 primitives on shadcn/Radix, each with its .stories.tsx beside it
   components/   the identity pieces, one folder per component
   brand/        logo, isotype, mascot and the PNG catalog
-  social/       the nine social icons. Published at ./social, with no `"use client"`
   icons/        the Phosphor wrapper. Published at ./icons; asks for @phosphor-icons/react
   theme/        light/dark mode and `themeScript`. No React. Published at ./theme
   variants/     the cva definitions and the class constants. No React. Published at ./variants
@@ -94,7 +93,7 @@ src/
   shiki/        the highlighting theme. No React. Published at ./shiki
   form/         the form layer. Published at ./form; asks for react-hook-form
   chart/        the chart chassis. Published at ./chart; asks for recharts
-  lib/          cn and the inline glyphs. `lib/` is what is NOT published
+  lib/          cn, and nothing else. `lib/` is what is NOT published
 stories/        stories that do not belong to a component (tokens, brand, og) and utils
 scripts/        the generators and the checks
 docs/
@@ -351,18 +350,23 @@ argument written in `docs/decisions/`, not because it looks better. See § 20.
   both of the brand's accents in the same glance. See `docs/decisions/0.7.md` § 37.
 - Every control with no text carries an `aria-label`. `Progress` requires `label`
   as a prop.
-- **The library ships no icons**, and `src/lib/glyphs.tsx` is the minimum set the
-  primitives need: inline, inheriting `currentColor`, measuring 1em, and not
-  exported. It does not grow.
-  What the library DOES ship is how an icon is drawn. Since 0.7.0
-  `@phosphor-icons/react` is an optional peer dependency and `./icons` publishes
-  `Icon`, which fixes the size at 1em and takes the weight from `tone` —
-  `action` is `regular`, which is 16 on a 256 grid = 0.0625em against the
-  document's 0.0667em; `current` is `fill`; `quiet` is `light`. `weight` is not
-  a prop: three of Phosphor's six have a role here and the other three do not.
+- **The library ships no icon INVENTORY, and it draws every icon it uses from
+  one place.** Since 0.10.0 `@phosphor-icons/react` is a REQUIRED peer dependency
+  and there is no second set: `src/lib/glyphs.tsx` and `src/social/` are deleted.
+  Everything is drawn through `Icon` from `./icons`, which fixes the size at 1em
+  and takes the weight from `tone` — `action` is `regular`, which is 16 on a 256
+  grid = 0.0625em against the document's 0.0667em; `current` is `fill`; `quiet`
+  is `light`. `weight` is not a prop: three of Phosphor's six have a role here
+  and the other three do not.
   A project's icons are still the project's; what stopped being the project's is
-  the line they are drawn with. `glyphs.tsx` itself is the known outlier at
-  0.109em. See `docs/decisions/0.7.md` § 29 and § 35.
+  the line they are drawn with. See `docs/decisions/0.10.md` § 51 and
+  `docs/decisions/0.7.md` § 35.
+- **The mono glyphs that are left are PROMPTS, not icons.** `~/` in `Nav`, `./`
+  on a `NavItem`, `$` in the footer signature, `❯` in the code block's bar. They
+  carry no meaning — remove any of them and nothing becomes ambiguous — which is
+  exactly why they survived 0.10.0 and `Alert`'s `✦ ✓ ! ✕` did not: those four
+  were the only thing on the block saying which of the four an alert was. See
+  § 52.
 - **An icon is not illustration.** Tiburoncín — the faces, the poses, the fin —
   is the mascot, it lives in `src/brand/` and the manual doses it by surface: a
   face only in an empty state, a confirmation, an error, course progress or a
@@ -443,16 +447,22 @@ docs(readme): the third contrast correction
 ```
 
 Valid scopes, and the list is short on purpose: `tokens`, `primitives`,
-`components`, `brand`, `social`, `icons`, `theme`, `og`, `shiki`, `form`,
+`components`, `brand`, `icons`, `theme`, `og`, `shiki`, `form`,
 `chart`, `storybook`, `a11y`, `deps`, `deps-dev`, `ci`. **A change to the repo's process
 goes without a scope** — `docs:`, `ci:`: there is no scope for «how we work», and
 an invented one is rejected.
 
+`social` was a valid scope until 0.10.0, when the subpath it named was removed.
+It stays out of the list rather than being kept «just in case»: the rule below is
+that a scope IS a published subpath, and a scope with no subpath behind it is the
+thing the rule exists to prevent.
+
 The rule governing the list: **a published subpath in `exports` is a scope.** It
 is what `og` and `shiki` already did, it is why `theme`, `form` and `chart`
 joined them in 0.4.0 instead of being split between `tokens` and `components`,
-and it is why `social` and `icons` joined in 0.7.0. A new scope with no subpath
-behind it does have to be discussed.
+and it is why `social` and `icons` joined in 0.7.0. It also runs the other way,
+which is what `social` leaving in 0.10.0 shows: a subpath that goes takes its
+scope with it. A new scope with no subpath behind it does have to be discussed.
 
 Careful with one trap: the workflow validates the **PR title**, not the scopes of
 the commits inside it. A `docs(agents):` buried in a PR titled `feat(tokens)!:`
@@ -623,13 +633,12 @@ In order of how often they actually happen:
 2. Importing something in `src/tokens/`. It breaks `./og`, `./shiki` and the
    Astro site.
 3. Adding an entrance animation because «it looks better». It does not get in.
-4. Putting a new glyph in `src/lib/glyphs.tsx` because a component wants one.
-   That file is the primitives' minimum set and it does not grow: a component
-   that needs an icon takes it as a prop, and the project draws it with `Icon`
-   from `./icons`. The ban on icon libraries was lifted in 0.7.0 — see
-   `docs/decisions/0.7.md` § 29 — and what replaced it is narrower, not looser:
-   Phosphor is an OPTIONAL peer on its own subpath, so the two projects that use
-   no icons still install nothing.
+4. Hand-drawing a glyph because Phosphor's is «not quite right». There is no
+   file to put it in any more: `src/lib/glyphs.tsx` and `src/social/` were both
+   deleted in 0.10.0 precisely so the library draws in one hand. Import it from
+   `@phosphor-icons/react` and render it through `Icon`. A component that needs
+   an icon the library cannot name takes it as a prop and the project passes it.
+   See `docs/decisions/0.10.md` § 51.
 5. Changing props without regenerating `llms.txt`. `pnpm check:llms` stops it in
    CI.
 6. Running the suite in one mode only. A color fails in one and passes in the

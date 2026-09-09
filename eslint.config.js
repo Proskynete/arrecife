@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
+import storybook from 'eslint-plugin-storybook';
 import tseslint from 'typescript-eslint';
 
 /**
@@ -89,4 +90,9 @@ export default tseslint.config(
       ],
     },
   },
+
+  // The story rules, LAST so its `files` scoping does not get overridden by the
+  // blocks above. It is what flags a `name` that only repeats the export's own
+  // name, which is the twenty warnings this repo currently carries.
+  storybook.configs['flat/recommended'],
 );

@@ -79,7 +79,8 @@ export const TheScript: Story = {
       </Note>
       <pre
         data-theme="dark"
-        className="rounded-card bg-brand-hull p-step-md text-chip text-text-primary overflow-x-auto font-mono"
+        tabIndex={0}
+        className="rounded-card bg-brand-hull p-step-md text-chip text-text-primary focus-ring overflow-x-auto font-mono"
       >
         {themeScript()}
       </pre>
@@ -103,7 +104,8 @@ export const BaseMode: Story = {
       </Note>
       <pre
         data-theme="dark"
-        className="rounded-card bg-brand-hull p-step-md text-chip text-text-primary overflow-x-auto font-mono"
+        tabIndex={0}
+        className="rounded-card bg-brand-hull p-step-md text-chip text-text-primary focus-ring overflow-x-auto font-mono"
       >
         {themeScript({ base: 'dark' })}
       </pre>

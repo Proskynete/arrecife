@@ -350,7 +350,22 @@ ${gradientsBlock('light')}
    focus-ring-warm exists for the ONE control the ring cannot be biolume on:
    the conversion button is the system's only sand fill, and a biolume ring
    around it puts both of the brand's accents in the same three pixels. It sets
-   only the color, so the width and the offset stay in one place. */
+   only the color, so the width and the offset stay in one place.
+
+   focus-ring-inset flips the OFFSET, and only the offset, for the same reason
+   and by the same rule: an element that is focusable but sits inside a clipped
+   container cannot wear a ring drawn 3px outside itself, because the container
+   paints it away. CodeBlock is the case — its root carries overflow-hidden so
+   its rounded corners hold, and its pre scrolls, so the pre has to be focusable.
+   With the outward ring, three of its four sides were clipped and what was left
+   read as a stray line under the header: a focus indicator that is present in
+   the CSS and invisible on screen, which is WCAG 2.4.7 failing while looking
+   fixed.
+
+   It is -3px and not 0: at 0 the ring sits exactly on the border box and reads
+   as a change of border rather than as a ring. The padding it eats into is
+   p-step-md, so it never touches the text. Reach for it ONLY when a clipping
+   ancestor is the reason — not because the outward ring looks too loud. */
 @utility focus-ring {
   &:focus-visible {
     outline: 2px solid var(--color-accent);
@@ -360,6 +375,11 @@ ${gradientsBlock('light')}
 @utility focus-ring-warm {
   &:focus-visible {
     outline-color: var(--color-warm);
+  }
+}
+@utility focus-ring-inset {
+  &:focus-visible {
+    outline-offset: -3px;
   }
 }
 

@@ -71,7 +71,24 @@ export function CodeBlock({ children, language, copyText, className, ...props }:
         ) : null}
       </div>
 
-      <pre className="p-step-md font-mono text-meta text-text-primary overflow-x-auto leading-relaxed">
+      {/*
+        `tabIndex={0}` because the block SCROLLS. A region that scrolls and holds
+        nothing focusable is unreachable by keyboard — WCAG 2.1.1 — and a code
+        block is the one place in this system where the content is routinely
+        wider than the box. `Table` has done this since it grew its own surface;
+        this one had `overflow-x-auto` without it, and the axe that shipped with
+        the older Chromium did not check the rule.
+      */}
+      <pre
+        tabIndex={0}
+        className={cn(
+          'p-step-md font-mono text-meta text-text-primary overflow-x-auto leading-relaxed',
+          // `focus-ring-inset` and not the plain ring: the root carries
+          // `overflow-hidden` so its corners hold, and it clips an outward ring
+          // on three sides. See the note beside the utility in build-tokens.mjs.
+          'focus-ring focus-ring-inset',
+        )}
+      >
         {children}
       </pre>
     </div>

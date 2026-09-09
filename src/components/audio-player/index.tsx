@@ -7,6 +7,7 @@ import {
   Play,
   SpeakerHigh,
   SpeakerSlash,
+  Waveform,
 } from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, PointerEvent as ReactPointerEvent } from 'react';
@@ -32,8 +33,9 @@ import { Icon } from '../../icons/index.tsx';
  *
  * And three things the system does not allow:
  *
- * - The waveform no longer animates `scaleY`. The bars are still there and still
- *   tell playback from pause by opacity, but they do not scale.
+ * - The waveform no longer animates `scaleY`. Since 0.10.0 it is not even drawn
+ *   here: it is Phosphor's `Waveform`, which is the same five bars. It still
+ *   tells playback from pause by opacity, and it does not move.
  * - The floating player appears and disappears instead of sliding.
  * - The progress bar no longer interpolates its width.
  *
@@ -66,7 +68,6 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-const WAVEFORM_HEIGHTS = [35, 65, 100, 65, 35];
 const RATES = [1, 1.25, 1.5, 1.75, 2];
 
 
@@ -79,18 +80,38 @@ const RATES = [1, 1.25, 1.5, 1.75, 2];
  * would lose pointer capture mid-drag and the volume range would lose focus.
  */
 
-/** The waveform's bars. No animation: scale is outside the system. */
-function Wave({ strokeWidth, height, playing }: { strokeWidth: string; height: string; playing: boolean }) {
+/**
+ * The mark that says the block is audio, beside «Narración de audio».
+ *
+ * It was five `<span>`s at heights `[35, 65, 100, 65, 35]` with a `bg-accent`
+ * and an inline `style`, and it was the last shape this library drew by hand.
+ * Phosphor's `Waveform` is the SAME drawing — five rounded vertical bars with
+ * the peak off centre — so what the hand-drawn version bought was a second
+ * description of one shape, which is § 51's whole argument arriving one file
+ * late.
+ *
+ * `Waveform` and NOT `Equalizer`, which was the other candidate. An equaliser is
+ * three columns of faders: it is a control you set, and this mark is not a
+ * control — it is the signal, sitting next to a label, `aria-hidden`, marking
+ * that there is something here to listen to.
+ *
+ * `tone` is the default `action`, like every other glyph in this player. The
+ * bars used to be solid, which is `fill`, and that difference is not kept for
+ * the same reason it was not kept for play and pause: `tone` names what an icon
+ * is doing, not how it looked before.
+ *
+ * THE OPACITY STAYS, and it is the one thing carried over. Playing is opaque and
+ * paused is not, which is a state channel the floating bar leans on — its play
+ * button is 16px in the corner of a phone. It does not TRANSITION:
+ * `transition-standard` covers colour and border only, so the change snaps, the
+ * same treatment `Progress` gives its width.
+ */
+function Wave({ size, playing }: { size: string; playing: boolean }) {
   return (
-    <div className={cn('flex items-end gap-[2px]', height)} aria-hidden="true">
-      {WAVEFORM_HEIGHTS.map((h, i) => (
-        <span
-          key={i}
-          className={cn('rounded-pill bg-accent transition-standard', strokeWidth)}
-          style={{ height: `${h}%`, opacity: playing ? 1 : 0.3 + (h / 100) * 0.4 }}
-        />
-      ))}
-    </div>
+    <Icon
+      as={Waveform}
+      className={cn('text-accent', size, playing ? 'opacity-100' : 'opacity-60')}
+    />
   );
 }
 
@@ -506,7 +527,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
       <div className="bg-surface/95 border-accent/25 border-t backdrop-blur-md">
         <div className="gap-step-sm px-step-md flex items-center py-5">
           <div className="gap-step-xs flex shrink-0 items-center">
-            <Wave strokeWidth="w-[2px]" height="h-4" playing={isPlaying} />
+            <Wave size="size-4" playing={isPlaying} />
             <span className="text-eyebrow font-mono text-accent hidden uppercase sm:block">
               Narración
             </span>
@@ -550,7 +571,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
 
         <div ref={staticRef}>
           <div className="gap-step-sm mb-step-md flex items-center">
-            <Wave strokeWidth="w-[3px]" height="h-5" playing={isPlaying} />
+            <Wave size="size-5" playing={isPlaying} />
             <span className="text-eyebrow font-mono text-accent uppercase">
               Narración de audio
             </span>

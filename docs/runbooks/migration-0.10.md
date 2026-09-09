@@ -143,6 +143,12 @@ as a tint, and with a mark — `CheckCircle` and `WarningCircle`. `neutral` is
 unchanged. Nothing in your call sites moves: `toast.success(…)` and
 `toast.error(…)` are the same two functions.
 
+### `AudioPlayer`'s waveform is Phosphor's `Waveform`
+
+The five bars beside «Narración de audio» were drawn inline in the component.
+They are the same five bars from Phosphor now, at the same size and in the same
+accent, and they still dim when paused. Nothing in your call sites moves.
+
 ### `Alert`'s four marks are Phosphor now
 
 `✦ ✓ ! ✕` become `Info`, `CheckCircle`, `Warning` and `XCircle`. If you were

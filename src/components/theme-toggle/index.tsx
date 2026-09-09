@@ -53,7 +53,22 @@ export function ThemeToggle({
       aria-label={label}
       // 19px, the same icon size as the footer links.
       className={cn('[&_svg]:size-[19px]', className)}
-      onClick={() => onThemeChange?.(toggleTheme())}
+      /*
+        THE THEME IS SWITCHED FIRST AND REPORTED AFTER, and it has to be written
+        in two statements.
+
+        It used to be `onThemeChange?.(toggleTheme())`, and optional call
+        short-circuits its ARGUMENTS: with no `onThemeChange` the whole
+        expression is skipped, `toggleTheme()` never runs and the button does
+        nothing at all. The prop is documented as optional and was mandatory in
+        practice — a consumer that omitted it shipped a dead control with no
+        error anywhere, which is how `eduardoalvarez.dev` found it and wrote it
+        down in its own `site-nav.tsx`.
+      */
+      onClick={() => {
+        const theme = toggleTheme();
+        onThemeChange?.(theme);
+      }}
       {...props}
     >
       {/* The target one, not the current state: you press it to go to the other. */}

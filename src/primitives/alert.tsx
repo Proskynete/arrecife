@@ -1,7 +1,9 @@
+import { CheckCircle, Info, Warning, XCircle } from '@phosphor-icons/react';
 import { type VariantProps } from 'class-variance-authority';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { cn } from '../lib/cn.ts';
+import { Icon } from '../icons/index.tsx';
 
 import { alertVariants as alert } from '../variants/alert.ts';
 
@@ -14,23 +16,33 @@ const colorGlyph = {
 } as const;
 
 /**
- * Mono glyphs, never emoji. They are characters and not SVG because the document
- * asks for them in the mono family: they are part of the CLI aesthetic, same as
- * the `❯` in the code block's bar.
+ * Phosphor, and this is the one place the CLI aesthetic gives ground.
+ *
+ * The four used to be mono CHARACTERS — ✦ ✓ ! ✕ — on the document's rule that
+ * an alert's mark belongs to the same family as the `❯` in the code block's bar
+ * and the `$` in the footer's signature. That rule is kept where it describes a
+ * PROMPT: `~/` in `Nav`, `./` on a nav item, `$` in the signature. It is dropped
+ * here, because an alert's mark is not a prompt — it is the one thing on the
+ * block that says which of the four this is, and a `!` and a `✕` at 15px are two
+ * glyphs of one stroke telling apart a warning from a failure.
+ *
+ * They are the outlined pair on purpose, not `…Fill`: `tone="action"` is the
+ * system's line and an alert's mark is not a state within a set. See
+ * `docs/decisions/0.10.md` § 52.
  */
 const GLYPH = {
-  accent: '✦',
-  success: '✓',
-  warning: '!',
-  error: '✕',
+  accent: Info,
+  success: CheckCircle,
+  warning: Warning,
+  error: XCircle,
 } as const;
 
 export type AlertProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> &
   VariantProps<typeof alert> & {
     title?: ReactNode;
     /**
-     * Replaces the variant's mono glyph. Never an emoji: if you need something
-     * else, it is an SVG from `glyphs`.
+     * Replaces the variant's glyph. Never an emoji: if you need something else,
+     * it is `<Icon as={…} />` from `@eduardoalvarez/arrecife/icons`.
      */
     icon?: ReactNode;
   };
@@ -53,11 +65,16 @@ export function Alert({
       {...props}
     >
       <div className="gap-step-sm flex items-start">
+        {/*
+          The glyph sits on the first line of the title, so the span carries the
+          same `text-ui` and `leading-normal` the text does and centres the icon
+          inside that box. `items-center` on a one-line box IS top alignment, and
+          it stays right when the alert has no title and the body wraps.
+        */}
         <span
-          aria-hidden="true"
-          className={cn('font-mono text-ui leading-normal select-none', colorGlyph[tone])}
+          className={cn('text-ui flex h-[1lh] shrink-0 items-center leading-normal', colorGlyph[tone])}
         >
-          {icon ?? GLYPH[tone]}
+          {icon ?? <Icon as={GLYPH[tone]} />}
         </span>
 
         <div className="min-w-0 flex-1">

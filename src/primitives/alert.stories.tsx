@@ -27,13 +27,18 @@ export const Variants: Story = {
       <Note>
         The semantic color at 8 % as background and at 22 % as border. The tone
         cannot live entirely in a 1px border: four alerts told apart by a line are
-        four alerts that get confused. The first is ACCENT (✦), the system's
+        four alerts that get confused. The first is ACCENT, the system's
         informational one — there is no neutral variant, because an alert without
         color is a paragraph.
       </Note>
       <Note>
-        The glyphs are mono characters, never emoji: `✦ ✓ ! ✕`. It is the same CLI
-        aesthetic as the `❯` in the code block's bar.
+        The four marks are Phosphor — `Info`, `CheckCircle`, `Warning`,
+        `XCircle` — at `tone="action"`, never emoji. Until 0.10.0 they were the
+        mono characters `✦ ✓ ! ✕`, on the rule that an alert's mark belongs to the
+        same family as the `❯` in the code block's bar. That rule describes a
+        PROMPT and an alert's mark is not one: it is the only thing on the block
+        saying which of the four this is, and at 15px `!` and `✕` are two glyphs
+        of one stroke doing that job. See `docs/decisions/0.10.md` § 52.
       </Note>
       <Note>
         The title uses `textPrimary` and not the tone's color. In light mode the

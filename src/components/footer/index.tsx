@@ -155,10 +155,21 @@ export type FooterProps = FooterBase &
       }
   );
 
-/** The row of icons. 18px of separation, from the document — the rhythm of a row of icons, not of a page. */
+/**
+ * The row of icons. 18px of separation, from the document — the rhythm of a row
+ * of icons, not of a page.
+ *
+ * CENTRED BELOW `sm` and flush left from there up. On a phone the footer is a
+ * single stacked column with nothing to align against, and a row of ten glyphs
+ * pinned to the left edge of a centred page reads as an accident. It is the same
+ * cut the signature takes two functions down, and it is not invented here:
+ * `links` has drawn its footer this way in production since before the library
+ * had one — `justify-center sm:justify-start`, copied. See
+ * `docs/decisions/0.10.md` § 53.
+ */
 function SocialRow({ social }: { social: readonly SocialLink[] }) {
   return (
-    <ul className="flex flex-wrap items-center gap-[18px]">
+    <ul className="flex flex-wrap items-center justify-center gap-[18px] sm:justify-start">
       {social.map((socialLink) => (
         <li key={socialLink.href}>
           <a
@@ -331,7 +342,14 @@ export function Footer({
           there goes in one column, by design.
         */}
         <div className="gap-step-xl flex flex-col md:flex-row md:justify-between">
-          <div className="gap-step-md flex max-w-xs flex-col">
+          {/*
+            Centred below `md` for the same reason the default form is centred
+            below `sm`: stacked, there is nothing to the left of this block to
+            align it against. `md` and not `sm` because this is where the column
+            of links sits down beside it, which is the moment left alignment
+            starts meaning something again.
+          */}
+          <div className="gap-step-md flex max-w-xs flex-col items-center text-center md:items-start md:text-left">
             {brand}
 
             {description ? (
@@ -345,9 +363,18 @@ export function Footer({
             {action}
           </div>
 
-          <div className="gap-step-lg grid grid-cols-2 sm:grid-cols-3">
+          {/*
+            One column below `xs`, two from there and three from `sm`. It used to
+            start at two, and two columns of `./aviso-legal` at 360px is a label
+            per line with the second column hard against the first: mono text
+            does not reflow, so the grid has to.
+          */}
+          <div className="gap-step-lg grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3">
             {columns.map((column) => (
-              <div key={column.title} className="gap-step-sm flex flex-col">
+              <div
+                key={column.title}
+                className="gap-step-sm flex flex-col items-center text-center md:items-start md:text-left"
+              >
                 {/*
                   An `<h3>` and not a `<p>`: the columns are sections of the
                   footer, and a screen reader jumping by heading should find
@@ -419,13 +446,21 @@ export function Footer({
       {/*
         `items-center` and not `items-start`: the signature is a 13px line and
         the brand measures 28, so aligning to the top leaves it floating high.
-        On a narrow screen `flex-wrap` drops it onto its own line — there is no
-        width for both there, and squeezing them would break the path, which is
+
+        BELOW `sm` IT IS A COLUMN, and that is 0.10.0's correction. It used to be
+        `flex-wrap` at every width, which does drop the signature onto its own
+        line on a phone — and leaves it there flush RIGHT, because `ml-auto`
+        keeps pushing, hanging off the edge of a page whose every other element
+        is centred. `flex-wrap` was finishing half the job. Stacking and centring
+        finishes the other half, and `sm:ml-auto` is what keeps the wide layout
+        exactly as it was.
+
+        Squeezing the two onto one narrow line was never an option: the path is
         mono and cannot be truncated without becoming unreadable.
       */}
-      <div className="gap-step-md flex flex-wrap items-center">
+      <div className="gap-step-md flex flex-col items-center sm:flex-row sm:flex-wrap">
         {first ?? null}
-        <Signature year={year} href={signatureHref} domain={domain} className="ml-auto" />
+        <Signature year={year} href={signatureHref} domain={domain} className="sm:ml-auto" />
       </div>
 
       {others}

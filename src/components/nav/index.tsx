@@ -64,15 +64,38 @@ export function Nav({ brand, children, actions, size = 'default', className, ...
     >
       <div
         className={cn(
-          'max-w-wide px-step-md gap-step-lg mx-auto flex items-center',
+          'max-w-wide px-step-md gap-step-sm sm:gap-step-lg mx-auto flex items-center',
           size === 'compact' ? 'h-nav-compact' : 'h-nav',
         )}
       >
         {brand ? <div className="shrink-0">{brand}</div> : null}
 
         {children ? (
-          <nav aria-label="Principal" className="ml-auto min-w-0">
-            <ul className="gap-step-md flex items-center">
+          /*
+            THE ITEM ROW SCROLLS instead of pushing the page sideways.
+
+            `min-w-0` was already here and on its own it does nothing: it lets the
+            nav shrink below its content, and the content then simply overflows
+            the bar. Six mono items at 13px plus the `~/` is around 300px, which
+            fits nowhere under a brand and a theme switch on a 360px screen, and
+            what the reader got was a horizontal scrollbar on the whole document.
+
+            It does NOT hide them below a breakpoint, which is the other obvious
+            answer and the wrong one for a library: hiding the navigation is only
+            safe if something else exposes it, and that something is a drawer the
+            project owns — `eduardoalvarez.dev` composes one out of `Sheet` and
+            puts it in `actions`. A `Nav` that hid its own items would leave every
+            consumer without a drawer with no navigation at all, silently.
+
+            See `docs/decisions/0.10.md` § 54.
+          */
+          <nav aria-label="Principal" className="ml-auto min-w-0 overflow-x-auto">
+            {/*
+              `w-max` and not just `flex`: inside a scroller the row would
+              otherwise shrink to the width available and squash six mono labels
+              instead of overflowing them, and there would be nothing to scroll.
+            */}
+            <ul className="gap-step-md flex w-max items-center">
               {/*
                 The prompt. It is the same CLI aesthetic as each item's `./` and
                 the footer's `$`, and it is `aria-hidden` for the same reason: a

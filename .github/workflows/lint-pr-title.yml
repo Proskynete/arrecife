@@ -34,12 +34,17 @@ jobs:
           # a subpath of their own so they could cross the RSC boundary, and
           # `icons` with it when the system adopted @phosphor-icons/react as an
           # optional peer on a subpath of its own.
+          #
+          # `social` LEFT in 0.10.0, and it is the first time the rule has run in
+          # that direction: the subpath was removed, so the scope goes with it.
+          # Keeping it would leave a name in this list that no longer points at
+          # anything, which is the state the rule exists to prevent. See
+          # docs/decisions/0.10.md § 51.
           scopes: |
             tokens
             primitives
             components
             brand
-            social
             icons
             theme
             variants

@@ -480,6 +480,13 @@ re-exported, because they are unchanged and wrapping them buys nothing.
 down for a ranking. Recharts calls that same thing `layout="vertical"` — if you
 are porting code, the value flips.
 
+**A percentage passes `valueMax={100}`.** Without it the value axis ends at the
+largest datum, and on a horizontal ranking — whose value axis is hidden — a
+course watched to 40 % draws as a full bar when it is the highest on the list.
+The bottom is always zero, and it is a floor rather than a clip: a datum above
+`valueMax` widens the axis instead of running off the edge. It is on all three
+types. See `decisions/0.11.md` § 58.
+
 `stacked` on `AreaChart` and `BarChart` adds the series up. Without it areas
 overlap, which is honest and rarely what you want with more than one series: to
 COMPARE rather than add up, the type is `LineChart`.

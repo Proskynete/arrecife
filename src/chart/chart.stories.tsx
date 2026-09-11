@@ -200,6 +200,60 @@ export const BarsHorizontal: Story = {
   ),
 };
 
+/**
+ * The shape `cursos` has on `/admin`: «% visto» per course, where the highest
+ * one is well short of 100. The two charts are the same data, and only one of
+ * them is true.
+ */
+const WATCHED = [
+  { course: 'Construir con IA', visto: 40 },
+  { course: 'TypeScript a fondo', visto: 31 },
+  { course: 'Arquitectura de front', visto: 22 },
+  { course: 'Diseño de sistemas', visto: 9 },
+];
+
+export const BarsValueMax: Story = {
+  name: 'Bars · valueMax',
+  render: () => (
+    <div className="gap-step-lg flex flex-col">
+      <Block title="Without valueMax · the longest bar reads as 100 %">
+        <BarChart
+          label="Porcentaje visto por curso, sin máximo"
+          height={220}
+          data={WATCHED}
+          series={[{ key: 'visto', label: '% visto' }]}
+          xKey="course"
+          orientation="horizontal"
+          formatter={(value) => `${String(value)} %`}
+        />
+      </Block>
+      <Block title="valueMax={100}">
+        <BarChart
+          label="Porcentaje visto por curso"
+          summary="Construir con IA 40 %, TypeScript a fondo 31 %, Arquitectura de front 22 %, Diseño de sistemas 9 %."
+          height={220}
+          data={WATCHED}
+          series={[{ key: 'visto', label: '% visto' }]}
+          xKey="course"
+          orientation="horizontal"
+          formatter={(value) => `${String(value)} %`}
+          valueMax={100}
+        />
+      </Block>
+      <Note>
+        The same four numbers. Without `valueMax` the axis ends at the largest datum, so a course
+        watched to 40 % fills the row — and the value axis of a ranking is hidden, so nothing on
+        screen says the scale stops at 40. With it the axis runs to 100 and the bars are what
+        they measure.
+      </Note>
+      <Note>
+        It is a floor for the top, not a clip: a datum above it widens the axis rather than
+        running off the edge. The bottom is always zero.
+      </Note>
+    </div>
+  ),
+};
+
 export const Lines: Story = {
   render: () => (
     <div>

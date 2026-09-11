@@ -210,6 +210,27 @@ describe('theme.css over Tailwind v4', () => {
     );
   });
 
+  /**
+   * `Isotype background="auto"` renders both fins and hides one with each of
+   * these. `light:` is a selector variant, so Tailwind can negate it; if it ever
+   * became a block variant that `not-` cannot turn inside out, `not-light:hidden`
+   * would compile to nothing and BOTH fins would show on a dark page — the
+   * two-blue one invisible over abyss, and nothing failing anywhere.
+   */
+  it('hides one fin per mode for Isotype background="auto", with dark as the default', async () => {
+    const css = await compileClasses(['light:hidden', 'not-light:hidden']);
+
+    // The foam fin: hidden only where a light theme is declared.
+    expect(css).toMatch(
+      /\.light\\:hidden:where\(\[data-theme="light"\], \[data-theme="light"\] \*\)\s*\{\s*display: none;/,
+    );
+    // The two-blue fin: hidden everywhere else, which includes a page that
+    // declares no theme at all — dark is the default.
+    expect(css).toMatch(
+      /\.not-light\\:hidden:not\(:where\(\[data-theme="light"\], \[data-theme="light"\] \*\)\)\s*\{\s*display: none;/,
+    );
+  });
+
   it('serves the four chart series and switches them with the mode', async () => {
     const css = await compileClasses(['bg-series-1', 'bg-series-4']);
 

@@ -2,11 +2,16 @@ import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/cn.ts';
 import { naming, tagline as taglines } from '../tokens/tokens.ts';
-import { Isotype } from './isotype.tsx';
-import { ASSETS_PATH, type Background } from './catalog.ts';
+import { Isotype, type IsotypeBackground } from './isotype.tsx';
+import { ASSETS_PATH } from './catalog.ts';
 
 export type LogoProps = Omit<ComponentPropsWithoutRef<'span'>, 'children'> & {
-  background?: Background | undefined;
+  /**
+   * The background the logo sits on, handed to its fin. `auto` follows the
+   * theme — see `Isotype`. The wordmark needs no help: it is `textPrimary`, which
+   * already follows the mode.
+   */
+  background?: IsotypeBackground | undefined;
   basePath?: string | undefined;
   /** Hides the wordmark and leaves only the fin, for very narrow bars. */
   isotypeOnly?: boolean | undefined;

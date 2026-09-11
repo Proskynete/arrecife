@@ -621,6 +621,11 @@ compiles and looks wrong, or that fails the project's accessibility audit.
     not the humour contract. See `decisions/0.7.md` § 27.
 12. **The fin is not a free parameter**: `foam` on a dark background, `color` on a
     light one. The components already choose it from the background.
+    **On a site that switches theme, pass `background="auto"`** to `Isotype` or
+    `Logo`: both fins are rendered and the `light:` variant shows the one that
+    reads, so no call site has to know the theme. A surface that keeps one mode
+    whatever the page does — a dark panel on a light page — is a fixed
+    background, and it still says `dark`. See `decisions/0.11.md` § 60.
 
 ## What the library does NOT do, on purpose
 

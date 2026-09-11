@@ -58,6 +58,11 @@ function Section({ title, note, children }: { title: string; note?: ReactNode; c
  * The preview area declares its own theme. Without that, the «light background»
  * card would be shown over abyss when the page is in dark mode, and it would
  * demonstrate nothing: exactly what rule 1 exists to prevent.
+ *
+ * `page` is the exception, and it is for `background="auto"`: that card must NOT
+ * declare a theme, because what it demonstrates is the fin following the page's.
+ * Inside a card fixed to the opposite mode it would pick the page's fin — which
+ * is the case `auto` is documented not to cover.
  */
 function AssetCard({
   name,
@@ -71,14 +76,14 @@ function AssetCard({
   file: string;
   code: string;
   children: ReactNode;
-  theme?: 'dark' | 'light';
+  theme?: 'dark' | 'light' | 'page';
   background?: string;
 }) {
   const [copied, setCopied] = useState(false);
 
   return (
     <Card className="overflow-hidden">
-      <div data-theme={theme} className={`${background} p-step-md flex min-h-36 items-center justify-center`}>
+      <div data-theme={theme === 'page' ? undefined : theme} className={`${background} p-step-md flex min-h-36 items-center justify-center`}>
         {children}
       </div>
       <div className="border-hairline p-step-sm gap-step-xs flex flex-col border-t">
@@ -142,7 +147,9 @@ export const Everything: StoryObj = {
           <>
             The fin's body is nearly black, so over a dark background the two-blue
             variant disappears. Which is why <Code>background</Code> is a prop and
-            not a note in a guide: the single-ink silhouette picks itself.
+            not a note in a guide: the single-ink silhouette picks itself. On a site
+            that switches theme, <Code>auto</Code> renders both and the theme picks —
+            flip the toolbar and the third card changes fin.
           </>
         }
       >
@@ -163,6 +170,14 @@ export const Everything: StoryObj = {
           >
             <Isotype background="light" className="h-16" />
           </AssetCard>
+          <AssetCard
+            name="follows the theme"
+            file={`${fins.foam} · ${fins.color}`}
+            theme="page"
+            code={'<Isotype background="auto" />'}
+          >
+            <Isotype background="auto" className="h-16" />
+          </AssetCard>
         </div>
       </Section>
 
@@ -181,6 +196,9 @@ export const Everything: StoryObj = {
           </AssetCard>
           <AssetCard name="full, light background" file="fin.png + wordmark" theme="light" code={'<Logo background="light" />'}>
             <Logo background="light" />
+          </AssetCard>
+          <AssetCard name="full, follows the theme" file="both fins + wordmark" theme="page" code={'<Logo background="auto" />'}>
+            <Logo background="auto" />
           </AssetCard>
           <AssetCard name="with tagline, for the bar" file="fin-foam.png + wordmark + tagline.short" theme="dark" code={'<Logo background="dark" withTagline />'}>
             <Logo background="dark" withTagline />

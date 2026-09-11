@@ -16,6 +16,11 @@ const meta = {
       table: { defaultValue: { summary: 'page' } },
     },
     as: { control: 'inline-radio', options: ['h1', 'h2'] },
+    titleVariant: {
+      control: 'inline-radio',
+      options: ['display', 'h1', 'h2', 'h3'],
+      description: 'The headline scale, when the screen needs another one. Defaults to what size gives.',
+    },
   },
   parameters: { layout: 'padded' },
   // It goes inside `<main>`: outside it would become a `banner` landmark and
@@ -75,6 +80,40 @@ export const Section: Story = {
 export const NoEyebrow: Story = {
   name: 'No eyebrow, no description',
   args: { size: 'page', title: 'Contacto' },
+};
+
+export const Panel: Story = {
+  name: 'Panel header · titleVariant',
+  args: {
+    size: 'page',
+    titleVariant: 'h3',
+    className: 'py-0',
+    title: 'Ventas',
+    description: 'Ingresos, reembolsos y cupones de los últimos treinta días.',
+  },
+  render: (args) => (
+    <>
+      <PageHeader {...args} action={<Button variant="secondary">Exportar CSV</Button>} />
+      <Note>
+        Still the page's only `h1`, at the `h3` scale: 25px. Both admin apps title
+        their screens there — all fifteen of the `cursos` panel, and the twelve of
+        `blog-content-manager` at 24 — and at 44 every panel screen would read like
+        a landing page. The padding stays with `size`, which is why the panel passes
+        `py-0`: its layout already spaces the content.
+      </Note>
+    </>
+  ),
+};
+
+export const PublicView: Story = {
+  name: 'Public view · titleVariant h2',
+  args: {
+    size: 'page',
+    titleVariant: 'h2',
+    eyebrow: 'catálogo',
+    title: 'Cursos',
+    description: 'Arquitectura, equipos y lo que pasa entre los dos.',
+  },
 };
 
 export const TwoScales: Story = {

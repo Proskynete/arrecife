@@ -636,6 +636,12 @@ These are the confusions people run into most often when consuming it.
   provider.
 - **It ships no router.** The components with links accept `asChild` to wrap the
   framework's `Link`.
+- **It does not know your prices, ratings or images.** `CourseCard` takes
+  `media` — the cover, bleeding to the edges, with `alt=""` because the title
+  already names the card — and `footer`, the closing row where a project puts the
+  rating and the price. Both are nodes the project draws; the card keeps the
+  title, its hover and the sand progress bar. The title does not go over the
+  cover. See `decisions/0.11.md` § 59.
 - **It ships no `data-testid`.** A composed part your test suite has to reach is
   reached with a slot: `ArticleCard`'s `tagAsChild`, `Breadcrumb`'s and
   `TableOfContents`'s `linkAsChild`. They hand you the element and its

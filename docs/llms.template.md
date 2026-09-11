@@ -590,6 +590,10 @@ compiles and looks wrong, or that fails the project's accessibility audit.
    the only member of the second criterion § 23 opened for it.
 6. **Semantics and scale are independent.** An `h2` that has to look small is
    `<Text as="h2" variant="h3">`, never an `h3` that lies about the hierarchy.
+   `PageHeader` makes the same split: `as` is the level and `titleVariant` the
+   scale. An admin panel's title is `<PageHeader title="Ventas"
+   titleVariant="h3" />` — still the page's only `h1`, at 25px instead of 44. See
+   `decisions/0.11.md` § 57.
 7. **`textMuted` never goes over `surfaceRaised`**: it gives 4.07 in dark. Over a
    raised surface — menus, active tabs — the token is `textSecondary`.
 8. **A background tinted with a semantic color carries text from a text token**,

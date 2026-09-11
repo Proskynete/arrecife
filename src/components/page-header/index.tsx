@@ -14,6 +14,15 @@ import { Text } from '../../primitives/typography.tsx';
  *
  * `display` for covers, `page` for section headers.
  *
+ * The size picks the title's scale by default, and `titleVariant` lets the
+ * screen pick another one. The default is the document's — «h1 44/700» on the
+ * six interior pages of the reading site — and it is right there. It is not
+ * right in the two admin apps: `blog-content-manager` titles its twelve screens
+ * at 24px, and `cursos` titles 29 of its 32 at `h3` — every one in the panel —
+ * and the other three, the public catalog pages, at `h2`. Both are rungs the
+ * scale already has, and a third `size` could only have named one of them. See
+ * `docs/decisions/0.11.md` § 57.
+ *
  * It takes no mascot face, at either scale: faces go in empty states,
  * confirmations, errors, course progress and celebration.
  *
@@ -46,6 +55,19 @@ export type PageHeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'title'> 
     action?: ReactNode | undefined;
     /** The headline's level. `h1` unless the page already has one. */
     as?: 'h1' | 'h2' | undefined;
+    /**
+     * The headline's scale, when the screen needs a different one from what
+     * `size` gives — `display` for `display`, `h1` for `page`.
+     *
+     * It is the same split `Text` makes: `as` is the level, this is how big it
+     * looks. A panel's `<h1>` at `h3` is still the page's only `h1`. The padding
+     * stays with `size`, so a header inside a layout that already spaces its
+     * content passes `className="py-0"`.
+     *
+     * Only the four headline scales, all in the display family. `stat` is for
+     * numbers and `body` is not a headline.
+     */
+    titleVariant?: 'display' | 'h1' | 'h2' | 'h3' | undefined;
   };
 
 export function PageHeader({
@@ -55,6 +77,7 @@ export function PageHeader({
   action,
   size,
   as = 'h1',
+  titleVariant,
   className,
   ...props
 }: PageHeaderProps) {
@@ -66,7 +89,11 @@ export function PageHeader({
         </Text>
       ) : null}
 
-      <Text as={as} variant={size === 'display' ? 'display' : 'h1'} className="max-w-measure">
+      <Text
+        as={as}
+        variant={titleVariant ?? (size === 'display' ? 'display' : 'h1')}
+        className="max-w-measure"
+      >
         {title}
       </Text>
 

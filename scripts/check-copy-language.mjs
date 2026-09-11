@@ -73,7 +73,7 @@ function isSpanish(text) {
  * correct Spanish cannot be evidence of anything.
  */
 const ENGLISH =
-  /\b(exists?|declared|label|labels|theme|next|previous|email|name|title|value|size|width|height|loading|delete|cancel|save|search|filter|row|rows|item|items|list|state|group|content|header|footer|body|link|button|card|page|text|type|new|old|first|last|and|the|with|from|not|are|was|were|one|two|three|four|five|six|seven|eight|nine|ten|year|years|month|months|week|weeks|day|days|hour|hours)\b/i;
+  /\b(exists?|declared|label|labels|theme|next|previous|email|name|title|value|size|width|height|loading|delete|cancel|save|search|filter|row|rows|item|items|list|state|group|content|header|footer|body|link|button|card|page|text|type|new|old|first|last|and|the|with|from|not|are|was|were|one|two|three|four|five|six|seven|eight|nine|ten|year|years|month|months|week|weeks|day|days|hour|hours|when|passes)\b/i;
 
 /*
   The numbers and the units of time are the newer half of that list, and they are
@@ -91,6 +91,12 @@ const ENGLISH =
   it without changing the sentence around it and the result still reads almost
   right. Neither is a word that belongs to both languages, which is the only test
   that keeps something OFF this list.
+
+  `when` and `passes` came in the same way, in 0.11.0. «Cómo sostener una base de
+  código when el equipo passes de tres a treinta» was the default summary of every
+  `CourseCard` story from the 0.6.0 sweep on: `cuando` and `pasa`, taken by the
+  find-and-replace, and neither on the list. Adding them turned up that one
+  string and nothing else.
 */
 
 /**

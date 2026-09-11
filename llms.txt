@@ -636,6 +636,12 @@ These are the confusions people run into most often when consuming it.
   provider.
 - **It ships no router.** The components with links accept `asChild` to wrap the
   framework's `Link`.
+- **It does not know your prices, ratings or images.** `CourseCard` takes
+  `media` — the cover, bleeding to the edges, with `alt=""` because the title
+  already names the card — and `footer`, the closing row where a project puts the
+  rating and the price. Both are nodes the project draws; the card keeps the
+  title, its hover and the sand progress bar. The title does not go over the
+  cover. See `decisions/0.11.md` § 59.
 - **It ships no `data-testid`.** A composed part your test suite has to reach is
   reached with a slot: `ArticleCard`'s `tagAsChild`, `Breadcrumb`'s and
   `TableOfContents`'s `linkAsChild`. They hand you the element and its
@@ -1400,11 +1406,15 @@ Source: `src/components/code-block/index.tsx`
 
 Source: `src/components/course-card/index.tsx`
 
-- Extends: `Omit<CardShellProps, 'children' \| 'title'>`
+The course, as a card that links to it.
+
+- Extends: `Omit<CardShellProps, 'children' \| 'title' \| 'media'>`
 
 | prop | type | req. | default | what it does |
 | --- | --- | --- | --- | --- |
 | `asChild` | `boolean \| undefined` |  |  | Renders the child instead of an `<a>`. It is how Next's or Astro's `Link` plugs in without the library depending on any router. |
+| `footer` | `ReactNode` |  |  | The closing row, under `meta`: the rating, the price, whatever the project sells the course with. It sits at the bottom of the card, so the rows of a grid line up whatever the length of each summary. |
+| `media` | `ReactNode` |  |  | The cover, at the top and bleeding to the card's edges, with `alt=""`: the whole card is one link and `title` already names it. |
 | `meta` | `readonly ReactNode[]` |  |  | Level, duration, number of lessons: whatever the project wants to list. |
 | `progress` | `number` |  |  | Percentage completed. It only makes sense for someone already enrolled; when passed, the bar goes in sand, which is the color of course progress. |
 | `status` | `ReactNode` |  |  | Status label: «próximamente», «gratis», «nuevo». |

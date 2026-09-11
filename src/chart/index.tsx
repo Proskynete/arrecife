@@ -326,6 +326,22 @@ export type SeriesChartProps = Omit<ChartContainerProps, 'children'> & {
    */
   yTickFormatter?: ((value: unknown) => string) | undefined;
   /**
+   * The top of the value axis, when the scale has one that the data does not
+   * reach — 100 for a percentage.
+   *
+   * Without it the axis ends at the largest datum, and on a chart of «% visto»
+   * a course watched to 40 % draws as a full bar when it is the highest on the
+   * list. On `BarChart orientation="horizontal"` nothing gives that away: the
+   * value axis is hidden by design, so the chart says something false and
+   * looks exactly like one that does not.
+   *
+   * The bottom is always zero. A bar that does not start at zero is a
+   * different lie, and this prop is not a way into it. It is a floor for the
+   * top and not a clip either: a datum above it extends the axis instead of
+   * running off the edge. See `docs/decisions/0.11.md` § 58.
+   */
+  valueMax?: number | undefined;
+  /**
    * Shows the legend. It defaults to «only when there is more than one series»:
    * a legend naming the one line already named by the chart's own heading is a
    * row of pixels that says nothing.
@@ -355,6 +371,18 @@ const AXIS = { tickLine: false, axisLine: false } as const;
  */
 const tickOf = (format?: ((value: unknown) => string) | undefined) =>
   format ? { tickFormatter: format } : {};
+
+/**
+ * The value axis's domain, spread for the same reason as `tickOf`. With no
+ * `valueMax` it adds nothing and Recharts scales to the data, as before.
+ *
+ * `allowDataOverflow` stays at Recharts' default, `false`, and that is the part
+ * that makes `valueMax` a floor rather than a clip: a datum past the top widens
+ * the domain to fit it. A bar cut off at the edge would be the same lie as the
+ * one this prop exists to fix, told the other way round.
+ */
+const domainOf = (max?: number | undefined) =>
+  max === undefined ? {} : { domain: [0, max] as [number, number] };
 
 const legendOf = (series: readonly ChartSeries[], legend?: boolean | undefined) =>
   (legend ?? series.length > 1) ? <ChartLegend key="legend" content={<ChartLegendContent />} /> : null;
@@ -401,6 +429,7 @@ export function AreaChart({
   formatter,
   xTickFormatter,
   yTickFormatter,
+  valueMax,
   legend,
   stacked = false,
   ...container
@@ -421,7 +450,7 @@ export function AreaChart({
 
         <CartesianGrid vertical={false} />
         <XAxis dataKey={xKey} {...AXIS} tickMargin={8} {...tickOf(xTickFormatter)} />
-        <YAxis {...AXIS} width={40} {...tickOf(yTickFormatter)} />
+        <YAxis {...AXIS} width={40} {...tickOf(yTickFormatter)} {...domainOf(valueMax)} />
 
         {tooltipOf(formatter)}
         {legendOf(series, legend)}
@@ -475,6 +504,7 @@ export function BarChart({
   formatter,
   xTickFormatter,
   yTickFormatter,
+  valueMax,
   legend,
   orientation = 'vertical',
   stacked = false,
@@ -510,7 +540,13 @@ export function BarChart({
                 width={130}
                 {...tickOf(xTickFormatter)}
               />,
-              <XAxis key="value" type="number" hide {...tickOf(yTickFormatter)} />,
+              <XAxis
+                key="value"
+                type="number"
+                hide
+                {...tickOf(yTickFormatter)}
+                {...domainOf(valueMax)}
+              />,
             ]
           : [
               <XAxis
@@ -520,7 +556,13 @@ export function BarChart({
                 tickMargin={8}
                 {...tickOf(xTickFormatter)}
               />,
-              <YAxis key="value" {...AXIS} width={40} {...tickOf(yTickFormatter)} />,
+              <YAxis
+                key="value"
+                {...AXIS}
+                width={40}
+                {...tickOf(yTickFormatter)}
+                {...domainOf(valueMax)}
+              />,
             ]}
 
         {tooltipOf(formatter)}
@@ -562,6 +604,7 @@ export function LineChart({
   formatter,
   xTickFormatter,
   yTickFormatter,
+  valueMax,
   legend,
   ...container
 }: LineChartProps) {
@@ -570,7 +613,7 @@ export function LineChart({
       <RechartsLineChart data={rows(data)} margin={MARGIN}>
         <CartesianGrid vertical={false} />
         <XAxis dataKey={xKey} {...AXIS} tickMargin={8} {...tickOf(xTickFormatter)} />
-        <YAxis {...AXIS} width={40} {...tickOf(yTickFormatter)} />
+        <YAxis {...AXIS} width={40} {...tickOf(yTickFormatter)} {...domainOf(valueMax)} />
 
         {tooltipOf(formatter)}
         {legendOf(series, legend)}

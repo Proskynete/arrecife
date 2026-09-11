@@ -480,6 +480,13 @@ re-exported, because they are unchanged and wrapping them buys nothing.
 down for a ranking. Recharts calls that same thing `layout="vertical"` — if you
 are porting code, the value flips.
 
+**A percentage passes `valueMax={100}`.** Without it the value axis ends at the
+largest datum, and on a horizontal ranking — whose value axis is hidden — a
+course watched to 40 % draws as a full bar when it is the highest on the list.
+The bottom is always zero, and it is a floor rather than a clip: a datum above
+`valueMax` widens the axis instead of running off the edge. It is on all three
+types. See `decisions/0.11.md` § 58.
+
 `stacked` on `AreaChart` and `BarChart` adds the series up. Without it areas
 overlap, which is honest and rarely what you want with more than one series: to
 COMPARE rather than add up, the type is `LineChart`.
@@ -1824,6 +1831,7 @@ A series over time, with the fill fading out underneath it.
 | `series` | `readonly ChartSeries[]` | yes |  |  |
 | `stacked` | `boolean \| undefined` |  | `false` | Adds the series up instead of overlaying them. |
 | `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
+| `valueMax` | `number` |  |  | The top of the value axis, when the scale has one that the data does not reach — 100 for a percentage. |
 | `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
 | `xTickFormatter` | `(value: unknown) => string` |  |  | Formats the TICK on the category axis. Returns a string, because an axis tick is an SVG `<text>` and not a place a node can go. |
 | `yTickFormatter` | `(value: unknown) => string` |  |  | Formats the tick on the VALUE axis — the currency symbol, the thousands separator, the percent sign. |
@@ -1844,6 +1852,7 @@ Bars, upright or lying down.
 | `series` | `readonly ChartSeries[]` | yes |  |  |
 | `stacked` | `boolean \| undefined` |  | `false` | Stacks the series instead of putting them side by side. |
 | `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
+| `valueMax` | `number` |  |  | The top of the value axis, when the scale has one that the data does not reach — 100 for a percentage. |
 | `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
 | `xTickFormatter` | `(value: unknown) => string` |  |  | Formats the TICK on the category axis. Returns a string, because an axis tick is an SVG `<text>` and not a place a node can go. |
 | `yTickFormatter` | `(value: unknown) => string` |  |  | Formats the tick on the VALUE axis — the currency symbol, the thousands separator, the percent sign. |
@@ -1862,6 +1871,7 @@ Lines, for comparing series against each other.
 | `legend` | `boolean \| undefined` |  |  | Shows the legend. It defaults to «only when there is more than one series»: a legend naming the one line already named by the chart's own heading is a row of pixels that says nothing. |
 | `series` | `readonly ChartSeries[]` | yes |  |  |
 | `summary` | `ReactNode` |  |  | What the chart says, in words. It goes in a visually hidden `figcaption`. |
+| `valueMax` | `number` |  |  | The top of the value axis, when the scale has one that the data does not reach — 100 for a percentage. |
 | `xKey` | `string` | yes |  | The key on the category axis: the day, the month, the course. |
 | `xTickFormatter` | `(value: unknown) => string` |  |  | Formats the TICK on the category axis. Returns a string, because an axis tick is an SVG `<text>` and not a place a node can go. |
 | `yTickFormatter` | `(value: unknown) => string` |  |  | Formats the tick on the VALUE axis — the currency symbol, the thousands separator, the percent sign. |

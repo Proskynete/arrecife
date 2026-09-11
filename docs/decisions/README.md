@@ -24,6 +24,7 @@ PR still resolves. This index is how you find which file holds it.
 | [`0.8.md`](0.8.md) | §§ 39–48 | Three removals, and why each one was built for nobody |
 | [`0.9.md`](0.9.md) | §§ 49–50 | Two pieces built from a consumer that the consumer could not use |
 | [`0.10.md`](0.10.md) | §§ 51–56 | The library stops drawing icons, and four things a phone already knew |
+| [`0.11.md`](0.11.md) | §§ 57–60 | Four props a consumer had already written down in its own source |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -113,3 +114,10 @@ with no text prop, `Text` with no `font` prop, `CodeBlock` with its theme island
 - § 54 · [Three rows that pushed the page sideways, and they do not get the same answer](0.10.md#54--three-rows-that-pushed-the-page-sideways-and-they-do-not-get-the-same-answer)
 - § 55 · [The toast's tone is a surface, not a hairline](0.10.md#55--the-toasts-tone-is-a-surface-not-a-hairline)
 - § 56 · [Storybook gets a way in, and the agent block is generated](0.10.md#56--storybook-gets-a-way-in-and-the-agent-block-is-generated)
+
+**[`0.11.md`](0.11.md)**
+
+- § 57 · [The page title's scale belongs to the screen, and the two admin apps agree on it](0.11.md#57--the-page-titles-scale-belongs-to-the-screen-and-the-two-admin-apps-agree-on-it)
+- § 58 · [A ranking with a hidden axis cannot scale to its own maximum](0.11.md#58--a-ranking-with-a-hidden-axis-cannot-scale-to-its-own-maximum)
+- § 59 · [The course card takes a cover and a closing row, and the title stays off the cover](0.11.md#59--the-course-card-takes-a-cover-and-a-closing-row-and-the-title-stays-off-the-cover)
+- § 60 · [The fin can follow the theme, and the explicit value stays for fixed backgrounds](0.11.md#60--the-fin-can-follow-the-theme-and-the-explicit-value-stays-for-fixed-backgrounds)

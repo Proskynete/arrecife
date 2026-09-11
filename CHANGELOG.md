@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.11.0](https://github.com/Proskynete/arrecife/compare/v0.10.0...v0.11.0) (2026-09-11)
+
+
+### 🚀 Novedades
+
+* **brand:** the fin can follow the theme with background="auto" ([3021f24](https://github.com/Proskynete/arrecife/commit/3021f24575c6f9422b7f322bf825a878a735306d))
+* **chart:** valueMax sets the top of the value axis ([ccebe24](https://github.com/Proskynete/arrecife/commit/ccebe24361ce4004916b433819ddf7f53f89907a))
+* **components:** CourseCard takes a cover and a closing row ([a3c73d0](https://github.com/Proskynete/arrecife/commit/a3c73d0b21edffc16c2965475fce9de6e1502926))
+* **components:** PageHeader lets the screen pick the title scale ([99bd553](https://github.com/Proskynete/arrecife/commit/99bd55376992109ea90c8eaedc435ffcadffdb0e))
+
+
+### 📚 Documentación
+
+* four decisions from cursos adopting the whole library ([2a712b8](https://github.com/Proskynete/arrecife/commit/2a712b871edd73f63fddfd2733279bf3e2834e07))
+* **readme:** background="auto", valueMax, and the story count ([149442c](https://github.com/Proskynete/arrecife/commit/149442cb2748da9cb06b3df23254cba46aae378a))
+
 ## [0.10.0](https://github.com/Proskynete/arrecife/compare/v0.9.0...v0.10.0) (2026-09-09)
 
 

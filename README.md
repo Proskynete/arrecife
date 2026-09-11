@@ -588,6 +588,11 @@ vertical={false}`, two axes with the line and the tick off, a `type="natural"`
 and a `strokeWidth` — which `cursos` wrote four times, once per chart. None of
 that is a decision the project made. See `docs/decisions/0.8.md` § 43.
 
+A chart of a quantity with a ceiling passes it: `valueMax={100}` on a percentage.
+Without it the value axis ends at the largest datum, and a horizontal ranking —
+whose value axis is hidden — draws a course watched to 40 % as a full bar. See
+`docs/decisions/0.11.md` § 58.
+
 `check:exports` verifies that the five portable ones — `./tokens`, `./theme`,
 `./variants`, `./og` and `./shiki` — bring no React into the published `dist/`,
 **by following the relative imports**. Without that the check was worthless: with `treeshake`
@@ -603,7 +608,7 @@ chunk imports it.
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint` | ESLint, including the ban on literal hexes outside `tokens.ts` |
 | `pnpm check:tokens` | fails if `src/tokens/` imports anything from outside |
-| `pnpm test` | compiles Tailwind and runs axe over the 208 stories, in both modes |
+| `pnpm test` | compiles Tailwind and runs axe over the 248 stories, in both modes |
 | `pnpm check:exports` | verifies that `dist/` holds what `exports` promises |
 | `pnpm check:release` | validates `release-please-config.json` against the official schema |
 | `pnpm storybook` | generates the tokens and serves Storybook on 6006 |
@@ -1046,6 +1051,12 @@ adding a line to the catalog.
 `background="light"` the two-blue one. It is not a note in a guide: it is a prop.
 Pixel analysis confirms it — 94 % of `fin-foam.png` is `#EDF4F3`, which is the
 foam token.
+
+On a site that switches theme, `background="auto"` renders both and the `light:`
+variant shows the one that reads, so no call site has to know which theme is on.
+A background that does not follow the theme — a dark panel on a light page —
+still names itself: `auto` reads the page, not the panel. See
+`docs/decisions/0.11.md` § 60.
 
 **Rule 5 as API.** The wordmark comes from `naming.wordmark` and always reads
 «Eduardo Álvarez». There is no prop that changes that text, and Tiburoncín never

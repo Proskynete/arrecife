@@ -98,7 +98,7 @@ stories/        stories that do not belong to a component (tokens, brand, og) an
 scripts/        the generators and the checks
 docs/
   architecture/ the Design System and the Brand Manual, as consulted from the code
-  decisions/    the decision log, one file per release. The numbering is global
+  decisions/    the decision log, one file per decision: NNN-slug.md. Global numbering
   runbooks/     one migration guide per release that broke something
   llms.template.md  NOT documentation: the input scripts/build-llms.mjs reads
 ```
@@ -107,10 +107,22 @@ docs/
 it is that way, or upgrade a project. Each folder has a `README.md` that says
 which is which; `docs/README.md` is the way in.
 
-**A decision keeps its number for ever.** `§ 45` is `§ 45` wherever it lives, the
-files are named for the release that closed them, and a release file is
-append-only: an entry written in 0.8 stays in `decisions/0.8.md`. That is what
-makes it safe for a code comment to point at the exact file.
+**A decision keeps its number for ever**, and the number is the filename:
+`§ 45` is `decisions/045-signature-halo.md`. So a reference is written as
+**«§ 45 in `docs/decisions/`»** — the folder and the number, never a version —
+and it resolves by sorting the folder. A file is never renumbered and never
+renamed to match a retitled entry; `004b` exists because § 4 grew a second half
+that could not take § 5's number.
+
+A code comment carries no release, then: the only true part of
+`decisions/0.8.md § 45` was the 45, and the log used to make every reference
+carry a version it did not care about. Each file's header holds the release that
+closed it and, when the decision has been overruled, the entry that overruled
+it — a reversed decision keeps its file and says so, because the record of how a
+sound argument reached the wrong place is the useful part. The index in
+`docs/decisions/README.md` lists all of them, grouped by release.
+
+**A new decision is a new file**, and an existing one is not appended to.
 
 ## Generated files: not edited by hand
 
@@ -249,7 +261,7 @@ Rules of the pattern, all of them with a reason:
   the part's data and returns the element; the library keeps the classes and the
   rule. `linkAsChild` in `Breadcrumb` and `tagAsChild` in `ArticleCard` are the
   two precedents, and they have the same signature on purpose. See
-  `docs/decisions/0.6.md` § 24.
+  `docs/decisions/` § 24.
 - **JSDoc with the why, not the what.** `/** Primary button */` above `Button`
   informs nobody. The whole repo is written this way; keep it that way.
 - **Reuse the primitives.** A component in `components/` that writes its own
@@ -278,7 +290,7 @@ Everything comes from a token, through its Tailwind utility:
   not gratuitous verbosity. `xs, sm, md, lg, xl` are the names of Tailwind's
   `--container-*` scale, and a `--spacing-md` of ours was swallowing `max-w-md`
   in every consuming project with no trace. A `p-md` written today does not fail:
-  it lands on the numeric scale and does nothing. See `docs/decisions/0.6.md` § 16.
+  it lands on the numeric scale and does nothing. See `docs/decisions/` § 16.
 - **Zero literal hexes.** ESLint blocks it across all of `src/**` except
   `src/tokens/tokens.ts`, which is where they live.
 - **No arbitrary values** like `p-[13px]` or `text-[15px]`: if the value has no
@@ -297,7 +309,7 @@ Everything comes from a token, through its Tailwind utility:
   `AlertDialog`.** There the title, the focus on cancel and the no-close-on-
   outside already carry the gravity, and a red button on top of that is shouting.
   The variant exists for the destructive that has none of that around it — a
-  table row, a toolbar. See `docs/decisions/0.6.md` § 21.
+  table row, a toolbar. See `docs/decisions/` § 21.
 
 ### 4 · Motion
 
@@ -347,7 +359,7 @@ argument written in `docs/decisions/`, not because it looks better. See § 20.
   the first one was and the next twenty-seven inherited it. The one control that
   changes the colour is the conversion button, which adds `focus-ring-warm`: it
   is the system's only sand fill, and a biolume ring three pixels off it puts
-  both of the brand's accents in the same glance. See `docs/decisions/0.7.md` § 37.
+  both of the brand's accents in the same glance. See `docs/decisions/` § 37.
 - Every control with no text carries an `aria-label`. `Progress` requires `label`
   as a prop.
 - **The library ships no icon INVENTORY, and it draws every icon it uses from
@@ -359,8 +371,8 @@ argument written in `docs/decisions/`, not because it looks better. See § 20.
   is `light`. `weight` is not a prop: three of Phosphor's six have a role here
   and the other three do not.
   A project's icons are still the project's; what stopped being the project's is
-  the line they are drawn with. See `docs/decisions/0.10.md` § 51 and
-  `docs/decisions/0.7.md` § 35.
+  the line they are drawn with. See `docs/decisions/` § 51 and
+  `docs/decisions/` § 35.
 - **The mono glyphs that are left are PROMPTS, not icons.** `~/` in `Nav`, `./`
   on a `NavItem`, `$` in the footer signature, `❯` in the code block's bar. They
   carry no meaning — remove any of them and nothing becomes ambiguous — which is
@@ -638,7 +650,7 @@ In order of how often they actually happen:
    deleted in 0.10.0 precisely so the library draws in one hand. Import it from
    `@phosphor-icons/react` and render it through `Icon`. A component that needs
    an icon the library cannot name takes it as a prop and the project passes it.
-   See `docs/decisions/0.10.md` § 51.
+   See `docs/decisions/` § 51.
 5. Changing props without regenerating `llms.txt`. `pnpm check:llms` stops it in
    CI.
 6. Running the suite in one mode only. A color fails in one and passes in the

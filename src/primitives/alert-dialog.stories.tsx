@@ -63,7 +63,7 @@ export const Open: Story = {
         than the absence of an option: `Button` has `destructive` and this does
         not use it. Everything above already carries the gravity, and a red button
         on top of it is shouting. What communicates it is the text: it says what
-        it does, not «Aceptar». See `docs/decisions/0.6.md` § 21.
+        it does, not «Aceptar». See `docs/decisions/` § 21.
       </Note>
     </>
   ),

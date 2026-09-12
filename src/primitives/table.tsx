@@ -30,7 +30,7 @@ import { cn } from '../lib/cn.ts';
  * `Nav`'s `size` documents: a `rounded-none` passed from the call site does
  * nothing, silently. There is one shape on purpose — fourteen call sites wanted
  * the same one — and a second gets a prop when a second consumer exists, not
- * before. See `docs/decisions/0.8.md` § 39.
+ * before. See `docs/decisions/` § 39.
  *
  * THE `tabIndex` IS NOT DECORATION and it is not new behaviour dressed up as
  * markup. A region you can pan with a mouse has to be reachable with a keyboard

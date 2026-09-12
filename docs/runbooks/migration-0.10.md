@@ -11,7 +11,7 @@ anything of a consuming project.
 
 If you are coming from 0.7.x, do [`migration-0.8.md`](migration-0.8.md) first.
 
-The argument for all of it is in [`../decisions/0.10.md`](../decisions/0.10.md)
+The argument for all of it is in [`../decisions/`](../decisions/README.md#0100),
 §§ 51–56.
 
 ---

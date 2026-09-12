@@ -9,7 +9,7 @@
  * hand-drawn brand marks were the library's own icon inventory, and the library
  * stopped having one — every glyph it draws now comes from Phosphor through
  * `Icon`. The migration is one import per call site and it is in
- * `docs/runbooks/migration-0.10.md`; the argument is in `docs/decisions/0.10.md`
+ * `docs/runbooks/migration-0.10.md`; the argument is in `docs/decisions/`
  * § 51.
  *
  * `Icon` itself is NOT re-exported from here, and that has not changed: it lives

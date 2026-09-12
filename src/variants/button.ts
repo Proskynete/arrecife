@@ -32,7 +32,7 @@ import { cva } from 'class-variance-authority';
  * actions and toolbars, next to «Editar» and «Duplicar», with no context to tell
  * them apart: with every one rendered as `secondary`, «Eliminar curso» looked
  * exactly like «Cancelar» and only the word separated them. See
- * `docs/decisions/0.6.md` § 21.
+ * `docs/decisions/` § 21.
  *
  * `destructiveOutline` fills on hover, and that IS an exception to «secondary is
  * never filled» — declared here rather than discovered later. A destructive
@@ -57,7 +57,7 @@ const button = cva(
         ],
         // The one control whose focus ring is not biolume. It is the system's
         // only sand fill, and a biolume ring three pixels off a sand button puts
-        // both of the brand's accents in the same glance. See `docs/decisions/0.7.md` § 37.
+        // both of the brand's accents in the same glance. See `docs/decisions/` § 37.
         conversion: 'bg-warm text-warm-on hover:bg-warm-hover focus-ring-warm',
         secondary: [
           'border-hairline-hover border bg-transparent text-text-primary',

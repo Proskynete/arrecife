@@ -368,7 +368,7 @@ And the bell:
   irreversible only, and never inside an `AlertDialog` — there the confirm button
   stays as it was, because the title, the focus on cancel and the
   no-close-on-outside already carry the gravity. See
-  [`../decisions/0.6.md`](../decisions/0.6.md#21--there-is-a-danger-button-outside-a-dialog) § 21.
+  [§ 21](../decisions/021-danger-button-outside-dialog.md).
 - **`Button size="icon-sm"`**, 32×32, for a table row. It does not replace
   `icon`, which is still 42 and is still what a page action uses.
 - **`ArticleCard`'s `tagAsChild`**, so an E2E suite can reach the tags without

@@ -46,7 +46,7 @@ import { radius } from '../tokens/tokens.ts';
  * What IS published, since this version, are three CHART TYPES on top of that
  * chassis: `AreaChart`, `BarChart` and `LineChart`. They are not wrappers over
  * Recharts' components of the same name — they take `data`, `series` and `xKey`
- * and draw the whole thing. See `docs/decisions/0.8.md` § 43 for why the names
+ * and draw the whole thing. See `docs/decisions/` § 43 for why the names
  * collide on purpose.
  */
 
@@ -313,7 +313,7 @@ export type SeriesChartProps = Omit<ChartContainerProps, 'children'> & {
    * `2026-07-15` repeated thirty times, overlapping into a grey band.
    *
    * The library imposes no format: a date key can be a day, a month or a course
-   * name, and only the project knows which. See `docs/decisions/0.9.md` § 50.
+   * name, and only the project knows which. See `docs/decisions/` § 50.
    */
   xTickFormatter?: ((value: unknown) => string) | undefined;
   /**
@@ -338,7 +338,7 @@ export type SeriesChartProps = Omit<ChartContainerProps, 'children'> & {
    * The bottom is always zero. A bar that does not start at zero is a
    * different lie, and this prop is not a way into it. It is a floor for the
    * top and not a clip either: a datum above it extends the axis instead of
-   * running off the edge. See `docs/decisions/0.11.md` § 58.
+   * running off the edge. See `docs/decisions/` § 58.
    */
   valueMax?: number | undefined;
   /**

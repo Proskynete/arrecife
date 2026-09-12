@@ -21,7 +21,7 @@ import { Text } from '../../primitives/typography.tsx';
  * at 24px, and `cursos` titles 29 of its 32 at `h3` — every one in the panel —
  * and the other three, the public catalog pages, at `h2`. Both are rungs the
  * scale already has, and a third `size` could only have named one of them. See
- * `docs/decisions/0.11.md` § 57.
+ * `docs/decisions/` § 57.
  *
  * It takes no mascot face, at either scale: faces go in empty states,
  * confirmations, errors, course progress and celebration.

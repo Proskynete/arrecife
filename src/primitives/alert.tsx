@@ -28,7 +28,7 @@ const colorGlyph = {
  *
  * They are the outlined pair on purpose, not `…Fill`: `tone="action"` is the
  * system's line and an alert's mark is not a state within a set. See
- * `docs/decisions/0.10.md` § 52.
+ * `docs/decisions/` § 52.
  */
 const GLYPH = {
   accent: Info,

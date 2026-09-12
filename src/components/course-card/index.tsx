@@ -50,7 +50,7 @@ export type CourseCardProps = Omit<CardShellProps, 'children' | 'title' | 'media
  * formatted in a currency the library does not know, the rating is drawn by a
  * component the project already has, and the cover is an image pipeline. What
  * IS the identity's stays here: the title's scale and its hover, the sand bar,
- * the status badge. See `docs/decisions/0.11.md` § 59.
+ * the status badge. See `docs/decisions/` § 59.
  *
  * The title does NOT go over the cover. It stays in the body at `h3`, with the
  * hover every other card has. Text on a photograph needs a scrim, and a scrim's

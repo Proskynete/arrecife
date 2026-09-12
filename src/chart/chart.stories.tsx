@@ -115,7 +115,7 @@ export const AxisFormatters: Story = {
       <Note>
         The key is `2026-07-15` and the tick says `07-15`. Without `xTickFormatter` the axis prints
         the whole key, and on a 30-day range the labels overlap into a band. See
-        `docs/decisions/0.9.md` § 50.
+        `docs/decisions/` § 50.
       </Note>
       <Note>
         `yTickFormatter` and `formatter` are separate on purpose. The axis is what you read while

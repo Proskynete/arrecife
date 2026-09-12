@@ -8,11 +8,12 @@
  * entry it is buried in.
  *
  * It reads every `*.md` in that folder EXCEPT `README.md`, which is the index
- * and holds no entries of its own. The files are named for the release that
- * closed them — `0.6.md`, `0.7.md`, `0.8.md` — and they are sorted NUMERICALLY
- * and not as strings: `0.10` sorts before `0.6` alphabetically, which would put
- * the report out of order on the first two-digit minor and do it silently. The
- * ordering inside a file is already the numbering.
+ * and holds no entries of its own. One file is one decision, named for its
+ * number — `045-signature-halo.md` — and the number is zero-padded to three
+ * digits precisely so that sorting the names sorts the log. That is why this
+ * script no longer sorts: `readdir` plus the padding already does it, and the
+ * hand-rolled numeric comparison it used to need existed only because `0.10`
+ * sorts before `0.6` as a string and would have reordered the report silently.
  *
  * § 22 is the proof. It asked for `icon-sm 32×32` in the controls table in
  * August; the code has had the size since, and thirteen entries later an audit
@@ -37,37 +38,38 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const folder = join(root, 'docs', 'decisions');
 
-const parts = (name) => name.replace(/\.md$/, '').split('.').map(Number);
-
 const files = (await readdir(folder))
   .filter((name) => name.endsWith('.md') && name !== 'README.md')
-  .sort((a, b) => {
-    const [left, right] = [parts(a), parts(b)];
-    for (let i = 0; i < Math.max(left.length, right.length); i += 1) {
-      const diff = (left[i] ?? 0) - (right[i] ?? 0);
-      if (diff !== 0) return diff;
-    }
-    return 0;
-  });
+  .sort();
 
 if (files.length === 0) {
   console.error('docs/decisions/ holds no entry files.');
   process.exit(1);
 }
 
-const source = (
-  await Promise.all(files.map((name) => readFile(join(folder, name), 'utf8')))
-).join('\n');
+const sources = new Map(
+  await Promise.all(
+    files.map(async (name) => [name, await readFile(join(folder, name), 'utf8')]),
+  ),
+);
 
-/** Split on the `##` headings, keeping the numbered entries and dropping the prose ones. */
-const entries = source
-  .split(/^## /m)
-  .slice(1)
-  .map((block) => {
-    const [heading, ...rest] = block.split('\n');
-    return { heading: (heading ?? '').trim(), body: rest.join('\n') };
-  })
-  .filter((entry) => /^\d/.test(entry.heading));
+/**
+ * One file, one entry: its `# § N · Title` and everything under it.
+ *
+ * A file whose H1 is not that shape is a real failure and not something to skip
+ * quietly — it means a file in this folder is not a decision, and the folder is
+ * the log. It says which file, because «malformed heading» with 62 candidates
+ * is not a message anybody can act on.
+ */
+const entries = files.map((name) => {
+  const [first, ...rest] = sources.get(name).split('\n');
+  const heading = /^# § (.+)$/.exec((first ?? '').trim())?.[1];
+  if (!heading) {
+    console.error(`${name} does not open with «# § N · Title».`);
+    process.exit(1);
+  }
+  return { heading, body: rest.join('\n') };
+});
 
 const missing = [];
 const pending = [];

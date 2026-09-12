@@ -20,6 +20,20 @@ import { AgentUsage } from './agent-usage.tsx';
  * are re-listed here. If Storybook adds a sixth, it does not appear until this
  * file is updated, and that is the cost of the block.
  *
+ * `includePrimary={false}` IS THE WHOLE OF WHY EVERY PAGE SHOWED A STORY TWICE.
+ * `Primary` renders the first story, and `Stories` renders all of them unless
+ * told otherwise — its default is to include the first, so `Basic` appeared at
+ * the top with its controls and again at the head of the list. Every component
+ * page in the library had it, and `Code` had it worst: with one story, the page
+ * was that story, a props table, and that story again.
+ *
+ * The flag fixes both at once, because `Stories` renders nothing when the list
+ * it is left with is empty. Storybook's own page reaches the single-story case
+ * differently — it counts the stories and drops the block — and that is the
+ * cost this comment warned about in the paragraph above, arriving: the default
+ * grew a guard and a hand-written copy of it cannot grow one by itself. Between
+ * the two, the flag is the one that says why rather than when.
+ *
  * WHY AFTER `Controls` AND NOT AT THE TOP. The agent section is a footnote for
  * whoever is wiring the component into a project, and it repeats on all fifty
  * pages. Above the props table it would be the first thing a human reads on
@@ -38,7 +52,7 @@ export function DocsPage() {
       <Primary />
       <Controls />
       <AgentUsage />
-      <Stories />
+      <Stories includePrimary={false} />
     </>
   );
 }

@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.12.0](https://github.com/Proskynete/arrecife/compare/v0.11.0...v0.12.0) (2026-09-12)
+
+
+### 🚀 Novedades
+
+* **components:** the footer can credit the library, and it is off by default ([9b80bd8](https://github.com/Proskynete/arrecife/commit/9b80bd80dc2bc1d4637a132e3b3b9dfbc254f653))
+* **storybook:** the site wears the projects' mark and prints its version ([4c36b94](https://github.com/Proskynete/arrecife/commit/4c36b94d31d7353982eaa58ab75da2b309d972ef))
+
+
+### 🐛 Correcciones
+
+* **storybook:** the docs page stops showing the first story twice ([66f0016](https://github.com/Proskynete/arrecife/commit/66f00163ee6b1f5feb111022762928db112b709e))
+* **tokens:** emit the whole token set, so a var() read from JS resolves ([68836c8](https://github.com/Proskynete/arrecife/commit/68836c861a6a80d74bd6d23c279bfc05978626dc))
+
+
+### 📚 Documentación
+
+* one file per decision, so a reference stops carrying a version ([1deda8e](https://github.com/Proskynete/arrecife/commit/1deda8e3f09585856741e23bceebf5d18e5b5336))
+* **readme:** [@theme](https://github.com/theme) static, builtWith, and how a decision is cited ([ded6f2c](https://github.com/Proskynete/arrecife/commit/ded6f2ca6cc32c4a6746ad66417afa29f66b881d))
+* three decisions, and two of them are about what the library says of itself ([c52c89f](https://github.com/Proskynete/arrecife/commit/c52c89f0507d99bb3886d412e91fc11922debcd4))
+
 ## [0.11.0](https://github.com/Proskynete/arrecife/compare/v0.10.0...v0.11.0) (2026-09-11)
 
 

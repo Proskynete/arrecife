@@ -239,9 +239,51 @@ describe('theme.css over Tailwind v4', () => {
     // `@theme`, the chart would keep the dark palette on paper.
     const light = css.slice(css.indexOf("[data-theme='light']"));
     for (const n of [1, 2, 3, 4]) {
-      expect(light, `--color-series-${n} en mode light`).toMatch(
+      expect(light, `--color-series-${n} in light mode`).toMatch(
         new RegExp(`--color-series-${n}\\s*:`),
       );
+    }
+  });
+
+  /**
+   * The bug the test above could not see, because it asked for the class.
+   *
+   * `seriesColor(i)` returns `var(--color-series-N)` and nothing anywhere writes
+   * `bg-series-1`: the color is read by JS at paint time, not requested by a
+   * utility. Tailwind emits a theme variable only if some generated utility uses
+   * one, so all four were dropped as unused, the `var()` resolved to nothing,
+   * and the bars came out black on a dark page — which reads as «no data».
+   *
+   * So this one compiles a class that asks for NONE of our tokens. That is the
+   * only way to see the difference, and it is exactly the shape of the test that
+   * was missing: `['bg-series-1', 'bg-series-4']` generates the utility that
+   * makes the variable used, and then proves it is there.
+   */
+  it('puts every declared token in :root even when no utility asks for it', async () => {
+    const css = await compileClasses(['flex']);
+    const emitted = css.slice(0, css.indexOf('[data-theme='));
+
+    for (const n of [1, 2, 3, 4]) {
+      expect(emitted, `--color-series-${n} with no series utility`).toMatch(
+        new RegExp(`--color-series-${n}\\s*:`),
+      );
+    }
+
+    // And the same for the other 99, because the failure is not about series:
+    // it is about any token read with `var()` from outside the CSS. `@theme
+    // static` is what makes the whole set a contract instead of a subset
+    // discovered by usage. See `docs/decisions/` § 61.
+    const block = themeCss.slice(
+      themeCss.indexOf('@theme static {'),
+      themeCss.indexOf("\n[data-theme='dark']"),
+    );
+    const declared = [...block.matchAll(/^\s*(--[a-z0-9-]+(?:--[a-z-]+)?):/gim)].map(
+      ([, name]) => name,
+    );
+
+    expect(declared.length).toBeGreaterThan(90);
+    for (const name of declared) {
+      expect(emitted, name).toMatch(new RegExp(`\\s${name}\\s*:`));
     }
   });
 
@@ -250,7 +292,7 @@ describe('theme.css over Tailwind v4', () => {
    * selector for the attribute — `[aria-current]`, with no value — because the
    * site's scroll-spy sets `aria-current="true"` and the controlled component
    * sets `"location"`: if the selector were tied to a value, one of the two
-   * dejaría de pintarse y nada avisaría.
+   * would stop being painted and nothing would say so.
    */
   it('the table of contents active state reacts to aria-current with any value', async () => {
     const css = await compileClasses([

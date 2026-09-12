@@ -1,15 +1,33 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GithubLogo } from '@phosphor-icons/react';
 
+import pkg from '../package.json';
 import { Logo } from '../src/brand/logo.tsx';
 import { CodeBlock } from '../src/components/code-block/index.tsx';
 import { Footer } from '../src/components/footer/index.tsx';
 import { Icon } from '../src/icons/index.tsx';
 import { Alert } from '../src/primitives/alert.tsx';
+import { Badge } from '../src/primitives/badge.tsx';
 import { Button } from '../src/primitives/button.tsx';
 import { Text } from '../src/primitives/typography.tsx';
 import { naming, tagline } from '../src/tokens/tokens.ts';
 import { Block, Note, Stack } from './utils.tsx';
+
+/**
+ * The published version, READ FROM `package.json` and never typed here.
+ *
+ * It is the one number on this page that goes stale on its own, and it would go
+ * stale silently: release-please writes `package.json` on every release and
+ * would have no reason to touch a story. A hand-written «v0.11.0» in the
+ * heading is wrong the day after it is written and looks exactly as right as it
+ * did the day before — which is the failure this whole repository is built
+ * against.
+ *
+ * The story files are not published — `files` ships `dist`, `assets`,
+ * `llms.txt` and the changelog — so importing the manifest here costs the
+ * package nothing. `resolveJsonModule` is already on and Vite serves it.
+ */
+const VERSION = pkg.version;
 
 /**
  * The way in. It is the first thing in the sidebar and it is the only page in
@@ -91,9 +109,18 @@ export const GettingStarted: Story = {
     <div className="max-w-content px-step-md py-step-xl gap-step-xl mx-auto flex flex-col">
       <header className="gap-step-md flex flex-col">
         <Logo withTagline />
-        <Text variant="display" as="h1">
-          {naming.wordmark}
-        </Text>
+        <div className="gap-step-sm flex flex-wrap items-center">
+          <Text variant="display" as="h1">
+            {naming.wordmark}
+          </Text>
+          {/*
+            The version sits beside the wordmark and not in the install snippet:
+            the snippet is what you copy, and pinning a version into something
+            copied is how a project ends up installing a release that was
+            current when the page was read.
+          */}
+          <Badge variant="neutral">v{VERSION}</Badge>
+        </div>
         <Text variant="lead" tone="secondary" as="p" measure>
           La librería de componentes de la identidad visual de Eduardo Álvarez. React 19,
           TypeScript, Tailwind v4 y shadcn/ui sobre Radix.
@@ -118,6 +145,12 @@ export const GettingStarted: Story = {
           <Note>
             Tailwind has to be v4. There is no v3 preset and there will not be one: the
             output is `@theme`, which v3 does not parse.
+          </Note>
+          <Note>
+            This page describes **v{VERSION}**, read from the package&rsquo;s own
+            `package.json` when the Storybook was built. The published site is deployed by
+            the release workflow AFTER npm publishes, so the version above is the one on
+            npm — that is why the deploy is chained to the publish and not to a push.
           </Note>
         </Stack>
       </Block>

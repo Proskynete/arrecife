@@ -72,6 +72,15 @@ project declares `@source`, include the package:
 @source "../node_modules/@eduardoalvarez/arrecife/dist";
 ```
 
+**Every token is in `:root`, and you may read it with `var()`.** The block is
+`@theme static`, so a token is emitted whether or not a utility asks for it:
+`style={{ fill: 'var(--color-series-1)' }}` or `var(--radius-card)` from your own
+JavaScript resolves. Do not write a fallback hexadecimal next to it — that is a
+second copy of a value this package exists to keep in one place. Before that fix
+Tailwind dropped the four `--color-series-*` as unused, because they are read by
+`var()` and requested by no class, and the charts drew black. See
+`decisions/` § 61.
+
 ### Light mode and dark mode
 
 **Dark mode is primary and it is the default.** A dark project declares nothing.
@@ -263,7 +272,7 @@ does nothing.
 
 **One `Nav` per page.** It renders the site's `banner` landmark, and two banners
 on one page is an accessibility failure — which is also why `PageHeader` goes
-inside `<main>` and is not a landmark. See `decisions/0.7.md` § 30.
+inside `<main>` and is not a landmark. See `decisions/` § 30.
 
 ### Icons are yours, the way they are drawn is not
 
@@ -332,7 +341,7 @@ a Server Component throws. It ships no `"use client"` to stop you, so the failur
 arrives at render rather than at build. The `/ssr` entry is the same icons
 without the context read, and `Icon` works with either.
 
-See `decisions/0.7.md` § 29 and § 35.
+See `decisions/` § 29 and § 35.
 
 ### `Stat`'s delta says direction, not judgement
 
@@ -349,7 +358,7 @@ errores» point the same way and mean opposite things, so whether a number is go
 news is `tone`'s job and yours: `neutral` for a datum, `alert` when the number IS
 the problem, `achievement` when it is the reward. `alert` and `achievement` paint
 the same sand on purpose — the API is the meaning, the colour is the
-implementation. See `decisions/0.7.md` § 28.
+implementation. See `decisions/` § 28.
 
 `delta.value` arrives already formatted, like `value`: the library imposes no
 locale and computes no percentage. `spark` is a `ReactNode` and the library ships
@@ -359,7 +368,7 @@ no sparkline — pass your own, exactly like `icon`.
 and biolume goes on the icon badge and the sparkline instead: three accents in
 one card and the figure stops being the loudest thing in it. `alert` and
 `achievement` DO paint the number sand, which is how «this number is not just a
-number» is said. See `decisions/0.7.md` § 31.
+number» is said. See `decisions/` § 31.
 
 **`icon` is a badge in the corner opposite the title**, in a circle tinted at
 10 % of the tone. You pass the glyph; the circle, the tint and the size are the
@@ -433,6 +442,13 @@ it is `aria-hidden`. The column titles render as `<h3>`. Pass `linkAsChild` to
 plug in the router's `Link`; without it the columns are plain `<a>` and every
 navigation costs a page load.
 
+**`builtWith` adds «Creado con Arrecife ♥» under the signature**, linking to the
+library's Storybook. It works on both shapes and it is OFF by default:
+the credit is the site's to give, so the library does not put it in a footer
+that did not ask. Do not hand-write that line instead — the heart is Phosphor's
+filled `Heart` and never the emoji, and the URL is checked against the package's
+`homepage` on every build. See `decisions/` § 62.
+
 ### `Table` brings its own surface
 
 ```tsx
@@ -485,7 +501,7 @@ largest datum, and on a horizontal ranking — whose value axis is hidden — a
 course watched to 40 % draws as a full bar when it is the highest on the list.
 The bottom is always zero, and it is a floor rather than a clip: a datum above
 `valueMax` widens the axis instead of running off the edge. It is on all three
-types. See `decisions/0.11.md` § 58.
+types. See `decisions/` § 58.
 
 `stacked` on `AreaChart` and `BarChart` adds the series up. Without it areas
 overlap, which is honest and rarely what you want with more than one series: to
@@ -493,6 +509,13 @@ COMPARE rather than add up, the type is `LineChart`.
 
 Anything that is not a series over a category axis has no type and is not missing
 one. A doughnut is `ChartContainer` plus Recharts' `Pie` with `SERIES_COLORS`.
+
+**The series palette comes from `seriesColor(i)` and `SERIES_COLORS`, and both
+return `var(--color-series-N)`** rather than a hexadecimal, so the colors follow
+the mode instead of freezing to the one that was live when the chart mounted. You
+do not need `data-theme` on `<html>` for that to resolve, and you do not need a
+fallback: the tokens are in `:root` on every page. Pass `color` per series only
+to override the palette on purpose — a semantic red for a failure count, say.
 
 ### The social icons are yours, and they come from Phosphor
 
@@ -585,7 +608,7 @@ compiles and looks wrong, or that fails the project's accessibility audit.
 3. **`Button variant="destructive"` is for the irreversible only.** Never for
    «cancel» on a form, and not inside an `AlertDialog` — there the confirm button
    stays `primary`, because the title, the focus on cancel and the no-click-outside
-   already carry the weight. See `decisions/0.6.md` § 21.
+   already carry the weight. See `decisions/` § 21.
 4. **`secondary` is never filled.** It is border and text.
 5. **No entrance animations.** Modals, menus, tooltips and toasts appear where
    they will stay. There are five declared exceptions, all behind `motion-safe`
@@ -600,7 +623,7 @@ compiles and looks wrong, or that fails the project's accessibility audit.
    `PageHeader` makes the same split: `as` is the level and `titleVariant` the
    scale. An admin panel's title is `<PageHeader title="Ventas"
    titleVariant="h3" />` — still the page's only `h1`, at 25px instead of 44. See
-   `decisions/0.11.md` § 57.
+   `decisions/` § 57.
 7. **`textMuted` never goes over `surfaceRaised`**: it gives 4.07 in dark. Over a
    raised surface — menus, active tabs — the token is `textSecondary`.
 8. **A background tinted with a semantic color carries text from a text token**,
@@ -618,14 +641,14 @@ compiles and looks wrong, or that fails the project's accessibility audit.
     hole inside a table page or a dashboard widget, and it carries no face — the
     type does not accept one. `page`, the default, is the one that IS the screen,
     and there `expression` stays mandatory. A dozen mascots on one admin screen is
-    not the humour contract. See `decisions/0.7.md` § 27.
+    not the humour contract. See `decisions/` § 27.
 12. **The fin is not a free parameter**: `foam` on a dark background, `color` on a
     light one. The components already choose it from the background.
     **On a site that switches theme, pass `background="auto"`** to `Isotype` or
     `Logo`: both fins are rendered and the `light:` variant shows the one that
     reads, so no call site has to know the theme. A surface that keeps one mode
     whatever the page does — a dark panel on a light page — is a fixed
-    background, and it still says `dark`. See `decisions/0.11.md` § 60.
+    background, and it still says `dark`. See `decisions/` § 60.
 
 ## What the library does NOT do, on purpose
 
@@ -646,7 +669,7 @@ These are the confusions people run into most often when consuming it.
   already names the card — and `footer`, the closing row where a project puts the
   rating and the price. Both are nodes the project draws; the card keeps the
   title, its hover and the sand progress bar. The title does not go over the
-  cover. See `decisions/0.11.md` § 59.
+  cover. See `decisions/` § 59.
 - **It ships no `data-testid`.** A composed part your test suite has to reach is
   reached with a slot: `ArticleCard`'s `tagAsChild`, `Breadcrumb`'s and
   `TableOfContents`'s `linkAsChild`. They hand you the element and its
@@ -720,5 +743,7 @@ usual ones.
 - `architecture/design-system.md` and `architecture/brand-manual.md`: the identity documents,
   greppable.
 - `decisions/`: the points where the code and the document did not say the
-  same thing, each with its resolution.
+  same thing, each with its resolution. One file per decision, named for its
+  number, so «§ 45» is `decisions/045-*.md` — which is how every `§ N` in this
+  file resolves.
 - `AGENTS.md`: for working inside the library's repo.

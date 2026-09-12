@@ -1,6 +1,8 @@
+import { Heart } from '@phosphor-icons/react';
 import { Slot } from '@radix-ui/react-slot';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
+import { Icon } from '../../icons/index.tsx';
 import { cn } from '../../lib/cn.ts';
 import { Text } from '../../primitives/typography.tsx';
 import { naming } from '../../tokens/tokens.ts';
@@ -11,7 +13,7 @@ import { naming } from '../../tokens/tokens.ts';
  * The domain defaults to `naming.domain` and not to a hand-written string, for
  * the same reason as the wordmark: if it changes, it changes in all five
  * projects at once. A project that lives on its OWN domain passes `domain` —
- * see `docs/decisions/0.9.md` § 49.
+ * see `docs/decisions/` § 49.
  *
  * The social links are icons with NO visible text, so `aria-label` is not an
  * improvement: it is the only thing that makes them legible. Which is why it is
@@ -27,7 +29,7 @@ import { naming } from '../../tokens/tokens.ts';
  * answer has not moved: `EmptyState` is a discriminated union where `page` is
  * the default and `inline` cannot be handed a face; `Nav` takes a `size` where
  * `default` is the bar it always was. Both left what was written before exactly
- * where it was. See `docs/decisions/0.8.md` § 44.
+ * where it was. See `docs/decisions/` § 44.
  *
  * The union is what holds the rule up. `columns`, `description` and `action`
  * exist only on `full`, and the default form cannot be handed one. As loose
@@ -78,7 +80,7 @@ export type FooterColumn = {
  * `./aviso-legal` — and that row is what `variant="full"`'s columns replace. A
  * flat row cannot say which block a link belongs to, cannot carry a heading a
  * screen reader can jump to, and made whoever wrote the label type the `./`
- * themselves, which the columns put there. See docs/decisions/0.8.md § 47.
+ * themselves, which the columns put there. See docs/decisions/ § 47.
  */
 type FooterBase = Omit<ComponentPropsWithoutRef<'footer'>, 'children'> & {
   social?: readonly SocialLink[];
@@ -113,10 +115,25 @@ type FooterBase = Omit<ComponentPropsWithoutRef<'footer'>, 'children'> & {
    * have warned about.
    *
    * It is a domain and not a whole signature: the `$`, the `cd ~/` and the year
-   * are the identity's and stay the component's. See `docs/decisions/0.9.md`
+   * are the identity's and stay the component's. See `docs/decisions/`
    * § 49.
    */
   domain?: string | undefined;
+  /**
+   * Adds «Creado con Arrecife ♥», linking to the library's Storybook.
+   *
+   * OFF BY DEFAULT, and that is the decision rather than the default. No
+   * consuming project credits the library today — the four were read before
+   * this was written — so turning it on for everybody would be the library
+   * putting a line into five production footers that none of them asked for.
+   * That is the move § 45 is about, and it does not get made twice.
+   *
+   * A site that wants it passes `builtWith`. It is a boolean and not a slot: the
+   * string and the destination are the library's, and a slot would be an
+   * invitation to write «Hecho con Arrecife» on one site and «Creado con» on the
+   * next, which is the drift this package exists to remove.
+   */
+  builtWith?: boolean | undefined;
 };
 
 export type FooterProps = FooterBase &
@@ -165,7 +182,7 @@ export type FooterProps = FooterBase &
  * cut the signature takes two functions down, and it is not invented here:
  * `links` has drawn its footer this way in production since before the library
  * had one — `justify-center sm:justify-start`, copied. See
- * `docs/decisions/0.10.md` § 53.
+ * `docs/decisions/` § 53.
  */
 function SocialRow({ social }: { social: readonly SocialLink[] }) {
   return (
@@ -201,7 +218,7 @@ function SocialRow({ social }: { social: readonly SocialLink[] }) {
  * So the mark is `pulse-accent`, and the geometry is the one those two sites
  * drew: a 2px bar, not a half-em block. A halo needs something thin to radiate
  * from — around a block it reads as a glowing rectangle, which is the shape the
- * bar exists to avoid. See `docs/decisions/0.8.md` § 45, and § 23 for the argument
+ * bar exists to avoid. See `docs/decisions/` § 45, and § 23 for the argument
  * this reverses.
  *
  * The height is `1em` and not `cursos`'s fixed 12px, so the mark tracks the text
@@ -223,12 +240,10 @@ function Signature({
   year,
   href,
   domain: domainName = naming.domain,
-  className,
 }: {
   year: number;
   href?: string | undefined;
   domain?: string | undefined;
-  className?: string;
 }) {
   const domain = href ? (
     <a
@@ -242,7 +257,7 @@ function Signature({
   );
 
   return (
-    <Text variant="meta" tone="muted" as="p" className={cn('shrink-0', className)}>
+    <Text variant="meta" tone="muted" as="p">
       <span aria-hidden="true" className="text-accent">
         ${' '}
       </span>
@@ -252,6 +267,110 @@ function Signature({
         className="bg-accent motion-safe:pulse-accent rounded-pill ml-1 inline-block h-[1em] w-[2px] align-middle"
       />
     </Text>
+  );
+}
+
+/**
+ * «Creado con Arrecife ♥», and the link is the only one in this component that
+ * points at the library rather than at the site.
+ *
+ * IT SITS UNDER THE SIGNATURE, which is `SignatureBlock`'s doing and not this
+ * component's — the alignment comes from the block so the two lines cannot come
+ * apart. It went at the very bottom of the footer first, which is where a «built
+ * with» line usually goes, and there it sat alone under a full-width block as
+ * far from the signature as the layout allows.
+ *
+ * The heart is Phosphor's `Heart` through `Icon` and not the ❤️ emoji. Two
+ * reasons and the second is the one that decides it: the library has drawn in
+ * one hand since 0.10.0 — see `docs/decisions/` § 51 — and an emoji is a
+ * different glyph on every operating system, so the one mark that says which
+ * library built the page would be a different drawing per visitor. `tone`
+ * makes it solid and `Icon` fixes it at 1em, so it tracks the 13px line it sits
+ * on. It carries no `label`: it is decorative, the sentence reads without it,
+ * and `Icon` hides it from the accessibility tree on its own.
+ *
+ * THE WORD IS UNDERLINED, and that is the suite's doing rather than a taste.
+ * A link sitting inside a line of text has to be told apart from that text by
+ * something other than colour — WCAG 1.4.1, `link-in-text-block` — or carry 3:1
+ * against it. Both of the obvious colours fail that: `textSecondary` on
+ * `textMuted` is 1.7:1 and the accent on `textMuted` is 1.85:1, and axe named
+ * both numbers before this line ever shipped. So the distinguishing mark is the
+ * underline, at `decoration-1 underline-offset-4`, which is not invented here
+ * either: it is what `NavItem` draws on the section you are on and what
+ * `Button variant="link"` draws on hover.
+ *
+ * The colour still moves — accent, going to `textPrimary` on hover, which is
+ * the signature's domain link exactly. Colour is the second signal here and not
+ * the only one, which is the whole of what the rule asks.
+ *
+ * The heart takes the accent for the same reason the signature's `$` does: one
+ * coloured mark per muted line is what keeps a 13px line from reading as body
+ * text that happens to be small.
+ *
+ * And it carries `inline`, which is the only place in this library that has to.
+ * Tailwind's preflight sets `svg { display: block }`, and every other icon here
+ * sits in a flex row where that is exactly right — this is the first one INSIDE
+ * a sentence, and as a block it took a line of its own under the text. It is
+ * visible the moment you look, which is why it is fixed here rather than in
+ * `Icon`: changing the base class would change how every icon in five projects
+ * is laid out, to solve a case that announces itself.
+ */
+function BuiltWith() {
+  return (
+    <Text variant="meta" tone="muted" as="p">
+      Creado con{' '}
+      <a
+        href={naming.libraryUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          'text-accent hover:text-text-primary transition-standard cursor-pointer',
+          'underline decoration-1 underline-offset-4',
+          'rounded-chip focus-ring',
+        )}
+      >
+        {naming.library}
+      </a>{' '}
+      <Icon as={Heart} tone="current" className="text-accent inline align-middle" />
+    </Text>
+  );
+}
+
+/**
+ * The signature and, under it, the credit: the two lines that say what this page
+ * is rather than what it contains.
+ *
+ * THEY STACK, and that is one placement for both shapes. The credit went at the
+ * very bottom of the footer first, which is where a «built with» line usually
+ * goes and which left it sitting alone under a full-width block, as far from the
+ * signature as the layout allows. Under it they read as what they are: the
+ * signature names the site, the credit names what built it, and both are the
+ * page talking about itself.
+ *
+ * The alignment is the block's and not each line's, so the two cannot drift
+ * apart: centred while the footer is a stacked column, and pinned to whichever
+ * edge the shape puts the signature on from `sm` up.
+ */
+function SignatureBlock({
+  year,
+  href,
+  domain,
+  builtWith,
+  className,
+}: {
+  year: number;
+  href?: string | undefined;
+  domain?: string | undefined;
+  builtWith?: boolean | undefined;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn('gap-step-xs flex shrink-0 flex-col items-center sm:items-end', className)}
+    >
+      <Signature year={year} href={href} domain={domain} />
+      {builtWith ? <BuiltWith /> : null}
+    </div>
   );
 }
 
@@ -293,6 +412,7 @@ export function Footer({
   linkAsChild,
   social,
   brand,
+  builtWith,
   year = new Date().getFullYear(),
   signatureHref,
   domain,
@@ -408,7 +528,12 @@ export function Footer({
           rather than as a decision.
         */}
         <div className="border-hairline mt-step-xl pt-step-lg border-t">
-          <Signature year={year} href={signatureHref} domain={domain} className="text-center sm:text-right" />
+          <SignatureBlock
+            year={year}
+            href={signatureHref}
+            domain={domain}
+            builtWith={builtWith}
+          />
         </div>
       </Shell>
     );
@@ -460,7 +585,13 @@ export function Footer({
       */}
       <div className="gap-step-md flex flex-col items-center sm:flex-row sm:flex-wrap">
         {first ?? null}
-        <Signature year={year} href={signatureHref} domain={domain} className="sm:ml-auto" />
+        <SignatureBlock
+          year={year}
+          href={signatureHref}
+          domain={domain}
+          builtWith={builtWith}
+          className="sm:ml-auto"
+        />
       </div>
 
       {others}

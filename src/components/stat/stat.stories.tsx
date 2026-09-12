@@ -227,7 +227,7 @@ export const Tones: Story = {
         names. A counter of diplomas is not an alert — it is the opposite — and
         painting it with `alert` gets the colour right and the meaning wrong,
         which is precisely what a system that names by meaning should not let you
-        do. See `docs/decisions/0.7.md` § 28.
+        do. See `docs/decisions/` § 28.
       </Note>
       <Note>
         Neither of them is `success`. In light mode `success` and `accent` are two
@@ -274,7 +274,7 @@ export const Panel: Story = {
       </Note>
       <Note>
         The circle is the tint pattern the system already has: `bg-accent/10` is a
-        SURFACE and the colour stays on the glyph, per `docs/decisions/0.6.md` § 4b. A
+        SURFACE and the colour stays on the glyph, per `docs/decisions/` § 4b. A
         glyph clears the 3:1 graphical threshold, where accent over its own tint
         would not clear text's 4.5.
       </Note>
@@ -321,7 +321,7 @@ export const NeutralIsNotBiolume: Story = {
         with a number and a label in it. With a biolume badge and a biolume
         sparkline, a biolume number is the third accent in a card the size of a
         postcard, and the thing you came to read stops being the loudest thing in
-        it. See `docs/decisions/0.7.md` § 31.
+        it. See `docs/decisions/` § 31.
       </Note>
       <Note>
         The rule that matters survives untouched: `alert` and `achievement` still

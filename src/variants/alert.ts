@@ -43,7 +43,7 @@ import { cva } from 'class-variance-authority';
  *
  * The radius: the document says 12, which is none of the system's five radii. It
  * uses the card radius rather than introducing a sixth — see
- * `docs/decisions/`.
+ * `docs/decisions/` § 3.
  */
 const alert = cva('w-full rounded-card border p-step-md font-sans text-ui', {
   variants: {

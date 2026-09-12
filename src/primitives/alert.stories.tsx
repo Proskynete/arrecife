@@ -38,7 +38,7 @@ export const Variants: Story = {
         same family as the `❯` in the code block's bar. That rule describes a
         PROMPT and an alert's mark is not one: it is the only thing on the block
         saying which of the four this is, and at 15px `!` and `✕` are two glyphs
-        of one stroke doing that job. See `docs/decisions/0.10.md` § 52.
+        of one stroke doing that job. See `docs/decisions/` § 52.
       </Note>
       <Note>
         The title uses `textPrimary` and not the tone's color. In light mode the

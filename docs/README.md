@@ -5,7 +5,7 @@ Three folders, and the split is by **what you came here to do**.
 | Folder | You are here to… | Holds |
 | --- | --- | --- |
 | [`architecture/`](architecture/README.md) | look up what the system IS | The Design System and the Brand Manual, as consulted from the code |
-| [`decisions/`](decisions/README.md) | find out WHY it is that way | 49 entries where the code and a document disagreed, and who won |
+| [`decisions/`](decisions/README.md) | find out WHY it is that way | 62 entries where the code and a document disagreed, and who won — one file each, `NNN-slug.md` |
 | [`runbooks/`](runbooks/README.md) | upgrade a project | One migration guide per release that broke something |
 
 ## The two files that are not in a folder

@@ -23,7 +23,7 @@ import { Icon } from '../icons/index.tsx';
  * `--ease-standard`, so it introduces neither a new timing nor a new curve.
  * Whoever asked for less motion still sees the panel appear where it will stay.
  *
- * See `docs/decisions/0.6.md` § 20.
+ * See `docs/decisions/` § 20.
  *
  * The chevron, by contrast, rotates with no transition: `transition-standard`
  * only covers color and border, so `rotate` snaps even with the class in place.

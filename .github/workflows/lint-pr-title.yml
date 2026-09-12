@@ -39,7 +39,7 @@ jobs:
           # that direction: the subpath was removed, so the scope goes with it.
           # Keeping it would leave a name in this list that no longer points at
           # anything, which is the state the rule exists to prevent. See
-          # docs/decisions/0.10.md § 51.
+          # docs/decisions/ § 51.
           scopes: |
             tokens
             primitives

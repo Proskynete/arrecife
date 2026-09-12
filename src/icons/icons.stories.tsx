@@ -90,14 +90,14 @@ export const Weight: Story = {
         quarters heavier than both, and 0.7.0 left it alone because aligning it
         restyled every primitive in the library. 0.10.0 is that change: the file
         is gone and the primitives draw from here. See
-        `docs/decisions/0.10.md` § 51.
+        `docs/decisions/` § 51.
       </Note>
       <Note>
         These are the three the system reads, not the six Phosphor ships.
         `thin`, `bold` and `duotone` are left out because no role here means
         them — `bold` in particular is what a set with a `strokeWidth` would
         have called the emphasis step, and this system emphasises with colour.
-        See `docs/decisions/0.7.md` § 35.
+        See `docs/decisions/` § 35.
       </Note>
     </>
   ),

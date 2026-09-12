@@ -425,7 +425,7 @@ function ShapeAndRhythm() {
           one with no component visible in this file. It is what `cursos` and
           `eduardoalvarez.dev` both drew before this library had a `Footer`, and
           the blink the library briefly published on top of them — the `caret`
-          utility — is gone. See `docs/decisions/0.8.md` § 45, and § 23 for the
+          utility — is gone. See `docs/decisions/` § 45, and § 23 for the
           argument it reverses.
         */}
         <div className="gap-step-lg mt-step-lg flex flex-wrap items-start">

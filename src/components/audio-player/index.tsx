@@ -27,7 +27,7 @@ import { Icon } from '../../icons/index.tsx';
  *   paths this file used to carry verbatim from the portfolio are gone with
  *   `lib/glyphs.tsx`; `Play`, `Pause`, `SpeakerHigh` and `SpeakerSlash` are the
  *   same symbols in Phosphor's hand, and the ±15s skips are `ArrowCounterClockwise`
- *   and `ArrowClockwise`. See `docs/decisions/0.10.md` § 51.
+ *   and `ArrowClockwise`. See `docs/decisions/` § 51.
  * - analytics' `trackEvent` → the `onFirstPlay` prop, which the consumer wires
  *   to whatever they use. It still fires exactly once per load.
  *

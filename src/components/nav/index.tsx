@@ -87,7 +87,7 @@ export function Nav({ brand, children, actions, size = 'default', className, ...
             puts it in `actions`. A `Nav` that hid its own items would leave every
             consumer without a drawer with no navigation at all, silently.
 
-            See `docs/decisions/0.10.md` § 54.
+            See `docs/decisions/` § 54.
           */
           <nav aria-label="Principal" className="ml-auto min-w-0 overflow-x-auto">
             {/*
@@ -150,7 +150,7 @@ export type NavItemProps = ComponentPropsWithoutRef<'a'> & {
  * impossible to call. It passed `tsc` and it passed the build, because the shape
  * of the children is not something either one looks at. `Slottable` is Radix's
  * answer to exactly this: it marks which child the router's `Link` replaces and
- * leaves the decoration where it is. See `docs/decisions/0.8.md` § 40.
+ * leaves the decoration where it is. See `docs/decisions/` § 40.
  */
 export function NavItem({ active = false, asChild = false, className, children, ...props }: NavItemProps) {
   const Root = asChild ? Slot : 'a';

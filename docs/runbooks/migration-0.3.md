@@ -175,4 +175,4 @@ reasoning:
 - `pnpm test:unit` (`scripts/theme-css.test.mjs`) compiles Tailwind for real with
   the tokens on top and checks what each utility resolves to.
 
-The detail of the decision is in [`../decisions/0.6.md`](../decisions/0.6.md#16--page-rhythm-carries-step-in-the-name) § 16.
+The detail of the decision is in [§ 16](../decisions/016-step-prefix.md).

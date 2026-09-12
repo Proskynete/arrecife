@@ -44,7 +44,7 @@ import { cn } from '../lib/cn.ts';
  * THE WEIGHT IS AN AXIS, AND IT IS THE ONLY ONE AN ICON HAS. There are three
  * roles and `tone` is how you name them; the weights themselves are not a prop,
  * because Phosphor's other three — `thin`, `bold`, `duotone` — say nothing this
- * system means. See `TONE_WEIGHT` below and `docs/decisions/0.7.md` § 35.
+ * system means. See `TONE_WEIGHT` below and `docs/decisions/` § 35.
  *
  * IT IS NOW THE ONLY LINE THE LIBRARY DRAWS, which is what 0.10.0 changed.
  * `lib/glyphs.tsx` drew at 1.75 on a 16 grid — 0.109em, three quarters heavier
@@ -52,7 +52,7 @@ import { cn } from '../lib/cn.ts';
  * third hand. 0.7.0 left both alone because reconciling them restyles every
  * primitive in the library; that is exactly what 0.10.0 did, and both files are
  * gone. There is one description of what a line looks like here, and it is
- * Phosphor's. See `docs/decisions/0.10.md` § 51.
+ * Phosphor's. See `docs/decisions/` § 51.
  *
  * IN NEXT, IMPORT FROM `@phosphor-icons/react/ssr` inside a Server Component.
  * Phosphor's default build reads `IconContext` through `useContext`, and a hook

@@ -31,7 +31,7 @@ import { Text } from '../../primitives/typography.tsx';
  * eyebrow is the same length in none of them, so an inline icon puts the only
  * coloured mark on a different x in every card; pinned to the corner it lands on
  * a grid. The circle is the tint pattern the system already has — `bg-accent/10`
- * as a surface and the colour on the GLYPH, per `docs/decisions/0.6.md` § 4b — and a
+ * as a surface and the colour on the GLYPH, per `docs/decisions/` § 4b — and a
  * glyph clears the 3:1 graphical threshold where text would not clear 4.5.
  *
  * WHICH IS WHY A NEUTRAL NUMBER IS PRIMARY INK AND NOT BIOLUME. With a biolume
@@ -39,7 +39,7 @@ import { Text } from '../../primitives/typography.tsx';
  * the size of a postcard, and the thing you came to read stops being the loudest
  * thing in it. `alert` and `achievement` DO still paint the number sand, so the
  * document's rule survives exactly where it matters: sand when the number is not
- * just a number. See `docs/decisions/0.7.md` § 31.
+ * just a number. See `docs/decisions/` § 31.
  */
 export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   /** The number, already formatted. The library imposes no locale. */
@@ -51,7 +51,7 @@ export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
    * the opposite — the diplomas issued, the modules finished. The two paint the
    * same sand today and they are still two names: a system that names by meaning
    * cannot make «this is bad» the only way to say «this stands out». See
-   * `docs/decisions/0.7.md` § 28.
+   * `docs/decisions/` § 28.
    */
   tone?: 'neutral' | 'alert' | 'achievement';
   /** With `progress`, the metric reads as progress and adds the bar. */

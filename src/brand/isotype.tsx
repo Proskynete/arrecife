@@ -37,7 +37,7 @@ export type IsotypeProps = Omit<ComponentPropsWithoutRef<'img'>, 'src' | 'alt'> 
  * server does not know the theme, and a fin picked in JavaScript would be wrong
  * on the first paint half the time. `cursos` had written exactly this by hand
  * after a surface changed mode and its fin vanished — not looked wrong: vanished,
- * with no error and no gap in the layout. See `docs/decisions/0.11.md` § 60.
+ * with no error and no gap in the layout. See `docs/decisions/` § 60.
  *
  * Dark is the system default, so the foam fin is the one shown unless
  * `data-theme="light"` says otherwise, and the two-blue one hides everywhere

@@ -39,6 +39,7 @@ keeps its file and says so.
 | 0.9.0 | §§ 49–50 | Two pieces built from a consumer that the consumer could not use |
 | 0.10.0 | §§ 51–56 | The library stops drawing icons, and four things a phone already knew |
 | 0.11.0 | §§ 57–60 | Four props a consumer had already written down in its own source |
+| 0.12.0 | §§ 61–63 | One word of CSS, a footer that can credit the library, and a site that says which version it is |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -183,6 +184,29 @@ difference.
 - § 58 · [A ranking with a hidden axis cannot scale to its own maximum](058-chart-value-max.md)
 - § 59 · [The course card takes a cover and a closing row, and the title stays off the cover](059-course-card-cover.md)
 - § 60 · [The fin can follow the theme, and the explicit value stays for fixed backgrounds](060-isotype-background-auto.md)
+
+### 0.12.0
+
+Three entries, and the first is one word of CSS. It is also the first entry in
+this log that is not a discrepancy with a canvas: the document and the code
+agreed on the four series colors all along, and what failed was whether the
+values reached the browser. It is the same silent-failure family as the missing
+`@source` and the token collision the doctor exists for — see
+[§ 33](033-doctor-command.md) — and as the `--spacing-*` clash that
+`scripts/theme-css.test.mjs` was written for. Nothing errors, nothing warns, and
+what arrives is a person saying the screen looks empty.
+
+The other two are about what this library says about ITSELF: a footer that can
+credit it, and a published site that wears the mark its four projects had
+already agreed on and prints the version it is describing. Both were settled by
+reading those projects rather than by arguing here, and § 62 is off by default
+for exactly that reason.
+
+Nobody's code changes. There is no migration.
+
+- § 61 · [The token set is emitted whole, because a token read by `var()` is asked for by no class](061-theme-static-tokens.md)
+- § 62 · [The footer can credit the library, and it is off until a site asks](062-footer-built-with.md)
+- § 63 · [The published site wears the projects' mark and prints the version it is](063-storybook-identity.md)
 
 ---
 

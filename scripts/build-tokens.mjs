@@ -142,7 +142,24 @@ export const themeCss = `${NOTICE}
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 
-@theme {
+/* STATIC, and that word is the whole of a bug fix. Tailwind v4 emits a theme
+   variable only if some utility it generated uses it, and a token read with
+   var() from JS is asked for by no utility at all: seriesColor(i) returns
+   var(--color-series-N) on purpose, so the color follows the mode instead of
+   freezing to whichever one was live when the chart mounted. No project writes
+   bg-series-1, so Tailwind dropped all four as unused, the var() resolved to
+   nothing, and a fill that resolves to nothing is black — on a dark page,
+   indistinguishable from «no data». No error in the console and none in the
+   build; the report that arrived was «the information is not showing».
+
+   With static, every token this file declares reaches :root whether a class
+   asks for it or not, which is what a published token set is: a contract, not
+   a subset of itself discovered by usage. It costs CSS — measured at +1.6 KB
+   raw / +234 B gzipped for a project using the library's whole vocabulary, and
+   +3.2 KB / +579 B for one that writes almost nothing — and it buys the
+   removal of a whole class of silent failure rather than of one instance.
+   See docs/decisions/ § 61. */
+@theme static {
   /* --- color · dark mode (default) ------------------------------------- */
 ${colorsBlock(tokens.colors.dark)}
 
@@ -236,7 +253,7 @@ ${gradientsBlock('light')}
    written from first principles about terminals rather than read off the two
    sites that already had a signature. A utility with no consumer and no origin
    is not a feature, it is the invention still sitting there under a new label.
-   See docs/decisions/0.8.md § 45.
+   See docs/decisions/ § 45.
 
    Its reason is the one the other four exceptions share: it is feedback about
    PROGRESS. A prompt that radiates says the terminal is live, which is the same
@@ -254,7 +271,7 @@ ${gradientsBlock('light')}
    Behind motion-safe at the call site — the half NOT copied from cursos, whose
    span animates regardless. The blog guarded it, every other exception here is
    guarded, and at rest the bar is simply solid.
-   See docs/decisions/0.8.md § 45. */
+   See docs/decisions/ § 45. */
 @keyframes arrecife-pulse {
   0%, 100% {
     box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent) 70%, transparent);

@@ -211,6 +211,27 @@ for (const [subpath, value] of Object.entries(pkg.exports ?? {})) {
   }
 }
 
+/* ---------------------------------- the library's own address, said twice ---
+   `naming.libraryUrl` is what `Footer builtWith` links to and `homepage` is what
+   npm prints, and they are the same URL written in two files. `src/tokens/`
+   imports nothing — that is the constraint that outranks everything else here —
+   so it cannot read `package.json` and the two cannot be derived from each
+   other. What is left is to check them, which is this repo's answer to every
+   list kept in sync by hand: see § 15.
+
+   It is worth the twelve lines because of how it would fail. The credit is the
+   one link in the library that points AT the library: if the Storybook ever
+   moves, `homepage` gets updated — npm shows it — and the footer of five
+   production sites keeps linking to wherever it used to be. */
+const { naming } = await import(resolve(root, 'src/tokens/index.ts'));
+
+if (naming.libraryUrl !== pkg.homepage) {
+  failures.push(
+    `naming.libraryUrl is ${naming.libraryUrl} and package.json's homepage is ` +
+      `${pkg.homepage} — Footer builtWith links to the first one`,
+  );
+}
+
 if (failures.length > 0) {
   console.error('The published surface does not add up:\n');
   for (const failure of failures) console.error(`  ${failure}`);

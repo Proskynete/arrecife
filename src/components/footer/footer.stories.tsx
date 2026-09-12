@@ -84,7 +84,7 @@ export const Basic: Story = {
           the library shipped its own ten at `./social`, and that catalogue is gone:
           `SocialLink.icon` was always a `ReactNode` the project supplies, so what
           disappeared is a second hand drawing the same marks. See
-          `docs/decisions/0.10.md` § 51.
+          `docs/decisions/` § 51.
         </Note>
         <Note>
           The signature comes from `naming.domain`. The `$` is biolume and
@@ -94,7 +94,7 @@ export const Basic: Story = {
           The mark at the end is `pulse-accent`: a 2px bar that stays solid and radiates a halo,
           which is what `cursos` and `eduardoalvarez.dev` both drew before this library had a
           `Footer`. It used to be a blinking block the library had invented on top of them. See
-          `docs/decisions/0.8.md` § 45.
+          `docs/decisions/` § 45.
         </Note>
       </div>
     </div>
@@ -261,7 +261,7 @@ export const Full: Story = {
         <Note>
           The signature prints `domain`, which is this site's and not the identity's. Without it the
           line would say `eduardoalvarez.dev` — a site signing with its parent's domain, which
-          nothing fails on and nothing warns about. See `docs/decisions/0.9.md` § 49.
+          nothing fails on and nothing warns about. See `docs/decisions/` § 49.
         </Note>
         <Note>
           The 197 hand-written lines of `cursos`, as data. Brand, description, icons and the action
@@ -362,6 +362,71 @@ export const FullWithLinkSlot: Story = {
           The library keeps the classes and the `./`; the project supplies the element. It is the
           same signature as `Breadcrumb`&rsquo;s `linkAsChild` and `ArticleCard`&rsquo;s `tagAsChild`,
           on purpose.
+        </Note>
+      </div>
+    </div>
+  ),
+};
+
+export const BuiltWith: Story = {
+  name: 'Creado con Arrecife',
+  render: () => (
+    <div className="-m-step-lg">
+      <Footer brand={<Logo />} social={SOCIAL} builtWith />
+
+      <div className="p-step-lg">
+        <Note>
+          It sits UNDER the signature, in both shapes, and it is OFF unless a site asks for it.
+          No consuming project credits the library today, so turning it on for everybody would
+          put a line into five production footers that none of them wrote.
+        </Note>
+        <Note>
+          The signature names the site and the credit names what built it: two lines of the page
+          talking about itself, so they stack. The alignment belongs to the block that holds both
+          — centred while the footer is a stacked column, pinned to the signature&rsquo;s edge from
+          `sm` up — which is what stops them drifting apart at one width and not the other.
+        </Note>
+        <Note>
+          The heart is Phosphor&rsquo;s `Heart` through `Icon` and not the ❤️ emoji: the library
+          draws in one hand, and an emoji is a different glyph on every operating system. It is
+          decorative, so it is hidden from a screen reader — «Creado con Arrecife» reads whole
+          without it.
+        </Note>
+        <Note>
+          The word is UNDERLINED because the suite said so, not because it looks better: a link
+          inside a line of text needs a signal other than colour, and both candidates failed the
+          3:1 against the muted text around them — `textSecondary` at 1.7:1, the accent at
+          1.85:1. The rule is `decoration-1 underline-offset-4`, which is what `NavItem` draws on
+          the section you are on.
+        </Note>
+        <Note>
+          The destination is `naming.libraryUrl`, which `check:exports` compares against
+          `homepage` in `package.json` on every build. It is the one link here that points at the
+          library instead of at the site, and a stale one would sit in five footers.
+        </Note>
+      </div>
+    </div>
+  ),
+};
+
+export const FullBuiltWith: Story = {
+  name: 'Full · Creado con Arrecife',
+  render: () => (
+    <div className="-m-step-lg">
+      <Footer
+        variant="full"
+        brand={<Logo />}
+        description="Cursos para construir con IA, directos y al grano."
+        columns={COLUMNS}
+        social={SOCIAL.slice(0, 7)}
+        builtWith
+      />
+
+      <div className="p-step-lg">
+        <Note>
+          The same two lines in the same order, here behind the hairline that closes the full
+          footer. One placement for both shapes: whatever edge the signature is on, the credit is
+          under it.
         </Note>
       </div>
     </div>

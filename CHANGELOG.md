@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.12.1](https://github.com/Proskynete/arrecife/compare/v0.12.0...v0.12.1) (2026-09-17)
+
+
+### 🐛 Correcciones
+
+* **components:** the footer signature is a column, so the credit stops pushing the icons ([6760744](https://github.com/Proskynete/arrecife/commit/67607443882b65fae8c7166554075e0ca7b9fe10))
+
+
+### 📚 Documentación
+
+* § 64, the signature is a column of its own ([6be8d1e](https://github.com/Proskynete/arrecife/commit/6be8d1e6cfc8a04bc3c999f672da3cb0d896f4d7))
+
 ## [0.12.0](https://github.com/Proskynete/arrecife/compare/v0.11.0...v0.12.0) (2026-09-12)
 
 

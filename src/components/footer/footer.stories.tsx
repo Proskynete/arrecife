@@ -128,9 +128,10 @@ export const WithBrand: Story = {
           patch, because the brand is not one more text link.
         </Note>
         <Note>
-          And the signature shares a line WITH THE BRAND, which is the first row.
-          Pinned to the social row — as it was in 0.5.0 — it fell to the second line
-          the moment the footer had a brand above it.
+          And the signature hangs from the TOP RIGHT, level with the brand. It is not
+          inside that row: the rows stack down the left and the signature is a column
+          beside them, so nothing it carries can lengthen a row that is not about it.
+          See «Creado con Arrecife», which is where that stops being theoretical.
         </Note>
         <Note>
           There is no third row of loose text links any more, and there is no
@@ -150,19 +151,20 @@ export const SignatureOnTheRight: Story = {
 
       <div className="p-step-lg">
         <Note>
-          Icons on the left, signature on the right, on the SAME line. The
-          signature carries `ml-auto` and `justify-between` is not enough: with no
-          social links, a `justify-between` would leave it pinned to the left edge.
+          Icons on the left, signature on the right. The signature carries `ml-auto`
+          and `justify-between` is not enough: with no social links, a
+          `justify-between` would leave it pinned to the left edge.
         </Note>
         <Note>
-          Here the first row is the icons, so the signature lines up with them. It
-          is not pinned to the social links: it is pinned to whichever first row
-          exists.
+          With only one row on the left, the signature lines up with it. That is the
+          same rule as with a brand and not a second one: the signature hangs from
+          the top of its own column, and what it ends up level with is whatever the
+          first row happens to be.
         </Note>
         <Note>
-          On a narrow screen the two parts break with `flex-wrap` instead of
-          squeezing. The signature is mono and cannot be truncated without ceasing
-          to read as a path.
+          On a narrow screen the two columns stack and centre instead of squeezing.
+          The signature is mono and cannot be truncated without ceasing to read as a
+          path.
         </Note>
       </div>
     </div>
@@ -196,8 +198,10 @@ export const FirstRowIsTheBrand: Story = {
 
       <div className="p-step-lg">
         <Note>
-          With a brand, the signature shares its line. It is the difference between
-          «the signature goes right» and «the signature goes at the TOP right».
+          With a brand, the signature sits level with it. It is the difference between
+          «the signature goes right» and «the signature goes at the TOP right» — and
+          since § 64 the structure says so rather than the row order: the signature is
+          a column of its own, anchored to the top.
         </Note>
       </div>
     </div>
@@ -382,9 +386,21 @@ export const BuiltWith: Story = {
         </Note>
         <Note>
           The signature names the site and the credit names what built it: two lines of the page
-          talking about itself, so they stack. The alignment belongs to the block that holds both
-          — centred while the footer is a stacked column, pinned to the signature&rsquo;s edge from
-          `sm` up — which is what stops them drifting apart at one width and not the other.
+          talking about itself, so they stack — with NO gap between them. A step separates blocks
+          that are not the same thing, and 8px of it between two lines of 13px mono read the
+          credit apart from the signature it belongs to. Their leading is the separation.
+        </Note>
+        <Note>
+          And THE ICONS DO NOT MOVE. Beside «First row · the brand» — the same footer without the
+          credit — this one is exactly as tall. The signature is a column next to the rows and not
+          an item inside the first one, so its second line lands in the air beside the icons
+          instead of pushing them down a line that was never about them. See § 64 in
+          `docs/decisions/`.
+        </Note>
+        <Note>
+          The alignment belongs to the block that holds both — centred while the footer is a
+          stacked column, pinned to the signature&rsquo;s edge from `sm` up — which is what stops
+          them drifting apart at one width and not the other.
         </Note>
         <Note>
           The heart is Phosphor&rsquo;s `Heart` through `Icon` and not the ❤️ emoji: the library

@@ -208,6 +208,21 @@ Nobody's code changes. There is no migration.
 - § 62 · [The footer can credit the library, and it is off until a site asks](062-footer-built-with.md)
 - § 63 · [The published site wears the projects' mark and prints the version it is](063-storybook-identity.md)
 
+### 0.12.1
+
+One entry, and it is the bill for the one before it. § 62 put the credit under
+the signature and left both of them inside a row that was measured by the
+taller of the two things in it. The line worked and the row grew, so a footer
+that credited the library pushed its own social icons down 22px — and the 8px
+step between the two lines, which is what separates blocks that are not the
+same thing, was reading them apart at the same time.
+
+It is the shape [§ 45](045-signature-halo.md) keeps naming from the other side:
+a piece is right until something else is switched on beside it, and what breaks
+is never the piece.
+
+- § 64 · [The signature is a column of its own, and the credit stops measuring the icons](064-footer-signature-column.md)
+
 ---
 
 ## What was NOT touched

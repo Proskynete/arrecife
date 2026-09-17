@@ -347,6 +347,14 @@ function BuiltWith() {
  * signature names the site, the credit names what built it, and both are the
  * page talking about itself.
  *
+ * WITH NO GAP BETWEEN THEM, and that is the correction. A `step` is the page's
+ * rhythm — the smallest one is 8px, which is what separates blocks that are not
+ * the same thing — and between two lines of 13px mono it is a whole extra line
+ * of air: the credit stopped reading as the signature's second line and started
+ * reading as an orphan paragraph that happened to land under it. Two lines of
+ * the same size and the same voice are separated by their leading, which at
+ * `meta`'s 1.6 is already 8px of it, and by nothing else.
+ *
  * The alignment is the block's and not each line's, so the two cannot drift
  * apart: centred while the footer is a stacked column, and pinned to whichever
  * edge the shape puts the signature on from `sm` up.
@@ -365,9 +373,7 @@ function SignatureBlock({
   className?: string;
 }) {
   return (
-    <div
-      className={cn('gap-step-xs flex shrink-0 flex-col items-center sm:items-end', className)}
-    >
+    <div className={cn('flex shrink-0 flex-col items-center sm:items-end', className)}>
       <Signature year={year} href={href} domain={domain} />
       {builtWith ? <BuiltWith /> : null}
     </div>
@@ -540,19 +546,18 @@ export function Footer({
   }
 
   /*
-    The footer's rows, in order and without the empty ones. They are assembled
-    before painting because the signature ALWAYS goes in the first one that
-    exists, and which one is first depends on what gets passed: with a brand it
-    is the brand, and with only social icons it is the icons.
+    The footer's rows, in order and without the empty ones: they are what stacks
+    on the LEFT, and the signature is not one of them.
 
-    It is the difference between «the signature goes on the right» and «the
-    signature goes at the top right». Pinning it to the social row — as it was —
-    left it on the third line the moment the footer had a brand above it, which
-    is exactly where it does not go.
+    It used to be assembled so the signature could be dropped into whichever row
+    happened to be first — «the signature goes at the top right» expressed as
+    «the signature goes inside row one». That is the same sentence only while the
+    signature is one line. `builtWith` makes it two, the row grows to hold them,
+    and everything below — the icons — gets pushed down by a line that was never
+    about them. See `docs/decisions/` § 64.
 
-    Two rows now, and the assembly is kept rather than collapsed into a
-    conditional: what it encodes is «first row, whichever it is», and that
-    survives the list being short.
+    So the two axes are separated: the rows stack down the left, the signature
+    and its credit hang from the top right, and neither measures the other.
   */
   const rows = [
     brand ? (
@@ -564,37 +569,47 @@ export function Footer({
     social && social.length > 0 ? <SocialRow key="social" social={social} /> : null,
   ].filter(Boolean);
 
-  const [first, ...others] = rows;
-
   return (
-    <Shell className={className} contentClassName="gap-step-lg" {...rest}>
-      {/*
-        `items-center` and not `items-start`: the signature is a 13px line and
-        the brand measures 28, so aligning to the top leaves it floating high.
+    <Shell
+      className={className}
+      /*
+        TWO COLUMNS from `sm` up, and that is what stops the credit pushing the
+        icons: the rows measure the left column, the signature measures the
+        right, and a second line on one side cannot lengthen the other.
 
-        BELOW `sm` IT IS A COLUMN, and that is 0.10.0's correction. It used to be
-        `flex-wrap` at every width, which does drop the signature onto its own
-        line on a phone — and leaves it there flush RIGHT, because `ml-auto`
-        keeps pushing, hanging off the edge of a page whose every other element
-        is centred. `flex-wrap` was finishing half the job. Stacking and centring
-        finishes the other half, and `sm:ml-auto` is what keeps the wide layout
-        exactly as it was.
+        `sm:items-start` and not `items-center`, which is what the single row
+        used to carry. Centring was right when the right-hand side was one 13px
+        line against a 28px brand; against a column it would float the signature
+        between the brand and the icons, level with neither. Hanging it from the
+        top puts it back where the rule always said: the top right corner. The
+        13px of difference it gives up against the brand is the half-line the
+        old `items-center` was worth.
+
+        BELOW `sm` IT IS ONE COLUMN, centred, which is 0.10.0's correction kept
+        whole: `sm:ml-auto` is what keeps the wide layout pushing right, and
+        stacking is what stops it hanging off the edge of a narrow page. What
+        changes is the order — the signature closes the stack instead of sitting
+        between the brand and the icons — because it is now a column and not a
+        row, and a signature at the foot of a phone footer is where a signature
+        goes.
 
         Squeezing the two onto one narrow line was never an option: the path is
         mono and cannot be truncated without becoming unreadable.
-      */}
-      <div className="gap-step-md flex flex-col items-center sm:flex-row sm:flex-wrap">
-        {first ?? null}
-        <SignatureBlock
-          year={year}
-          href={signatureHref}
-          domain={domain}
-          builtWith={builtWith}
-          className="sm:ml-auto"
-        />
-      </div>
+      */
+      contentClassName="gap-step-lg items-center sm:flex-row sm:items-start"
+      {...rest}
+    >
+      {rows.length > 0 ? (
+        <div className="gap-step-lg flex flex-col items-center sm:items-start">{rows}</div>
+      ) : null}
 
-      {others}
+      <SignatureBlock
+        year={year}
+        href={signatureHref}
+        domain={domain}
+        builtWith={builtWith}
+        className="sm:ml-auto"
+      />
     </Shell>
   );
 }

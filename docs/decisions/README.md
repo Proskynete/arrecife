@@ -40,6 +40,7 @@ keeps its file and says so.
 | 0.10.0 | §§ 51–56 | The library stops drawing icons, and four things a phone already knew |
 | 0.11.0 | §§ 57–60 | Four props a consumer had already written down in its own source |
 | 0.12.0 | §§ 61–63 | One word of CSS, a footer that can credit the library, and a site that says which version it is |
+| unreleased | §§ 65–66 | The positioning, decided by interview, and where the avatar is a face |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -222,6 +223,17 @@ a piece is right until something else is switched on beside it, and what breaks
 is never the piece.
 
 - § 64 · [The signature is a column of its own, and the credit stops measuring the icons](064-footer-signature-column.md)
+
+### Unreleased
+
+Two entries that move no code at all. They are the author's positioning, decided
+in an interview rather than in a canvas, and they are here because the manual is
+where anyone checking «what does the brand say» will look first. Until the
+canvas catches up, the transcription carries a note at each line these two
+overrule.
+
+- § 65 · [One lema, one bajada, and a voice that is his and not the manual's](065-positioning-lema-voice.md)
+- § 66 · [The avatar is his face where people meet him, and Tiburoncín where developers do](066-avatar-photo-on-people-networks.md)
 
 ---
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.2](https://github.com/Proskynete/arrecife/compare/v0.12.1...v0.12.2) (2026-09-23)
+
+
+### 📚 Documentación
+
+* §§ 65–66, one positioning for the brand and where the avatar is a face ([#80](https://github.com/Proskynete/arrecife/issues/80)) ([40e76c5](https://github.com/Proskynete/arrecife/commit/40e76c5a2323f1c4447bfdac10204acb5cd593b1))
+
 ## [0.12.1](https://github.com/Proskynete/arrecife/compare/v0.12.0...v0.12.1) (2026-09-17)
 
 

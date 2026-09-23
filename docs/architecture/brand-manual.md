@@ -12,6 +12,9 @@ eduardoalvarez.dev
 MANUAL DE MARCA · VERSIÓN 1 · 2026 
 Eduardo Álvarez 
 Identidad visual y normas de uso. Engineering leadership, plataforma y la era de la IA — con un tiburón ballena de por medio. 
+
+> **Overruled by § 65/§ 66 in `docs/decisions/` — the canvas has not caught up yet.** Bajada: «Technical Lead · Spec-Driven Development. Enseño a construir software con IA sin dejar de entender lo que hacemos.» Lema: «Entender antes de construir.» (§ 65)
+
 01 · Concepto 
 08 · Voz y tono 
 02 · Arquitectura de marca 
@@ -59,10 +62,16 @@ Eduardo Álvarez
 code · build · explore 
 NIVEL 1 · LOCKUP COMPLETO 
 Mascota en loto, wordmark en Bricolage Grotesque 700 uppercase con tracking 0.04em, y la línea code · build · explore en mono con tracking 0.28em. 
+
+> **Overruled by § 65/§ 66 in `docs/decisions/` — the canvas has not caught up yet.** The lockup line is `entender · construir · compartir`. (§ 65)
+
 Portadas de charla, primera diapositiva, poleras, banner de stand. Mínimo 120 px o 30 mm de alto. 
 NIVEL 2 · AVATAR 
 La cabeza centrada dentro de un círculo azul tiburón #3E7CB1 sólido, sangrando ligeramente por el borde inferior. Fondo plano, nunca degradado. 
 Foto de perfil en GitHub, LinkedIn, X, Instagram, Discord. Mínimo 36 px. 
+
+> **Overruled by § 65/§ 66 in `docs/decisions/` — the canvas has not caught up yet.** Nivel 2 is the avatar on GitHub, X, Discord and npm. LinkedIn and Instagram use his photo. (§ 66)
+
 NIVEL 3 · ISOTIPO (ALETA) 
 Favicon, marca de agua en bloques de código, bordado, pin metálico, sello en la esquina de una diapositiva. Es la única pieza que aguanta 16 px y una sola tinta. 
 Dos variantes obligatorias: la aleta a dos azules sobre fondo claro, y la silueta en espuma #EDF4F3 a una tinta sobre fondo oscuro. El cuerpo de la aleta es casi negro y desaparece sobre fondos oscuros. 
@@ -181,6 +190,9 @@ eyebrow JetBrains 12px 500 0.10–0.14em
 Mínimos absolutos: 13 px en pantalla, 12 pt impreso, 24 px en una diapositiva de 1920×1080. Medida máxima de cuerpo: 68 caracteres. 
 08 · Voz y tono 
 Diez años de industria hablando en primera persona, sin distancia y sin pose. La autoridad viene de haber estado ahí, no del vocabulario. 
+
+> **Overruled by § 65/§ 66 in `docs/decisions/` — the canvas has not caught up yet.** The voice is rewritten in § 65: neutral Spanish, first person («yo hice», «nos va a pasar»), the complex made simple, never «vende humo»; no «humor seco». Emoji: few, not none — sparingly on Instagram and LinkedIn, none in articles, slides or print. The writing voice lives in the `author-voice-profile` corpus of `blog-content-manager`.
+
 SÍ 
 Contar cicatrices propias con nombre y fecha. 
 Decir «no lo sé» y «esto me salió mal». 
@@ -230,6 +242,9 @@ Sticker die-cut 55 mm · vinilo mate · contorno blanco 2 mm Una pose + URL al p
 Sticker de cara 25 mm · vinilo mate Una cara, sin texto 
 Polera negra Print 90 mm al pecho · dos tintas Aleta espuma + «FILTRA EL RUIDO» + URL 
 Polera arena Tela #F6F2EA · print 140 mm Mascota grande + BUILD · LEARN · SHARE. URL en la manga 
+
+> **Overruled by § 65/§ 66 in `docs/decisions/` — the canvas has not caught up yet.** Black tee: aleta espuma + «ENTENDER ANTES DE CONSTRUIR» + URL. Sand tee: phrase pending — no merch phrase besides the lema is approved yet. (§ 65)
+
 Poleron Bordado 40 mm al pecho · una tinta Solo la aleta 
 Pin metálico 25 mm · esmalte duro · dos colores Solo la aleta 
 Regla de producción: todo el merch debe funcionar en dos tintas sobre tela oscura y sobre tela clara. Antes de mandar a imprimir, convierte la pieza a escala de grises: si la mascota se pierde contra el fondo, el contorno casco no es suficiente y hay que añadir contorno espuma de 2 mm. 
@@ -244,6 +259,9 @@ Microfrontends sin dolor
 6 módulos · 4h 20m 
 og · curso 
 Avatar de perfil: nivel 2 en todas las plataformas, idéntico, sin variantes por red. La coherencia del avatar es lo que hace que te reconozcan en el timeline. 
+
+> **Overruled by § 65/§ 66 in `docs/decisions/` — the canvas has not caught up yet.** Photo on LinkedIn and Instagram, nivel 2 on GitHub, X, Discord and npm. (§ 66)
+
 13 · Checklist 
 Antes de publicar una pieza digital o mandar una a imprenta. 
 DIGITAL 

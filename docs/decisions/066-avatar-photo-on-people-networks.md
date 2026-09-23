@@ -34,8 +34,5 @@ stands as written.
 It is still one avatar per kind of network, never one per network, so the
 consistency the rule was protecting survives inside each group.
 
-**Action in the document:** in § 03 nivel 2, change «Foto de perfil en GitHub,
-LinkedIn, X, Instagram, Discord» to «GitHub, X, Discord, npm». In § 12, replace
-«nivel 2 en todas las plataformas, idéntico» with the two groups above and the
-reason: the photo where people meet him in person, the mascot where they meet
-his code.
+**Action in the document:** none. Applied on the canvas on 23 Sep 2026 and
+`docs/architecture/brand-manual.md` re-synced from it.

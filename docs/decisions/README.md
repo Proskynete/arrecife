@@ -40,7 +40,7 @@ keeps its file and says so.
 | 0.10.0 | §§ 51–56 | The library stops drawing icons, and four things a phone already knew |
 | 0.11.0 | §§ 57–60 | Four props a consumer had already written down in its own source |
 | 0.12.0 | §§ 61–63 | One word of CSS, a footer that can credit the library, and a site that says which version it is |
-| unreleased | §§ 65–66 | The positioning, decided by interview, and where the avatar is a face |
+| unreleased | §§ 65–67 | The positioning, decided by interview, where the avatar is a face, and the merch phrases |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -234,6 +234,7 @@ overrule.
 
 - § 65 · [One lema, one bajada, and a voice that is his and not the manual's](065-positioning-lema-voice.md)
 - § 66 · [The avatar is his face where people meet him, and Tiburoncín where developers do](066-avatar-photo-on-people-networks.md)
+- § 67 · [Three merch phrases, taken from his mouth and not from a slogan list](067-merch-phrases.md)
 
 ---
 

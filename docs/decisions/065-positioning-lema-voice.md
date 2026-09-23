@@ -81,11 +81,5 @@ the manual's own rule — «nadie pega un sticker por el nombre» — is the rea
 to fill the slot with a placeholder that sounds like anyone. The sand tee's
 phrase is **pending**, and it is written that way rather than guessed.
 
-**Action in the document:** on the brand manual canvas — replace the subtitle
-in the cover with the bajada; replace `code · build · explore` with
-`entender · construir · compartir` in § 03 nivel 1 (drawing and caption); rewrite
-§ 08 · Voz y tono with the rules above, drop «humor seco», change the emoji line
-to «pocos emoji, y solo en Instagram y LinkedIn; ninguno en artículos, slides ni
-impresos», and point to the voice corpus; in § 11 set the black tee to «aleta
-espuma + ENTENDER ANTES DE CONSTRUIR + URL» and mark the sand tee's phrase as
-pending.
+**Action in the document:** none. Applied on the canvas on 23 Sep 2026 and
+`docs/architecture/brand-manual.md` re-synced from it. The same round also rewrote § 01: the FILTRAR card now reads «Quedarse con lo que se entiende», because «el trabajo de un líder técnico» was the positioning this entry retires.

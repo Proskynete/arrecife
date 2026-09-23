@@ -30,9 +30,5 @@ The second life philosophy is his own sentence with the word order fixed
 already said it, not when it sounds like a developer. Each of the four comes from
 something he said in his own words, and no two share a verb.
 
-**Action in the document:** in § 11 · Merch y producción, set the die-cut
-sticker's art to «Una pose + «Yo manejo la herramienta. No al revés.» + URL al
-pie»; set the sand tee to «Mascota grande al pecho + «Si no estás dispuesto a
-darlo todo, no tienes derecho a intentarlo.» en la espalda. URL en la manga»;
-add a row «Libreta · tapa dura A5 · una tinta · Aleta + «No permitas que las
-cosas tomen más tiempo del que tienen que tomar.» + URL».
+**Action in the document:** none. Applied on the canvas on 23 Sep 2026 and
+`docs/architecture/brand-manual.md` re-synced from it.

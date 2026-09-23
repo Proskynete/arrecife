@@ -3,7 +3,7 @@
 > **This file is a verbatim transcription and is deliberately NOT translated.**
 >
 > Extracted from `Manual de marca - Eduardo Alvarez.html` (a Claude Design
-> canvas) on 27 Aug 2026 and re-synced on 23 Sep 2026 after §§ 65–66. Same conditions as `design-system.md`: the canvas is
+> canvas) on 27 Aug 2026 and re-synced on 23 Sep 2026 after §§ 65–67. Same conditions as `design-system.md`: the canvas is
 > the Spanish source and this copy only earns its place while it matches it word
 > for word.
 
@@ -230,12 +230,13 @@ El merch es donde la mascota manda y el nombre casi desaparece. Nadie pega un st
 PIEZA 
 ESPECIFICACIÓN 
 ARTE 
-Sticker die-cut 55 mm · vinilo mate · contorno blanco 2 mm Una pose + URL al pie 
+Sticker die-cut 55 mm · vinilo mate · contorno blanco 2 mm Una pose + «Yo manejo la herramienta. No al revés.» + URL al pie 
 Sticker de cara 25 mm · vinilo mate Una cara, sin texto 
 Polera negra Print 90 mm al pecho · dos tintas Aleta espuma + ENTENDER ANTES DE CONSTRUIR + URL 
-Polera arena Tela #F6F2EA · print 140 mm Mascota grande + Frase pendiente. URL en la manga 
+Polera arena Tela #F6F2EA · print 140 mm Mascota grande al pecho + «Si no estás dispuesto a darlo todo, no tienes derecho a intentarlo.» en la espalda. URL en la manga 
 Poleron Bordado 40 mm al pecho · una tinta Solo la aleta 
 Pin metálico 25 mm · esmalte duro · dos colores Solo la aleta 
+Libreta Tapa dura A5 · una tinta Aleta + «No permitas que las cosas tomen más tiempo del que tienen que tomar.» + URL 
 Regla de producción: todo el merch debe funcionar en dos tintas sobre tela oscura y sobre tela clara. Antes de mandar a imprimir, convierte la pieza a escala de grises: si la mascota se pierde contra el fondo, el contorno casco no es suficiente y hay que añadir contorno espuma de 2 mm. 
 12 · Redes y OG 
 Las imágenes de redes se generan en el build, no se diseñan a mano. Dos plantillas a 1200×630. 

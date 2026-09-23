@@ -3,7 +3,7 @@
 > **This file is a verbatim transcription and is deliberately NOT translated.**
 >
 > Extracted from `Manual de marca - Eduardo Alvarez.html` (a Claude Design
-> canvas) on 27 Aug 2026. Same conditions as `design-system.md`: the canvas is
+> canvas) on 27 Aug 2026 and re-synced on 23 Sep 2026 after §§ 65–67. Same conditions as `design-system.md`: the canvas is
 > the Spanish source and this copy only earns its place while it matches it word
 > for word.
 
@@ -11,7 +11,9 @@ MANUAL DE MARCA · EDUARDO ÁLVAREZ · v1 · 2026
 eduardoalvarez.dev 
 MANUAL DE MARCA · VERSIÓN 1 · 2026 
 Eduardo Álvarez 
-Identidad visual y normas de uso. Engineering leadership, plataforma y la era de la IA — con un tiburón ballena de por medio. 
+Technical Lead · Spec-Driven Development 
+Enseño a construir software con IA sin dejar de entender lo que hacemos. 
+Entender antes de construir. 
 01 · Concepto 
 08 · Voz y tono 
 02 · Arquitectura de marca 
@@ -27,11 +29,11 @@ Identidad visual y normas de uso. Engineering leadership, plataforma y la era de
 07 · Tipografía 
 — · Colofón 
 01 · Concepto 
-El tiburón ballena es el pez más grande del océano y es inofensivo. Filtra volúmenes enormes de agua por sus branquias para quedarse con lo mínimo que lo alimenta. Esa es la marca: profundidad sin intimidación, criterio para filtrar el ruido, y ganas de compartir lo que queda. 
+El tiburón ballena es el pez más grande del océano y es inofensivo. Filtra volúmenes enormes de agua por sus branquias para quedarse con lo mínimo que lo alimenta. Esa es la marca: profundidad sin intimidación, criterio para entender antes de construir, y ganas de compartir lo que queda. 
 Tres ideas sostienen el sistema. Si una decisión visual no apoya ninguna de las tres, sobra. 
 FILTRAR 
-Volumen, no ruido 
-Dejar pasar el hype y quedarse con lo que alimenta al equipo. Es el trabajo de un líder técnico en la era de la IA. 
+Quedarse con lo que se entiende 
+Dejar pasar el hype y quedarse con lo que de verdad entendemos. Con la IA, filtrar es entender antes de construir. 
 ACERCARSE 
 Grande y accesible 
 Los buzos nadan al lado del animal sin miedo. La seniority no se comunica poniendo distancia. 
@@ -56,13 +58,13 @@ Regla: la mascota es el logo, pero el logo dice «Eduardo Álvarez». Tiburoncí
 03 · Sistema de marca 
 Cuatro niveles, del más ilustrado al más mínimo. Una ilustración detallada no sobrevive a 16 px ni a un bordado, así que el sistema baja en detalle a medida que baja el tamaño. Elige el nivel por tamaño de reproducción, no por gusto. 
 Eduardo Álvarez 
-code · build · explore 
+entender · construir · compartir 
 NIVEL 1 · LOCKUP COMPLETO 
-Mascota en loto, wordmark en Bricolage Grotesque 700 uppercase con tracking 0.04em, y la línea code · build · explore en mono con tracking 0.28em. 
+Mascota en loto, wordmark en Bricolage Grotesque 700 uppercase con tracking 0.04em, y la línea entender · construir · compartir en mono con tracking 0.28em. 
 Portadas de charla, primera diapositiva, poleras, banner de stand. Mínimo 120 px o 30 mm de alto. 
 NIVEL 2 · AVATAR 
 La cabeza centrada dentro de un círculo azul tiburón #3E7CB1 sólido, sangrando ligeramente por el borde inferior. Fondo plano, nunca degradado. 
-Foto de perfil en GitHub, LinkedIn, X, Instagram, Discord. Mínimo 36 px. 
+Foto de perfil en GitHub, X, Discord, npm. Mínimo 36 px. 
 NIVEL 3 · ISOTIPO (ALETA) 
 Favicon, marca de agua en bloques de código, bordado, pin metálico, sello en la esquina de una diapositiva. Es la única pieza que aguanta 16 px y una sola tinta. 
 Dos variantes obligatorias: la aleta a dos azules sobre fondo claro, y la silueta en espuma #EDF4F3 a una tinta sobre fondo oscuro. El cuerpo de la aleta es casi negro y desaparece sobre fondos oscuros. 
@@ -180,20 +182,22 @@ etiqueta Geist 13px / 1.5 500 0
 eyebrow JetBrains 12px 500 0.10–0.14em 
 Mínimos absolutos: 13 px en pantalla, 12 pt impreso, 24 px en una diapositiva de 1920×1080. Medida máxima de cuerpo: 68 caracteres. 
 08 · Voz y tono 
-Diez años de industria hablando en primera persona, sin distancia y sin pose. La autoridad viene de haber estado ahí, no del vocabulario. 
+Primera persona, sin pose. La autoridad viene de haber estado ahí, no del vocabulario. 
 SÍ 
-Contar cicatrices propias con nombre y fecha. 
+Español neutro, sin modismos regionales. 
+Contar experiencia en primera persona: «yo hice», «hicimos con mi equipo». 
+Al advertir algo, incluirse: «nos va a pasar esto si no hacemos esto otro». 
+Hacer simple lo complejo, con ejemplos concretos. 
+Explicar el concepto antes que la herramienta. 
 Decir «no lo sé» y «esto me salió mal». 
-Frases cortas. Un dato concreto por párrafo. 
-Humor seco, y solo donde el contrato lo permite. 
-Segunda persona cuando enseñas: «te va a pasar que…». 
 NO 
+Palabras rebuscadas para parecer intelectual. 
 Vender certezas sobre la IA que nadie tiene. 
-Jerga por jerga: «sinergia», «disruptivo», «10x». 
-Listas de tres adjetivos donde va un ejemplo. 
-Emoji en material de marca. 
-Hablar de «nosotros» corporativo. Eres una persona. 
+Culpar a la herramienta: la IA es una herramienta y el ingeniero le da la dirección. 
+Sermonear con «tú deberías». 
+Emojis en artículos, slides o impresos. Van pocos, y solo en Instagram, LinkedIn y el README de GitHub. 
 Los títulos de sección usan el formato de ruta — ./artículos , ./hablemos — y los enlaces de acción el formato ./leer → . Es la parte de la estética terminal que sobrevive en el texto. 
+La voz de escritura detallada vive en el corpus de voz de blog-content-manager. 
 09 · Aplicaciones por superficie 
 El mismo sistema se dosifica distinto según lo que la persona esté haciendo ahí. El portfolio es sobrio, los cursos son cálidos, los links son la pieza más personal. 
 SUPERFICIE 
@@ -226,12 +230,13 @@ El merch es donde la mascota manda y el nombre casi desaparece. Nadie pega un st
 PIEZA 
 ESPECIFICACIÓN 
 ARTE 
-Sticker die-cut 55 mm · vinilo mate · contorno blanco 2 mm Una pose + URL al pie 
+Sticker die-cut 55 mm · vinilo mate · contorno blanco 2 mm Una pose + «Yo manejo la herramienta. No al revés.» + URL al pie 
 Sticker de cara 25 mm · vinilo mate Una cara, sin texto 
-Polera negra Print 90 mm al pecho · dos tintas Aleta espuma + «FILTRA EL RUIDO» + URL 
-Polera arena Tela #F6F2EA · print 140 mm Mascota grande + BUILD · LEARN · SHARE. URL en la manga 
+Polera negra Print 90 mm al pecho · dos tintas Aleta espuma + ENTENDER ANTES DE CONSTRUIR + URL 
+Polera arena Tela #F6F2EA · print 140 mm Mascota grande al pecho + «Si no estás dispuesto a darlo todo, no tienes derecho a intentarlo.» en la espalda. URL en la manga 
 Poleron Bordado 40 mm al pecho · una tinta Solo la aleta 
 Pin metálico 25 mm · esmalte duro · dos colores Solo la aleta 
+Libreta Tapa dura A5 · una tinta Aleta + «No permitas que las cosas tomen más tiempo del que tienen que tomar.» + URL 
 Regla de producción: todo el merch debe funcionar en dos tintas sobre tela oscura y sobre tela clara. Antes de mandar a imprimir, convierte la pieza a escala de grises: si la mascota se pierde contra el fondo, el contorno casco no es suficiente y hay que añadir contorno espuma de 2 mm. 
 12 · Redes y OG 
 Las imágenes de redes se generan en el build, no se diseñan a mano. Dos plantillas a 1200×630. 
@@ -243,7 +248,7 @@ NUEVO CURSO
 Microfrontends sin dolor 
 6 módulos · 4h 20m 
 og · curso 
-Avatar de perfil: nivel 2 en todas las plataformas, idéntico, sin variantes por red. La coherencia del avatar es lo que hace que te reconozcan en el timeline. 
+Avatar de perfil: foto real en LinkedIn e Instagram, donde la gente te conoce en persona. Nivel 2 (Tiburoncín) en GitHub, X, Discord y npm, donde te conocen por tu código. 
 13 · Checklist 
 Antes de publicar una pieza digital o mandar una a imprenta. 
 DIGITAL 

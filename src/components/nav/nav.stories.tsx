@@ -1,7 +1,9 @@
+import { MagnifyingGlass } from '@phosphor-icons/react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Note } from '../../../stories/utils.tsx';
 import { Logo } from '../../brand/logo.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { Text } from '../../primitives/typography.tsx';
 import { ThemeToggle } from '../theme-toggle/index.tsx';
@@ -95,7 +97,7 @@ export const AsOnTheSite: Story = {
         actions={
           <>
             <Button variant="tertiary" size="icon" aria-label="Buscar">
-              <span aria-hidden="true">⌕</span>
+              <Icon as={MagnifyingGlass} />
             </Button>
             <ThemeToggle />
           </>

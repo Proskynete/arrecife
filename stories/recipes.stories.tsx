@@ -1,7 +1,9 @@
+import { CalendarBlank } from '@phosphor-icons/react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Block, Note } from './utils.tsx';
+import { Icon } from '../src/icons/index.tsx';
 import { Button } from '../src/primitives/button.tsx';
 import { Calendar } from '../src/primitives/calendar.tsx';
 import { DateField } from '../src/primitives/date-field.tsx';
@@ -52,7 +54,7 @@ function SchedulePublication() {
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="secondary" size="icon" aria-label="Elegir en el calendario">
-              <span aria-hidden="true">▤</span>
+              <Icon as={CalendarBlank} />
             </Button>
           </PopoverTrigger>
           <PopoverContent aria-label="Calendario de publicación">

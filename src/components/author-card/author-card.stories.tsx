@@ -40,7 +40,7 @@ export const WithBio: Story = {
     <Stack>
       <AuthorCard
         {...args}
-        bio="Trabajo con equipos que crecieron más rápido que su arquitectura. Escribo sobre liderazgo técnico, plataforma y la era de la IA."
+        bio="Llevo más de diez años construyendo aplicaciones web y hoy lidero un equipo de desarrollo. Me interesa cómo usamos la IA sin dejar de entender lo que construimos."
         action={<Button variant="tertiary">./hablemos →</Button>}
       />
     </Stack>

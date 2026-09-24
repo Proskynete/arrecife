@@ -1,6 +1,6 @@
 # § 67 · Three merch phrases, taken from his mouth and not from a slogan list
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.2 · [index](README.md)
 
 ---
 

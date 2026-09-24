@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.3](https://github.com/Proskynete/arrecife/compare/v0.12.2...v0.12.3) (2026-09-24)
+
+
+### 🐛 Correcciones
+
+* **components:** align ten components and the stories with the Design System canvas ([#85](https://github.com/Proskynete/arrecife/issues/85)) ([52f141d](https://github.com/Proskynete/arrecife/commit/52f141dcdc8739f6735f0b5082e7f2a19b54d383))
+* **tokens:** the tagline follows the new positioning, so the header stops saying the old one ([#82](https://github.com/Proskynete/arrecife/issues/82)) ([01abbbf](https://github.com/Proskynete/arrecife/commit/01abbbf5f31fd0690137c5c169432bd8c34b7689))
+
+
+### 📚 Documentación
+
+* re-sync the design system transcription and record where production diverged, §§ 69–75 ([#84](https://github.com/Proskynete/arrecife/issues/84)) ([64dddcf](https://github.com/Proskynete/arrecife/commit/64dddcf32490a65f0185cafffe3467d4fcf9f55d))
+
 ## [0.12.2](https://github.com/Proskynete/arrecife/compare/v0.12.1...v0.12.2) (2026-09-23)
 
 

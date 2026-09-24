@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.4](https://github.com/Proskynete/arrecife/compare/v0.12.3...v0.12.4) (2026-09-24)
+
+
+### 🐛 Correcciones
+
+* **tokens:** flat dark section, and the transcriptions re-synced from the 24 Sep canvases ([#86](https://github.com/Proskynete/arrecife/issues/86)) ([f5f5f5c](https://github.com/Proskynete/arrecife/commit/f5f5f5c6d45f65ae87ad3bf7dc7cad8e62be955a))
+
 ## [0.12.3](https://github.com/Proskynete/arrecife/compare/v0.12.2...v0.12.3) (2026-09-24)
 
 

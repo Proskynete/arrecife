@@ -22,10 +22,19 @@ rest.
 | Checkbox | 19px, r5 | 20px, r6 |
 | Radio | 19px, checked = 5px border | 20px, checked = 10px dot |
 | Switch | 42×24, knob 18 | 44×24, knob 16 |
-| Newsletter panel | section r20, pad 44, two columns until 900; component fosa r16, pad 30, max 760 | one panel, section gradient, r16, pad 26, two columns from 768 |
+| Newsletter panel | section r20, pad 44, two columns until 900; component fosa r16, pad 30, max 760 | one panel, section gradient, r16, pad 26, two columns from 768; the button is full width on phones and a pose in `aside` replaces the face |
 | Toast and code block | r12 | r14 (`card`) |
 | Icon-to-text gap in Alert and Toast | 8px, always | 12px (Alert), 16px (Toast) |
 | PageHeader | eyebrow as a route, mono muted; bajada 17; a 15px context paragraph | eyebrow mono accent uppercase; description `body` 18; no context slot |
+| Tooltip | r8 | r6 (`chip`): there is no 8px radius token |
+| Blockquote | padding 22px, body line-height 1.7 | padding 16px, line-height 1.75 (`body`) |
+| Pagination | arrows only | the words «Anterior» and «Siguiente», which carry the accessible name without an extra label |
+| AudioPlayer icons | 1em, sized by the text next to them | fixed sizes, because the player has no text-size token to hang them on |
+
+One behaviour is recorded here only so it is not lost: the AudioPlayer's
+progress knob fades in with `transition-opacity`, which is not one of the
+declared motion exceptions (§ 20). It is a code bug, not a measure, and the fix
+belongs in the component, not on the canvas.
 
 **Why:** each of these is a measure, not a behaviour, and every one of them was
 chosen against a real screen in a consuming project: 760 because a modal in

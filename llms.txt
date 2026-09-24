@@ -1642,6 +1642,7 @@ A large metric: the number in the `stat` scale and its name underneath.
 | `icon` | `ReactNode` |  |  | Glyph in a tinted circle, in the corner opposite the title. At 1em, and it inherits `currentColor` from the badge, so it takes the tone without being tinted separately. |
 | `label` | `ReactNode` | yes |  | What is being counted. It goes in mono small caps. |
 | `progress` | `number` |  |  | With `progress`, the metric reads as progress and adds the bar. |
+| `progressLabel` | `string` |  |  | The bar's accessible name. It defaults to `label` when `label` is a string; a `label` that is markup has to spell it here, or the bar would announce «[object Object]: 38%». |
 | `spark` | `ReactNode` |  |  | The number's shape over time, under it. A `ReactNode` and not a data prop: a sparkline needs a charting library, and this component lives in the barrel that four projects install. The one project that draws them passes its own, exactly like `icon`. |
 | `tone` | `"neutral" \| "alert" \| "achievement"` |  | `neutral` | `alert` ONLY when the number is the problem, and `achievement` when it is the opposite — the diplomas issued, the modules finished. The two paint the same sand today and they are still two names: a system that names by meaning cannot make «this is bad» the only way to say «this stands out». See `docs/decisions/` § 28. |
 | `value` | `ReactNode` | yes |  | The number, already formatted. The library imposes no locale. |

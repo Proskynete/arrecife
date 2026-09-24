@@ -57,6 +57,12 @@ export type StatProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   /** With `progress`, the metric reads as progress and adds the bar. */
   progress?: number | undefined;
   /**
+   * The bar's accessible name. It defaults to `label` when `label` is a string;
+   * a `label` that is markup has to spell it here, or the bar would announce
+   * «[object Object]: 38%».
+   */
+  progressLabel?: string | undefined;
+  /**
    * Glyph in a tinted circle, in the corner opposite the title. At 1em, and it
    * inherits `currentColor` from the badge, so it takes the tone without being
    * tinted separately.
@@ -113,6 +119,7 @@ export function Stat({
   label,
   tone = 'neutral',
   progress,
+  progressLabel,
   icon,
   description,
   delta,
@@ -120,6 +127,8 @@ export function Stat({
   className,
   ...props
 }: StatProps) {
+  const barName = progressLabel ?? (typeof label === 'string' ? label : 'Progreso');
+
   const DeltaGlyph = delta ? DELTA[delta.direction].glyph : null;
 
   return (
@@ -167,7 +176,7 @@ export function Stat({
         <Progress
           value={progress}
           tone={tone === 'neutral' ? 'accent' : 'warm'}
-          label={`${label}: ${progress}%`}
+          label={`${barName}: ${progress}%`}
           className="mt-step-sm"
         />
       ) : null}

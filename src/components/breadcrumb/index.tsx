@@ -56,7 +56,17 @@ export function Breadcrumb({
   return (
     <nav aria-label="Ruta" className={cn('font-mono text-meta text-text-muted', className)} {...props}>
       <ol className="gap-step-xs flex flex-wrap items-center">
-        <li>{link(homeHref, <span aria-label={homeLabel}>~</span>)}</li>
+        {/* The name goes in text, not on a bare span: `aria-label` on a
+            generic element is not reliably announced. */}
+        <li>
+          {link(
+            homeHref,
+            <>
+              <span aria-hidden="true">~</span>
+              <span className="sr-only">{homeLabel}</span>
+            </>,
+          )}
+        </li>
 
         {items.map((item, i) => {
           const last = i === items.length - 1;

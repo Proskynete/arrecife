@@ -41,17 +41,23 @@ export function PaginationItem(props: ComponentPropsWithoutRef<'li'>) {
 
 export type PaginationLinkProps = ComponentPropsWithoutRef<'a'> & { isActive?: boolean };
 
+/**
+ * Mono, bordered, and the current page in solid biolume, as the document draws
+ * it: «paginación mono, página actual en bioluz sólido». The page is where you
+ * are, so it is the one control that carries the accent fill.
+ */
 export function PaginationLink({ className, isActive = false, ...props }: PaginationLinkProps) {
   return (
     <a
       aria-current={isActive ? 'page' : undefined}
       className={cn(
-        'rounded-chip px-step-sm inline-flex h-9 min-w-9 cursor-pointer items-center justify-center',
-        'font-sans text-ui text-text-secondary',
+        'rounded-chip px-step-sm inline-flex h-9 min-w-9 cursor-pointer items-center justify-center border',
+        'font-mono text-meta',
         'transition-standard',
-        'hover:bg-surface hover:text-text-primary',
         'focus-ring',
-        isActive && 'bg-surface-raised text-text-primary',
+        isActive
+          ? 'border-accent bg-accent text-accent-on'
+          : 'border-border text-text-secondary hover:border-hairline-hover hover:text-text-primary',
         className,
       )}
       {...props}

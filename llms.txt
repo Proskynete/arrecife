@@ -1071,6 +1071,8 @@ Source: `src/primitives/pagination.tsx`
 - No own props: it passes through those of the element or primitive it wraps.
 
 **PaginationLink**
+Mono, bordered, and the current page in solid biolume, as the document draws it: «paginación mono, página actual en bioluz sólido». The page is where you are, so it is the one control that carries the accent fill.
+
 - Extends: `ComponentPropsWithoutRef<'a'>`
 
 | prop | type | req. | default | what it does |

@@ -3,7 +3,8 @@
 > **This file is a verbatim transcription and is deliberately NOT translated.**
 >
 > Extracted from `Design System - Eduardo Alvarez.html` (a Claude Design canvas)
-> on 27 Aug 2026. It is the text and the monospaced specifications; the
+> on 27 Aug 2026, and re-synced from `Design System.dc.html` on 24 Sep 2026
+> (Iconografía, the destructive buttons). It is the text and the monospaced specifications; the
 > illustrations and SVGs do not survive extraction and show up as «SVG».
 >
 > The canvas is still the source, and the canvas is in Spanish. This copy is in
@@ -15,6 +16,7 @@
 
 ~/design-system 
 v1.0.0 
+iconos 
 botones 
 formulario 
 etiquetas 
@@ -37,8 +39,66 @@ transición 150ms ease-out
 foco: borde bioluz, sin outline 
 una sola sombra 
 contraste AA verificado 
+Iconografía 
+Phosphor · regular es la línea del sistema 
+Phosphor es la única familia de iconos del sistema. No se mezcla con otra, no se dibujan iconos a mano y no se usan emojis como iconos. Se elige porque su peso regular cae sobre el trazo que ya nombra la identidad: 16/256 = 0.0625em contra el 1.6/24 = 0.0667em del documento. Seis por ciento de diferencia, que no es un píxel en ninguna pantalla. No hubo que derivar nada. 
+Todo pasa por la primitiva <Icon as={Books} /> de @arrecife/icons, que fija peso y tamaño. El sistema no publica un set de iconos: publica cómo se dibujan. 
+REGULAR POR DEFECTO · DOS DESVÍOS DECLARADOS 
+light 
+Metadato y decoración. Fecha, duración, categoría. Nunca es interactivo, nunca lleva color de acento. 
+regular 
+El peso por defecto. Todo lo que se puede pulsar: botones, enlaces con icono, controles del reproductor. 
+fill 
+Estado activo. Guardado, reproduciendo, completado. El relleno dice «esto ya pasó», el trazo dice «puedes hacerlo». 
+La primitiva pone regular sola; light y fill se piden con weight y solo por esas dos razones. 
+thin · bold · duotone quedan fuera. Están en la librería, pero usarlos rompe la relación peso ↔ jerarquía. 
+Sin reconciliar: lib/glyphs.tsx dibuja a 0.109em, tres cuartos más pesado que esto. Alinearlo reestiliza cada primitiva — decisiones.md § 29. 
+TAMAÑO · 1em, NO UNA ESCALA 
+label 
+13px 
+ui 
+15px 
+lead 
+18px 
+vacío 
+El icono mide 1em y hereda del texto que acompaña. Nadie elige un número. 
+La única excepción es el icono suelto de estado vacío, que no acompaña a nada. 
+No hay escala 16/20/24. Una escala propia se desincroniza del texto en cuanto cambia el cuerpo. 
+ALINEACIÓN ÓPTICA CON TEXTO 
+8 min de lectura 
+Escuchar episodio 
+./artículos 
+gap 8px entre icono y texto, siempre. 
+El icono hereda el color del texto salvo que sea metadato, donde baja a bruma. 
+Icono a la izquierda cuando clasifica, a la derecha cuando indica movimiento. 
+El play va en regular: aún no suena. Pasa a fill mientras reproduce. 
+LOS QUE YA SE USAN · MUESTRA, NO CATÁLOGO 
+Estos son los que aparecen hoy en el sitio, no los que están permitidos. Phosphor entero está disponible: el panel de cursos importa 89 iconos distintos y 77 son de su dominio, así que cerrar un set aquí solo obligaría a saltárselo. La regla que sí vincula es la de arriba — peso y tamaño — más una: un icono por concepto. Si «artículo» ya es article, no aparece después como note ni file-text. 
+article 
+microphone-stage 
+graduation-cap 
+users-three 
+tree-structure 
+stack 
+funnel 
+terminal-window 
+rss-simple 
+envelope-simple 
+magnifying-glass 
+arrow-right 
+arrow-up-right 
+github-logo 
+linkedin-logo 
+youtube-logo 
+check-circle 
+warning 
+trash 
+x 
+Bioluz solo en los ocho de contenido, que son navegables. Los de utilidad van en bruma; los de estado heredan su color semántico. 
+Sin encodar: la primitiva fija regular y nada más — light y fill son política de este documento, no del código. 
+Pendiente: hay ph-fish y ph-waves en la librería, pero Tiburoncín no se dibuja con un icono de stock — la aleta es un asset propio. 
 Botones 
-4 variantes · 3 tamaños · 5 estados 
+6 variantes · 3 tamaños · 5 estados 
 DEFAULT 
 HOVER 
 FOCUS 
@@ -64,6 +124,19 @@ Inscribirme
 Agotado 
 Solo un botón arena por pantalla. Es el de conversión. 
 conversión · bg #F2A65A · texto #2A1605 · solo cursos, charlas y mentoría 
+Eliminar cuenta 
+Eliminar cuenta 
+Eliminar cuenta 
+Eliminar cuenta 
+Solo para lo irreversible. Nunca para «cancelar» un formulario. 
+Revocar acceso 
+Revocar acceso 
+Revocar acceso 
+Revocar acceso 
+El de borde sí se rellena en hover: es la excepción a la regla del secundario. 
+destructivo · bg #F4736B · texto #2B0A08 · hover #F78D86 · disabled bg #4A2422 texto #8A5F5C 
+destructivoBorde · borde y texto #F4736B · hover rellena a coral con tinta #2B0A08 
+modo claro · bg #C0392B · texto #FFF6F4 · hover #A32F22 — el coral claro no pasa AA con tinta oscura encima 
 ./ver_todos → 
 ./ver_todos → 
 Pequeño · 13.5px 

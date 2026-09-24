@@ -44,8 +44,7 @@ is what both of them already did, and what the recipe that went with this
 demonstrated: `Sheet side="left"` IS the mobile drawer, and a component wrapping
 the two is an alias with maintenance.
 
-**Action in the document:** the admin's navigation section comes out of the
-specification. What stays is the dosage rule from `../architecture/brand-manual.md` § 09, which
-was never about this component.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+admin sidebar section is gone.
 
 ---

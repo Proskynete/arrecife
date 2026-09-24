@@ -41,6 +41,5 @@ phone it now shows a scrolling nav next to a hamburger. That is a composition
 bug in that project and the fix is one `hidden sm:block` around its `NavLinks`.
 The library cannot make that decision for it.
 
-**Action in the document:** the components are specified at one width. Say what
-each of the three does when there is not enough of it: the nav row and the tab
-list scroll, the pagination row wraps and centres.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «el nav
+y las pestañas hacen scroll horizontal; la paginación se envuelve y se centra».

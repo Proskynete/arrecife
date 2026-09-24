@@ -1,6 +1,6 @@
 # § 70 · Three colours moved a few points of lightness, and only the README said so
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.3 · [index](README.md)
 
 ---
 
@@ -30,7 +30,5 @@ should have had.
 **Why:** the decision log is the one place `pnpm check:decisions` reads. A
 correction recorded anywhere else is a correction the canvas will never hear of.
 
-**Action in the document:** in the Design System canvas, replace `#E05252` with
-`#E15757` everywhere it draws an error (eleven places), and `#6B7480` with
-`#626A75` where it draws light muted text. The Manual uses `#6B7480` only as the
-colour of its own page chrome, not as a specified token, so it needs nothing.
+**Action in the document:** none. Applied on the Design System canvas on 24 Sep
+2026: it draws `#E15757` and `#626A75`, and no `#E05252` or `#6B7480` is left.

@@ -76,8 +76,14 @@ nobody measures. It is not touched here — it is the document's, it ships in fo
 projects, and changing it is a visible change to the newsletter block in every
 one of them.
 
-**Action in the document:** ratify the three light values above, and decide what
-the dark `section` gradient is for: at 0.11 L\* it either wants a real second
-stop or it wants to stop being a gradient.
+**Resolved on 24 Sep 2026.** The author chose the second option: the dark
+`section` stops being a gradient and is a flat fosa (`#10202B`). The token keeps
+the `linear-gradient(...)` shape with one colour at both ends, so the
+`gradient-section` utility still sets `background-image` and no project has to
+change a class. The dark hero is now the only dark gradient on a page.
+
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+three light gradients are drawn with the token values, and the dark section is a
+flat fosa `#10202B`, so the hero is the only dark gradient on a page.
 
 ---

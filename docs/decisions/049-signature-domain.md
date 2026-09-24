@@ -43,7 +43,5 @@ property of the SYSTEM. `naming.domain` is a property of one SITE in the system,
 and the tell was already there: `cursos` and `links` had both written their own,
 which is a project disagreeing with a token twice.
 
-**Action in the document:** say that the signature's domain is the site's own and
-not the identity's, and that `naming.domain` is the default rather than the
-value. The signature section currently prints one domain as if there were one
-site.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «la
+firma imprime el dominio del sitio, no el de la identidad».

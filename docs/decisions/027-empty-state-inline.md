@@ -70,9 +70,8 @@ the 404 and `confused` for the server error — swapped against `faceUsage` — 
 above it says the data exists «so the choice is not made by eye at every call
 site». It was being made by eye one story later, in the published Storybook.
 
-**Action in the document:** add the second shape to the design system's empty
-state line — «hueco de tabla o widget · sin cara, sin superficie, glifo opcional
-del proyecto + línea 15px muted». The brand manual needs no change: its rule is
-about where a face may appear, and this adds no place.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «hueco
+de tabla o widget · sin cara, sin superficie, glifo opcional del proyecto +
+línea 15px muted».
 
 ---

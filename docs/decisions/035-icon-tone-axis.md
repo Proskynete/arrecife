@@ -61,11 +61,7 @@ middle of the exhibit. The edits go in `docs/llms.template.md`, never in
 mode as § 15 and as § 22's forgotten row**: two places that have to agree, living
 in different files, with nothing checking that they do.
 
-**Action in the document:** half applied. The Iconografía section re-synced on 24 Sep
-2026 has the three roles — `light` for metadata, `regular` by default, `fill` for
-the active state. One line still contradicts the code: «light y fill se piden con
-weight». The code asks with `tone` (`quiet`, `action`, `current`) and has no
-`weight` prop, so the line should read «se piden con `tone`: `quiet` para light,
-`current` para fill».
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «light y
+fill se piden con tone: quiet para light, current para fill».
 
 ---

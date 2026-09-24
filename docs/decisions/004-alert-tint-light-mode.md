@@ -23,7 +23,8 @@ than dark across all four tones. The suspicion ran the other way round.
 The system's only weak point is `error` over abyss, 1.067, the faintest of the
 eight tints, which leans entirely on the 22 % border.
 
-**Action in the document:** note that the 8/22 recipe holds in both modes, and
-that dark `error` is the edge case.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+alert's spec line now says «la receta 8/22 vale en ambos modos; el error oscuro
+es el caso límite».
 
 ---

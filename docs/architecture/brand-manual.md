@@ -3,7 +3,8 @@
 > **This file is a verbatim transcription and is deliberately NOT translated.**
 >
 > Extracted from `Manual de marca - Eduardo Alvarez.html` (a Claude Design
-> canvas) on 27 Aug 2026 and re-synced on 23 Sep 2026 after §§ 65–67. Same conditions as `design-system.md`: the canvas is
+> canvas) on 27 Aug 2026, re-synced on 23 Sep 2026 after §§ 65–67 and on
+> 24 Sep 2026 after §§ 60, 62, 69 and 72. Same conditions as `design-system.md`: the canvas is
 > the Spanish source and this copy only earns its place while it matches it word
 > for word.
 
@@ -67,11 +68,12 @@ La cabeza centrada dentro de un círculo azul tiburón #3E7CB1 sólido, sangrand
 Foto de perfil en GitHub, X, Discord, npm. Mínimo 36 px. 
 NIVEL 3 · ISOTIPO (ALETA) 
 Favicon, marca de agua en bloques de código, bordado, pin metálico, sello en la esquina de una diapositiva. Es la única pieza que aguanta 16 px y una sola tinta. 
-Dos variantes obligatorias: la aleta a dos azules sobre fondo claro, y la silueta en espuma #EDF4F3 a una tinta sobre fondo oscuro. El cuerpo de la aleta es casi negro y desaparece sobre fondos oscuros. 
+Dos variantes obligatorias: la aleta a dos azules sobre fondo claro, y la silueta en espuma #EDF4F3 a una tinta sobre fondo oscuro. El cuerpo de la aleta es casi negro y desaparece sobre fondos oscuros. En una superficie que cambia de tema, la marca lleva las dos variantes y el tema elige cuál se ve. La elección explícita es para fondos que no cambian. 
 ~/ eduardoalvarez.dev 
 NIVEL 4 · FIRMA CLI 
 La estética terminal con rol definido: es la firma tipográfica del sistema, no el fondo de todo. El prefijo ~/ en bioluz, el cursor de bloque en arena. 
 Footers, navegación, transiciones de diapositiva, pie de firma en correo. 
+El crédito a la librería es opcional, va en la última línea del footer y su marca es el Heart relleno de Phosphor en bioluz, nunca un emoji. 
 Zona de seguridad y tamaños mínimos 
 El aire libre alrededor del lockup equivale a la altura de la aleta dorsal de la mascota. Ningún elemento —texto, borde, foto, otro logo— entra en esa zona. En el avatar, la cabeza ocupa el 88 % del diámetro del círculo. 
 PIEZA 
@@ -133,17 +135,17 @@ Modo oscuro · primario
 NOMBRE 
 HEX 
 USO 
-CONTRASTE 
+CONTRASTE SOBRE ABISMO 
 abismo #091319 Fondo de página — 
 fosa #10202B Tarjetas y paneles — 
 corriente #17303E Elevado, menús, tabs activos — 
 borde #22414F Bordes de control — 
-espuma #EDF4F3 Titulares y cuerpo 16.9:1 
-bruma #A7BCC4 Cuerpo secundario 8.9:1 
-plancton #71919C Metadatos · solo ≥13px 4.9:1 
-bioluz #35D6C0 Interactivo: links, foco, terminal 10.7:1 
-arena #F2A65A Humano: categorías, citas, conversión 9.4:1 
-tiburón #3E7CB1 Cuerpo de la mascota · solo relleno 4.3:1 
+espuma #EDF4F3 Titulares y cuerpo 16.8:1 
+bruma #A7BCC4 Cuerpo secundario 9.5:1 
+plancton #71919C Metadatos · solo ≥13px 5.6:1 
+bioluz #35D6C0 Interactivo: links, foco, terminal 10.3:1 
+arena #F2A65A Humano: categorías, citas, conversión 9.3:1 
+tiburón #3E7CB1 Cuerpo de la mascota · solo relleno 4.2:1 
 manchas #C2D7E7 Patrón de manchas — 
 casco #0B1524 Contorno + bloques de código — 
 Modo claro · lectura larga, PDF, impresión 
@@ -152,8 +154,8 @@ HEX
 USO 
 papel #F6F2EA Fondo. Blanco cálido obligatorio 
 papel alto #FFFFFF Tarjetas sobre papel 
-bioluz oscura #0F8F80 Links y foco sobre papel · 4.6:1 
-arena oscura #B4632A Etiquetas y citas sobre papel · 4.8:1 
+bioluz oscura #0D7C6F Links y foco sobre papel · 4.55:1 
+arena oscura #A65B27 Etiquetas y citas sobre papel · 4.54:1 
 Nunca blanco puro como fondo de página. Sobre #FFFFFF el contorno casco vibra y la panza del tiburón desaparece. 
 En claro el botón primario no puede ser bioluz ni arena —no dan contraste con texto oscuro encima—: pasa a casco sólido, y los acentos viven en sus variantes oscuras para texto y bordes. 
 Proporción y reparto 
@@ -179,7 +181,7 @@ h3 Bricolage 25px / 1.15 600 −0.02em
 cuerpo Geist 18px / 1.75 400 0 
 interfaz Geist 15px / 1.6 400 / 500 0 
 etiqueta Geist 13px / 1.5 500 0 
-eyebrow JetBrains 12px 500 0.10–0.14em 
+eyebrow JetBrains 12px 400 0.12em 
 Mínimos absolutos: 13 px en pantalla, 12 pt impreso, 24 px en una diapositiva de 1920×1080. Medida máxima de cuerpo: 68 caracteres. 
 08 · Voz y tono 
 Primera persona, sin pose. La autoridad viene de haber estado ahí, no del vocabulario. 

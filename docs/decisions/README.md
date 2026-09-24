@@ -41,7 +41,7 @@ keeps its file and says so.
 | 0.11.0 | §§ 57–60 | Four props a consumer had already written down in its own source |
 | 0.12.0 | §§ 61–63 | One word of CSS, a footer that can credit the library, and a site that says which version it is |
 | 0.12.2 | §§ 65–67 | The positioning, decided by interview, where the avatar is a face, and the merch phrases |
-| unreleased | §§ 68–75 | The tagline token catches up with the positioning, and the code-wins measures get their record |
+| 0.12.3 | §§ 68–75 | The tagline token catches up with the positioning, and the code-wins measures get their record |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -236,7 +236,7 @@ canvas caught up in the same round, and the transcription was re-synced from it.
 - § 66 · [The avatar is his face where people meet him, and Tiburoncín where developers do](066-avatar-photo-on-people-networks.md)
 - § 67 · [Three merch phrases, taken from his mouth and not from a slogan list](067-merch-phrases.md)
 
-### Unreleased
+### 0.12.3
 
 The code half of § 65. The positioning changed in every project that writes its
 own copy, and stayed in the one token that the header reads for them.
@@ -255,6 +255,11 @@ consuming project — gets the entry that sends it back to the drawing.
 - § 73 · [Text fields keep the ring, and the danger button keeps biolume for now](073-focus-rings-fields-and-danger.md)
 - § 74 · [Disabled is half opacity, not a second palette](074-primary-disabled-opacity.md)
 - § 75 · [The measures that shipped, component by component](075-component-measures.md)
+
+The canvases caught up on 24 Sep 2026, a day after this release: both
+transcriptions were re-synced, and 29 actions — most of §§ 68–75 and a backlog
+reaching back to § 1 — were settled against the drawings, not against memory.
+Eleven are still owed, each narrowed to what the canvas has not drawn yet.
 
 ---
 

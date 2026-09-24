@@ -25,7 +25,7 @@ second vocabulary for the same thing. If the admin grows enough that row actions
 start needing their own hover, focus and spacing rules, that is when the separate
 component earns its place.
 
-**Action in the document:** add `icon-sm 32×32` to the controls table, with the
-note that it is for dense UI and not a replacement for `icon`.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+controls table has «icon-sm 32×32, solo para UI densa».
 
 ---

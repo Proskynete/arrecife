@@ -96,7 +96,6 @@ moving the Storybook would update what npm prints and leave five production
 footers pointing at the old address, and the only way to find out would be for
 somebody to click.
 
-**Action in the document:** the manual has no rule for crediting the library, and
-it now has a component that can. Add a line saying the credit is optional, that
-it is the footer's last line, and that its mark is Phosphor's filled `Heart` in
-biolume and never an emoji.
+**Action in the document:** none. Applied on the Manual canvas on 24 Sep 2026:
+the signature section carries the optional credit line with Phosphor's filled
+Heart.

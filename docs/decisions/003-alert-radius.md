@@ -12,6 +12,7 @@
 one — which is what an alert is: a block of surface with content — the card one
 wins.
 
-**Action in the document:** change `r12` to «card radius» in the alerts section.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+alert line gives «radio de tarjeta».
 
 ---

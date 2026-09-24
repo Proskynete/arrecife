@@ -43,7 +43,7 @@ export const Cover: Story = {
     eyebrow: 'start',
     title: tagline.long,
     description:
-      'Trabajo con equipos que crecieron más rápido que su arquitectura. Empiezo por leer el código y terminar hablando con quien lo escribió.',
+      'Aquí reúno lo que voy aprendiendo sobre Spec-Driven Development, desarrollo con IA y liderar un equipo de desarrollo: artículos, charlas y la newsletter mensual, sin spam.',
   },
   render: (args) => (
     <>
@@ -51,8 +51,8 @@ export const Cover: Story = {
         {...args}
         action={
           <>
-            <Button variant="conversion">Agenda una llamada</Button>
-            <Button variant="secondary">Ver el trabajo</Button>
+            <Button variant="conversion">Ver los cursos</Button>
+            <Button variant="secondary">Leer artículos</Button>
           </>
         }
       />
@@ -118,11 +118,11 @@ export const PublicView: Story = {
 
 export const TwoScales: Story = {
   name: 'The two scales',
-  args: { title: 'Escalar con criterio' },
+  args: { title: 'Entender antes de construir' },
   render: () => (
     <div className="gap-step-lg flex flex-col">
-      <PageHeader size="display" eyebrow="portada" title="Escalar con criterio" as="h1" />
-      <PageHeader size="page" eyebrow="sección" title="Escalar con criterio" as="h2" />
+      <PageHeader size="display" eyebrow="portada" title="Entender antes de construir" as="h1" />
+      <PageHeader size="page" eyebrow="sección" title="Entender antes de construir" as="h2" />
       <Note>
         The same skeleton at 76 and at 44 pixels. They used to be two components,
         `Hero` and `PageHeader`, with the same rule written twice.

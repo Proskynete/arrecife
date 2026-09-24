@@ -449,12 +449,12 @@ export const motion = {
 /* ------------------------------------------------------------ voice and brand */
 
 export const tagline = {
-  /** Hero. */
-  long: 'Ayudo a equipos de ingeniería a escalar con criterio',
-  /** Header, one line. */
-  short: 'Ayudo a equipos a escalar con criterio',
-  /** LinkedIn. */
-  en: 'Helping engineering teams scale with judgment',
+  /** Hero. The bajada approved in § 65. */
+  long: 'Enseño a construir software con IA sin dejar de entender lo que hacemos.',
+  /** Header, one line. Role and method, as in § 65. */
+  short: 'Technical Lead · Spec-Driven Development',
+  /** English surfaces. */
+  en: 'I teach how to build software with AI without losing sight of what we build.',
 } as const;
 
 /**

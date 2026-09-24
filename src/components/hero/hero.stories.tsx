@@ -10,10 +10,10 @@ const meta = {
   component: Hero,
   parameters: { layout: 'fullscreen' },
   args: {
-    eyebrow: 'consultoría',
+    eyebrow: tagline.short,
     title: tagline.long,
     description:
-      'Trabajo con equipos que crecieron más rápido que su arquitectura. Empiezo por leer el código y termino hablando con quien lo escribió.',
+      'Aquí reúno lo que voy aprendiendo sobre Spec-Driven Development, desarrollo con IA y liderar un equipo de desarrollo: artículos, charlas y la newsletter mensual, sin spam.',
     pose: 'surf',
   },
 } satisfies Meta<typeof Hero>;
@@ -29,8 +29,8 @@ export const Basic: Story = {
         {...args}
         action={
           <>
-            <Button variant="conversion">Agenda una llamada</Button>
-            <Button variant="tertiary">./ver_el_trabajo →</Button>
+            <Button variant="conversion">Ver los cursos</Button>
+            <Button variant="tertiary">./leer_artículos →</Button>
           </>
         }
       />
@@ -59,7 +59,7 @@ export const NoPose: Story = {
   args: { pose: undefined },
   render: (args) => (
     <div className="p-step-lg">
-      <Hero {...args} action={<Button variant="conversion">Agenda una llamada</Button>} />
+      <Hero {...args} action={<Button variant="conversion">Ver los cursos</Button>} />
       <Note>
         Valid, but it is a panel with text. The pose is half of what makes a hero
         recognisable as this site and not as any other.
@@ -77,7 +77,7 @@ export const Centered: Story = {
         {...args}
         eyebrow="enlaces"
         title="Eduardo Álvarez"
-        description="Everything lo que publico, en un sitio."
+        description="Todo lo que publico, en un sitio."
         action={<Button variant="secondary">Ver el blog</Button>}
       />
       <Note>

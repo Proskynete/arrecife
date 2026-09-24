@@ -11,11 +11,11 @@ const meta = {
   component: TalkCard,
   args: {
     href: '#',
-    title: 'Escalar sin romper el equipo',
-    event: 'JSConf',
-    date: 'Mayo 2025',
-    dateTime: '2025-05',
-    location: 'Santiago',
+    title: 'Microfrontends sin dolor: cómo escalar React (y tu equipo) sin romperlo todo',
+    event: 'CaribeConf',
+    date: 'Agosto 2026',
+    dateTime: '2026-08',
+    location: 'Barranquilla',
     status: 'con vídeo',
   },
 } satisfies Meta<typeof TalkCard>;
@@ -36,7 +36,7 @@ export const Grid: Story = {
   render: (args) => (
     <div className="gap-step-md grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
       <TalkCard {...args} />
-      <TalkCard {...args} title="Deuda técnica con nombre y apellido" event="NerdearLA" date="Octubre 2024" dateTime="2024-10" location="Buenos Aires" status={undefined} />
+      <TalkCard {...args} title="Taller de Astro: Crea tu portafolio" event="Tech School" date="Mayo 2025" dateTime="2025-05" location="Maipú" status={undefined} />
       <TalkCard {...args} title="Decisiones documentadas" event="Interno" date="Próxima" dateTime="2026-03" location={undefined} status="próxima" />
     </div>
   ),
@@ -46,7 +46,7 @@ export const WithDescription: Story = {
   name: 'With description',
   args: {
     description:
-      'Qué se rompe cuando un equipo pasa de ocho a treinta, por qué casi nunca es la arquitectura, y las tres decisiones que conviene escribir antes de que hagan falta.',
+      'Cómo unificamos 12 aplicaciones bajo una sola experiencia con microfrontends, y cuándo sí y cuándo no conviene usarlos.',
   },
   render: (args) => (
     <div className="max-w-content">
@@ -70,13 +70,13 @@ export const WithResources: StoryObj = {
   render: () => (
     <div className="max-w-content">
       <TalkCard
-        title="Escalar sin romper el equipo"
-        event="JSConf"
-        date="Mayo 2025"
-        dateTime="2025-05"
-        location="Santiago"
+        title="Microfrontends sin dolor: cómo escalar React (y tu equipo) sin romperlo todo"
+        event="CaribeConf"
+        date="Agosto 2026"
+        dateTime="2026-08"
+        location="Barranquilla"
         status="con vídeo"
-        description="Qué se rompe cuando un equipo pasa de ocho a treinta, y las tres decisiones que conviene escribir antes de que hagan falta."
+        description="Cómo unificamos 12 aplicaciones bajo una sola experiencia con microfrontends, y cuándo sí y cuándo no conviene usarlos."
         resources={
           <>
             <Button asChild variant="tertiary" size="sm" icon={<Icon as={ArrowUpRight}  />}>

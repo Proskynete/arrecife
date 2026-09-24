@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 const TODAY = new Date(2026, 8, 15, 9, 0);
 
 const EVENTS: readonly CalendarEvent[] = [
-  { id: '1', start: new Date(2026, 8, 15, 10, 0), title: 'Publicar «Escalar con criterio»' },
+  { id: '1', start: new Date(2026, 8, 15, 10, 0), title: 'Publicar «El camino hacia mi primera charla internacional»' },
   { id: '2', start: new Date(2026, 8, 15, 16, 30), title: 'Revisar el borrador de la newsletter' },
   { id: '3', start: new Date(2026, 8, 18, 12, 0), title: 'Charla en JSConf', tone: 'warm' },
   { id: '4', start: new Date(2026, 8, 24, 9, 0), title: 'Cierre del curso' },

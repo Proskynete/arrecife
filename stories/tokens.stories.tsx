@@ -290,9 +290,9 @@ const SIZE: Record<keyof typeof typeScale, string> = {
 };
 
 const EXAMPLE: Record<keyof typeof typeScale, string> = {
-  display: 'Escalar con criterio',
+  display: 'Entender antes de construir',
   stat: '46',
-  h1: 'Ayudo a equipos de ingeniería a escalar con criterio',
+  h1: 'Entender antes de construir',
   h2: 'Arquitectura que sobrevive al equipo que la escribió',
   h3: 'Decisiones documentadas, no heredadas',
   body: 'El sistema no anima posición ni escala. Los estados se comunican con borde y color, no con movimiento, porque el movimiento es caro de leer y barato de abusar.',

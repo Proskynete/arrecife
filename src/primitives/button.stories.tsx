@@ -20,7 +20,7 @@ const VARIANTS = ['primary', 'conversion', 'secondary', 'tertiary'] as const;
 /** The tertiary carries its format inside: it is part of the variant, not of the text. */
 const LABEL = {
   primary: 'Primario',
-  conversion: 'Agenda una llamada',
+  conversion: 'Ver los cursos',
   secondary: 'Secundario',
   tertiary: './ver_todos →',
 } as const;
@@ -171,7 +171,7 @@ export const BrandRules: Story = {
       <Block title="Rule 3 · conversion, once per screen">
         <Row>
           <Button {...args} variant="conversion">
-            Agenda una llamada
+            Ver los cursos
           </Button>
           <Button {...args} variant="secondary">
             Ver el trabajo

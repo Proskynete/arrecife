@@ -1,6 +1,6 @@
 # § 66 · The avatar is his face where people meet him, and Tiburoncín where developers do
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.2 · [index](README.md)
 
 ---
 

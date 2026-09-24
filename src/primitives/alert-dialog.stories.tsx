@@ -29,7 +29,7 @@ const confirmation = (args: Parameters<NonNullable<Story['render']>>[0]) => (
     </AlertDialogTrigger>
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Borrar «Escalar con criterio»</AlertDialogTitle>
+        <AlertDialogTitle>Borrar «El camino hacia mi primera charla internacional»</AlertDialogTitle>
         <AlertDialogDescription>
           Se borra el artículo, sus two borradores y la imagen de portada. Los
           enlaces que apunten a él van a dar un 404. No se puede deshacer.

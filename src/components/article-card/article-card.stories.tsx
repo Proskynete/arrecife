@@ -8,9 +8,9 @@ const meta = {
   component: ArticleCard,
   args: {
     href: '#',
-    title: 'Deuda técnica con nombre y apellido',
+    title: 'El camino hacia mi primera charla internacional',
     excerpt:
-      'Llamarla «deuda técnica» la vuelve de nadie. Cuando cada atajo tiene una fecha y una persona detrás, la conversación cambia de tono.',
+      'Cómo preparé mi primera charla fuera de Chile, lo que me dio miedo antes de subir al escenario y lo que me llevo de CaribeConf.',
     date: '14 de marzo de 2025',
     dateTime: '2025-03-14',
     readingMinutes: 8,

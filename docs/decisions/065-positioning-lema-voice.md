@@ -1,6 +1,6 @@
 # § 65 · One lema, one bajada, and a voice that is his and not the manual's
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.2 · [index](README.md)
 
 ---
 

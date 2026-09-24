@@ -14,22 +14,22 @@ type Story = StoryObj<typeof meta>;
 
 const QUESTIONS = [
   {
-    value: 'consultoria',
-    pregunta: '¿Trabajas con equipos pequeños?',
+    value: 'frecuencia',
+    pregunta: '¿Cada cuánto llega la newsletter?',
     response:
-      'Sí. La mayoría de lo que hago es con equipos de entre cinco y treinta personas, que es donde los problemas de escala aparecen antes de que nadie los llame así.',
+      'Una vez al mes. Te cuento lo que voy aprendiendo sobre Spec-Driven Development y desarrollo con IA, sin resúmenes de noticias.',
   },
   {
-    value: 'remoto',
-    pregunta: '¿En remoto o presencial?',
+    value: 'nivel',
+    pregunta: '¿Necesito experiencia para los cursos?',
     response:
-      'Las dos. El trabajo de fondo se hace en remoto y las sesiones de arranque salen mejor en persona, si la distancia lo permite.',
+      'No. Los cursos parten desde cero y avanzan paso a paso, así que sirven si estás empezando o si vienes de otra carrera.',
   },
   {
-    value: 'plazos',
-    pregunta: '¿Cuánto dura un acompañamiento?',
+    value: 'charlas',
+    pregunta: '¿Das charlas en remoto?',
     response:
-      'Entre tres y seis meses. Menos de tres no da tiempo a que un cambio de proceso se note; más de seis y el equipo debería poder seguir sin mí.',
+      'Sí, presenciales o remotas. Antes de cada charla pregunto quién va a estar en la sala para adaptar lo que voy a mostrar.',
   },
 ] as const;
 

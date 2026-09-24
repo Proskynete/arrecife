@@ -56,8 +56,8 @@ export const Playground: Story = {
 };
 
 const SCALES = [
-  { variant: 'display', detail: '76 / 0.96 / 800 / -0.035em · display', example: 'Escalar con criterio' },
-  { variant: 'h1', detail: '44 / 1.05 / 700 / -0.03em · display', example: 'Ayudo a equipos de ingeniería a escalar con criterio' },
+  { variant: 'display', detail: '76 / 0.96 / 800 / -0.035em · display', example: 'Entender antes de construir' },
+  { variant: 'h1', detail: '44 / 1.05 / 700 / -0.03em · display', example: 'Entender antes de construir' },
   { variant: 'h2', detail: '30 / 1.1 / 600 / -0.02em · display', example: 'Arquitectura que sobrevive al equipo que la escribió' },
   { variant: 'h3', detail: '25 / 1.15 / 600 / -0.02em · display', example: 'Decisiones documentadas, no heredadas' },
   { variant: 'body', detail: '18 / 1.75 / 400 · sans', example: 'El sistema no anima posición ni escala. Los estados se comunican con borde y color, no con movimiento, porque el movimiento es caro de leer y barato de abusar.' },

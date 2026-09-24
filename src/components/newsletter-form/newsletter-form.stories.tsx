@@ -112,6 +112,11 @@ export const WithAside: Story = {
         field first. An illustration ahead of the thing it decorates is one more
         stop between the reader and the input.
       </Note>
+      <Note>
+        The story still passes `expression="wink"` and no face shows: with an
+        `aside` the face is dropped, because the manual allows one mascot per
+        piece and the pose is already it.
+      </Note>
     </>
   ),
 };
@@ -154,7 +159,7 @@ export const Behaviour: StoryObj = {
       const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
       return (
         <NewsletterForm
-          title="Un correo cada dos semanas"
+          title="Un correo al mes"
           disclaimer="Suscríbete y mira qué pasa con el campo."
           expression="wink"
           state={state}

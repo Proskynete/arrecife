@@ -1579,7 +1579,7 @@ Source: `src/components/newsletter-form/index.tsx`
 | `description` | `ReactNode` |  |  |  |
 | `disclaimer` | `ReactNode` |  |  | The small print. It is the «sin spam», which is why it accepts a face. |
 | `errorMessage` | `ReactNode` |  | `No se pudo suscribir ese correo. Revísalo y vuelve a intentar.` |  |
-| `expression` | `"annoyed" \| "confused" \| "hearts" \| "laughing" \| "shades" \| "waiting" \| "wink"` |  |  |  |
+| `expression` | `"annoyed" \| "confused" \| "hearts" \| "laughing" \| "shades" \| "waiting" \| "wink"` |  |  | The face beside the disclaimer. It is dropped when `aside` is set: the manual allows one mascot per piece («Dos mascotas en la misma pieza. Compiten entre sí y ninguna gana»), and the aside is the illustration. |
 | `fieldErrors` | `{ name?: ReactNode; email?: ReactNode; }` |  |  | A message under one specific field, instead of the single alert. |
 | `fieldLabel` | `string` |  | `Correo electrónico` |  |
 | `nameField` | `boolean` |  | `false` | Adds the name field ahead of the email one. |
@@ -1588,11 +1588,11 @@ Source: `src/components/newsletter-form/index.tsx`
 | `namePlaceholder` | `string` |  | `Cómo te llamas` |  |
 | `onFieldChange` | `(field: "email" \| "name", value: string) => void` |  |  | Fires when either field changes. It is where the project clears its error. |
 | `onSubmitEmail` | `(email: string, name?: string \| undefined) => void` |  |  | Fires with the email already read from the field, and with the name if that field is enabled. |
-| `placeholder` | `string` |  | `tu@email.dev` |  |
+| `placeholder` | `string` |  | `tu@correo.dev` |  |
 | `resetOnSuccess` | `boolean` |  | `true` | Empties the fields after a successful subscription. On by default. |
 | `state` | `"success" \| "error" \| "idle" \| "sending"` |  | `idle` |  |
 | `submitLabel` | `string` |  | `Suscribirme` |  |
-| `successMessage` | `ReactNode` |  | `Ya estás dentro. Te llega un correo cada dos semanas, y nada más.` |  |
+| `successMessage` | `ReactNode` |  | `Ya estás dentro. Te llega un correo al mes, y nada más.` |  |
 | `title` | `ReactNode` | yes |  |  |
 
 ### PageHeader

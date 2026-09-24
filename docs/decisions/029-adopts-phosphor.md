@@ -97,8 +97,9 @@ The manual's dosage is untouched by any of this. It was written about
 illustration and it still governs illustration; a set of functional glyphs is a
 category it never described and never restricted.
 
-**Action in the document:** add an icon line to the design system — «iconos de
-interfaz · Phosphor a 1em y peso `regular`, que es el mismo trazo 1.6 escrito en
-otra retícula · los glifos internos van más pesados y hay que igualarlos».
+**Action in the document:** none. The Design System canvas gained an Iconografía
+section, re-synced on 24 Sep 2026: Phosphor at 1em, `regular` as the line, and
+the 0.0625em against 0.0667em comparison. Its line about the internal glyphs is
+stale against § 51, which carries the correction.
 
 ---

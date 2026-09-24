@@ -1,6 +1,6 @@
 # § 42 · The glyphs are data, and the tenth one is ours
 
-**Release:** 0.8.0 · [index](README.md)
+**Release:** 0.8.0 · **Status:** Obsoleted by § 51 · [index](README.md)
 
 ---
 
@@ -46,8 +46,7 @@ catalogue's proportions: r 9.25 leaves the 2.75 of margin `Email`'s rectangle
 leaves, and the meridian bulges to 37 % of the sphere's half-width, which is what
 keeps it from reading as a vertical line at 19px.
 
-**Action in the document:** add `Website` to the social set, as the fourth
-functional glyph. Note that the set is now ten and that the shapes are published
-as data as well as as components.
+**Action in the document:** none any more — § 51 deleted `src/social/` and the glyph
+data, so there is no social set left to add `Website` to.
 
 ---

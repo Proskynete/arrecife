@@ -34,7 +34,7 @@ The row assembly stays a list at two entries rather than collapsing into a
 conditional. What it encodes is «the signature goes in the first row, whichever
 it is», and that does not stop being the rule because the list got shorter.
 
-**Action in the document:** the footer's specification loses the row of loose
-links. The link list is the full shape's columns.
+**Action in the document:** none. The Design System canvas's footer has no row of loose
+links (checked 24 Sep 2026); the link list lives in the full shape's columns.
 
 ---

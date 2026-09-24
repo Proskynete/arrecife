@@ -1,6 +1,6 @@
 # § 28 · There is a third tone, and two of them are the same sand
 
-**Release:** 0.7.0 · [index](README.md)
+**Release:** 0.7.0 · **Status:** Neutral half overruled by § 31 · [index](README.md)
 
 ---
 
@@ -63,8 +63,8 @@ rule it is not a component yet. A `ReactNode` slot costs the barrel nothing and
 unblocks all ten cards today, which is the same answer `icon` already gives. If a
 second project starts drawing them, that is when it earns its place in `./chart`.
 
-**Action in the document:** add the third value to the `Stat` line — «arena para
-`alert` y para `achievement`; biolume para lo neutro» — and note that sand covers
-both the number that is the problem and the number that is the reward.
+**Action in the document:** none — § 31 carries the whole `Stat` line, and the code
+follows § 31: the neutral number is primary ink and biolume moves to the badge.
+This entry's other half, sand for `alert` and `achievement`, is in § 31's action.
 
 ---

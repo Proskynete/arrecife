@@ -173,7 +173,7 @@ function ProgressBar({
         style={{ width: `${progress}%` }}
       />
       <div
-        className="rounded-pill bg-text-primary absolute top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+        className="rounded-pill bg-text-primary absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
         style={{
           width: knob,
           height: knob,

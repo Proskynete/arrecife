@@ -4,7 +4,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
 
 /**
- * The path as a path: `~ / artículos / cómo-escalar-un-equipo`.
+ * The path as a path: `~ / artículos / el-camino-hacia-mi-primera-charla`.
  *
  * The `~` is neither decoration nor a house icon: it is the filesystem's home,
  * which is why the breadcrumb is mono and not sans. The separators use `border`

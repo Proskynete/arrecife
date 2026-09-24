@@ -8,7 +8,7 @@ const meta = {
   component: Blockquote,
   args: {
     children:
-      'La arquitectura no se decide en una pizarra, se decide en las mil veces que alguien elige el atajo o no lo elige.',
+      'La IA es una herramienta. No le puedo culpar al martillo si la casa no quedó bien construida: soy yo el que maneja la herramienta, no al revés.',
   },
 } satisfies Meta<typeof Blockquote>;
 
@@ -19,6 +19,6 @@ export const Default: Story = { render: (args) => <Stack><Blockquote {...args} /
 
 export const WithByline: Story = {
   name: 'With byline',
-  args: { author: 'Eduardo Álvarez', source: 'Escalar sin romper el equipo, JSConf 2025' },
+  args: { author: 'Eduardo Álvarez', source: 'Cómo pienso, eduardoalvarez.dev' },
   render: (args) => <Stack><Blockquote {...args} /></Stack>,
 };

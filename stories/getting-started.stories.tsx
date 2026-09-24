@@ -71,7 +71,7 @@ import { ArrowUpRight } from '@phosphor-icons/react';
 export function Panel() {
   return (
     <Card className="p-step-lg gap-step-md flex flex-col">
-      <Text variant="h3" as="h2">Escalar con criterio</Text>
+      <Text variant="h3" as="h2">Entender antes de construir</Text>
       <Text variant="ui" tone="secondary" as="p" measure>
         Cada color, tamaño y espacio sale de un token.
       </Text>

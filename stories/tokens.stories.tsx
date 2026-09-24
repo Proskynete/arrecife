@@ -290,7 +290,7 @@ const SIZE: Record<keyof typeof typeScale, string> = {
 };
 
 const EXAMPLE: Record<keyof typeof typeScale, string> = {
-  display: 'Escalar con criterio',
+  display: 'Entender antes de construir',
   stat: '46',
   h1: 'Entender antes de construir',
   h2: 'Arquitectura que sobrevive al equipo que la escribió',

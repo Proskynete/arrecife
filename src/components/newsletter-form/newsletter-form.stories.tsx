@@ -9,9 +9,9 @@ const meta = {
   title: 'Components/NewsletterForm',
   component: NewsletterForm,
   args: {
-    title: 'Un correo cada dos semanas',
+    title: 'Un correo al mes',
     description:
-      'Lo que aprendí escalando equipos, escrito en corto. Sin resúmenes de noticias y sin lanzamientos.',
+      'Lo que voy aprendiendo sobre Spec-Driven Development y desarrollo con IA, escrito en corto. Sin resúmenes de noticias y sin lanzamientos.',
     disclaimer: 'Sin spam. Te das de baja en un clic.',
     expression: 'wink',
   },

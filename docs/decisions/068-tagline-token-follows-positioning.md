@@ -27,12 +27,25 @@ has no description.
 | `en` | I teach how to build software with AI without losing sight of what we build. |
 
 `short` and `long` are the two lines of the bajada approved in § 65. `en` is a
-translation of `long`; no English positioning was approved in the interview.
+translation of `long`, approved by the author on 24 Sep 2026.
 
-The Storybook samples that printed the old sentence as example text (the type
-scale and the tokens page) now print the lema, and `AuthorCard`'s example bio is
-taken from the approved bio instead of «liderazgo técnico, plataforma y la era
-de la IA».
+The Storybook had the old positioning in its sample data too, and a Storybook
+sample is the first thing a consuming project copies:
+
+- The type scale, the tokens page, `PageHeader`, getting-started, the progress
+  bar, the README and `llms.txt` printed «Escalar con criterio» as example
+  text. They now print the lema.
+- `Hero`, `PageHeader` and `Nav` presented the author as a consultancy
+  (eyebrow «consultoría», «Trabajo con equipos que crecieron más rápido que su
+  arquitectura», «Agenda una llamada»). They now use the bajada, the site's own
+  hero paragraph and «Ver los cursos» — sand is for courses, talks and mentoring.
+- `Blockquote`, `TalkCard` and `Table` attributed invented talks to him
+  («Escalar sin romper el equipo, JSConf 2025», a NerdearLA talk). They now use
+  his real talks (CaribeConf 2026, Tech School 2025) and a quote from his about
+  page. `ArticleCard` and `Breadcrumb` use one of his real articles.
+- The `Accordion` FAQ was a consultancy's; it now answers questions about the
+  newsletter, the courses and the talks.
+- `AuthorCard`'s example bio is the approved bio.
 
 **Why:** a token is the one place where copy cannot drift across projects, which
 is exactly why a stale token drifts all of them at once.
@@ -46,5 +59,5 @@ newsletter mensual, sin spam.», buttons «Leer artículos» and «Sobre mí»; 
 page header: bajada «Artículos sobre Spec-Driven Development, desarrollo con IA y
 lo que voy aprendiendo liderando un equipo.», context «Cuento lo que hice, lo que
 me salió mal y lo que aprendimos con mi equipo.»; newsletter title «Artículos
-sobre Spec-Driven Development y desarrollo con IA»; the logo sample and the
-default OG card read «Technical Lead · Spec-Driven Development».
+sobre Spec-Driven Development y desarrollo con IA»; the default OG card reads
+«Technical Lead · Spec-Driven Development».

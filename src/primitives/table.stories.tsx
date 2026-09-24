@@ -18,8 +18,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const ROWS = [
-  { talk: 'Escalar sin romper el equipo', event: 'JSConf', year: '2025', state: 'publicada' },
-  { talk: 'Deuda técnica con nombre y apellido', event: 'NerdearLA', year: '2024', state: 'publicada' },
+  { talk: 'Microfrontends sin dolor: cómo escalar React (y tu equipo) sin romperlo todo', event: 'CaribeConf', year: '2026', state: 'publicada' },
+  { talk: 'Taller de Astro: Crea tu portafolio', event: 'Tech School', year: '2025', state: 'publicada' },
   { talk: 'Arquitecturas que sobreviven', event: 'Interno', year: '2024', state: 'borrador' },
 ];
 
@@ -80,7 +80,7 @@ export const Hover: Story = {
   ),
 };
 
-export const Selected: Story = { render: () => table('Deuda técnica con nombre y apellido') };
+export const Selected: Story = { render: () => table('Taller de Astro: Crea tu portafolio') };
 
 /**
  * A footer row is `surface`, and it is the one row that is tinted at rest — so it

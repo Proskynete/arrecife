@@ -37,7 +37,7 @@ export const Basic: Story = {
     <div className="-m-step-lg">
       <Nav
         brand={<Logo background="dark" className="h-7" />}
-        actions={<Button variant="conversion">Agenda una llamada</Button>}
+        actions={<Button variant="conversion">Ver los cursos</Button>}
       >
         {SECTIONS.map((s) => (
           <NavItem key={s} href={`/${s}`} active={s === 'artículos'}>

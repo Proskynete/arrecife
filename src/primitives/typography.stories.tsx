@@ -56,7 +56,7 @@ export const Playground: Story = {
 };
 
 const SCALES = [
-  { variant: 'display', detail: '76 / 0.96 / 800 / -0.035em · display', example: 'Escalar con criterio' },
+  { variant: 'display', detail: '76 / 0.96 / 800 / -0.035em · display', example: 'Entender antes de construir' },
   { variant: 'h1', detail: '44 / 1.05 / 700 / -0.03em · display', example: 'Entender antes de construir' },
   { variant: 'h2', detail: '30 / 1.1 / 600 / -0.02em · display', example: 'Arquitectura que sobrevive al equipo que la escribió' },
   { variant: 'h3', detail: '25 / 1.15 / 600 / -0.02em · display', example: 'Decisiones documentadas, no heredadas' },

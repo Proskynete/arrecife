@@ -355,7 +355,7 @@ import { Text, Button, Badge, cn } from '@eduardoalvarez/arrecife';
 import type { TextProps } from '@eduardoalvarez/arrecife';
 
 <Text variant="eyebrow" tone="muted">charlas</Text>
-<Text as="h2" variant="h1">Escalar con criterio</Text>
+<Text as="h2" variant="h1">Entender antes de construir</Text>
 <Text variant="body">Clamps itself to 68ch.</Text>
 <Text variant="ui" measure={false}>No clamp, for a narrow cell.</Text>
 ```

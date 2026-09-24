@@ -9,7 +9,7 @@ const meta = {
   args: {
     items: [
       { label: 'artículos', href: '/articulos' },
-      { label: 'como-escalar-un-equipo-sin-romperlo' },
+      { label: 'el-camino-hacia-mi-primera-charla-internacional' },
     ],
   },
 } satisfies Meta<typeof Breadcrumb>;

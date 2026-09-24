@@ -20,7 +20,7 @@ function Article() {
   return (
     <div className="gap-step-md max-w-content mx-auto flex flex-col">
       <Text as="h1" variant="h1">
-        Escalar con criterio
+        Entender antes de construir
       </Text>
       {Array.from({ length: PARAGRAPHS }, (_, i) => (
         <Text key={i} variant="body">

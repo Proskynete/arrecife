@@ -428,7 +428,13 @@ const ogDeep = '#0E2A30';
 export const gradient = {
   dark: {
     hero: `linear-gradient(160deg, ${dark.background} 60%, ${deep} 100%)`,
-    section: `linear-gradient(150deg, ${dark.surface} 0%, ${deep} 100%)`,
+    /**
+     * Flat, on purpose. The document drew it #10202B → #0D2129, a 0.11 L* sweep
+     * nobody can see; the author chose a flat fosa over inventing a second stop
+     * (§ 9). It stays a `linear-gradient` so `gradient-section`, which sets
+     * `background-image`, keeps working unchanged in every project.
+     */
+    section: `linear-gradient(${dark.surface}, ${dark.surface})`,
     /** The article OG template. 145°, from the document. */
     og: `linear-gradient(145deg, ${dark.background} 58%, ${ogDeep} 100%)`,
     /** The talk OG template. 150°, from the document. */

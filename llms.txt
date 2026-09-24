@@ -1394,7 +1394,7 @@ The byline at the foot of the article: 52px avatar, 15/500 name and the role in 
 
 Source: `src/components/blockquote/index.tsx`
 
-The side bar is `accent`, the interactive color, because a quotation is somebody else's voice entering the text. It carries no decorative quote marks: the system's glyphs are SVG, and an ornamental quote adds nothing the border and the indent do not already say.
+The side bar is `warm`, 3px, and the text is italic, as the document draws it: «cita con borde arena 3px, cursiva, sin fondo». Sand is the human accent — quotes, categories, conversion — and biolume is the interactive one; a quote in biolume read as a link that could not be clicked. It carries no decorative quote marks: the border and the italic already say it is somebody's voice.
 
 - Extends: `Omit<ComponentPropsWithoutRef<'blockquote'>, 'cite'>`
 

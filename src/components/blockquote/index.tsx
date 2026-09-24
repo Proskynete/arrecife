@@ -12,18 +12,19 @@ export type BlockquoteProps = Omit<ComponentPropsWithoutRef<'blockquote'>, 'cite
 };
 
 /**
- * The side bar is `accent`, the interactive color, because a quotation is
- * somebody else's voice entering the text. It carries no decorative quote marks:
- * the system's glyphs are SVG, and an ornamental quote adds nothing the border
- * and the indent do not already say.
+ * The side bar is `warm`, 3px, and the text is italic, as the document draws it:
+ * «cita con borde arena 3px, cursiva, sin fondo». Sand is the human accent —
+ * quotes, categories, conversion — and biolume is the interactive one; a quote
+ * in biolume read as a link that could not be clicked. It carries no decorative
+ * quote marks: the border and the italic already say it is somebody's voice.
  */
 export function Blockquote({ children, author, source, className, ...props }: BlockquoteProps) {
   return (
     <blockquote
-      className={cn('border-accent pl-step-md my-step-lg border-l-2', className)}
+      className={cn('border-warm pl-step-md my-step-lg border-l-3', className)}
       {...props}
     >
-      <Text variant="body" tone="secondary">
+      <Text variant="body" tone="secondary" className="italic">
         {children}
       </Text>
 

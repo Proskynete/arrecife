@@ -1,6 +1,6 @@
 # § 71 · The light borders sit one step lighter, and five tokens have no drawing
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.3 · [index](README.md)
 
 ---
 
@@ -36,8 +36,5 @@ the argument § 9 already made for the light gradients. Aligning to the canvas n
 would darken every card in `cursos`, which is the one light surface, for a
 difference no one has reported.
 
-**Action in the document:** in the Design System canvas's light section, set the
-card border to `#EBE6DC`, the input border to `#E6DFD2` and the secondary border
-to `#D3C8B2`, and add the missing values to its palette: raised surface
-`#EFE9DE`, hovers `#0C7466` and `#96511F`, section gap 96 and wide container
-1180.
+**Action in the document:** none. Applied on the Design System canvas on 24 Sep
+2026: the three light borders and the five values are listed.

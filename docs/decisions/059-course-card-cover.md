@@ -68,6 +68,6 @@ slide editor. So these slots have one consumer with a real case. For a component
 that is already in, that is the bar: [§ 39](039-table-surface.md) turned down a
 prop because nobody needed it, and here somebody does.
 
-**Action in the document:** the design system has no course card with a cover.
-Add one, and write down the two rules it carries: the title goes in the body and
-not over the image, and the cover does not move on hover.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «curso
+con portada · el título va en el cuerpo, no sobre la portada · la portada no se
+mueve en hover».

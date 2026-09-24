@@ -33,6 +33,7 @@ With this one there are **four** declared exceptions: the button spinner, the
 side panel, the skeleton shimmer and the accordion. All four are feedback about
 PROGRESS or about spatial continuity; none of them is decoration.
 
-**Action in the document:** note the fourth exception alongside the other three.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+accordion's height is in the motion line's five exceptions.
 
 ---

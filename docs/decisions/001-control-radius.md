@@ -16,6 +16,7 @@ from the document: `control.sm 14 · control.md 22 · control.lg 30`. They are i
 `tokens.ts` as a group of their own and not inside `spacing`, because 14, 22 and
 30 do not compose with 8/12/16/26/40 and must not be offered as loose margins.
 
-**Action in the document:** remove the radius stepping from the button table.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+button table gives one radius for the three sizes.
 
 ---

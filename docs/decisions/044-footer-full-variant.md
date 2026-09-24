@@ -48,8 +48,7 @@ markup, so without a slot those links are reachable from a project only by
 structure or by a style class, and a router's `Link` cannot be plugged in at all.
 Same signature as `Breadcrumb`'s and `ArticleCard`'s, on purpose.
 
-**Action in the document:** add the full footer to the footer's specification —
-the two blocks, the columns with their mono heading, and the signature closing the
-piece behind a hairline. Note that it is a second shape and not a replacement.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «FOOTER
+· FORMA COMPLETA» is drawn and specified as a second shape.
 
 ---

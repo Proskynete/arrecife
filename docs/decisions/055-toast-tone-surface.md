@@ -38,7 +38,5 @@ context of its own. The two colour stops are identical on purpose: it is a fill.
 uses. The toast's own close button is a `✕` two centimetres away, and a `✕` mark
 beside it reads as a second one.
 
-**Action in the document:** the toast section gives a border and no fill. Bring it
-in line with the alert's `strong` recipe and add the two marks, or say why a
-notice that floats should carry less colour than one that sits in the page — the
-current specification implies the second and the reason is not written anywhere.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «toast ·
+receta «strong» del aviso · r14 · 16px de separación».

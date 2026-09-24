@@ -62,8 +62,7 @@ documents — so there is no opting out from the call site. One shape, because
 fourteen call sites wanted the same one; a second gets a prop when a second
 consumer exists.
 
-**Action in the document:** add the surface to the table's specification. It is
-now a panel and not a grid, and the border it draws is the card's hairline. Note
-that the scroll container is a focus stop.
+**Action in the document:** the panel and the card's hairline were applied on 24
+Sep 2026. Still missing: say that the scroll container is a focus stop.
 
 ---

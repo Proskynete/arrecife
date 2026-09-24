@@ -1,6 +1,6 @@
 # § 69 · The manual's light accents fail AA, and its contrast column measures against two surfaces
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.3 · [index](README.md)
 
 ---
 
@@ -36,8 +36,5 @@ accents, and every ratio in the palette is stated against the page it sits on.
 the next project to read the manual would pick the failing hex with a clear
 conscience.
 
-**Action in the document:** in the Manual canvas § 06 · Color, replace the two
-light rows with «bioluz oscura #0D7C6F · Links y foco sobre papel · 4.55:1» and
-«arena oscura #A65B27 · Etiquetas y citas sobre papel · 4.54:1». In the dark
-table, change the contrast column to 16.8 / 9.5 / 5.6 / 10.3 / 9.3 / 4.2 and put
-«contraste sobre abismo» in the column header.
+**Action in the document:** none. Applied on the Manual canvas on 24 Sep 2026:
+both light rows and the dark contrast column, headed «contraste sobre abismo».

@@ -63,8 +63,6 @@ With `auto` the props land on both `<img>`, an `id` or a `ref` included, so a
 call site that has to reach THE image passes the background it is on. The `alt`
 does not double: an image with `display: none` is out of the accessibility tree.
 
-**Action in the document:** the manual's rule is two variants, one per
-background. Add that on a surface that switches theme the mark carries both and
-the theme picks, and that the explicit choice is for backgrounds that do not
-switch. The checklist line «La aleta usa la variante correcta para el fondo»
-stays true as written.
+**Action in the document:** none. Applied on the Manual canvas on 24 Sep 2026:
+the fin rule says the mark carries both variants on a surface that switches
+theme.

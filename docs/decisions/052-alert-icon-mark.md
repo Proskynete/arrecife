@@ -34,7 +34,6 @@ An alert's mark is not a state within a set, so it is not `current`; picking
 `fill` because it reads heavier is choosing a weight by hand, which is the thing
 `tone` exists to prevent.
 
-**Action in the document:** the alert section specifies the four mono characters.
-Replace them with the four Phosphor names, and keep the sentence that the mark is
-the semantic colour while the title is not — that half was right and § 4b already
-argued it.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+alert mark is «uno de cuatro íconos Phosphor — info, check-circle, warning,
+x-circle — en el color semántico».

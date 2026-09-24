@@ -12,7 +12,7 @@ It is point 5's argument again: a new step for a one-pixel difference turns the
 scale into a list of sizes. The text format (`./action →`) IS part of the variant
 and IS in the code.
 
-**Action in the document:** give the tertiary in the control's scale, not in an
-absolute size.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+tertiary is «en la escala del control».
 
 ---

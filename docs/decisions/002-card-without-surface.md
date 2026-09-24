@@ -16,6 +16,8 @@ What **was** wrong and got corrected is the padding: the document's cards carry
 26 (`lg`) and `CardHeader` was setting 16 (`md`). It changed in `Card*` and in
 the three domain cards.
 
-**Action in the document:** delete `#0B1620` from the cards section.
+**Action in the document:** the cards section's spec line was rewritten on 24
+Sep 2026 («sin superficie propia, hereda el fondo»), but the card drawings still
+paint `#0B1620`. Repaint them on the page's own background.
 
 ---

@@ -1,6 +1,6 @@
 # § 72 · The eyebrow is 400, because the two canvases disagree and the code picked one
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.3 · [index](README.md)
 
 ---
 
@@ -19,5 +19,5 @@ bold against the Geist around it, and the eyebrow's job is to sit above the
 headline, not to compete with it. The Design System is the drawing that was
 checked at size.
 
-**Action in the document:** in the Manual canvas § 07 · Tipografía, change the
-eyebrow row to «eyebrow JetBrains 12px 400 0.12em».
+**Action in the document:** none. Applied on the Manual canvas on 24 Sep 2026:
+«eyebrow JetBrains 12px 400 0.12em».

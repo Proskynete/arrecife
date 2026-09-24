@@ -17,7 +17,7 @@ It sits behind `motion-safe`, so it switches itself off for anyone who asked for
 less motion, and `still` turns it off by hand for long lists — twenty rows
 sweeping at once are a strobe, not a load.
 
-**Action in the document:** none, but it would help if the document said there
-are three exceptions and which ones.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+motion line lists the skeleton's shimmer among the five exceptions.
 
 ---

@@ -97,8 +97,8 @@ spatial continuity. **One criterion.** A sixth lands on it or it does not exist,
 and «write a second criterion for it» stops being available, which is what § 23
 did and what took two corrections to undo.
 
-**Action in the document:** the motion section gets the halo as the signature's
-mark, with its bar geometry, and the blinking caret comes out of the footer's
-specification. The exception list is five with one criterion.
+**Action in the document:** the motion line lists «halo de la firma» among five
+exceptions with one criterion, and the footer specification no longer carries a
+blinking caret (24 Sep 2026). Still missing: the halo's bar geometry.
 
 ---

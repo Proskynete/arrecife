@@ -1,6 +1,6 @@
 # § 68 · The tagline token follows § 65, because the header reads it and nobody can override it
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.3 · [index](README.md)
 
 ---
 
@@ -50,14 +50,6 @@ sample is the first thing a consuming project copies:
 **Why:** a token is the one place where copy cannot drift across projects, which
 is exactly why a stale token drifts all of them at once.
 
-**Action in the document:** on the Design System canvas — in «Secciones de
-página», hero: eyebrow «Technical Lead · Spec-Driven Development», bajada
-«Enseño a construir software con IA sin dejar de entender lo que hacemos.», the
-paragraph «Aquí reúno lo que voy aprendiendo sobre Spec-Driven Development,
-desarrollo con IA y liderar un equipo de desarrollo: artículos, charlas y la
-newsletter mensual, sin spam.», buttons «Leer artículos» and «Sobre mí»; internal
-page header: bajada «Artículos sobre Spec-Driven Development, desarrollo con IA y
-lo que voy aprendiendo liderando un equipo.», context «Cuento lo que hice, lo que
-me salió mal y lo que aprendimos con mi equipo.»; newsletter title «Artículos
-sobre Spec-Driven Development y desarrollo con IA»; the default OG card reads
-«Technical Lead · Spec-Driven Development».
+**Action in the document:** none. Applied on the Design System canvas on 24 Sep
+2026: the hero, the interior page header, the newsletter title and the default
+OG card carry the new copy.

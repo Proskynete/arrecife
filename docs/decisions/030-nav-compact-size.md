@@ -57,7 +57,7 @@ Algolia search, a mobile drawer, all of it Astro islands — and the backlog
 already recorded that no change is needed for it. `cursos` can now be built out
 of `Nav`, `brand` and `actions` without one.
 
-**Action in the document:** add the second bar height — «barra · 64px, o 56 en un
-shell con barra lateral».
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «nav ·
+64px, o 56 en un shell con barra lateral».
 
 ---

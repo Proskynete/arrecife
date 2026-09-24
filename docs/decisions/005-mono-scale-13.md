@@ -15,6 +15,8 @@ by half a pixel.
 By the same argument the document's other two half-pixels do not get in: the card
 excerpt at 15.5 uses `ui` (15) and inline code at 13.5 uses `meta` (13).
 
-**Action in the document:** raise the metadata mono scale to 13.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+prose line gives «metadatos mono 13px». The `12.5px` left on the canvas is the
+nav items' and the status badge's sans, not metadata.
 
 ---

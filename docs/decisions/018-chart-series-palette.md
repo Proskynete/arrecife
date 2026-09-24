@@ -33,6 +33,7 @@ The threshold that applies is the graphical-object one, 3:1 against the
 background, not the text one. The worst of the eight values is `brand.body` over
 paper, 3.9:1.
 
-**Action in the document:** add the series palette and the four-color rule.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «SERIES
+DE GRÁFICOS · CUATRO, POR TONO» and the four-colour rule are drawn.
 
 ---

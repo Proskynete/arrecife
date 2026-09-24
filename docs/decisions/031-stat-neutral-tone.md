@@ -40,8 +40,8 @@ line that sits wherever the standfirst happens to end turns a row of ten into a
 sawtooth. Pinned to the bottom edge of the padding box, the lines share a
 baseline across the row.
 
-**Action in the document:** update the `Stat` line — «el número en tinta primaria;
-biolume va en el badge del icono y en la sparkline · arena en el número para
-`alert` y `achievement`».
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the stat
+line gives the number in primary ink, biolume in the badge and the sparkline,
+sand for alert and achievement.
 
 ---

@@ -1,6 +1,6 @@
 # § 74 · Disabled is half opacity, not a second palette
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.3 · [index](README.md)
 
 ---
 
@@ -20,5 +20,5 @@ showed happens. Half opacity keeps the variant recognisable, derives from the
 colour that is already measured, and cannot drift from it. Disabled controls are
 exempt from WCAG contrast, so there is no ratio to protect.
 
-**Action in the document:** in the Design System canvas, replace the two
-disabled pairs with «disabled · la misma variante al 50% de opacidad».
+**Action in the document:** none. Applied on the Design System canvas on 24 Sep
+2026: both disabled pairs read «la misma variante al 50% de opacidad».

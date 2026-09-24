@@ -1,6 +1,6 @@
 # § 73 · Text fields keep the ring, and the danger button keeps biolume for now
 
-**Release:** unreleased · [index](README.md)
+**Release:** 0.12.3 · [index](README.md)
 
 ---
 
@@ -29,7 +29,6 @@ The danger ring is a gap, not a decision against coral: a ring in the button's
 own colour is what § 37 did for sand. Until a `focus-ring-danger` utility exists
 it stays biolume, which at least passes contrast against both themes.
 
-**Action in the document:** in the Design System canvas, change «foco: borde
-bioluz, sin outline» (header and form sections) to «foco: borde bioluz más el
-anillo del sistema, 2px + offset 3px». Leave the coral destructive ring drawn;
-this entry is revisited when the code adds it.
+**Action in the document:** none. Applied on the Design System canvas on 24 Sep
+2026: both focus lines read «borde bioluz más el anillo del sistema, 2px +
+offset 3px». Revisit when the code adds the coral ring.

@@ -12,6 +12,7 @@ six in blue). A literal hex for what is already a token with alpha is one token
 too many, and the literal would have no light-mode equivalent either: the same
 rule at 28 % gives dark sand over paper, which is what is wanted.
 
-**Action in the document:** replace the hex with «sand at 28 %».
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+category border reads «arena al 28 %».
 
 ---

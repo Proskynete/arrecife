@@ -31,11 +31,6 @@ rest.
 | Pagination | arrows only | the words «Anterior» and «Siguiente», which carry the accessible name without an extra label |
 | AudioPlayer icons | 1em, sized by the text next to them | fixed sizes, because the player has no text-size token to hang them on |
 
-One behaviour is recorded here only so it is not lost: the AudioPlayer's
-progress knob fades in with `transition-opacity`, which is not one of the
-declared motion exceptions (§ 20). It is a code bug, not a measure, and the fix
-belongs in the component, not on the canvas.
-
 **Why:** each of these is a measure, not a behaviour, and every one of them was
 chosen against a real screen in a consuming project: 760 because a modal in
 `cursos` holds a form, 12px cell padding because admin tables have three actions

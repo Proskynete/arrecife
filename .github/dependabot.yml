@@ -1,10 +1,12 @@
 version: 2
+# Twice a year: a weekly schedule kept a queue of open PRs that nobody was
+# reviewing. Security updates are not affected by this and still arrive as soon
+# as an advisory is published.
 updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: weekly
-      day: monday
+      interval: semiannually
     commit-message:
       prefix: fix
       prefix-development: chore
@@ -39,8 +41,7 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: weekly
-      day: monday
+      interval: semiannually
     labels:
       - "📦 Dependencies"
       - "🚀 CI/CD"

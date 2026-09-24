@@ -23,6 +23,8 @@ export function SelectTrigger({
         'transition-standard',
         'hover:border-hairline-hover',
         'focus-visible:border-accent focus-ring',
+        // `FormControl` marks an invalid field with `aria-invalid` only.
+        'aria-[invalid=true]:border-error aria-[invalid=true]:focus-visible:outline-error',
         'disabled:pointer-events-none disabled:opacity-50',
         'data-[placeholder]:text-text-muted',
         className,

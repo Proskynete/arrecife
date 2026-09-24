@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 
 import { Note } from '../../stories/utils.tsx';
 import { Button } from '../primitives/button.tsx';
@@ -118,6 +119,19 @@ export const Basic: Story = {
 
 export const WithErrors: Story = {
   name: 'With errors',
+  play: async ({ canvasElement }) => {
+    // `FormControl` sets `aria-invalid` and nothing else, so the red border has
+    // to come from that attribute: it used to be styled on `data-invalid`, which
+    // only the `invalid` prop sets, and a react-hook-form error stayed grey.
+    const input = within(canvasElement).getByLabelText('Nombre');
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--color-error)';
+    canvasElement.appendChild(probe);
+    const error = getComputedStyle(probe).color;
+    probe.remove();
+    await expect(input).toHaveAttribute('aria-invalid', 'true');
+    await expect(getComputedStyle(input).borderTopColor).toBe(error);
+  },
   render: () => (
     <div>
       <DemoForm withErrors />

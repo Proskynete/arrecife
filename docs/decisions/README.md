@@ -41,7 +41,7 @@ keeps its file and says so.
 | 0.11.0 | §§ 57–60 | Four props a consumer had already written down in its own source |
 | 0.12.0 | §§ 61–63 | One word of CSS, a footer that can credit the library, and a site that says which version it is |
 | 0.12.2 | §§ 65–67 | The positioning, decided by interview, where the avatar is a face, and the merch phrases |
-| unreleased | § 68 | The tagline token catches up with the positioning |
+| unreleased | §§ 68–75 | The tagline token catches up with the positioning, and the code-wins measures get their record |
 
 `pnpm check:decisions` walks this folder and prints the actions still owed to a
 canvas. It reports, it does not enforce: those actions land on a document this
@@ -242,6 +242,19 @@ The code half of § 65. The positioning changed in every project that writes its
 own copy, and stayed in the one token that the header reads for them.
 
 - § 68 · [The tagline token follows § 65, because the header reads it and nobody can override it](068-tagline-token-follows-positioning.md)
+
+Seven entries that change no value. The canvases were re-read against the code on
+24 Sep 2026, and every place where production had quietly diverged — contrast
+corrections recorded only in the README, lighter borders, measures chosen in a
+consuming project — gets the entry that sends it back to the drawing.
+
+- § 69 · [The manual's light accents fail AA, and its contrast column measures against two surfaces](069-manual-light-accents-and-contrast-column.md)
+- § 70 · [Three colours moved a few points of lightness, and only the README said so](070-contrast-corrections.md)
+- § 71 · [The light borders sit one step lighter, and five tokens have no drawing](071-light-borders-and-code-only-tokens.md)
+- § 72 · [The eyebrow is 400, because the two canvases disagree and the code picked one](072-eyebrow-weight.md)
+- § 73 · [Text fields keep the ring, and the danger button keeps biolume for now](073-focus-rings-fields-and-danger.md)
+- § 74 · [Disabled is half opacity, not a second palette](074-primary-disabled-opacity.md)
+- § 75 · [The measures that shipped, component by component](075-component-measures.md)
 
 ---
 

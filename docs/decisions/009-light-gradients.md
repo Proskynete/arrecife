@@ -82,8 +82,8 @@ the `linear-gradient(...)` shape with one colour at both ends, so the
 `gradient-section` utility still sets `background-image` and no project has to
 change a class. The dark hero is now the only dark gradient on a page.
 
-**Action in the document:** the author asked the Design System canvas for the
-flat section and the three light values on 24 Sep 2026; confirm against the
-next export.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+three light gradients are drawn with the token values, and the dark section is a
+flat fosa `#10202B`, so the hero is the only dark gradient on a page.
 
 ---

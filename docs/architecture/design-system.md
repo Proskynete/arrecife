@@ -4,8 +4,11 @@
 >
 > Extracted from `Design System - Eduardo Alvarez.html` (a Claude Design canvas)
 > on 27 Aug 2026, and re-synced from `Design System.dc.html` on 24 Sep 2026
-> twice: first for Iconografía and the destructive buttons, then for the canvas
-> update that applied §§ 68–75 and the older actions listed in `docs/decisions/`. It is the text and the monospaced specifications; the
+> three times: first for Iconografía and the destructive buttons, then for the
+> canvas update that applied §§ 68–75 and the older actions listed in
+> `docs/decisions/`, and last for the canvas update that applied the remaining
+> actions (§§ 2, 4, 4b, 9, 13, 17, 27, 39, 45, 57, 75) and the flat dark
+> section. It is the text and the monospaced specifications; the
 > illustrations and SVGs do not survive extraction and show up as «SVG».
 >
 > The canvas is still the source, and the canvas is in Spanish. This copy is in
@@ -110,10 +113,10 @@ Leer artículos
 Cargando 
 primario · bg #35D6C0 · texto #06171A · 15px/500 · pad 12px 22px · r10
 hover #5FE3D1 · focus ring 2px #35D6C0 + offset 3px · disabled · la misma variante al 50% de opacidad 
-Trabajar juntos 
-Trabajar juntos 
-Trabajar juntos 
-Trabajar juntos 
+Leer artículos 
+Leer artículos 
+Leer artículos 
+Leer artículos 
 Enviando 
 secundario · borde #2C4D5D · texto #EDF4F3 · fondo transparente
 hover: borde y texto pasan a #35D6C0 . Nunca se rellena el fondo. 
@@ -231,8 +234,8 @@ Eduardo Álvarez
 ./hablemos 
 ~ / artículos / el-camino-hacia-mi-primera-charla 
 Todos 
-Liderazgo 
-Plataforma 
+Spec-Driven Development 
+Desarrollo con IA 
 IA 
 ← 
 Anterior 1 
@@ -264,6 +267,7 @@ tabs · grupo sobre surface sin borde · r10 · pad 4 · activo con fondo #17303
 sin espacio · el nav y las pestañas hacen scroll horizontal; la paginación se envuelve y se centra 
 footer · redes como iconos de 19px en plancton, gap 18px, hover bioluz · marcas en sólido, funcionales en trazo 1.6 · cada enlace con aria-label , que es lo que reemplaza al texto visible 
 footer completo · segunda forma: marca, descripción, redes y acción a la izquierda, columnas a la derecha, firma cerrando tras un hairline · la firma imprime el dominio del sitio , no el de la identidad 
+halo de la firma · barra de 2px de ancho, 1em de alto, radio pill, en bioluz; el halo es un anillo de box-shadow que crece hasta 5px y se desvanece en 1.5s ease-in-out; solo con movimiento permitido, en reposo la barra es sólida 
 Feedback 
 el único lugar donde van las caras 
 Nuevo artículo publicado 
@@ -289,9 +293,9 @@ hace 2 segundos
 SKELETON · CARGA 
 ESTADO VACÍO · HUECO DE TABLA O WIDGET 
 Todavía no hay borradores. 
-aviso · fondo al 8% del color semántico sobre abismo, borde al 22% · radio de tarjeta · marca con uno de cuatro íconos Phosphor — info, check-circle, warning, x-circle — en el color semántico · 12px entre ícono y texto · nunca emoji 
+aviso · fondo al 8% del color semántico sobre abismo, borde al 22% · radio de tarjeta · marca con uno de cuatro íconos Phosphor — info, check-circle, warning, x-circle — en el color semántico · 12px entre ícono y texto · nunca emoji · la receta 8/22 vale en ambos modos; el error oscuro es el caso límite · un color semántico no es color de texto sobre su propio tinte, en ningún modo 
 toast · receta «strong» del aviso · r14 · 16px de separación 
-estado vacío · una cara a 66px + título 15px/500 + explicación 13.5px muted · hueco de tabla o widget · sin cara, sin superficie + línea 15px muted · skeleton shimmer 1.4s lineal 
+estado vacío · una cara a 66px + título 15px/500 + explicación 13.5px muted · hueco de tabla o widget · sin cara, sin superficie, glifo opcional del proyecto + línea 15px muted · skeleton shimmer 1.4s lineal 
 Datos 
 admin del blog · métricas de charla 
 TÍTULO 
@@ -306,7 +310,7 @@ La IA no reemplaza tu experiencia. La pone a prueba
 career-strategy 
 2026-06-30 
 Publicado 
-Plataformas internas que nadie odia 
+Microfrontends sin dolor 
 platform 
 — 
 Borrador 
@@ -329,7 +333,7 @@ claro
 1 · arena oscura 
 2 · tiburón 
 3 · muted 
-tabla · panel con el hairline de tarjeta · cabecera mono 11.5px muted · celdas con 12px · divisiones hairline · hover surface (segunda fila) 
+tabla · panel con el hairline de tarjeta · cabecera mono 11.5px muted · celdas con 12px · divisiones hairline · hover surface (segunda fila) · el contenedor con scroll es un punto de foco del teclado 
 stat · número display 800 en tinta primaria · bioluz en el badge y la sparkline · arena en el número solo para alert y achievement 
 series · se distinguen por tono, no por luminosidad · umbral de objeto gráfico 3:1 · una quinta serie no se inventa: se agrupa en «otros» 
 Contenido largo 
@@ -380,13 +384,15 @@ Leer artículos
 Sobre mí 
 hero-gradient linear-gradient(160deg, #091319 60%, #0d2129 100%) · r16 · pad 44px 40px 40px
 texto al 62% del ancho · display 800/76 en pantalla completa · eyebrow mono bioluz uppercase 0.12em
-Uno por sitio. Es el único bloque con degradado y la única pose de mascota; sangra por el borde inferior derecho, nunca centrada. En móvil la pose baja bajo los botones y se centra. 
+Uno por sitio. Es el único bloque con degradado y la única pose de mascota; sangra por el borde inferior derecho, nunca centrada. En móvil la pose baja bajo los botones y se centra. La pose puede ir centrada solo en una página que es solo eso, sin contenido después. 
+degradados · oscuro: hero linear-gradient(160deg, #091319 60%, #0d2129 100%) es el único de página; la sección es superficie plana fosa #10202B 
+claro: hero linear-gradient(160deg, #F6F2EA 60%, #FFFFFF 100%) · sección linear-gradient(150deg, #FFFFFF 0%, #F6F2EA 100%) · og linear-gradient(145deg, #F6F2EA 55%, #FFFFFF 100%) 
 ENCABEZADO DE PÁGINA INTERNA 
 /artículos 
 Artículos 
 Artículos sobre Spec-Driven Development, desarrollo con IA y lo que voy aprendiendo liderando un equipo. 
-Cuento lo que hice, lo que me salió mal y lo que aprendimos con mi equipo. 
-Sin degradado, sin pose, sin fondo. Eyebrow mono bioluz uppercase · h1 44/700 · bajada 18px · párrafo de contexto 15px 
+Sin degradado, sin pose, sin fondo. Eyebrow mono bioluz uppercase · h1 44/700 · bajada 18px 
+h1 44/700 es la escala del sitio de lectura; un panel de admin titula sus pantallas en h3 (25px) 
 Mismo patrón en las seis páginas internas. Es lo que hace que el hero de portada se sienta especial. 
 NEWSLETTER · SECCIÓN COMPLETA 
 NEWSLETTER 
@@ -396,7 +402,7 @@ Tu nombre
 tu@correo.dev 
 «SVG» Suscribirme 
 Sin spam. Solo cuando tengo algo que vale. 
-un solo panel con degradado de sección · r16 · pad 26 · dos columnas hasta 900 px, luego apilado · en el teléfono el botón va a ancho completo · con pose no lleva cara 
+un solo panel en superficie plana fosa #10202B · r16 · pad 26 · dos columnas desde 768 px, apilado por debajo · en el teléfono el botón va a ancho completo · con pose no lleva cara 
 la pose del escritorio va en su recuadro con r12 — es la única ilustración del sistema con fondo propio, así que necesita el radio para no chocar con el panel
 Es la excepción al «un solo degradado por sitio»: la sección de newsletter y el hero comparten ese permiso porque nunca aparecen juntos en la misma pantalla. 
 NEWSLETTER · COMPONENTE SUBSCRIBE 
@@ -416,7 +422,7 @@ Revisa tu correo para confirmar la suscripción.
 Error 
 No pudimos procesar tu suscripción. Inténtalo de nuevo. 
 error de envío · el de validación va bajo cada campo, en 12px 
-un solo panel con degradado de sección · r16 · pad 26 · máx 760px centrado · campos con label 13px/500 
+un solo panel en superficie plana fosa #10202B · r16 · pad 26 · máx 760px centrado · campos con label 13px/500 
 avisos · receta «strong»: fondo al 10% del color semántico, borde al 100% · radio de tarjeta · ícono Phosphor en el color semántico, 12px hasta el texto 
 La cara va aquí y en 404, en ningún otro lugar del portfolio. Acompaña al «sin spam»: el usuario ya decidió leer, no está evaluando si contratarte. 
 Reproductor de audio 
@@ -448,7 +454,7 @@ cargando · spinner dentro del botón · duración sin metadatos muestra 0:00
 «SVG» 
 «SVG» 
 error · el botón pasa a rojo con icono reintentar; hover al 80%. Sin cara: es un fallo técnico 
-contenedor fosa · borde #22414F · r8 · pad 16px
+contenedor fosa · borde #22414F · radio control · pad 16px 
 pista 8px sobre corriente, relleno bioluz, pomo 16px espuma visible solo en hover · tiempos mono 12px bajo la pista
 saltos de ±15 s en muted, hover a espuma · velocidad como chip sobre corriente · volumen oculto bajo 640 px 
 los íconos tienen tamaños fijos por modo, no 1em: son controles, no acompañan texto 

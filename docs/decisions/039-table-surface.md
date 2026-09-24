@@ -62,7 +62,8 @@ documents — so there is no opting out from the call site. One shape, because
 fourteen call sites wanted the same one; a second gets a prop when a second
 consumer exists.
 
-**Action in the document:** the panel and the card's hairline were applied on 24
-Sep 2026. Still missing: say that the scroll container is a focus stop.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+table's spec line ends «el contenedor con scroll es un punto de foco del
+teclado».
 
 ---

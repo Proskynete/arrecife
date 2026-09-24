@@ -22,7 +22,8 @@ A rule with a name can be argued with; a copy cannot. The variant puts the pose
 ABOVE the headline and not below it, which is what keeps it out of the case the
 rule forbids: it does not close a block of text, it heads one.
 
-**Action in the document:** note the exception and its condition — a full page,
-with no content after it — not the variant on its own.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the hero
+adds «La pose puede ir centrada solo en una página que es solo eso, sin
+contenido después».
 
 ---

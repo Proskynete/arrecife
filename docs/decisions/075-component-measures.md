@@ -39,7 +39,6 @@ from. Moving them back to the drawing would restyle four sites for no reported
 problem. What the canvas gets right about behaviour — which state is shown, what
 is interactive, what never moves — the code already follows.
 
-**Action in the document:** every row was applied on 24 Sep 2026 except two: the
-newsletter panel still says «dos columnas hasta 900 px» (the code goes two
-columns from 768), and the interior page header still draws a 15px context
-paragraph that `PageHeader` has no slot for.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+newsletter panel reads «dos columnas desde 768 px», and the interior page header
+no longer draws a context paragraph.

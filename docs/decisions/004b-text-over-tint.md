@@ -32,7 +32,7 @@ The status badge, on top of that, carries a **solid** border instead of the
 alert's 22 %: at 13px and two words wide, the border is the only thing saying
 which tone it is, and at 22 % it did not get there.
 
-**Action in the document:** note that a semantic color is not a text color over
-its own tint, in either mode.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «un
+color semántico no es color de texto sobre su propio tinte, en ningún modo».
 
 ---

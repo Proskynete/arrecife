@@ -60,7 +60,6 @@ when its layout already spaces the content. That is one class at fifteen call
 sites at most, and the alternative — padding that changes with the title's scale
 — ties two things together that the projects do not tie.
 
-**Action in the document:** say that the interior-page header's «h1 44/700» is
-the reading site's, and that an admin panel titles its screens at `h3` (25px),
-which is where both admin apps landed on their own. The section currently gives
-one scale for «las seis páginas internas» and nothing for a panel.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: «h1
+44/700 es la escala del sitio de lectura; un panel de admin titula sus pantallas
+en h3 (25px)».

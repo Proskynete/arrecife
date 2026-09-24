@@ -10,8 +10,8 @@ are `chip 6 · control 10 · card 14 · panel 16 · pill 999`.
 The alert uses `card` (point 3) and the player uses `control`, which is the
 closest to 8. Neither introduces a sixth radius.
 
-**Action in the document:** the alert half was applied on 24 Sep 2026 («radio de
-tarjeta»). The player's container still reads `r8` in pixels; give it by radius
-name.
+**Action in the document:** none. Applied on the canvas on 24 Sep 2026: the
+player's container now reads «radio control», which is the `rounded-control` the
+code uses.
 
 ---

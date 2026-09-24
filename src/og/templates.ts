@@ -349,7 +349,7 @@ export type TalkData = BaseData & {
   pose?: Pose | undefined;
 };
 
-/** Talk · eyebrow in biolume with the event and year, pose bleeding off the corner. */
+/** Talk · 150° gradient, eyebrow in biolume with the event and year, pose bleeding off the corner. */
 export function talkTemplate(data: TalkData): SatoriNode {
   const base = data.basePath ?? ASSETS_PATH;
   const head = ['charla', data.event, data.year].filter(Boolean).join(' · ');
@@ -357,7 +357,7 @@ export function talkTemplate(data: TalkData): SatoriNode {
 
   return card({
     mode: 'dark',
-    background: 'none',
+    background: gradient.dark.ogTalk,
     eyebrow: { text: head, color: dark.accent },
     title: data.title,
     bajada: data.summary,

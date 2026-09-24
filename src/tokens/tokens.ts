@@ -324,7 +324,7 @@ export const size = {
  *   invalid     error      4.97:1
  *
  * `brand.body` (#3E7CB1) is NOT here: the system restricts it to fill, never
- * text, and it measures 4.2:1 in this context.
+ * text, and it measures 4.12:1 in this context.
  *
  * Numeric and boolean literals ride with strings in biolume. The document does
  * not assign them, and grouping them with strings — all three are literals — is
@@ -416,17 +416,30 @@ export const series = {
  */
 const deep = '#0D2129';
 
+/**
+ * Where the two OG cards end. The document draws them a step greener than the
+ * hero's `deep`: «145deg, #091319 58%, #0e2a30 100%» for the article and «150deg,
+ * #091319 55%, #0e2a30 100%» for the talk, in both canvases. The token used to
+ * reuse `deep` at 55%, which nobody saw because a 1200×630 card is never next to
+ * the canvas.
+ */
+const ogDeep = '#0E2A30';
+
 export const gradient = {
   dark: {
     hero: `linear-gradient(160deg, ${dark.background} 60%, ${deep} 100%)`,
     section: `linear-gradient(150deg, ${dark.surface} 0%, ${deep} 100%)`,
-    /** The one used by the article OG template. 145°, from the document. */
-    og: `linear-gradient(145deg, ${dark.background} 55%, ${deep} 100%)`,
+    /** The article OG template. 145°, from the document. */
+    og: `linear-gradient(145deg, ${dark.background} 58%, ${ogDeep} 100%)`,
+    /** The talk OG template. 150°, from the document. */
+    ogTalk: `linear-gradient(150deg, ${dark.background} 55%, ${ogDeep} 100%)`,
   },
   light: {
     hero: `linear-gradient(160deg, ${light.background} 60%, ${light.surface} 100%)`,
     section: `linear-gradient(150deg, ${light.surface} 0%, ${light.background} 100%)`,
     og: `linear-gradient(145deg, ${light.background} 55%, ${light.surface} 100%)`,
+    /** No light talk card exists; the key mirrors dark so both modes carry it. */
+    ogTalk: `linear-gradient(150deg, ${light.background} 55%, ${light.surface} 100%)`,
   },
 } as const;
 

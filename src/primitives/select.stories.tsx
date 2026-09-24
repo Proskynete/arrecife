@@ -25,7 +25,7 @@ const control = (args: Parameters<NonNullable<Story['render']>>[0], disabled = f
       </span>
       <Select {...args}>
         <SelectTrigger disabled={disabled} aria-labelledby="velocidad-etiqueta">
-          <SelectValue placeholder="Elige una speed" />
+          <SelectValue placeholder="Elige una velocidad" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

@@ -20,7 +20,7 @@ export function Textarea({ className, invalid = false, ...props }: TextareaProps
         'hover:border-hairline-hover',
         'focus-visible:border-accent focus-ring',
         'disabled:pointer-events-none disabled:opacity-50',
-        'data-[invalid]:border-error data-[invalid]:focus-visible:outline-error',
+        'aria-[invalid=true]:border-error aria-[invalid=true]:focus-visible:outline-error',
         className,
       )}
       {...props}

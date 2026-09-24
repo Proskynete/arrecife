@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 const OPTIONS = [
   { value: 'mensual', text: 'Mensual' },
   { value: 'anual', text: 'Anual' },
-  { value: 'nunca', text: 'No submit' },
+  { value: 'nunca', text: 'No enviar' },
 ];
 
 const group = (args: Parameters<NonNullable<Story['render']>>[0]) => (

@@ -217,7 +217,7 @@ export function EventCalendar({
                     onClick={() => edit(event)}
                     aria-label={`Editar «${event.title}»`}
                   >
-                    ./edit
+                    ./editar
                   </Button>
                 ) : null}
 
@@ -239,7 +239,7 @@ export function EventCalendar({
                       <AlertDialogFooter>
                         <AlertDialogCancel>Mejor no</AlertDialogCancel>
                         <AlertDialogAction onClick={() => onDeleteEvent(event.id)}>
-                          Borrar el event
+                          Borrar el evento
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

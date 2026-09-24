@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { SVGProps } from 'react';
+import { Clock } from '@phosphor-icons/react';
 
 import { Block, Note, Stack } from '../../../stories/utils.tsx';
+import { Icon } from '../../icons/index.tsx';
 import { Button } from '../../primitives/button.tsx';
 import { Card, CardContent, CardHeader, CardTitle } from '../../primitives/card.tsx';
 import {
@@ -16,33 +17,13 @@ import { Text } from '../../primitives/typography.tsx';
 import { EmptyState } from './index.tsx';
 
 /**
- * The project's glyph, drawn HERE and not imported, because that is the contract:
- * `EmptyState` takes an icon, it does not own one. Since 0.10.0 the library's
- * own icons all come from Phosphor through `Icon`, and a consumer that reaches
- * for a shape Phosphor does not have draws it — this is what «draws it» looks
- * like: 1em, `currentColor`, a 1.6 stroke, `aria-hidden`.
+ * `EmptyState` takes an icon, it does not own one, so the story passes it — and
+ * it passes it from Phosphor through `Icon`, like any project should. The
+ * document is explicit: «no se dibujan iconos a mano». This used to be a hand-
+ * drawn clock, to show what «draws it» looks like; Phosphor has `Clock`, so
+ * that example taught the one thing the system forbids.
  */
-function Clock(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="1em"
-      height="1em"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      focusable="false"
-      className="text-h3"
-      {...props}
-    >
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 7.5V12l3 2" />
-    </svg>
-  );
-}
+const clock = <Icon as={Clock} className="text-h3" />;
 
 const meta = {
   title: 'Components/EmptyState',
@@ -211,7 +192,7 @@ export const InlineStates: Story = {
         <Stack>
           <EmptyState
             variant="inline"
-            icon={<Clock />}
+            icon={clock}
             title="Sin actividad en el rango"
           />
         </Stack>
@@ -221,7 +202,7 @@ export const InlineStates: Story = {
         <Stack>
           <EmptyState
             variant="inline"
-            icon={<Clock />}
+            icon={clock}
             title="No hay reportes que coincidan"
             description="Los filtros activos no dejan pasar ninguno."
             action={

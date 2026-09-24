@@ -71,6 +71,11 @@ export type NewsletterFormProps = Omit<ComponentPropsWithoutRef<'section'>, 'tit
   errorMessage?: ReactNode;
   /** The small print. It is the «sin spam», which is why it accepts a face. */
   disclaimer?: ReactNode;
+  /**
+   * The face beside the disclaimer. It is dropped when `aside` is set: the
+   * manual allows one mascot per piece («Dos mascotas en la misma pieza.
+   * Compiten entre sí y ninguna gana»), and the aside is the illustration.
+   */
   expression?: Face | undefined;
   basePath?: string | undefined;
   submitLabel?: string;
@@ -134,13 +139,13 @@ export function NewsletterForm({
   description,
   state = 'idle',
   onSubmitEmail,
-  successMessage = 'Ya estás dentro. Te llega un correo cada dos semanas, y nada más.',
+  successMessage = 'Ya estás dentro. Te llega un correo al mes, y nada más.',
   errorMessage = 'No se pudo suscribir ese correo. Revísalo y vuelve a intentar.',
   disclaimer,
   expression,
   basePath,
   submitLabel = 'Suscribirme',
-  placeholder = 'tu@email.dev',
+  placeholder = 'tu@correo.dev',
   fieldLabel = 'Correo electrónico',
   nameField = false,
   nameLabel = 'Nombre',
@@ -185,9 +190,11 @@ export function NewsletterForm({
       variant="conversion"
       loading={sending}
       // The document asks for 60 % while sending, not the generic disabled 50 %.
-      // With the name field it drops to its own line and aligns left: stretched
-      // to full width it would look like a modal's submit.
-      className={cn('disabled:opacity-60', nameField && 'sm:self-start')}
+      // Full width on a phone, where the form stacks («bajo eso apilado y botón
+      // a ancho completo»). With the name field it drops to its own line and
+      // aligns left from `sm` up: stretched there it would look like a modal's
+      // submit.
+      className={cn('w-full disabled:opacity-60 sm:w-auto', nameField && 'sm:self-start')}
     >
       {submitLabel}
     </Button>
@@ -304,7 +311,7 @@ export function NewsletterForm({
 
       {disclaimer ? (
         <div className="gap-step-sm flex items-center">
-          {expression ? (
+          {expression && !aside ? (
             <MascotFace expression={expression} basePath={basePath} className="w-10 max-w-none" />
           ) : null}
           <Text variant="label" tone="muted" as="p" className="font-normal">

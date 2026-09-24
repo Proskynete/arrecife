@@ -77,7 +77,7 @@ export const WithProgress: Story = {
   name: 'With progress',
   render: () => (
     <div className="gap-step-md grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-      <Stat value="38%" label="progress del curso" progress={38} />
+      <Stat value="38%" label="avance del curso" progress={38} />
     </div>
   ),
 };

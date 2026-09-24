@@ -104,7 +104,7 @@ function AssetCard({
             );
           }}
         >
-          {copied ? './copied ✓' : './copiar_uso →'}
+          {copied ? './copiado ✓' : './copiar_uso →'}
         </Button>
       </div>
     </Card>

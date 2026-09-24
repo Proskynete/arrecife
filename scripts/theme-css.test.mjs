@@ -174,7 +174,7 @@ describe('theme.css over Tailwind v4', () => {
     // guarantee flat: the darkest point of either block is `background`, which
     // is the surface every light contrast value here is ratified against.
     const light = css.slice(css.indexOf("[data-theme='light']"));
-    for (const name of ['--gradient-hero', '--gradient-section', '--gradient-og']) {
+    for (const name of ['--gradient-hero', '--gradient-section', '--gradient-og', '--gradient-og-talk']) {
       const value = property(light, name);
       expect(value, `${name} exists in light mode`).toBeDefined();
       expect(value, `${name} must not touch surfaceRaised`).not.toContain('#EFE9DE');
@@ -185,6 +185,12 @@ describe('theme.css over Tailwind v4', () => {
     const dark = css.slice(css.indexOf("[data-theme='dark']"));
     expect(property(dark, '--gradient-hero')).toBe(
       'linear-gradient(160deg, #091319 60%, #0D2129 100%)',
+    );
+    expect(property(dark, '--gradient-og')).toBe(
+      'linear-gradient(145deg, #091319 58%, #0E2A30 100%)',
+    );
+    expect(property(dark, '--gradient-og-talk')).toBe(
+      'linear-gradient(150deg, #091319 55%, #0E2A30 100%)',
     );
   });
 

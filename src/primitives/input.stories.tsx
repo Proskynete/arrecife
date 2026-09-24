@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 const withLabel = (args: Parameters<NonNullable<Story['render']>>[0]) => (
   <Stack>
     <div className="gap-step-xs flex flex-col">
-      <FieldLabel htmlFor="email">Email</FieldLabel>
+      <FieldLabel htmlFor="email">Correo</FieldLabel>
       <Input id="email" {...args} />
     </div>
   </Stack>

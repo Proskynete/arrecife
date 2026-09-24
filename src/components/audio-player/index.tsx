@@ -10,7 +10,11 @@ import {
   Waveform,
 } from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, PointerEvent as ReactPointerEvent } from 'react';
+import type {
+  ChangeEvent,
+  KeyboardEvent as ReactKeyboardEvent,
+  PointerEvent as ReactPointerEvent,
+} from 'react';
 
 import { cn } from '../../lib/cn.ts';
 import { Icon } from '../../icons/index.tsx';
@@ -121,11 +125,19 @@ type PointerProps = {
   onPointerUp: (e: ReactPointerEvent<HTMLDivElement>) => void;
 };
 
+/**
+ * A `role="slider"` has to answer the keyboard: it used to take focus and then
+ * ignore every key, which is WCAG 2.1.1. The arrows move 5 seconds, Page Up and
+ * Page Down move 15 — the same as the skip buttons — and Home and End go to the
+ * ends. `aria-valuetext` reads the time, not a percentage nobody asked for.
+ */
 function ProgressBar({
   height,
   knob,
   progress,
-  redondeada = true,
+  valueText,
+  onKeyDown,
+  rounded = true,
   tabIndex = 0,
   ...pointer
 }: PointerProps & {
@@ -133,26 +145,31 @@ function ProgressBar({
   /** Knob diameter in px. Also used to centre it over the point. */
   knob: number;
   progress: number;
-  redondeada?: boolean;
+  valueText: string;
+  onKeyDown: (e: ReactKeyboardEvent<HTMLDivElement>) => void;
+  rounded?: boolean;
   tabIndex?: number;
 }) {
   return (
     <div
       className={cn(
         'group bg-surface-raised relative cursor-pointer',
+        'focus-ring',
         height,
-        redondeada && 'rounded-pill',
+        rounded && 'rounded-pill',
       )}
       role="slider"
       aria-label="Progreso del audio"
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(progress)}
+      aria-valuetext={valueText}
       tabIndex={tabIndex}
+      onKeyDown={onKeyDown}
       {...pointer}
     >
       <div
-        className={cn('bg-accent absolute h-full', redondeada && 'rounded-pill')}
+        className={cn('bg-accent absolute h-full', rounded && 'rounded-pill')}
         style={{ width: `${progress}%` }}
       />
       <div
@@ -263,6 +280,7 @@ function Volume({
         className={cn(
           'bg-surface-raised rounded-pill h-1 cursor-pointer appearance-none',
           '[accent-color:var(--color-accent)]',
+          'focus-ring',
           width,
         )}
         aria-label="Volumen"
@@ -279,12 +297,10 @@ function PlayIcon({ className, loading, error, playing }: PlayState & { classNam
   if (loading)
     return <Icon as={CircleNotch} className={cn('motion-safe:animate-spin', className)} />;
   if (error) return <Icon as={ArrowsClockwise} className={className} />;
-  // All four at the default `action`, which is the system's line. The portfolio
-  // drew play and pause SOLID and the volume too, and that difference is not
-  // kept: `tone` names what an icon is DOING, not how it looks, and every glyph
-  // in this player is a control. Picking `fill` here to match the old drawing
-  // would be choosing a weight by hand, which is the thing `tone` exists to stop.
-  if (playing) return <Icon as={Pause} className={className} />;
+  // The document: «El play va en regular: aún no suena. Pasa a fill mientras
+  // reproduce.» So play is `action` and the pause that replaces it while the
+  // audio runs is `current`, the fill: the weight says the sound is on.
+  if (playing) return <Icon as={Pause} tone="current" className={className} />;
   return <Icon as={Play} className={className} />;
 }
 
@@ -309,7 +325,10 @@ function PlayButton({
       className={cn(
         'text-accent-on transition-standard cursor-pointer',
         'focus-ring',
-        state.error ? 'bg-error hover:bg-error/80' : 'bg-accent hover:bg-accent-hover',
+        // `danger` is the fill and `error` is text: the retry button is a fill.
+        state.error
+          ? 'bg-danger text-danger-on hover:bg-danger-hover'
+          : 'bg-accent hover:bg-accent-hover',
         className,
       )}
       aria-label={label}
@@ -457,6 +476,30 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
     isDragging.current = false;
   }, []);
 
+  const handleProgressKey = useCallback(
+    (e: ReactKeyboardEvent<HTMLDivElement>) => {
+      const audio = audioRef.current;
+      if (!audio || !duration) return;
+      const steps: Record<string, number> = {
+        ArrowLeft: -5,
+        ArrowDown: -5,
+        ArrowRight: 5,
+        ArrowUp: 5,
+        PageDown: -15,
+        PageUp: 15,
+      };
+      let next: number | undefined;
+      if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = duration;
+      else if (e.key in steps) next = audio.currentTime + (steps[e.key] ?? 0);
+      if (next === undefined) return;
+      e.preventDefault();
+      audio.currentTime = Math.max(0, Math.min(next, duration));
+      setCurrentTime(audio.currentTime);
+    },
+    [duration],
+  );
+
   const handleVolumeChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -503,6 +546,8 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
     onPointerDown: handlePointerDown,
     onPointerMove: handlePointerMove,
     onPointerUp: handlePointerUp,
+    onKeyDown: handleProgressKey,
+    valueText: `${formatTime(currentTime)} de ${formatTime(duration)}`,
   };
 
   /** Floating player, shared by the banner and compact modes. */
@@ -519,7 +564,7 @@ export function AudioPlayer({ src, title, mode = 'full', onFirstPlay }: AudioPla
         height="h-1"
         knob={10}
         progress={progress}
-        redondeada={false}
+        rounded={false}
         tabIndex={-1}
         {...pointer}
       />

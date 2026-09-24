@@ -64,7 +64,9 @@ values — a token with no light counterpart is a token that lies in half the
 projects, which is exactly § 2. If the uniform treatment turns out not to be
 enough for a red, the light pair gets decided and both come in together.
 
-**Action in the document:** add the danger palette and the two variants, with the
-rule that they are for the irreversible and never for «cancel».
+**Action in the document:** none. Applied on the Design System canvas and re-synced
+into `docs/architecture/design-system.md` on 24 Sep 2026: the danger palette,
+`destructivo` and `destructivoBorde`, the light values and the rule «Solo para lo
+irreversible. Nunca para «cancelar» un formulario.» are all drawn.
 
 ---

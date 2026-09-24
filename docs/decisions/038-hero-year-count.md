@@ -1,6 +1,6 @@
 # § 38 · The hero's year count is not unknown, and it is still not a token
 
-**Release:** 0.7.0 · [index](README.md)
+**Release:** 0.7.0 · **Status:** Premise removed by § 65 · [index](README.md)
 
 ---
 
@@ -40,9 +40,8 @@ starting year, and the manual gives a rounded count and not a date. **Ten years
 stated in August 2026 is 2015 or it is 2016**, and picking one is inventing the
 thing this entry exists to say was not invented.
 
-**Action in the document:** give the manual a start year beside «Diez años», or
-say the count is rounded on purpose. With a year, `since` becomes a token and the
-count is derived by whoever renders it. Without one, the copy still ships — it
-just ships as copy.
+**Action in the document:** none. § 65 rewrote Manual § 08 and «Diez años» is no longer
+in it. The approved bio says «más de diez años», a count that is rounded on
+purpose, so there is no start year to add and still nothing becomes a token.
 
 ---

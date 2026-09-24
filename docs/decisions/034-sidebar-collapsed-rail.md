@@ -58,7 +58,8 @@ the other one rather than guessing.
 **`user` is a slot**, for the same reason `Nav`'s user menu goes in `actions`: an
 avatar needs a session and a sign-out route.
 
-**Action in the document:** add the rail to the admin's description in § 09 —
-«barra lateral de 256, rail de 56 a solo iconos».
+**Action in the document:** none — § 48 removed `SidebarNav`, and the rail went with
+it. The action this entry asked for («add the rail to the admin's description in
+§ 09») no longer applies, and § 48 carries the admin's navigation.
 
 ---

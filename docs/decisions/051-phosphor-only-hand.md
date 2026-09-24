@@ -76,3 +76,9 @@ holds now: the set is Phosphor's, `regular` is the line, `fill` is a brand or a
 current state, `light` is furniture, and nothing in the system is hand-drawn
 except the brand marks in `src/brand/`. The social row's «brands solid, functional
 at 1.6» survives verbatim as `tone="current"` against `tone="action"`.
+The Iconografía section drawn since (re-synced 24 Sep 2026) already says most of
+this, and three of its lines are stale against this entry: «Sin reconciliar:
+lib/glyphs.tsx dibuja a 0.109em … decisiones.md § 29» comes out, because the file
+is deleted; «de @arrecife/icons» becomes «de `@eduardoalvarez/arrecife/icons`»;
+and «Sin encodar: la primitiva fija regular y nada más» comes out, because `Icon`
+encodes the three roles in `TONE_WEIGHT`.

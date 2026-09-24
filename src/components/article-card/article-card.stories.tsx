@@ -46,7 +46,7 @@ export const Grid: Story = {
       <ArticleCard
         {...args}
         title="Arquitecturas que sobreviven al equipo que las escribió"
-        excerpt="Una decisión sin write es una decisión que se vuelve a tomar cada seis meses, peor cada vez."
+        excerpt="Una decisión sin escribir es una decisión que se vuelve a tomar cada seis meses, peor cada vez."
         readingMinutes={12}
         tags={['adr']}
       />

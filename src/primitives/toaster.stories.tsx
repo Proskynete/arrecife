@@ -18,7 +18,7 @@ export const Basic: Story = {
   render: (args) => (
     <div>
       <Row>
-        <Button variant="secondary" onClick={() => toast('Borrador stored')}>
+        <Button variant="secondary" onClick={() => toast('Borrador guardado')}>
           Neutral
         </Button>
         <Button
@@ -114,7 +114,7 @@ export const Variants: Story = {
     </div>
   ),
   play: async () => {
-    toast('Borrador stored');
+    toast('Borrador guardado');
     toast.success('Artículo publicado', { description: 'Ya está en el feed.' });
     toast.error('No se pudo guardar', { title: 'Error del servidor' });
   },

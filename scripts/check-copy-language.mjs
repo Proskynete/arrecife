@@ -73,7 +73,7 @@ function isSpanish(text) {
  * correct Spanish cannot be evidence of anything.
  */
 const ENGLISH =
-  /\b(exists?|declared|label|labels|theme|next|previous|email|name|title|value|size|width|height|loading|delete|cancel|save|search|filter|row|rows|item|items|list|state|group|content|header|footer|body|link|button|card|page|text|type|new|old|first|last|and|the|with|from|not|are|was|were|one|two|three|four|five|six|seven|eight|nine|ten|year|years|month|months|week|weeks|day|days|hour|hours|when|passes)\b/i;
+  /\b(exists?|declared|label|labels|theme|next|previous|email|name|title|value|size|width|height|loading|delete|cancel|save|search|filter|row|rows|item|items|list|state|group|content|header|footer|body|link|button|card|page|text|type|new|old|first|last|and|the|with|from|not|are|was|were|one|two|three|four|five|six|seven|eight|nine|ten|year|years|month|months|week|weeks|day|days|hour|hours|when|passes|stored|date|speed|submit|write|mode|progress|response|copied)\b/i;
 
 /*
   The numbers and the units of time are the newer half of that list, and they are
@@ -97,6 +97,11 @@ const ENGLISH =
   `CourseCard` story from the 0.6.0 sweep on: `cuando` and `pasa`, taken by the
   find-and-replace, and neither on the list. Adding them turned up that one
   string and nothing else.
+
+  The last nine — `stored`, `date`, `speed`, `submit`, `write`, `mode`,
+  `progress`, `response`, `copied` — came in with the canvas alignment of
+  0.12.x. An audit found each of them inside a Spanish story string («Borrador
+  stored», «Elige una speed», «en la response») that the list could not see.
 */
 
 /**

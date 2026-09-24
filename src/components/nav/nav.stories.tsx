@@ -49,7 +49,7 @@ export const Basic: Story = {
       <div className="px-step-md py-section max-w-wide mx-auto">
         <Text variant="body" tone="secondary" measure>
           Baja la página para ver el desenfoque. La barra es abismo al 86 % con
-          14px de desenfoque detrás, y el alfa va sobre el token, así que en mode
+          14px de desenfoque detrás, y el alfa va sobre el token, así que en modo
           claro es papel al 86 % sin tocar una línea.
         </Text>
         <div className="h-[120vh]" />

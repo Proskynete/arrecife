@@ -94,7 +94,7 @@ function DatePicker() {
           {date ? date.toLocaleDateString('es') : 'Elegir fecha'}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" aria-label="Elegir date" className="w-auto p-step-sm">
+      <PopoverContent align="start" aria-label="Elegir fecha" className="w-auto p-step-sm">
         <Calendar mode="single" selected={date} onSelect={setDate} defaultMonth={MONTH} />
       </PopoverContent>
     </Popover>

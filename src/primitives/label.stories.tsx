@@ -14,7 +14,7 @@ export const WithField: Story = {
   render: () => (
     <Stack>
       <div className="gap-step-xs flex flex-col">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">Correo</Label>
         <Input id="email" placeholder="name@dominio.dev" />
       </div>
     </Stack>

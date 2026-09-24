@@ -55,7 +55,7 @@ function DemoForm({ withErrors = false }: { withErrors?: boolean }) {
               <FormControl>
                 <Input placeholder="Cómo te llamas" {...field} />
               </FormControl>
-              <FormDescription>Es lo que aparece en la response.</FormDescription>
+              <FormDescription>Es lo que aparece en la respuesta.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -66,9 +66,9 @@ function DemoForm({ withErrors = false }: { withErrors?: boolean }) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Correo</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="tu@email.dev" {...field} />
+                <Input type="email" placeholder="tu@correo.dev" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -82,7 +82,7 @@ function DemoForm({ withErrors = false }: { withErrors?: boolean }) {
             <FormItem>
               <FormLabel>Mensaje</FormLabel>
               <FormControl>
-                <Textarea rows={4} placeholder="En qué andas" {...field} />
+                <Textarea rows={4} placeholder="Cuéntame qué necesitas" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

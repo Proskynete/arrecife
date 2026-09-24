@@ -11,7 +11,7 @@ export const Variants: Story = {
   render: () => (
     <>
       <Stack>
-        <Alert variant="accent" title="Borrador stored">
+        <Alert variant="accent" title="Borrador guardado">
           Se guarda solo cada treinta segundos mientras escribes.
         </Alert>
         <Alert variant="success" title="Curso publicado">

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.5](https://github.com/Proskynete/arrecife/compare/v0.12.4...v0.12.5) (2026-09-29)
+
+
+### 🐛 Correcciones
+
+* **deps:** bundle the six open dependabot updates into one ([#91](https://github.com/Proskynete/arrecife/issues/91)) ([d753ab5](https://github.com/Proskynete/arrecife/commit/d753ab5f19b0eb293ab4a05c69347ef965f470ca))
+
 ## [0.12.4](https://github.com/Proskynete/arrecife/compare/v0.12.3...v0.12.4) (2026-09-24)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/Proskynete/arrecife/compare/v0.12.5...v0.13.0) (2026-10-05)
+
+
+### 🚀 Novedades
+
+* **theme:** hide the third fragment of the terminal hunt in :root ([#93](https://github.com/Proskynete/arrecife/issues/93)) ([b116303](https://github.com/Proskynete/arrecife/commit/b116303a48d8e2fb92f015925ae2e6b1012af8c9))
+
 ## [0.12.5](https://github.com/Proskynete/arrecife/compare/v0.12.4...v0.12.5) (2026-09-29)
 
 

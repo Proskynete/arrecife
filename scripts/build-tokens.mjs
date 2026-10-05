@@ -142,6 +142,16 @@ export const themeCss = `${NOTICE}
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 
+/* Not a token, and nothing reads it. It is the third of six fragments of the
+   hunt in terminal.eduardoalvarez.dev, and it sits here because this file
+   reaches every site that wears the identity: whoever inspects :root in
+   DevTools finds it. Outside @theme on purpose, so Tailwind and
+   check:namespace leave it alone. The terminal keeps only its hash; changing
+   the text breaks the hunt (see the terminal's src/data/hunt.ts). */
+:root {
+  --tiburoncin: "🦈 3/6 «donde casi»";
+}
+
 /* STATIC, and that word is the whole of a bug fix. Tailwind v4 emits a theme
    variable only if some utility it generated uses it, and a token read with
    var() from JS is asked for by no utility at all: seriesColor(i) returns

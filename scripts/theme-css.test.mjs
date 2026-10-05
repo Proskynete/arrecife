@@ -265,6 +265,13 @@ describe('theme.css over Tailwind v4', () => {
    * was missing: `['bg-series-1', 'bg-series-4']` generates the utility that
    * makes the variable used, and then proves it is there.
    */
+  it('keeps the terminal hunt fragment in :root, outside the theme', async () => {
+    const css = await compileClasses(['flex']);
+    expect(css).toContain('--tiburoncin: "🦈 3/6 «donde casi»"');
+    const theme = themeCss.slice(themeCss.indexOf('@theme static {'));
+    expect(theme).not.toContain('--tiburoncin');
+  });
+
   it('puts every declared token in :root even when no utility asks for it', async () => {
     const css = await compileClasses(['flex']);
     const emitted = css.slice(0, css.indexOf('[data-theme='));

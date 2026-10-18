@@ -261,6 +261,13 @@ transcriptions were re-synced, and 29 actions — most of §§ 68–75 and a bac
 reaching back to § 1 — were settled against the drawings, not against memory.
 Eleven are still owed, each narrowed to what the canvas has not drawn yet.
 
+### 0.14.0
+
+One entry, and it is the manual's colophon coming due: the mascot was bitmap
+until it was vectorized, and the vectors started arriving.
+
+- § 76 · [Tiburoncín becomes vector, one piece at a time, and a piece is one file](076-brand-pieces-are-vectors.md)
+
 ---
 
 ## What was NOT touched

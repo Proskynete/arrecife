@@ -143,6 +143,14 @@ so the command reports the value on each side and only fails on the ones that
 differ. A collision that agrees is worth knowing about and is not worth failing
 over.
 
+> **Coming from 0.13.x.** One break, and nothing fails to compile: the fin and
+> the `laptop-coffee`, `peek` and `surf` poses are SVG now, and the library asks
+> for `/brand/pose-surf.svg` instead of `.png`. Copy the four SVGs from the
+> package into your `public/brand/` and delete their PNGs, or those images come
+> out broken.
+>
+> Read [`docs/runbooks/migration-0.14.md`](docs/runbooks/migration-0.14.md).
+
 > **Coming from 0.9.0.** Two breaks and they are the same one twice: the library
 > stopped drawing icons of its own. `@phosphor-icons/react` becomes a REQUIRED
 > peer dependency — even if your project draws no icons, the `Alert` and the
@@ -1059,13 +1067,17 @@ import { Logo, Mascot, MascotFace, faceList } from '@eduardoalvarez/arrecife/bra
 
 | | |
 | --- | --- |
-| fins | `fin.png` (two blues) and `fin-foam.png` (foam silhouette) |
+| fins | `fin.svg` (two blues) and `fin-foam.png` (foam silhouette) |
 | faces | annoyed · confused · hearts · laughing · shades · waiting · wink |
 | poses | desk · laptop-coffee · peek · surf |
 
 The names are a type: a face that does not exist will not compile, and
-autocomplete offers the ones that do. Adding one means dropping the PNG in and
+autocomplete offers the ones that do. Adding one means dropping the file in and
 adding a line to the catalog.
+
+`fin.svg` and the `laptop-coffee`, `peek` and `surf` poses are vectors; their
+PNGs are gone, so there is one file per piece. The rest are still PNG until
+they are vectorized.
 
 **Rule 1 as API.** `background="dark"` uses the single-ink silhouette and
 `background="light"` the two-blue one. It is not a note in a guide: it is a prop.

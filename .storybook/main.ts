@@ -12,7 +12,7 @@ const config: StorybookConfig = {
     'storybook-addon-pseudo-states',
     '@storybook/addon-vitest',
   ],
-  // The PNGs are served at /brand, the same path the five projects use from
+  // The brand pieces are served at /brand, the same path the five projects use from
   // their public/, so the `basePath` default works.
   //
   // `.storybook/public` is the Storybook's OWN chrome and is deliberately a

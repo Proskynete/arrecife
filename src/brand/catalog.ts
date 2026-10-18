@@ -3,8 +3,13 @@
  * called. Pure data, no React, so the OG templates and any script can read it
  * too.
  *
- * Adding a new piece means dropping the PNG into `assets/brand/` and adding one
+ * Adding a new piece means dropping the file into `assets/brand/` and adding one
  * line here. The type updates itself and autocomplete offers it immediately.
+ *
+ * A piece that exists as a vector is an SVG, and its PNG leaves the repo the
+ * moment the SVG arrives: two files for one piece is two sources of truth, and
+ * the bitmap is the one that drifts. The rest are still PNG until they are
+ * vectorized.
  */
 
 /**
@@ -25,9 +30,9 @@ export const faces = {
 /** Full-body poses. */
 export const poses = {
   desk: 'pose-desk.png',
-  'laptop-coffee': 'pose-laptop-coffee.png',
-  peek: 'pose-peek.png',
-  surf: 'pose-surf.png',
+  'laptop-coffee': 'pose-laptop-coffee.svg',
+  peek: 'pose-peek.svg',
+  surf: 'pose-surf.svg',
 } as const;
 
 /**
@@ -38,8 +43,8 @@ export const poses = {
  * `#EDF4F3`, which is the foam token — and it is the one that reads over abyss.
  */
 export const fins = {
-  /** Two blues. For light backgrounds. */
-  color: 'fin.png',
+  /** Two blues, vector. For light backgrounds. */
+  color: 'fin.svg',
   /** Single-ink silhouette. For dark backgrounds. */
   foam: 'fin-foam.png',
 } as const;
@@ -74,7 +79,7 @@ export type Fin = keyof typeof fins;
 export type Background = 'dark' | 'light';
 
 /**
- * Where the PNGs are served from. `/brand` by default, which is where they
+ * Where the pieces are served from. `/brand` by default, which is where they
  * already live in all five projects (`public/brand/`), so there is nothing to
  * configure.
  */

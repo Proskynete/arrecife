@@ -137,7 +137,7 @@ that only whoever uses them installs.
 | `@eduardoalvarez/arrecife/icons` | yes | `@phosphor-icons/react` | `Icon`, which draws a Phosphor icon at the system's size, and at the weight its role asks for |
 | `@eduardoalvarez/arrecife/form` | yes | `react-hook-form` | The form layer: labels, errors and `aria-*` |
 | `@eduardoalvarez/arrecife/chart` | yes | `recharts` | The chart chassis, the series palette and the three chart types |
-| `@eduardoalvarez/arrecife/assets/*` | — | — | The brand PNGs |
+| `@eduardoalvarez/arrecife/assets/*` | — | — | The brand pieces, SVG where vectorized and PNG otherwise |
 
 Importing the root from a build script to get one token is the mistake the
 subpaths exist to prevent: it drags all of React into a worker that never mounts
@@ -1990,13 +1990,13 @@ Types (2): `Theme`, `ThemeOptions`.
 
 | export | type | what it is |
 | --- | --- | --- |
-| `ASSETS_PATH` | `"/brand"` | Where the PNGs are served from. `/brand` by default, which is where they already live in all five projects (`public/brand/`), so there is nothing to configure. |
+| `ASSETS_PATH` | `"/brand"` | Where the pieces are served from. `/brand` by default, which is where they already live in all five projects (`public/brand/`), so there is nothing to configure. |
 | `faceList` | `readonly ("annoyed" \| "confused" \| "hearts" \| "laughing" \| "shades" \| "waiting" \| "wink")[]` |  |
 | `faces` | `{ annoyed, confused, hearts, laughing, shades, waiting, wink }` | The faces. They are used only in empty states, confirmations, errors, course progress and celebration — never in a hero, pricing, services, contact or CV. That is why `EmptyState` takes a face and `PageHeader` does not. |
 | `faceUsage` | `{ wink, waiting, laughing, shades, hearts, confused, annoyed }` | The assigned use of each face, from the manual's inventory. |
-| `fins` | `{ readonly color: "fin.png"; readonly foam: "fin-foam.png"; }` | The fin, in its two variants. |
+| `fins` | `{ readonly color: "fin.svg"; readonly foam: "fin-foam.png"; }` | The fin, in its two variants. |
 | `poseList` | `readonly ("desk" \| "laptop-coffee" \| "peek" \| "surf")[]` |  |
-| `poses` | `{ readonly desk: "pose-desk.png"; readonly 'laptop-coffee': "pose-laptop-coffee.png"; readonly peek: "pose-peek.png"; readonly surf: "pose-surf.png"; }` | Full-body poses. |
+| `poses` | `{ readonly desk: "pose-desk.png"; readonly 'laptop-coffee': "pose-laptop-coffee.svg"; readonly peek: "pose-peek.svg"; readonly surf: "pose-surf.svg"; }` | Full-body poses. |
 
 Types (9): `Background`, `Face`, `Fin`, `IsotypeBackground`, `IsotypeProps`, `LogoProps`, `MascotFaceProps`, `MascotProps`, `Pose`.
 

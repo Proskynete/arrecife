@@ -174,7 +174,7 @@ export const typeScale = {
    *
    * It exists because `eyebrow` ships `uppercase` and that is not a preference
    * you can switch off: it IS the eyebrow scale. An `18 Aug 2026` in small caps
-   * or a `pose-laptop-coffee.png` in all caps are wrong, and without this step
+   * or a `pose-laptop-coffee.svg` in all caps are wrong, and without this step
    * the only way out was a `normal-case` at every call site.
    *
    * The document says 12.5. This is 13 for the same reason `textMuted` was

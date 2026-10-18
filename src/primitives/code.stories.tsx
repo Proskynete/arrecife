@@ -14,7 +14,7 @@ export const InProse: Story = {
     <>
       <Stack>
         <Text variant="body" tone="secondary">
-          Los PNG se publican bajo <Code>./assets/brand/</Code> y se sirven en{' '}
+          Las piezas de marca se publican bajo <Code>./assets/brand/</Code> y se sirven en{' '}
           <Code>/brand</Code>, que es la misma ruta que ya usan los cinco proyectos
           desde su <Code>public/</Code>.
         </Text>

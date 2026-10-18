@@ -14,7 +14,7 @@ import { cva } from 'class-variance-authority';
  * NONE of them is small-capped. The `uppercase tracking-[0.12em]` all three used
  * to carry came from `text-eyebrow`, which is the eyebrow scale and not the
  * badge one: it turned `engineering-culture` into `ENGINEERING-CULTURE` and
- * `pose-laptop-coffee.png` into a file name that does not exist.
+ * `pose-laptop-coffee.svg` into a file name that does not exist.
  */
 
 
@@ -90,7 +90,7 @@ const category = cva(
  *
  * No color box and no transform. It is the family `brand.stories.tsx` was asking
  * for when it rendered `LAPTOP-COFFEE` for a file name that is actually
- * `pose-laptop-coffee.png`.
+ * `pose-laptop-coffee.svg`.
  */
 const metric = ['inline-flex items-center gap-step-xs', 'rounded-pill', 'font-mono text-chip text-text-muted'];
 

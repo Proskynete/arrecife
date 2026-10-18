@@ -44,7 +44,7 @@ export type IsotypeProps = Omit<ComponentPropsWithoutRef<'img'>, 'src' | 'alt'> 
  * else. `not-light:hidden` rather than `hidden light:block`: the visible fin
  * keeps whatever `display` the call site gave it.
  *
- * What it costs: the hidden image is still downloaded, 14 or 21 KB. And with
+ * What it costs: the hidden image is still downloaded, 14 KB or 2 KB. And with
  * `auto` the props land on BOTH `<img>` — an `id` or a `ref` included — so a
  * call site that needs to reach the one image passes the background it is on.
  * The `alt` does not double: an image with `display: none` is out of the
@@ -57,12 +57,15 @@ export function Isotype({
   className,
   ...props
 }: IsotypeProps) {
-  const fin = (file: string, mode?: string) => (
+  // The intrinsic size of each file, so the browser reserves the right box before
+  // it loads. They are not the same shape: the SVG is a redraw, not a trace of the
+  // PNG, and it came with proportions of its own.
+  const fin = (variant: keyof typeof fins, mode?: string) => (
     <img
-      src={`${basePath}/${file}`}
+      src={`${basePath}/${fins[variant]}`}
       alt={alt}
-      width={147}
-      height={111}
+      width={variant === 'foam' ? 147 : 103}
+      height={variant === 'foam' ? 111 : 88}
       className={cn('h-8 w-auto select-none', className, mode)}
       {...props}
     />
@@ -71,11 +74,11 @@ export function Isotype({
   if (background === 'auto') {
     return (
       <>
-        {fin(fins.foam, 'light:hidden')}
-        {fin(fins.color, 'not-light:hidden')}
+        {fin('foam', 'light:hidden')}
+        {fin('color', 'not-light:hidden')}
       </>
     );
   }
 
-  return fin(background === 'dark' ? fins.foam : fins.color);
+  return fin(background === 'dark' ? 'foam' : 'color');
 }

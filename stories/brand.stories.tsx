@@ -194,7 +194,7 @@ export const Everything: StoryObj = {
           <AssetCard name="full, dark background" file="fin-foam.png + wordmark" theme="dark" code={'<Logo background="dark" />'}>
             <Logo background="dark" />
           </AssetCard>
-          <AssetCard name="full, light background" file="fin.png + wordmark" theme="light" code={'<Logo background="light" />'}>
+          <AssetCard name="full, light background" file="fin.svg + wordmark" theme="light" code={'<Logo background="light" />'}>
             <Logo background="light" />
           </AssetCard>
           <AssetCard name="full, follows the theme" file="both fins + wordmark" theme="page" code={'<Logo background="auto" />'}>

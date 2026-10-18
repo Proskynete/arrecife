@@ -85,7 +85,7 @@ export const Families: Story = {
         <Row>
           <MetricBadge>8 min de lectura</MetricBadge>
           <MetricBadge>6 módulos</MetricBadge>
-          <MetricBadge>pose-laptop-coffee.png</MetricBadge>
+          <MetricBadge>pose-laptop-coffee.svg</MetricBadge>
           <MetricBadge boxed>v5.0.1</MetricBadge>
         </Row>
         <Note>

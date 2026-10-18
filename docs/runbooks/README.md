@@ -5,6 +5,7 @@ whoever is upgrading a consuming project — not for whoever made the change.
 
 | Runbook | Breaks | The short version |
 | --- | --- | --- |
+| [`migration-0.14.md`](migration-0.14.md) | 1 | Four brand pieces are SVG: copy them into `public/brand/` |
 | [`migration-0.10.md`](migration-0.10.md) | 2 | Phosphor is a required peer, and `./social` is gone |
 | [`migration-0.8.md`](migration-0.8.md) | 4 | `Table` draws its own surface, `Footer` takes no `children`, `caret` and `SidebarNav` are removed |
 | [`migration-0.7.md`](migration-0.7.md) | 1 | `Stat`'s `tone="alerta"` becomes `tone="alert"` |

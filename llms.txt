@@ -2039,7 +2039,7 @@ Types (10): `AreaChartProps`, `BarChartProps`, `ChartContainerProps`, `ChartDatu
 | `articleTemplate` | `(data: ArticleData): SatoriNode` | Article · 145° gradient over abyss, category and reading time in sand. |
 | `courseTemplate` | `(data: CourseData): SatoriNode` | Course · THE ONLY LIGHT TEMPLATE. |
 | `defaultTemplate` | `(data?: DefaultData): SatoriNode` | Default · the document's declared exception. |
-| `OG` | `{ readonly width: 1200; readonly height: 630; readonly margin: 64; readonly mascot: 430; readonly signatureFin: 34; readonly mascotReserve: 560; }` | The canvas and the grid. These are the production measurements. |
+| `OG` | `{ width, height, margin, mascot, signatureFin, mascotReserve, mascotMaxWidth }` | The canvas and the grid. These are the production measurements. |
 | `plantillaBase` | `(options: { mode: "dark" \| "light"; background: string; eyebrow: { text: string; color: string; }; title: string; bajada?: string \| undefined; signature: string; firmaColor: string; base: string; mascot?: SatoriNode \| ... 1 more ... \| undefined; mascotaIzquierda?: boolean \| undefined; tinta: string; tintaSecundaria: string; }): SatoriNode` |  |
 | `talkTemplate` | `(data: TalkData): SatoriNode` | Talk · 150° gradient, eyebrow in biolume with the event and year, pose bleeding off the corner. |
 

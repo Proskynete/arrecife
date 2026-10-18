@@ -85,6 +85,15 @@ export const OG = {
    * by the pose's real width, not by the margin.
    */
   mascotReserve: 560,
+  /**
+   * The widest a pose may get in the course template, 24 short of the reserve.
+   *
+   * A height alone stopped being enough when the poses started arriving as SVG:
+   * each one is a redraw with its own proportions, and `laptop-coffee` at 430
+   * tall came out 617 wide — over the reserve and on top of the signature's fin.
+   * The pose fits a box now, so the next one cannot do it either.
+   */
+  mascotMaxWidth: 536,
 } as const;
 
 export type BaseData = {
@@ -261,8 +270,33 @@ function card(options: {
   );
 }
 
-function mascotPose(pose: Pose, base: string, height = OG.mascot) {
-  return el('img', { alt: '', src: `${base}/${poses[pose]}`, height: height, style: { height: height } });
+/**
+ * A pose fitted into a box and anchored to the corner it comes from.
+ *
+ * `contain` keeps the drawing's proportions whatever they are, and the position
+ * pins it to the bottom edge and to its side, so a pose narrower than the box
+ * still sits in the corner instead of floating in the middle of it. Satori writes
+ * it as `preserveAspectRatio`, and a browser reads the same two properties.
+ */
+function mascotPose(
+  pose: Pose,
+  base: string,
+  fit: { width: number; height: number; side: 'left' | 'right' },
+  style: Record<string, string | number> = {},
+) {
+  return el('img', {
+    alt: '',
+    src: `${base}/${poses[pose]}`,
+    width: fit.width,
+    height: fit.height,
+    style: {
+      width: fit.width,
+      height: fit.height,
+      objectFit: 'contain',
+      objectPosition: `${fit.side} bottom`,
+      ...style,
+    },
+  });
 }
 
 /* ------------------------------------------------------------- plantillas */
@@ -337,7 +371,11 @@ export function courseTemplate(data: CourseData): SatoriNode {
     tinta: light.textPrimary,
     tintaSecundaria: light.textSecondary,
     mascotaIzquierda: true,
-    mascot: mascotPose(data.pose ?? 'desk', base),
+    mascot: mascotPose(data.pose ?? 'desk', base, {
+      width: OG.mascotMaxWidth,
+      height: OG.mascot,
+      side: 'left',
+    }),
   });
 }
 
@@ -366,12 +404,15 @@ export function talkTemplate(data: TalkData): SatoriNode {
     base,
     tinta: dark.textPrimary,
     tintaSecundaria: dark.textSecondary,
-    // It bleeds: it runs off the bottom and the right, like a slide cover.
-    mascot: el('img', { alt: '',
-      src: `${base}/${poses[data.pose ?? 'surf']}`,
-      height: 470,
-      style: { height: 470, marginBottom: -46, marginRight: -36 },
-    }),
+    // It bleeds: it runs off the bottom and the right, like a slide cover. The
+    // 590 is the widest a pose ever came out at 470 before the SVGs, so a wide
+    // redraw keeps out of the headline instead of growing into it.
+    mascot: mascotPose(
+      data.pose ?? 'surf',
+      base,
+      { width: 590, height: 470, side: 'right' },
+      { marginBottom: -46, marginRight: -36 },
+    ),
   });
 }
 

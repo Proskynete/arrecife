@@ -30,10 +30,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The `engines` floor and the current one. A library breaks by Node
+        # The `engines` floor, the previous LTS and the current one. A library breaks by Node
         # version, not by operating system: hence a Node matrix and not an OS
         # one, the opposite of an API with native binaries.
-        node: ["22.x", "24.x"]
+        node: ["22.x", "24.x", "26.x"]
     steps:
       - name: 📚 Check out the repository
         uses: actions/checkout@v7

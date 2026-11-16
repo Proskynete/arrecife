@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1](https://github.com/Proskynete/arrecife/compare/v0.13.0...v0.13.1) (2026-11-16)
+
+
+### 📦 Dependencias
+
+* develop on Node 26.13.1 and add it to the CI matrix ([#95](https://github.com/Proskynete/arrecife/issues/95)) ([b92a64a](https://github.com/Proskynete/arrecife/commit/b92a64abf5719dcc86d02697c6482e2f7561c7aa))
+
 ## [0.13.0](https://github.com/Proskynete/arrecife/compare/v0.12.5...v0.13.0) (2026-10-05)
 
 
